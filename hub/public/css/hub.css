@@ -21,6 +21,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);fon
 img{max-width:100%;display:block}
 a{color:inherit}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+button,a,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
 [hidden]{display:none!important}
 .skip-link{position:absolute;left:-999px;top:8px;z-index:100;padding:8px 14px;border-radius:999px;background:var(--gold);color:var(--night);font-weight:700}
@@ -425,6 +426,19 @@ section{padding:72px 0 24px}
  .toast small{display:none}
  .live-tag{display:none}
  .detail-progress{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:380px){
+ .topnav{gap:12px;padding-left:12px;padding-right:12px}
+ .brand-text small{display:none}
+ .player-chip{gap:6px;padding-right:8px}
+ .chip-id b{max-width:78px}
+ .album-progress{padding:16px}
+ .rarity-legend{flex-wrap:wrap;gap:6px 12px}
+ .hero-stats{gap:16px}
+ .hero-stats dd{font-size:1.6rem}
+}
+@media (hover:none){
+ .game-card:hover,.btn:hover,.badge:hover,.player-chip:hover{transform:none}
 }
 @media (prefers-reduced-motion:reduce){
  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}

@@ -1,0 +1,1239 @@
+{
+ "drop/assets/audio/bd-bloom.wav": {
+  "sha1": "cf2af9e84eca6c635be69643266cca2ee055a396",
+  "file": "drop/assets/audio/bd-bloom.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 260738,
+  "bytes": 30041
+ },
+ "drop/assets/audio/bd-drop.wav": {
+  "sha1": "2b3c948b572938c085dab43c002ba1d429df0fa3",
+  "file": "drop/assets/audio/bd-drop.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 327518,
+  "bytes": 37617
+ },
+ "drop/assets/audio/bd-welcome.wav": {
+  "sha1": "49437c1f8955dfcbc1f9af7397ad35ccf1491a2a",
+  "file": "drop/assets/audio/bd-welcome.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 492678,
+  "bytes": 56164
+ },
+ "drop/assets/audio/bd-zonk.wav": {
+  "sha1": "cc7545b44ed7295cd648c11e65418d734e4c267f",
+  "file": "drop/assets/audio/bd-zonk.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 501962,
+  "bytes": 57208
+ },
+ "drop/assets/audio/bpedia-bgm.wav": {
+  "sha1": "2a516777f812664be39901dc4b2d937e776f95e8",
+  "file": "drop/assets/audio/bpedia-bgm.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 8467278,
+  "bytes": 768626
+ },
+ "drop/assets/audio/fs-back-hug.wav": {
+  "sha1": "28ef27da552a1c8a471ba7ff35919cd3671b3337",
+  "file": "drop/assets/audio/fs-back-hug.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 617126,
+  "bytes": 70270
+ },
+ "drop/assets/audio/fs-flower.wav": {
+  "sha1": "93633bc192a68ac40b546eeffb94eca4de8e1327",
+  "file": "drop/assets/audio/fs-flower.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 672738,
+  "bytes": 76539
+ },
+ "drop/assets/audio/fs-hug.wav": {
+  "sha1": "5efd42b601a8929f0181443596e2ead7d45284ff",
+  "file": "drop/assets/audio/fs-hug.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 635666,
+  "bytes": 72359
+ },
+ "drop/assets/audio/fs-intro.wav": {
+  "sha1": "7b13c90349e6b38bdd6b9a2a6d855b0d2a0af2a0",
+  "file": "drop/assets/audio/fs-intro.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 394160,
+  "bytes": 45192
+ },
+ "drop/assets/audio/fs-kiss-hand.wav": {
+  "sha1": "514763f3bfdae7b1fb5bbdff415073da94418fc0",
+  "file": "drop/assets/audio/fs-kiss-hand.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 664302,
+  "bytes": 75755
+ },
+ "drop/assets/audio/fs-pet-pet.wav": {
+  "sha1": "83112dfea39fc11fec606803a94753aaf8aea79e",
+  "file": "drop/assets/audio/fs-pet-pet.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 635946,
+  "bytes": 72359
+ },
+ "drop/assets/audio/fs-pick.wav": {
+  "sha1": "b9cd3722d8f14b505832683035b8de0a605503b9",
+  "file": "drop/assets/audio/fs-pick.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 394800,
+  "bytes": 45192
+ },
+ "drop/assets/audio/mc-ayo.wav": {
+  "sha1": "33e41b96945870022761150abd6a71b492ce7d05",
+  "file": "drop/assets/audio/mc-ayo.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 366284,
+  "bytes": 41796
+ },
+ "drop/assets/audio/mc-bidik.wav": {
+  "sha1": "4b5d09624105068ce3062f3a0b7383f7e300116d",
+  "file": "drop/assets/audio/mc-bidik.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 332416,
+  "bytes": 38139
+ },
+ "drop/assets/audio/mc-hampir.wav": {
+  "sha1": "ed41fc595894b56a1611e4faf6dc2bf475c54af0",
+  "file": "drop/assets/audio/mc-hampir.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 273146,
+  "bytes": 31347
+ },
+ "drop/assets/audio/mc-koin.wav": {
+  "sha1": "b3adfbab93776ddd1221f3f86b056df69a68bb08",
+  "file": "drop/assets/audio/mc-koin.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 474242,
+  "bytes": 54074
+ },
+ "drop/assets/audio/mc-mantap.wav": {
+  "sha1": "8be59ab13dd8b0e900a0fbcbf886228d9dabfc2e",
+  "file": "drop/assets/audio/mc-mantap.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 522928,
+  "bytes": 59559
+ },
+ "drop/assets/audio/mc-semangat.wav": {
+  "sha1": "c6e846e55e76a676649d7a12c33ef2b1a9358d5d",
+  "file": "drop/assets/audio/mc-semangat.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 336650,
+  "bytes": 38661
+ },
+ "drop/assets/audio/mc-tegang.wav": {
+  "sha1": "148d420e27ca8e4a8ba556992c21a33391c1b6c5",
+  "file": "drop/assets/audio/mc-tegang.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 209642,
+  "bytes": 24033
+ },
+ "drop/assets/audio/prize-balm-pk01.wav": {
+  "sha1": "8cc5f4a231860770643652d7042d678315c10ea8",
+  "file": "drop/assets/audio/prize-balm-pk01.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 520812,
+  "bytes": 59559
+ },
+ "drop/assets/audio/prize-bundling.wav": {
+  "sha1": "5c46bf9966f7e9d89e1e82f2f7e83c68b1744eae",
+  "file": "drop/assets/audio/prize-bundling.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 649936,
+  "bytes": 74188
+ },
+ "drop/assets/audio/prize-creamy-or01.wav": {
+  "sha1": "d043fa2d97b660c28b2a5c41c95fe2f1b99cea3a",
+  "file": "drop/assets/audio/prize-creamy-or01.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 599134,
+  "bytes": 68441
+ },
+ "drop/assets/audio/prize-creamy-rd01.wav": {
+  "sha1": "5e2a0f9348274760ee5c9c50ed3b621f9c133797",
+  "file": "drop/assets/audio/prize-creamy-rd01.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 599134,
+  "bytes": 68441
+ },
+ "drop/assets/audio/prize-duo-m03.wav": {
+  "sha1": "5e37e0c11e564862c48768436b83399883395aaa",
+  "file": "drop/assets/audio/prize-duo-m03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 573732,
+  "bytes": 65306
+ },
+ "drop/assets/audio/prize-foundation-03.wav": {
+  "sha1": "14334cfd233bc85f060d65bae7859b863e659c3b",
+  "file": "drop/assets/audio/prize-foundation-03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 527162,
+  "bytes": 60082
+ },
+ "drop/assets/audio/prize-foundation-04.wav": {
+  "sha1": "c9cd286ba2d2d71e70f7cbd092f4df70e68544b3",
+  "file": "drop/assets/audio/prize-foundation-04.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 565264,
+  "bytes": 64523
+ },
+ "drop/assets/audio/prize-glossy-g03.wav": {
+  "sha1": "5a6347ba8a51e98e72a48216bab1ae9dc9a61386",
+  "file": "drop/assets/audio/prize-glossy-g03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 656286,
+  "bytes": 74710
+ },
+ "drop/assets/audio/prize-powder-000.wav": {
+  "sha1": "8cbdf0338fb99c5291c4e935928ff00a1da41097",
+  "file": "drop/assets/audio/prize-powder-000.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 622418,
+  "bytes": 71053
+ },
+ "drop/assets/audio/prize-salsa-vinilash-pro.wav": {
+  "sha1": "203d66db1ff197ab47bc720e15f741cb4d1c6484",
+  "file": "drop/assets/audio/prize-salsa-vinilash-pro.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 537746,
+  "bytes": 61388
+ },
+ "drop/assets/audio/prize-salsa-vinilash.wav": {
+  "sha1": "212a3c24f4aa2a1916efda7bb93e27c3816a54ac",
+  "file": "drop/assets/audio/prize-salsa-vinilash.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 505994,
+  "bytes": 57731
+ },
+ "drop/assets/audio/prize-stick-hs03.wav": {
+  "sha1": "56a643e28fe55c2322a382653e198154448b1d06",
+  "file": "drop/assets/audio/prize-stick-hs03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 529278,
+  "bytes": 60343
+ },
+ "drop/assets/audio/prize-voucher-100000.wav": {
+  "sha1": "b67831324a0d8c69b1bd185e03d649a77b57e8f8",
+  "file": "drop/assets/audio/prize-voucher-100000.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 609718,
+  "bytes": 69486
+ },
+ "drop/assets/audio/prize-voucher-25.wav": {
+  "sha1": "eedf18682b60f7c764b3911a3292063671257015",
+  "file": "drop/assets/audio/prize-voucher-25.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 611834,
+  "bytes": 69747
+ },
+ "drop/assets/audio/prize-voucher-50.wav": {
+  "sha1": "3026939eec37f27b708c600057c57253bfbe8d1d",
+  "file": "drop/assets/audio/prize-voucher-50.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 592782,
+  "bytes": 67657
+ },
+ "drop/assets/audio/prize-voucher-500000.wav": {
+  "sha1": "50eaf1168670c2fffb3bfb32714a98dc9ee19cf3",
+  "file": "drop/assets/audio/prize-voucher-500000.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 679572,
+  "bytes": 77323
+ },
+ "drop/assets/audio/prize-voucher-newuser.wav": {
+  "sha1": "ef2520f71c94d0dd4d61ada79af204bea12f6438",
+  "file": "drop/assets/audio/prize-voucher-newuser.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 643586,
+  "bytes": 73404
+ },
+ "drop/assets/audio/prize-watery-nu02.wav": {
+  "sha1": "c4a918004b89ea1424bfea030f1655f5b89f9834",
+  "file": "drop/assets/audio/prize-watery-nu02.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 529278,
+  "bytes": 60343
+ },
+ "drop/assets/audio/slogan-adaada.wav": {
+  "sha1": "dc1fb0e75e15e3fae3c8b2ed5903e714b34e0b14",
+  "file": "drop/assets/audio/slogan-adaada.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 730374,
+  "bytes": 83070
+ },
+ "drop/assets/audio/slogan-app.wav": {
+  "sha1": "32cdf0179b7c37064ff869bb2573068546adf38a",
+  "file": "drop/assets/audio/slogan-app.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 395920,
+  "bytes": 45192
+ },
+ "drop/assets/audio/slogan-belanja.wav": {
+  "sha1": "a94d253563a78819476ceb47ffb54f688859db7d",
+  "file": "drop/assets/audio/slogan-belanja.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 378986,
+  "bytes": 43364
+ },
+ "drop/assets/audio/slogan-cantik.wav": {
+  "sha1": "19fd2cbfa262eac9cb35859e5b8484ff3038adce",
+  "file": "drop/assets/audio/slogan-cantik.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 332416,
+  "bytes": 38139
+ },
+ "drop/assets/audio/slogan-halo.wav": {
+  "sha1": "37f63e4f65d3f691e39392fd206cb0218dab6151",
+  "file": "drop/assets/audio/slogan-halo.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 309132,
+  "bytes": 35527
+ },
+ "drop/assets/audio/slogan-skincare.wav": {
+  "sha1": "1cd66a5009219c3534bd6d5b27e87f6c7aa4b961",
+  "file": "drop/assets/audio/slogan-skincare.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 495410,
+  "bytes": 56425
+ },
+ "nyapit/assets/audio/bpedia-bgm.wav": {
+  "sha1": "2a516777f812664be39901dc4b2d937e776f95e8",
+  "file": "nyapit/assets/audio/bpedia-bgm.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 8467278,
+  "bytes": 768626
+ },
+ "nyapit/assets/audio/mc-ayo.wav": {
+  "sha1": "33e41b96945870022761150abd6a71b492ce7d05",
+  "file": "nyapit/assets/audio/mc-ayo.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 366284,
+  "bytes": 41796
+ },
+ "nyapit/assets/audio/mc-bidik.wav": {
+  "sha1": "4b5d09624105068ce3062f3a0b7383f7e300116d",
+  "file": "nyapit/assets/audio/mc-bidik.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 332416,
+  "bytes": 38139
+ },
+ "nyapit/assets/audio/mc-hampir.wav": {
+  "sha1": "ed41fc595894b56a1611e4faf6dc2bf475c54af0",
+  "file": "nyapit/assets/audio/mc-hampir.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 273146,
+  "bytes": 31347
+ },
+ "nyapit/assets/audio/mc-koin.wav": {
+  "sha1": "b3adfbab93776ddd1221f3f86b056df69a68bb08",
+  "file": "nyapit/assets/audio/mc-koin.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 474242,
+  "bytes": 54074
+ },
+ "nyapit/assets/audio/mc-mantap.wav": {
+  "sha1": "8be59ab13dd8b0e900a0fbcbf886228d9dabfc2e",
+  "file": "nyapit/assets/audio/mc-mantap.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 522928,
+  "bytes": 59559
+ },
+ "nyapit/assets/audio/mc-semangat.wav": {
+  "sha1": "c6e846e55e76a676649d7a12c33ef2b1a9358d5d",
+  "file": "nyapit/assets/audio/mc-semangat.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 336650,
+  "bytes": 38661
+ },
+ "nyapit/assets/audio/mc-tegang.wav": {
+  "sha1": "148d420e27ca8e4a8ba556992c21a33391c1b6c5",
+  "file": "nyapit/assets/audio/mc-tegang.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 209642,
+  "bytes": 24033
+ },
+ "nyapit/assets/audio/prize-balm-pk01.wav": {
+  "sha1": "8cc5f4a231860770643652d7042d678315c10ea8",
+  "file": "nyapit/assets/audio/prize-balm-pk01.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 520812,
+  "bytes": 59559
+ },
+ "nyapit/assets/audio/prize-bundling.wav": {
+  "sha1": "5c46bf9966f7e9d89e1e82f2f7e83c68b1744eae",
+  "file": "nyapit/assets/audio/prize-bundling.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 649936,
+  "bytes": 74188
+ },
+ "nyapit/assets/audio/prize-creamy-or01.wav": {
+  "sha1": "d043fa2d97b660c28b2a5c41c95fe2f1b99cea3a",
+  "file": "nyapit/assets/audio/prize-creamy-or01.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 599134,
+  "bytes": 68441
+ },
+ "nyapit/assets/audio/prize-creamy-rd01.wav": {
+  "sha1": "5e2a0f9348274760ee5c9c50ed3b621f9c133797",
+  "file": "nyapit/assets/audio/prize-creamy-rd01.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 599134,
+  "bytes": 68441
+ },
+ "nyapit/assets/audio/prize-duo-m03.wav": {
+  "sha1": "5e37e0c11e564862c48768436b83399883395aaa",
+  "file": "nyapit/assets/audio/prize-duo-m03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 573732,
+  "bytes": 65306
+ },
+ "nyapit/assets/audio/prize-foundation-03.wav": {
+  "sha1": "14334cfd233bc85f060d65bae7859b863e659c3b",
+  "file": "nyapit/assets/audio/prize-foundation-03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 527162,
+  "bytes": 60082
+ },
+ "nyapit/assets/audio/prize-foundation-04.wav": {
+  "sha1": "c9cd286ba2d2d71e70f7cbd092f4df70e68544b3",
+  "file": "nyapit/assets/audio/prize-foundation-04.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 565264,
+  "bytes": 64523
+ },
+ "nyapit/assets/audio/prize-glossy-g03.wav": {
+  "sha1": "5a6347ba8a51e98e72a48216bab1ae9dc9a61386",
+  "file": "nyapit/assets/audio/prize-glossy-g03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 656286,
+  "bytes": 74710
+ },
+ "nyapit/assets/audio/prize-powder-000.wav": {
+  "sha1": "8cbdf0338fb99c5291c4e935928ff00a1da41097",
+  "file": "nyapit/assets/audio/prize-powder-000.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 622418,
+  "bytes": 71053
+ },
+ "nyapit/assets/audio/prize-salsa-vinilash-pro.wav": {
+  "sha1": "203d66db1ff197ab47bc720e15f741cb4d1c6484",
+  "file": "nyapit/assets/audio/prize-salsa-vinilash-pro.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 537746,
+  "bytes": 61388
+ },
+ "nyapit/assets/audio/prize-salsa-vinilash.wav": {
+  "sha1": "212a3c24f4aa2a1916efda7bb93e27c3816a54ac",
+  "file": "nyapit/assets/audio/prize-salsa-vinilash.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 505994,
+  "bytes": 57731
+ },
+ "nyapit/assets/audio/prize-stick-hs03.wav": {
+  "sha1": "56a643e28fe55c2322a382653e198154448b1d06",
+  "file": "nyapit/assets/audio/prize-stick-hs03.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 529278,
+  "bytes": 60343
+ },
+ "nyapit/assets/audio/prize-voucher-100000.wav": {
+  "sha1": "b67831324a0d8c69b1bd185e03d649a77b57e8f8",
+  "file": "nyapit/assets/audio/prize-voucher-100000.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 609718,
+  "bytes": 69486
+ },
+ "nyapit/assets/audio/prize-voucher-25.wav": {
+  "sha1": "eedf18682b60f7c764b3911a3292063671257015",
+  "file": "nyapit/assets/audio/prize-voucher-25.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 611834,
+  "bytes": 69747
+ },
+ "nyapit/assets/audio/prize-voucher-50.wav": {
+  "sha1": "3026939eec37f27b708c600057c57253bfbe8d1d",
+  "file": "nyapit/assets/audio/prize-voucher-50.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 592782,
+  "bytes": 67657
+ },
+ "nyapit/assets/audio/prize-voucher-500000.wav": {
+  "sha1": "50eaf1168670c2fffb3bfb32714a98dc9ee19cf3",
+  "file": "nyapit/assets/audio/prize-voucher-500000.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 679572,
+  "bytes": 77323
+ },
+ "nyapit/assets/audio/prize-voucher-newuser.wav": {
+  "sha1": "ef2520f71c94d0dd4d61ada79af204bea12f6438",
+  "file": "nyapit/assets/audio/prize-voucher-newuser.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 643586,
+  "bytes": 73404
+ },
+ "nyapit/assets/audio/prize-watery-nu02.wav": {
+  "sha1": "c4a918004b89ea1424bfea030f1655f5b89f9834",
+  "file": "nyapit/assets/audio/prize-watery-nu02.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 529278,
+  "bytes": 60343
+ },
+ "nyapit/assets/audio/slogan-adaada.wav": {
+  "sha1": "dc1fb0e75e15e3fae3c8b2ed5903e714b34e0b14",
+  "file": "nyapit/assets/audio/slogan-adaada.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 730374,
+  "bytes": 83070
+ },
+ "nyapit/assets/audio/slogan-app.wav": {
+  "sha1": "32cdf0179b7c37064ff869bb2573068546adf38a",
+  "file": "nyapit/assets/audio/slogan-app.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 395920,
+  "bytes": 45192
+ },
+ "nyapit/assets/audio/slogan-belanja.wav": {
+  "sha1": "a94d253563a78819476ceb47ffb54f688859db7d",
+  "file": "nyapit/assets/audio/slogan-belanja.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 378986,
+  "bytes": 43364
+ },
+ "nyapit/assets/audio/slogan-cantik.wav": {
+  "sha1": "19fd2cbfa262eac9cb35859e5b8484ff3038adce",
+  "file": "nyapit/assets/audio/slogan-cantik.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 332416,
+  "bytes": 38139
+ },
+ "nyapit/assets/audio/slogan-halo.wav": {
+  "sha1": "37f63e4f65d3f691e39392fd206cb0218dab6151",
+  "file": "nyapit/assets/audio/slogan-halo.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 309132,
+  "bytes": 35527
+ },
+ "nyapit/assets/audio/slogan-skincare.wav": {
+  "sha1": "1cd66a5009219c3534bd6d5b27e87f6c7aa4b961",
+  "file": "nyapit/assets/audio/slogan-skincare.mp3",
+  "type": "audio/mpeg",
+  "sourceBytes": 495410,
+  "bytes": 56425
+ },
+ "drop/assets/brand/app-icon-512.png": {
+  "sha1": "8f34b43e2500e03f06c800bfa12c4b3c1a8dcebf",
+  "file": "drop/assets/brand/app-icon-512.webp",
+  "type": "image/webp",
+  "sourceBytes": 87298,
+  "bytes": 13128
+ },
+ "drop/assets/brand/bpedia-logo-horizontal-3d.png": {
+  "sha1": "761426a958e20ae89db425abfbc68b67a2d3ac74",
+  "file": "drop/assets/brand/bpedia-logo-horizontal-3d.webp",
+  "type": "image/webp",
+  "sourceBytes": 1382406,
+  "bytes": 261842
+ },
+ "drop/assets/brand/bpedia-logo-horizontal-flat.png": {
+  "sha1": "d5b75a63fdb087af02b2719150d0e06cba6027cc",
+  "file": "drop/assets/brand/bpedia-logo-horizontal-flat.webp",
+  "type": "image/webp",
+  "sourceBytes": 1061153,
+  "bytes": 214814
+ },
+ "drop/assets/brand/bpedia-logo-reverse.png": {
+  "sha1": "c445bea0a7e6ee106a1638d63f732a0d83872383",
+  "file": "drop/assets/brand/bpedia-logo-reverse.webp",
+  "type": "image/webp",
+  "sourceBytes": 126420,
+  "bytes": 44282
+ },
+ "drop/assets/brand/bpedia-logo.png": {
+  "sha1": "cb3c253285b020c2ee82f16090d9cfa926aaa5a3",
+  "file": "drop/assets/brand/bpedia-logo.webp",
+  "type": "image/webp",
+  "sourceBytes": 179210,
+  "bytes": 60274
+ },
+ "drop/assets/brand/bpedia-monogram.png": {
+  "sha1": "5898275330fb35603a045f2f4561e28398a4a638",
+  "file": "drop/assets/brand/bpedia-monogram.webp",
+  "type": "image/webp",
+  "sourceBytes": 87916,
+  "bytes": 34416
+ },
+ "drop/assets/brand/rt-bipy-bag.png": {
+  "sha1": "6a8f99b2e48440eedb43327c67480a4511fe8591",
+  "file": "drop/assets/brand/rt-bipy-bag.webp",
+  "type": "image/webp",
+  "sourceBytes": 300499,
+  "bytes": 54472
+ },
+ "drop/assets/brand/rt-bipy-peek.png": {
+  "sha1": "04f5f0377cdebee0ddd21eb3687d21bbbc645a43",
+  "file": "drop/assets/brand/rt-bipy-peek.webp",
+  "type": "image/webp",
+  "sourceBytes": 329377,
+  "bytes": 50944
+ },
+ "drop/assets/brand/rt-bipy-stand.png": {
+  "sha1": "0081301fe219829c027ee5951720bbc74984a006",
+  "file": "drop/assets/brand/rt-bipy-stand.webp",
+  "type": "image/webp",
+  "sourceBytes": 241896,
+  "bytes": 42546
+ },
+ "drop/assets/brand/rt-bipy-wave.png": {
+  "sha1": "2305c38de88c749f14e09d34d9f244bca99b9a80",
+  "file": "drop/assets/brand/rt-bipy-wave.webp",
+  "type": "image/webp",
+  "sourceBytes": 241359,
+  "bytes": 43674
+ },
+ "drop/assets/brand/rt-bipy-wink.png": {
+  "sha1": "b79319aa860631d3b1a99cf5b6c4e014e55ef1e2",
+  "file": "drop/assets/brand/rt-bipy-wink.webp",
+  "type": "image/webp",
+  "sourceBytes": 285102,
+  "bytes": 44316
+ },
+ "drop/assets/images/host-sanji.jpg": {
+  "sha1": "635727a7aefae4da6ab89d0b45eafb78b83355ea",
+  "file": "drop/assets/images/host-sanji.webp",
+  "type": "image/webp",
+  "sourceBytes": 83552,
+  "bytes": 50464
+ },
+ "drop/assets/images/host-zoro.jpg": {
+  "sha1": "9ea5cdf652fcffcf999376f4d8636bd5d070aed6",
+  "file": "drop/assets/images/host-zoro.webp",
+  "type": "image/webp",
+  "sourceBytes": 95067,
+  "bytes": 63888
+ },
+ "drop/assets/images/hosts-duo.png": {
+  "sha1": "ace46c3b8da0ca64ee6f803bafd64ad6672b2513",
+  "file": "drop/assets/images/hosts-duo.webp",
+  "type": "image/webp",
+  "sourceBytes": 907457,
+  "bytes": 124720
+ },
+ "drop/assets/products/creamy-rd01.jpg": {
+  "sha1": "08f165e61068bdf3d4aa3b9555486893009ccaac",
+  "file": "drop/assets/products/creamy-rd01.webp",
+  "type": "image/webp",
+  "sourceBytes": 267785,
+  "bytes": 21456
+ },
+ "drop/assets/products/curler.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "drop/assets/products/curler.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
+ "drop/assets/products/powder-000.jpg": {
+  "sha1": "af3ba9c912df6e6d5c14b5d0d9665db8b0b21f2d",
+  "file": "drop/assets/products/powder-000.webp",
+  "type": "image/webp",
+  "sourceBytes": 134481,
+  "bytes": 70722
+ },
+ "drop/assets/products/stick.jpg": {
+  "sha1": "206db3d0a899388dfe11e0f26ebfa3d957366899",
+  "file": "drop/assets/products/stick.webp",
+  "type": "image/webp",
+  "sourceBytes": 84295,
+  "bytes": 12366
+ },
+ "drop/assets/products/vinilash-pro.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "drop/assets/products/vinilash-pro.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
+ "nyapit/assets/brand/bpedia-logo.png": {
+  "sha1": "73de12e38cdc68bd8f0ec9e45146e9a62dc631bd",
+  "file": "nyapit/assets/brand/bpedia-logo.webp",
+  "type": "image/webp",
+  "sourceBytes": 168171,
+  "bytes": 46570
+ },
+ "nyapit/assets/images/mascot-celebrate-3d-v2.png": {
+  "sha1": "2951dc3e88bc54411b6e38b7ba1877e9e0e2fed0",
+  "file": "nyapit/assets/images/mascot-celebrate-3d-v2.webp",
+  "type": "image/webp",
+  "sourceBytes": 1787760,
+  "bytes": 126464
+ },
+ "nyapit/assets/images/mascot-claw-3d-v2.png": {
+  "sha1": "efe2c005d6e356d9d3899042bd0838faba292088",
+  "file": "nyapit/assets/images/mascot-claw-3d-v2.webp",
+  "type": "image/webp",
+  "sourceBytes": 1815187,
+  "bytes": 129288
+ },
+ "nyapit/assets/images/mascot-encourage-3d-v2.png": {
+  "sha1": "98da2a2fd8c2e3171a850f1b0fde31acbf066f7a",
+  "file": "nyapit/assets/images/mascot-encourage-3d-v2.webp",
+  "type": "image/webp",
+  "sourceBytes": 1766111,
+  "bytes": 130262
+ },
+ "nyapit/assets/images/mascot-front.png": {
+  "sha1": "9e7a578e47f71b3ac55a0c6629205d9a16723d38",
+  "file": "nyapit/assets/images/mascot-front.webp",
+  "type": "image/webp",
+  "sourceBytes": 94291,
+  "bytes": 26072
+ },
+ "nyapit/assets/images/mascot-host-3d-v2.png": {
+  "sha1": "397f58ccb60f4038e0c8187c31a92dad4abb2514",
+  "file": "nyapit/assets/images/mascot-host-3d-v2.webp",
+  "type": "image/webp",
+  "sourceBytes": 1766144,
+  "bytes": 127032
+ },
+ "nyapit/assets/images/mascot-v3/celebrate.png": {
+  "sha1": "2951dc3e88bc54411b6e38b7ba1877e9e0e2fed0",
+  "file": "nyapit/assets/images/mascot-v3/celebrate.webp",
+  "type": "image/webp",
+  "sourceBytes": 1787760,
+  "bytes": 126464
+ },
+ "nyapit/assets/images/mascot-v3/encourage.png": {
+  "sha1": "98da2a2fd8c2e3171a850f1b0fde31acbf066f7a",
+  "file": "nyapit/assets/images/mascot-v3/encourage.webp",
+  "type": "image/webp",
+  "sourceBytes": 1766111,
+  "bytes": 130262
+ },
+ "nyapit/assets/images/mascot-v3/focus.png": {
+  "sha1": "efe2c005d6e356d9d3899042bd0838faba292088",
+  "file": "nyapit/assets/images/mascot-v3/focus.webp",
+  "type": "image/webp",
+  "sourceBytes": 1815187,
+  "bytes": 129288
+ },
+ "nyapit/assets/images/mascot-v3/host.png": {
+  "sha1": "c1b9c7ddae48653d6445b82a1e0a9d2c80e6a883",
+  "file": "nyapit/assets/images/mascot-v3/host.webp",
+  "type": "image/webp",
+  "sourceBytes": 1770850,
+  "bytes": 129148
+ },
+ "nyapit/assets/images/mascot-win.png": {
+  "sha1": "35a10374036f74cc0a5fe8225cef7c1636db11eb",
+  "file": "nyapit/assets/images/mascot-win.webp",
+  "type": "image/webp",
+  "sourceBytes": 96043,
+  "bytes": 28404
+ },
+ "nyapit/assets/images/mascot-zonk.png": {
+  "sha1": "fe8386bf401b6074f06330d4534d8f5c47ee3d33",
+  "file": "nyapit/assets/images/mascot-zonk.webp",
+  "type": "image/webp",
+  "sourceBytes": 94980,
+  "bytes": 27416
+ },
+ "nyapit/assets/images/mascot_3d/15_bouquet.png": {
+  "sha1": "390b46bd384ee8ee8879caa95442ff11776ae755",
+  "file": "nyapit/assets/images/mascot_3d/15_bouquet.webp",
+  "type": "image/webp",
+  "sourceBytes": 75844,
+  "bytes": 20642
+ },
+ "nyapit/assets/images/poses/mascot_head_chin.png": {
+  "sha1": "fc308cb55f65279ac1045d916f196d2f20c694a7",
+  "file": "nyapit/assets/images/poses/mascot_head_chin.webp",
+  "type": "image/webp",
+  "sourceBytes": 150613,
+  "bytes": 13268
+ },
+ "nyapit/assets/images/poses/pose_01_neutral.png": {
+  "sha1": "7c6542b92c78da5efcc5769f9c2ed8774465c1b1",
+  "file": "nyapit/assets/images/poses/pose_01_neutral.webp",
+  "type": "image/webp",
+  "sourceBytes": 76929,
+  "bytes": 12262
+ },
+ "nyapit/assets/images/poses/pose_02_wave.png": {
+  "sha1": "16561fa528981e48614d96f010da7ffe8cb3f719",
+  "file": "nyapit/assets/images/poses/pose_02_wave.webp",
+  "type": "image/webp",
+  "sourceBytes": 76643,
+  "bytes": 11882
+ },
+ "nyapit/assets/images/poses/pose_03_walk.png": {
+  "sha1": "92c6a0a384e2993021a1e12677d2a3ac2d984e1b",
+  "file": "nyapit/assets/images/poses/pose_03_walk.webp",
+  "type": "image/webp",
+  "sourceBytes": 70279,
+  "bytes": 11762
+ },
+ "nyapit/assets/images/poses/pose_04_hips.png": {
+  "sha1": "b489754c1aa1de72039e9d98ff1c0e69d32f1587",
+  "file": "nyapit/assets/images/poses/pose_04_hips.webp",
+  "type": "image/webp",
+  "sourceBytes": 72279,
+  "bytes": 11832
+ },
+ "nyapit/assets/images/poses/pose_05_jump.png": {
+  "sha1": "2ee6a5b8c92d6de6d0adefd7139e19426cccbe13",
+  "file": "nyapit/assets/images/poses/pose_05_jump.webp",
+  "type": "image/webp",
+  "sourceBytes": 78942,
+  "bytes": 13426
+ },
+ "nyapit/assets/images/poses/pose_06_point.png": {
+  "sha1": "cab1841b67ea44e4b3fc8a396d257ebb89c92192",
+  "file": "nyapit/assets/images/poses/pose_06_point.webp",
+  "type": "image/webp",
+  "sourceBytes": 81949,
+  "bytes": 15254
+ },
+ "nyapit/assets/images/poses/pose_07_sit.png": {
+  "sha1": "ec8509077c570d778b9e6537328559f453bc8c3d",
+  "file": "nyapit/assets/images/poses/pose_07_sit.webp",
+  "type": "image/webp",
+  "sourceBytes": 80077,
+  "bytes": 12692
+ },
+ "nyapit/assets/images/poses/pose_08_bow.png": {
+  "sha1": "9742a1720a3b3048aa91fcc25b7b18c89f6f2994",
+  "file": "nyapit/assets/images/poses/pose_08_bow.webp",
+  "type": "image/webp",
+  "sourceBytes": 70641,
+  "bytes": 11192
+ },
+ "nyapit/assets/images/poses/pose_09_run.png": {
+  "sha1": "cfe521eab474b4ad0148ff8f1f0f4f08b0e31667",
+  "file": "nyapit/assets/images/poses/pose_09_run.webp",
+  "type": "image/webp",
+  "sourceBytes": 80177,
+  "bytes": 13574
+ },
+ "nyapit/assets/images/poses/pose_10_lipstick.png": {
+  "sha1": "16942b6b6e60c0631c96b3863ea5f63a92acf845",
+  "file": "nyapit/assets/images/poses/pose_10_lipstick.webp",
+  "type": "image/webp",
+  "sourceBytes": 82690,
+  "bytes": 14958
+ },
+ "nyapit/assets/images/poses/pose_11_mirror.png": {
+  "sha1": "544a576813ca0f5abf362b7331fd70cf6d4db025",
+  "file": "nyapit/assets/images/poses/pose_11_mirror.webp",
+  "type": "image/webp",
+  "sourceBytes": 81600,
+  "bytes": 14168
+ },
+ "nyapit/assets/images/poses/pose_12_shop.png": {
+  "sha1": "e4b8caee746567ca76104136c2bed5930b86fc57",
+  "file": "nyapit/assets/images/poses/pose_12_shop.webp",
+  "type": "image/webp",
+  "sourceBytes": 84793,
+  "bytes": 15652
+ },
+ "nyapit/assets/images/poses/pose_13_skincare.png": {
+  "sha1": "260d78ee0a5609b8914f4c23988356d116ce3fcb",
+  "file": "nyapit/assets/images/poses/pose_13_skincare.webp",
+  "type": "image/webp",
+  "sourceBytes": 78772,
+  "bytes": 14024
+ },
+ "nyapit/assets/images/poses/pose_14_selfie.png": {
+  "sha1": "650e975451657cef8ee943a83da6691f12f777c3",
+  "file": "nyapit/assets/images/poses/pose_14_selfie.webp",
+  "type": "image/webp",
+  "sourceBytes": 79703,
+  "bytes": 12428
+ },
+ "nyapit/assets/images/poses/pose_15_bouquet.png": {
+  "sha1": "4bb6cc6d907366e4735a4b7ca427edd15f0aab5d",
+  "file": "nyapit/assets/images/poses/pose_15_bouquet.webp",
+  "type": "image/webp",
+  "sourceBytes": 92858,
+  "bytes": 26196
+ },
+ "nyapit/assets/products/creamy-rd01.jpg": {
+  "sha1": "08f165e61068bdf3d4aa3b9555486893009ccaac",
+  "file": "nyapit/assets/products/creamy-rd01.webp",
+  "type": "image/webp",
+  "sourceBytes": 267785,
+  "bytes": 21456
+ },
+ "nyapit/assets/products/curler.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "nyapit/assets/products/curler.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
+ "nyapit/assets/products/powder-000.jpg": {
+  "sha1": "af3ba9c912df6e6d5c14b5d0d9665db8b0b21f2d",
+  "file": "nyapit/assets/products/powder-000.webp",
+  "type": "image/webp",
+  "sourceBytes": 134481,
+  "bytes": 70722
+ },
+ "nyapit/assets/products/stick.jpg": {
+  "sha1": "206db3d0a899388dfe11e0f26ebfa3d957366899",
+  "file": "nyapit/assets/products/stick.webp",
+  "type": "image/webp",
+  "sourceBytes": 84295,
+  "bytes": 12366
+ },
+ "nyapit/assets/products/vinilash-pro.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "nyapit/assets/products/vinilash-pro.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
+ "spin/assets/brand/app-icon.png": {
+  "sha1": "602f1cea289cc2ddeafc33a65304fd8bcbf68996",
+  "file": "spin/assets/brand/app-icon.webp",
+  "type": "image/webp",
+  "sourceBytes": 1595693,
+  "bytes": 65346
+ },
+ "spin/assets/brand/bpedia-logo.png": {
+  "sha1": "73de12e38cdc68bd8f0ec9e45146e9a62dc631bd",
+  "file": "spin/assets/brand/bpedia-logo.webp",
+  "type": "image/webp",
+  "sourceBytes": 168171,
+  "bytes": 46570
+ },
+ "spin/assets/images/mascot-bpedia.png": {
+  "sha1": "65962a07361ca8080899d6f1c18a7c5111052c3d",
+  "file": "spin/assets/images/mascot-bpedia.webp",
+  "type": "image/webp",
+  "sourceBytes": 744938,
+  "bytes": 20948
+ },
+ "spin/assets/images/mascot-clean.png": {
+  "sha1": "82d2d73f21a5e8c109799faad88ed78110706445",
+  "file": "spin/assets/images/mascot-clean.webp",
+  "type": "image/webp",
+  "sourceBytes": 1015284,
+  "bytes": 51558
+ },
+ "spin/assets/images/mascot_back_raw.png": {
+  "sha1": "e3954def2b810093f1a856ac9e586a092605ac93",
+  "file": "spin/assets/images/mascot_back_raw.webp",
+  "type": "image/webp",
+  "sourceBytes": 63959,
+  "bytes": 13432
+ },
+ "spin/assets/images/mascot_front.png": {
+  "sha1": "9e7a578e47f71b3ac55a0c6629205d9a16723d38",
+  "file": "spin/assets/images/mascot_front.webp",
+  "type": "image/webp",
+  "sourceBytes": 94291,
+  "bytes": 26072
+ },
+ "spin/assets/images/mascot_front_raw.png": {
+  "sha1": "da1985da1c18aef89c7b48dfab854bdc0c6a696e",
+  "file": "spin/assets/images/mascot_front_raw.webp",
+  "type": "image/webp",
+  "sourceBytes": 102212,
+  "bytes": 22112
+ },
+ "spin/assets/images/mascot_idle.png": {
+  "sha1": "9e7a578e47f71b3ac55a0c6629205d9a16723d38",
+  "file": "spin/assets/images/mascot_idle.webp",
+  "type": "image/webp",
+  "sourceBytes": 94291,
+  "bytes": 26072
+ },
+ "spin/assets/images/mascot_side.png": {
+  "sha1": "d9987960430aa0fe35fa2f90deb3dc9135f2ca28",
+  "file": "spin/assets/images/mascot_side.webp",
+  "type": "image/webp",
+  "sourceBytes": 73446,
+  "bytes": 26862
+ },
+ "spin/assets/images/mascot_side_raw.png": {
+  "sha1": "70e1cb50a5e51e0dc8f7002d439d4ed9174f4ce4",
+  "file": "spin/assets/images/mascot_side_raw.webp",
+  "type": "image/webp",
+  "sourceBytes": 74959,
+  "bytes": 22690
+ },
+ "spin/assets/images/mascot_spin.png": {
+  "sha1": "d9987960430aa0fe35fa2f90deb3dc9135f2ca28",
+  "file": "spin/assets/images/mascot_spin.webp",
+  "type": "image/webp",
+  "sourceBytes": 73446,
+  "bytes": 26862
+ },
+ "spin/assets/images/mascot_win.png": {
+  "sha1": "35a10374036f74cc0a5fe8225cef7c1636db11eb",
+  "file": "spin/assets/images/mascot_win.webp",
+  "type": "image/webp",
+  "sourceBytes": 96043,
+  "bytes": 28404
+ },
+ "spin/assets/images/mascot_zonk.png": {
+  "sha1": "fe8386bf401b6074f06330d4534d8f5c47ee3d33",
+  "file": "spin/assets/images/mascot_zonk.webp",
+  "type": "image/webp",
+  "sourceBytes": 94980,
+  "bytes": 27416
+ },
+ "spin/assets/products/bioaqua.jpg": {
+  "sha1": "370f77593f3bc4ac2166bae9330f7b8fabdb3949",
+  "file": "spin/assets/products/bioaqua.webp",
+  "type": "image/webp",
+  "sourceBytes": 191595,
+  "bytes": 79480
+ },
+ "spin/assets/products/creamy-detail.jpg": {
+  "sha1": "0a0f52237d2362cc198b95f4de47400166b903a4",
+  "file": "spin/assets/products/creamy-detail.webp",
+  "type": "image/webp",
+  "sourceBytes": 126759,
+  "bytes": 74068
+ },
+ "spin/assets/products/creamy-main.jpg": {
+  "sha1": "e137fc9bde926b02a44b4c3ebcbfe5e5439fc142",
+  "file": "spin/assets/products/creamy-main.webp",
+  "type": "image/webp",
+  "sourceBytes": 118978,
+  "bytes": 57332
+ },
+ "spin/assets/products/creamy-or01-alt.jpg": {
+  "sha1": "95697c90238d37938d36130b4c57e7149122553b",
+  "file": "spin/assets/products/creamy-or01-alt.webp",
+  "type": "image/webp",
+  "sourceBytes": 807307,
+  "bytes": 72688
+ },
+ "spin/assets/products/creamy-or01-swatch.jpg": {
+  "sha1": "fbcd6c6c4e72b82460aa93aa8a3f317e4a8ddcca",
+  "file": "spin/assets/products/creamy-or01-swatch.webp",
+  "type": "image/webp",
+  "sourceBytes": 79851,
+  "bytes": 53556
+ },
+ "spin/assets/products/creamy-rd01-clean.jpg": {
+  "sha1": "08f165e61068bdf3d4aa3b9555486893009ccaac",
+  "file": "spin/assets/products/creamy-rd01-clean.webp",
+  "type": "image/webp",
+  "sourceBytes": 267785,
+  "bytes": 21456
+ },
+ "spin/assets/products/creamy-rd01-swatch.jpg": {
+  "sha1": "eee3ac054c3de8cc5dd6c9c36a994eac824a3814",
+  "file": "spin/assets/products/creamy-rd01-swatch.webp",
+  "type": "image/webp",
+  "sourceBytes": 76913,
+  "bytes": 52074
+ },
+ "spin/assets/products/creamy-rd01.jpg": {
+  "sha1": "08f165e61068bdf3d4aa3b9555486893009ccaac",
+  "file": "spin/assets/products/creamy-rd01.webp",
+  "type": "image/webp",
+  "sourceBytes": 267785,
+  "bytes": 21456
+ },
+ "spin/assets/products/curler.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "spin/assets/products/curler.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
+ "spin/assets/products/eyebrow-ash.jpg": {
+  "sha1": "0ed8a4bfce80a275a13ac2f3333304f5e4c74e2a",
+  "file": null,
+  "sourceBytes": 117535
+ },
+ "spin/assets/products/eyebrow-black.png": {
+  "sha1": "0e39db68c7f6939d0d06ae91b1c652449ea52e74",
+  "file": "spin/assets/products/eyebrow-black.webp",
+  "type": "image/webp",
+  "sourceBytes": 1190325,
+  "bytes": 143640
+ },
+ "spin/assets/products/eyebrow-guru.jpg": {
+  "sha1": "8664632879aa02782d80390b6b9924a7dc014a35",
+  "file": "spin/assets/products/eyebrow-guru.webp",
+  "type": "image/webp",
+  "sourceBytes": 249503,
+  "bytes": 49032
+ },
+ "spin/assets/products/foundation.jpg": {
+  "sha1": "41284481987a35baef6dd60b0a1a983d6e45291b",
+  "file": "spin/assets/products/foundation.webp",
+  "type": "image/webp",
+  "sourceBytes": 332340,
+  "bytes": 45862
+ },
+ "spin/assets/products/powder-000.jpg": {
+  "sha1": "af3ba9c912df6e6d5c14b5d0d9665db8b0b21f2d",
+  "file": "spin/assets/products/powder-000.webp",
+  "type": "image/webp",
+  "sourceBytes": 134481,
+  "bytes": 70722
+ },
+ "spin/assets/products/powder-222.jpg": {
+  "sha1": "288111ed97b22082c49e0c2f248d1cbecc90fcd9",
+  "file": "spin/assets/products/powder-222.webp",
+  "type": "image/webp",
+  "sourceBytes": 139639,
+  "bytes": 77644
+ },
+ "spin/assets/products/powder.jpg": {
+  "sha1": "af34413b0dad032460eebb2a2ebd4d6b42ffef30",
+  "file": "spin/assets/products/powder.webp",
+  "type": "image/webp",
+  "sourceBytes": 94182,
+  "bytes": 44812
+ },
+ "spin/assets/products/spon-basah.jpg": {
+  "sha1": "04807f12b78a3944f55fa12a6ec4f090bd567656",
+  "file": "spin/assets/products/spon-basah.webp",
+  "type": "image/webp",
+  "sourceBytes": 69605,
+  "bytes": 27176
+ },
+ "spin/assets/products/spon-mandi.jpg": {
+  "sha1": "46e3d3404a0410f9fac67d1df6900c417c0b6c6f",
+  "file": "spin/assets/products/spon-mandi.webp",
+  "type": "image/webp",
+  "sourceBytes": 225358,
+  "bytes": 144124
+ },
+ "spin/assets/products/stick.jpg": {
+  "sha1": "206db3d0a899388dfe11e0f26ebfa3d957366899",
+  "file": "spin/assets/products/stick.webp",
+  "type": "image/webp",
+  "sourceBytes": 84295,
+  "bytes": 12366
+ },
+ "spin/assets/products/ticket-BPFOLKA100.png": {
+  "sha1": "82419b6fe31837cbe6bab649c9e5ce3536347d60",
+  "file": "spin/assets/products/ticket-BPFOLKA100.webp",
+  "type": "image/webp",
+  "sourceBytes": 157495,
+  "bytes": 35796
+ },
+ "spin/assets/products/ticket-BPFOLKA25.png": {
+  "sha1": "b2d054b0c75102d8042083c311770c3b4af0a608",
+  "file": "spin/assets/products/ticket-BPFOLKA25.webp",
+  "type": "image/webp",
+  "sourceBytes": 136524,
+  "bytes": 28534
+ },
+ "spin/assets/products/ticket-BPFOLKA50.png": {
+  "sha1": "65935a6faef87b78f2dee9bacdf1c72500d6e595",
+  "file": "spin/assets/products/ticket-BPFOLKA50.webp",
+  "type": "image/webp",
+  "sourceBytes": 133229,
+  "bytes": 27888
+ },
+ "spin/assets/products/ticket-BPFOLKA500.png": {
+  "sha1": "1b4bef819851674b0fb45d3fccd8a4f619eea074",
+  "file": "spin/assets/products/ticket-BPFOLKA500.webp",
+  "type": "image/webp",
+  "sourceBytes": 1169736,
+  "bytes": 57862
+ },
+ "hub/assets/avatars/bag.png": {
+  "sha1": "69946f219978c1d1ddd2a5a2609371d6263ed9b9",
+  "file": "hub/assets/avatars/bag.webp",
+  "type": "image/webp",
+  "sourceBytes": 71691,
+  "bytes": 19372
+ },
+ "hub/assets/avatars/peek.png": {
+  "sha1": "c5a651a6d2b0fefad42991d681c198f11a4e7ab1",
+  "file": "hub/assets/avatars/peek.webp",
+  "type": "image/webp",
+  "sourceBytes": 76901,
+  "bytes": 19476
+ },
+ "hub/assets/avatars/stand.png": {
+  "sha1": "c5aedee8f94e1c4e4d2e52bdcf966d30ec4027ed",
+  "file": "hub/assets/avatars/stand.webp",
+  "type": "image/webp",
+  "sourceBytes": 80932,
+  "bytes": 16754
+ },
+ "hub/assets/avatars/wave.png": {
+  "sha1": "8dba546375fad60e48584d3fecdb2210dba42743",
+  "file": "hub/assets/avatars/wave.webp",
+  "type": "image/webp",
+  "sourceBytes": 82611,
+  "bytes": 17132
+ },
+ "hub/assets/avatars/wink.png": {
+  "sha1": "3feef58ea99f8cc44f6810cd82437a5ab9cd30b6",
+  "file": "hub/assets/avatars/wink.webp",
+  "type": "image/webp",
+  "sourceBytes": 82515,
+  "bytes": 19406
+ },
+ "hub/assets/brand/bipy-peek.png": {
+  "sha1": "af3a8d6b38c87dd6c3a884fad13390cb2a59ddf0",
+  "file": "hub/assets/brand/bipy-peek.webp",
+  "type": "image/webp",
+  "sourceBytes": 248834,
+  "bytes": 41162
+ },
+ "hub/assets/brand/bipy-wave.png": {
+  "sha1": "79064423212f64713e5ab6626efa6f410ccb5a98",
+  "file": "hub/assets/brand/bipy-wave.webp",
+  "type": "image/webp",
+  "sourceBytes": 150693,
+  "bytes": 29432
+ },
+ "hub/assets/brand/bipy-wink.png": {
+  "sha1": "bdf861da9596aee8a79a5cd124f5714e3e3c0a28",
+  "file": "hub/assets/brand/bipy-wink.webp",
+  "type": "image/webp",
+  "sourceBytes": 189481,
+  "bytes": 32506
+ },
+ "hub/assets/brand/bpedia-logo-reverse.png": {
+  "sha1": "5e1e3f6e66638ef7f6ee22bd36859c4dbc86c4c6",
+  "file": "hub/assets/brand/bpedia-logo-reverse.webp",
+  "type": "image/webp",
+  "sourceBytes": 77358,
+  "bytes": 28534
+ },
+ "hub/assets/brand/icon-512.png": {
+  "sha1": "e973207fd59f2bd34a857307ffa14c8fa9732bb4",
+  "file": "hub/assets/brand/icon-512.webp",
+  "type": "image/webp",
+  "sourceBytes": 88685,
+  "bytes": 29728
+ },
+ "hub/assets/covers/drop.jpg": {
+  "sha1": "509e9bf22a001b8f39526de908988d008527b61f",
+  "file": "hub/assets/covers/drop.webp",
+  "type": "image/webp",
+  "sourceBytes": 146066,
+  "bytes": 103742
+ },
+ "hub/assets/covers/nyapit.jpg": {
+  "sha1": "0e33635d018fe87cbea1abf05cf61d1f96c7714f",
+  "file": "hub/assets/covers/nyapit.webp",
+  "type": "image/webp",
+  "sourceBytes": 91873,
+  "bytes": 59566
+ },
+ "hub/assets/covers/spin.jpg": {
+  "sha1": "d77b189a4d94a4cb71ee59f62608c9903abcc304",
+  "file": "hub/assets/covers/spin.webp",
+  "type": "image/webp",
+  "sourceBytes": 93335,
+  "bytes": 60572
+ }
+}

@@ -68,6 +68,43 @@ async function seedGameAuth(slug,dataDir,pin){
  fs.writeFileSync(path.join(dataDir,'auth.json'),JSON.stringify(record),{mode:0o600});
 }
 
+/* Skin online per game (hub/public/skins/<slug>.css|js): tata letak HP,
+   tablet, dan layar lipat plus polesan khusus versi cloud. Disisipkan setelah
+   CSS game sehingga versi booth/desktop (folder 01/02/03) tidak berubah dan
+   npm run sync tidak menimpanya. */
+function skinTags(slug){
+ const tags=[];
+ if(fs.existsSync(path.join(PUBLIC,'skins',`${slug}.css`)))tags.push(`<link rel="stylesheet" href="/hub/skins/${slug}.css?v=${VERSION}">`);
+ if(fs.existsSync(path.join(PUBLIC,'skins',`${slug}.js`)))tags.push(`<script defer src="/hub/skins/${slug}.js?v=${VERSION}"></script>`);
+ return tags.join('');
+}
+
+/* Media ringan (npm run media:lite): URL aset game & hub dilayani dengan MP3
+   (dari WAV) atau WebP (dari PNG/JPG, hanya untuk browser yang mengirim
+   Accept: image/webp) selama checksum berkas sumber sama dengan manifest.
+   Bila game di-sync dan asetnya berubah, gateway kembali ke berkas asli. */
+function loadMediaLite(){
+ const dir=path.join(__dirname,'media-lite');
+ const lite=new Map();
+ let manifest={};
+ try{manifest=JSON.parse(fs.readFileSync(path.join(dir,'manifest.json'),'utf8'));}catch{return lite;}
+ for(const [key,entry] of Object.entries(manifest)){
+  if(!entry?.file||key.includes('..')||entry.file.includes('..'))continue;
+  const source=key.startsWith('hub/')?path.join(PUBLIC,key.slice(4)):path.join(ROOT,'games',key);
+  const file=path.join(dir,entry.file);
+  if(fs.existsSync(source)&&fs.existsSync(file)&&crypto.createHash('sha1').update(fs.readFileSync(source)).digest('hex')===entry.sha1)lite.set(key,{file,image:entry.type==='image/webp'});
+ }
+ return lite;
+}
+
+/* Versi ringan yang boleh dikirim untuk permintaan ini, atau null. */
+function liteFor(lite,key,req){
+ const entry=lite.get(key);
+ if(!entry||!['GET','HEAD'].includes(req.method))return null;
+ if(entry.image&&!/image\/webp/i.test(String(req.headers.accept||'')))return null;
+ return entry;
+}
+
 async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=false,allowedHosts=null,now=()=>Date.now(),rng}={}){
  if(!dataDir)throw new Error('dataDir wajib diisi.');
  fs.mkdirSync(dataDir,{recursive:true});
@@ -95,12 +132,13 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
    const app=await createApp({dataDir:gameData,port:0,rng,cloud:{engineFor:(req,real)=>visitors.get(req.headers['x-gamysuf-visitor'],real),sessionTtlMs:GAME_SESSION_TTL}});
    const handler=app.server.listeners('request')[0];
-   mounts.set(game.slug,{game,app,visitors,handler,origin:app.origin,prefix:`/g/${game.slug}`});
+   mounts.set(game.slug,{game,app,visitors,handler,origin:app.origin,prefix:`/g/${game.slug}`,skin:skinTags(game.slug)});
   }
  }finally{
   http.Server.prototype.listen=hostingerListen;
  }
  const builtinSlugs=GAMES.map(game=>game.slug);
+ const mediaLite=loadMediaLite();
 
  function cardsOf(mount){
   const seen=new Set();
@@ -137,11 +175,11 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   ctx.res.end(ctx.req.method==='HEAD'?undefined:payload);
  }
 
- function serveFile(ctx,file,{csp=HUB_CSP,cache='public, max-age=86400',transform=null}={}){
+ function serveFile(ctx,file,{csp=HUB_CSP,cache='public, max-age=86400',transform=null,headers:extra={}}={}){
   if(!file||!fs.existsSync(file)||!fs.statSync(file).isFile())return notFound(ctx);
   const type=TYPES[path.extname(file).toLowerCase()];
   if(!type)return notFound(ctx);
-  const headers={'Content-Type':type,'Cache-Control':/text\/html/.test(type)?'no-cache':cache,'Content-Security-Policy':csp,'X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin'};
+  const headers={'Content-Type':type,'Cache-Control':/text\/html/.test(type)?'no-cache':cache,'Content-Security-Policy':csp,'X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin',...extra};
   if(transform&&/text\/html/.test(type))return send(ctx,200,Buffer.from(transform(fs.readFileSync(file,'utf8'))),headers);
   const size=fs.statSync(file).size;
   const cookies=ctx.cookies.length?{'Set-Cookie':ctx.cookies}:{};
@@ -169,6 +207,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  async function proxy(ctx,mount,rest){
   const {req,res}=ctx;
   const route=rest.split('?')[0]||'/';
+  let liteKey=`${mount.game.slug}${route}`;
+  try{liteKey=decodeURIComponent(liteKey);}catch{/* URL rusak: pakai apa adanya */}
+  const lite=liteFor(mediaLite,liteKey,req);
+  if(lite)return serveFile(ctx,lite.file,{cache:'public, max-age=604800',headers:lite.image?{Vary:'Accept'}:{}});
   const origin=req.headers.origin;
   const sameOrigin=origin===`https://${ctx.host}`||origin===`http://${ctx.host}`;
   if(!['GET','HEAD'].includes(req.method)&&!sameOrigin)throw fail('Permintaan harus berasal dari situs ini.',403);
@@ -198,6 +240,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    const setCookies=[...[].concat(head.headers['set-cookie']||[]).map(cookie=>rewriteCookie(cookie,mount.prefix,ctx.secure)),...ctx.cookies];
    if(setCookies.length)out['set-cookie']=setCookies;
    if(out.location)out.location=rewriteLocation(out.location,mount.prefix);
+   if(mediaLite.get(liteKey)?.image)out.vary='Accept';
    if(/text\/html|text\/css|javascript|application\/json/i.test(type)&&req.method!=='HEAD')return null;
    if(head.headers['content-length']!==undefined)out['content-length']=head.headers['content-length'];
    res.writeHead(head.statusCode,out);
@@ -207,7 +250,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   let text=upstream.body.toString('utf8');
   if(upstream.statusCode===200&&req.method==='POST'&&mount.game.resultRoutes.includes(route))recordResult(ctx,mount,route,text);
   text=rewriteOutgoing(text,mount.prefix);
-  if(/text\/html/i.test(type)&&(route==='/'||route==='/index.html'))text=text.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
+  if(/text\/html/i.test(type)&&(route==='/'||route==='/index.html'))text=text.replace(/<\/head>/i,`${mount.skin}<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
   const buffer=Buffer.from(text,'utf8');
   out['content-length']=String(buffer.length);
   res.writeHead(upstream.statusCode,out);
@@ -319,7 +362,12 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   if(relative.includes('..')||relative.includes('\\')||relative.includes('\0'))return notFound(ctx);
   const pages={'/':'index.html','/index.html':'index.html','/studio':'studio.html','/studio.html':'studio.html','/manifest.webmanifest':'manifest.webmanifest','/favicon.ico':'assets/brand/favicon.ico','/robots.txt':'robots.txt'};
   if(pages[relative])return serveFile(ctx,path.join(PUBLIC,pages[relative]));
-  if(relative.startsWith('/hub/')&&/^\/hub\/[a-zA-Z0-9_./-]+$/.test(relative))return serveFile(ctx,path.join(PUBLIC,relative.slice(5)));
+  if(relative.startsWith('/hub/')&&/^\/hub\/[a-zA-Z0-9_./-]+$/.test(relative)){
+   const key=`hub${relative.slice(4)}`;
+   const lite=liteFor(mediaLite,key,ctx.req);
+   if(lite)return serveFile(ctx,lite.file,{headers:{Vary:'Accept'}});
+   return serveFile(ctx,path.join(PUBLIC,relative.slice(5)),{headers:mediaLite.has(key)?{Vary:'Accept'}:{}});
+  }
   return notFound(ctx);
  }
 

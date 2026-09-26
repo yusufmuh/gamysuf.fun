@@ -1,0 +1,24 @@
+/* Skin online Nyapit Bareng Bpedia (hanya di Gamysuf Arcade, bukan versi booth).
+   Di HP, aturan game menaruh mesin capit di atas panel host, tetapi aturan
+   sesudahnya mengembalikan urutan panel host ke 0 sehingga tombol MAIN ada
+   ±1100 px di bawah (dua layar gulir). Skin ini mengembalikan urutan mesin
+   lebih dulu dan membuat dialog koin muat di HP mendatar. */
+
+button,a,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+
+@media (max-width:760px){
+ .game-shell>.machine-panel{order:1}
+ .game-shell>.host-panel{order:2}
+ .game-shell>.score-panel{order:3}
+ .chute-bay .bay-label{font-size:8px}
+}
+
+@media (max-height:560px) and (orientation:landscape){
+ .coin-dialog{max-height:calc(100dvh - 16px);overflow-y:auto;padding:18px 26px}
+ .coin-dialog h2{font-size:26px;margin-top:8px}
+ .coin-dialog h2 em{font-size:36px}
+}
+
+@media (hover:none){
+ .icon-button:hover{transform:none}
+}

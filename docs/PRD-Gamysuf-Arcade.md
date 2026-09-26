@@ -29,6 +29,8 @@ Ketiga game diberi opsi `cloud` di `server.cjs` masing-masing (commit di repo lo
 ```
 hub/server.cjs        gateway + API hub + Studio + penyaji game tambahan (createHub)
 hub/dispatch.cjs      memanggil handler HTTP game di memori (tanpa port internal; streaming aset biner)
+hub/public/skins/     skin online per game (<slug>.css/.js): tata letak HP/tablet/lipat, getar, dll.
+hub/media-lite/       MP3 (dari WAV) & WebP (dari PNG/JPG) + manifest checksum (npm run media:lite)
 hub/rewrite.cjs       awalan URL /g/<slug> (keluar) & pelepasan awalan (body JSON masuk), cookie Path
 hub/visitors.cjs      mesin demo per pengunjung (Engine asli game di atas MemoryStore)
 hub/registry.cjs      metadata & panduan game bawaan + adapter hasil → kartu/XP
@@ -36,14 +38,15 @@ hub/players.cjs       profil, XP, level, streak, misi, lencana, album, peringkat
 hub/custom-games.cjs  slot game tambahan (ZIP HTML5 / tautan), sampul, pengaturan arcade
 hub/public/           index.html (arcade), studio.html, css/, js/hub.js, js/studio.js, js/inject.js, assets/
 games/{spin,nyapit,drop}/  salinan runtime game
-scripts/              sync-games.cjs, capture.cjs (+ -electron / -playwright), package-hostinger.cjs
-tests/hub.test.cjs    11 tes (gateway, dispatch, aset biner, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP)
+scripts/              sync-games.cjs, media-lite.cjs, capture.cjs (+ -electron / -playwright), package-hostinger.cjs
+tests/hub.test.cjs    12 tes (gateway, dispatch, aset biner, media ringan, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP)
 .github/workflows/    ci.yml: npm test + paket Hostinger di setiap PR/push main
 ```
 
 ### Alur permintaan
 1. `/g/<slug>/*` → gateway memeriksa Origin (POST wajib same-origin), menulis ulang Host/Origin ke origin internal game, menambah header `x-gamysuf-visitor`, lalu memanggil handler game **di memori** (`dispatch.cjs`). HTML/CSS/JS/JSON ditampung untuk ditulis ulang; gambar/audio/font diteruskan streaming.
-2. Respons HTML/CSS/JS/JSON diberi awalan `/g/<slug>`; cookie sesi game dipindah ke `Path=/g/<slug>/api/` (+`Secure` di HTTPS); `inject.js` disisipkan ke halaman utama game (tombol GAMYSUF + notifikasi XP).
+2. Respons HTML/CSS/JS/JSON diberi awalan `/g/<slug>`; cookie sesi game dipindah ke `Path=/g/<slug>/api/` (+`Secure` di HTTPS); skin online (`/hub/skins/<slug>.css|js`, bila ada) dan `inject.js` disisipkan ke halaman utama game (tombol GAMYSUF + notifikasi XP).
+   Aset `.wav` dan PNG/JPG yang ada di `hub/media-lite/manifest.json` (checksum sumber cocok) dijawab dengan MP3/WebP; WebP hanya bila browser mengirim `Accept: image/webp` (`Vary: Accept`).
 3. Di dalam game (mode `cloud`): permintaan tanpa sesi admin → `cloud.engineFor()` = mesin demo milik pengunjung itu (stok asli aman, tidak ada tabrakan antar pengunjung). Perangkat yang login dashboard game → mesin asli (mode resmi booth).
 4. Respons hasil (`/api/play`, `/api/spin`, `/api/bonus`) dengan `demo:true` dicatat `players.record()` → XP/kartu/misi/lencana (anti-curang karena dibaca di server, idempoten per requestId).
 
@@ -64,6 +67,14 @@ tests/hub.test.cjs    11 tes (gateway, dispatch, aset biner, isolasi pengunjung,
 - Panduan: cara kerja 4 langkah, aturan main adil, tabel XP, FAQ, modal "Cara main" per game (langkah, kontrol, tips).
 - Kejujuran: online selalu demo; hadiah fisik hanya di booth. Beauty Drop menampilkan teks "simulasi demo" pada hasil demo.
 - v1.1 (engagement): gelar per level (Pendatang Baru Lv1, Pemburu Hoki Lv3, Kolektor Muda Lv5, Bintang Arcade Lv8, Master Kapsul Lv12, Legenda Bpedia Lv16); progres setiap lencana + kartu "Target berikutnya"; "Saran Bipy" di hero (bonus harian → misi 2 game → game dengan kartu terbanyak yang belum ditemukan); pita LIVE (jumlah main hari ini + kartu legendaris/epik, level kelipatan 5, album lengkap; di memori, 24 terakhir); popularitas per game; progres per game di modal Cara main; hitung mundur musim mingguan; tombol Bagikan progres (Web Share/salin); confetti saat naik level/lencana; toast ringkas di HP.
+
+### Responsif & perangkat (skin online)
+Game booth dirancang untuk TV 16:9. Versi online memakai skin di `hub/public/skins/` (tidak menyentuh folder 01/02/03, tidak tertimpa `npm run sync`):
+- **Beauty Drop** (`drop.css/js`): layar tegak = tata letak mengalir & bisa digulir; HP tegak = unit `--u` 9–11,5 px, teks min. ±11 px, target sentuh ≥40 px, papan selebar layar, tombol DROP menempel di bawah & papan otomatis digulir ke tengah; HP mendatar = kontrol kiri, papan kanan + petunjuk putar HP; hasil demo tanpa kode klaim/syarat penukaran; getar halus (Android) saat DROP & kartu mekar; kartu hologram ikut kemiringan HP (Android, iOS dilewati agar tanpa izin sensor); tombol layar penuh di bilah atas untuk perangkat sentuh.
+- **Spin** (`spin.css`): pemutar musik pindah ke baris sendiri ≤900 px (pilih lagu & volume disembunyikan ≤1100 px); teks 5–8 px di HP dinaikkan; orbit dekoratif tidak melebarkan halaman.
+- **Nyapit** (`nyapit.css`): mesin capit kembali di urutan pertama di HP (tombol MAIN tidak lagi ±1100 px di bawah); dialog koin muat di HP mendatar.
+- `inject.js`: tombol GAMYSUF ringkas (ikon saja) di HP.
+Matriks uji: 390×844, 844×390, 344×882 (lipat tertutup), 884×1104 (lipat terbuka), 820×1180, 1180×820, 1366×768, 1440×900, 1920×1080 — tanpa scroll horizontal.
 
 ## 5. Studio (`/studio`)
 Statistik (pemain, aktif hari ini, main hari ini, total), daftar game bawaan + tombol Dashboard + info login, pengumuman beranda (+tautan), game unggulan kabinet, sembunyikan game bawaan, kelola maksimal 6 game tambahan (slug, judul, subjudul, deskripsi, cara main, tag, warna, sampul, ZIP/tautan, publikasi), Top 10 minggu ini.
@@ -90,6 +101,7 @@ npm run qa -- 1366x768          # juga 390x844 untuk HP
 CAPTURE_ENGINE=chromium npm run qa   # paksa Playwright/Chromium walau Electron ada
 npm run qa -- covers            # perbarui sampul game dari tampilan terbaru
 npm run package:hostinger
+npm run media:lite              # setelah sync: MP3/WebP ringan (butuh devDependency lamejs; gambar butuh Playwright)
 ```
 Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 
@@ -99,6 +111,7 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - Pengunjung online = mesin demo pribadi; mode resmi hanya perangkat booth yang login.
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 - Game bawaan dipanggil di memori (dispatch.cjs), bukan lewat port 127.0.0.1, agar cocok dengan runner Hostinger satu-soket.
+- Penyesuaian versi online (HP/tablet, kejujuran demo) lewat skin hub, bukan mengubah salinan `games/`; media ringan lewat manifest checksum, bukan mengganti berkas game.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 Terakhir diperbarui: 2026-09-27 WIB oleh Claude (sesi cloud, branch `claude/zen-meitner-wrzrju`).
@@ -108,14 +121,17 @@ Terakhir diperbarui: 2026-09-27 WIB oleh Claude (sesi cloud, branch `claude/zen-
 | Patch mode cloud di game 01/02/03 (+ baseline commit lokal 01 & 02) | ✅ tes 83/54/29 lulus (sesi 2026-09-27, laptop pemilik) |
 | Hub: gateway, dispatch di memori, visitors, players, custom games, Studio, API | ✅ |
 | Front-end arcade v1.1 (gelar, target, saran Bipy, LIVE, bagikan, confetti) + Studio + inject | ✅ QA Chromium 1600×900, 1366×768, 390×844: 0 error konsol, 0 scroll horizontal |
-| Tes hub | ✅ 11/11 |
+| Tes hub | ✅ 12/12 |
+| Responsif semua perangkat (skin drop/spin/nyapit, dashboard ≤380 px) | ✅ 9 profil perangkat tanpa scroll horizontal; alur Beauty Drop diuji di HP, lipat, tablet |
+| Media ringan (MP3/WebP) | ✅ audio 51,5→5,5 MB, gambar 33,6→4,7 MB; halaman HP 0,7–1,6 MB |
 | CI GitHub Actions (npm test + paket Hostinger) | ✅ `.github/workflows/ci.yml` |
 | ZIP Hostinger | ✅ `npm run package:hostinger` (v1.1.0, ±96 MB) |
 | Repo GitHub `yusufmuh/gamysuf.fun` | ✅ kode di `main`; perbaikan v1.1 di PR dari `claude/zen-meitner-wrzrju` → merge oleh pemilik |
 | Deploy ke hPanel gamysuf.fun | ⏳ pemilik: Import Git repository `yusufmuh/gamysuf.fun` (main), isi `ADMIN_PIN` sendiri, lalu cek `/hub-api/health` |
-| Tindak lanjut game 03 | ⏳ hasil demo online Beauty Drop masih menampilkan "kode klaim untuk petugas"; sembunyikan kode klaim saat `demo:true` di folder `03 bipy-beauty-drop`, lalu `npm run sync` |
+| Kode klaim di hasil demo Beauty Drop | ✅ online disembunyikan oleh skin; opsional perbaiki juga di folder `03 bipy-beauty-drop` untuk mode demo booth |
 
 ## 11. Log serah-terima
 - **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.
 - **2026-09-27 (pemilik)**: tiga commit perbaikan Hostinger — entry guard untuk runner, listen asli untuk server internal game, dispatch di memori.
 - **2026-09-27 (Claude, sesi cloud)**: v1.1.0. Perbaikan: entry guard kini tidak menyalakan server produksi kedua saat `hub/server.cjs` dimuat skrip/tes (sebelumnya QA/skrip ikut membuka port 3000 dan menulis `~/gamysuf-data`); dispatch di memori dipindah ke `hub/dispatch.cjs` (statusCode implisit, writeHead dengan reason, streaming aset biner, error handler → 500/502, batas waktu 30 dtk → 504); beranda tidak lagi melebar ke samping (album); celah kosong di Studio; 401 di konsol Studio (endpoint `/hub-api/session`). Fitur engagement v1.1 (§4), `/hub-api/health`, meta OG/canonical, robots menutup `/g/*/admin.html`. QA kini jalan di Linux/cloud lewat Playwright + Chromium (`scripts/capture-playwright.cjs`) dan memeriksa scroll horizontal. CI GitHub Actions. Game 01/02/03 tidak diubah (folder aslinya tidak ada di sesi cloud).
+- **2026-09-27 (Claude, sesi cloud, lanjutan)**: permintaan "semua game responsif di HP/laptop/tablet/HP lipat, permulus dashboard, sempurnakan Beauty Drop". Audit Playwright 9 profil perangkat → skin online `hub/public/skins/` (drop: tata letak HP/tablet/lipat + getar + tilt + layar penuh + sembunyikan kode klaim demo; spin: header & teks HP; nyapit: urutan mesin & dialog koin), dashboard ≤380 px & meta PWA iOS, `inject.js` ringkas di HP. Media ringan `npm run media:lite` (lamejs untuk MP3, Chromium untuk WebP) + negosiasi `Accept` di gateway. Tes 12/12, QA 0 error. Tidak memakai kredensial pemilik; deploy Hostinger tetap lewat Import Git (lihat §7).

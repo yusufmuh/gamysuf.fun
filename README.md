@@ -12,13 +12,16 @@ Satu dashboard interaktif untuk tiga game booth Bpedia, berjalan di cloud (Hosti
 Fitur pemain: profil & avatar Bipy, XP & level dengan gelar (Pendatang Baru → Legenda Bpedia), streak harian, 3 misi harian, 11 lencana dengan progres "target berikutnya", album 57 kartu, papan peringkat mingguan (hitung mundur musim) & sepanjang masa, saran game dari Bipy, pita aktivitas LIVE, bagikan progres, kode pemulihan profil, panduan & FAQ.
 Studio pemilik (`/studio`): statistik, tautan dashboard tiap game, pengumuman, game unggulan, sembunyikan game, kelola game tambahan (maks. 6).
 
+Semua perangkat: dashboard dan ketiga game diuji di HP tegak/mendatar, HP lipat (tertutup/terbuka), tablet tegak/mendatar, laptop, Mac, dan desktop tanpa geser ke samping. Penyesuaian versi online ada di `hub/public/skins/<game>.css|js` (tata letak HP Beauty Drop, header Spin, urutan Nyapit, getar & kemiringan kartu di HP) sehingga versi booth tidak berubah. Aset berat disajikan ringan: WAV → MP3 dan PNG/JPG → WebP (±85 MB → ±10 MB) lewat `npm run media:lite`.
+
 ## Menjalankan
 
 ```bash
 npm install
 npm run dev                 # http://127.0.0.1:4400 · PIN lokal 123456
-npm test                    # 11 tes: gateway, dispatch, pemain, Studio, keamanan ZIP
+npm test                    # 12 tes: gateway, dispatch, media ringan, pemain, Studio, keamanan ZIP
 npm run sync                # salin ulang game dari folder 01/02/03 (laptop pemilik)
+npm run media:lite          # MP3/WebP ringan untuk online (jalankan setelah sync)
 npm run qa                  # tur visual → artifacts/qa (Electron bila ada, selain itu Chromium/Playwright)
 npm run qa -- 390x844       # ukuran lain; tambah "covers" untuk memperbarui sampul
 npm run package:hostinger   # release/Gamysuf-Arcade-<versi>-Hostinger.zip

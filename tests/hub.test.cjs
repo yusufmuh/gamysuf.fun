@@ -107,6 +107,33 @@ test('aset biner game diteruskan utuh lewat gateway',async t=>{
  assert.equal((await call(hub,'/g/drop/assets/tidak-ada.png')).status,404);
 });
 
+test('media ringan: WAV → MP3, PNG → WebP hanya bila browser menerima WebP',async t=>{
+ const hub=await hubFor(t);
+ const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'..','hub','media-lite','manifest.json'),'utf8'));
+ const get=(route,accept)=>new Promise((resolve,reject)=>{
+  http.get({host:'127.0.0.1',port:hub.server.address().port,path:route,headers:{host:HOST,...(accept?{accept}:{})}},res=>{
+   const chunks=[];res.on('data',chunk=>chunks.push(chunk));res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,body:Buffer.concat(chunks)}));
+  }).on('error',reject);
+ });
+ const audio=manifest['drop/assets/audio/prize-bundling.wav'];
+ const mp3=await get('/g/drop/assets/audio/prize-bundling.wav');
+ assert.equal(mp3.headers['content-type'],'audio/mpeg');
+ assert.equal(mp3.body.length,audio.bytes);
+ assert.ok(mp3.body.length*5<audio.sourceBytes,'MP3 jauh lebih kecil dari WAV');
+ assert.equal(mp3.body[0],0xFF,'awal frame MPEG');
+ const image=manifest['drop/assets/images/hosts-duo.png'];
+ const webp=await get('/g/drop/assets/images/hosts-duo.png','image/avif,image/webp,*/*');
+ assert.equal(webp.headers['content-type'],'image/webp');
+ assert.equal(webp.headers.vary,'Accept');
+ assert.equal(webp.body.length,image.bytes);
+ const png=await get('/g/drop/assets/images/hosts-duo.png','image/png,*/*');
+ assert.equal(png.headers['content-type'],'image/png','browser lama tetap dapat PNG asli');
+ assert.equal(png.body.length,image.sourceBytes);
+ assert.equal(png.headers.vary,'Accept');
+ const avatar=await get('/hub/assets/avatars/wink.png','image/webp,*/*');
+ assert.equal(avatar.headers['content-type'],'image/webp','gambar beranda hub ikut ringan');
+});
+
 test('pengunjung publik bermain di mesin demo pribadi; stok asli tidak tersentuh',async t=>{
  const hub=await hubFor(t);
  const played=await call(hub,'/g/nyapit/api/play',{method:'POST',visitor:vid('a'),body:{requestId:'hub-test-0001',username:'A'}});
