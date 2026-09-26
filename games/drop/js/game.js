@@ -376,9 +376,9 @@
   $('revealLead').textContent=result.demo?`Selamat, ${result.username}! Ini simulasi demo, jadi hadiah tidak diserahkan. Main di booth Bpedia untuk hadiah asli.`:`Selamat, ${result.username}! Hadiahmu siap diserahkan petugas Bpedia.`;
   $('voucherBox').hidden=!prize.voucherCode;
   $('voucherCode').textContent=prize.voucherCode||'';
-  $('claimLabel').textContent='Kode klaim untuk petugas';
+  $('claimLabel').textContent=result.demo?'Kode simulasi (tidak bisa ditukar)':'Kode klaim untuk petugas';
   $('claimCode').textContent=result.id;
-  $('claimPlayer').textContent=`${result.username} · tunjukkan layar ini ke petugas Bpedia`;
+  $('claimPlayer').textContent=result.demo?`${result.username} · hasil latihan di mode demo`:`${result.username} · tunjukkan layar ini ke petugas Bpedia`;
   $('claimCode').parentElement.hidden=false;
   $('revealTerms').textContent=[prize.terms,prize.voucherCode?state.settings.voucherTerms:''].filter(Boolean).join(' ');
  }

@@ -89,7 +89,7 @@ Statistik (pemain, aktif hari ini, main hari ini, total), daftar game bawaan + t
 - Pengaturan: Framework **Other**, Node **22**, Build command kosong, Entry file **hub/server.cjs**.
 - Env: `ADMIN_PIN` (wajib, diisi pemilik sendiri), `NODE_ENV=production`, opsional `ALLOWED_HOSTS=gamysuf.fun,www.gamysuf.fun`.
 - Catatan Hostinger: bila domain sudah terdaftar sebagai website lain di paket, flow Node.js meminta website lama dihapus dulu.
-- Runner Node.js Hostinger memuat entry lewat `require()` (bukan `node hub/server.cjs`) dan membajak `http.Server.listen`. Karena itu: server mulai otomatis bila `require.main` di luar proyek (tes/skrip di `tests/`, `scripts/` tidak ikut menyalakan server; `GAMYSUF_NO_AUTOSTART=1` untuk alat lain), selama `createApp` game, `listen()` hanya memberi tanda siap (server internal game tidak terikat ke port/soket mana pun, origin cadangan `127.0.0.1:4300` dari commit pemilik 46a2da0), dan trafik game lewat `dispatch.cjs`.
+- Runner Node.js Hostinger memuat entry lewat `require()` (bukan `node hub/server.cjs`) dan membajak `http.Server.listen`. Karena itu: server mulai otomatis bila `require.main` di luar proyek (tes/skrip di `tests/`, `scripts/`, `artifacts/` dan Electron tidak ikut menyalakan server; `GAMYSUF_AUTOSTART=0` untuk alat lain), selama `createApp` game, `listen()` hanya memberi tanda siap (server internal game tidak terikat ke port/soket mana pun, origin cadangan `127.0.0.1:4300` dari commit pemilik 46a2da0), dan trafik game lewat `dispatch.cjs`.
 - Verifikasi setelah deploy: `https://gamysuf.fun/hub-api/health` → `{ok:true, pinConfigured:true}`.
 
 ## 8. Menjalankan & verifikasi
@@ -114,25 +114,33 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - Penyesuaian versi online (HP/tablet, kejujuran demo) lewat skin hub, bukan mengubah salinan `games/`; media ringan lewat manifest checksum, bukan mengganti berkas game.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
-Terakhir diperbarui: 2026-09-27 WIB oleh Claude (sesi cloud, branch `claude/zen-meitner-wrzrju`).
+Terakhir diperbarui: 2026-09-27 WIB oleh Claude (sesi cloud, merge `main` 83eb7ee ke PR #1). **LIVE di https://gamysuf.fun** (dari `main`).
 
 | Area | Status |
 |---|---|
-| Patch mode cloud di game 01/02/03 (+ baseline commit lokal 01 & 02) | ✅ tes 83/54/29 lulus (sesi 2026-09-27, laptop pemilik) |
-| Hub: gateway, dispatch di memori, visitors, players, custom games, Studio, API | ✅ |
-| Front-end arcade v1.1 (gelar, target, saran Bipy, LIVE, bagikan, confetti) + Studio + inject | ✅ QA Chromium 1600×900, 1366×768, 390×844: 0 error konsol, 0 scroll horizontal |
-| Tes hub | ✅ 12/12 |
-| Responsif semua perangkat (skin drop/spin/nyapit, dashboard ≤380 px) | ✅ 9 profil perangkat tanpa scroll horizontal; alur Beauty Drop diuji di HP, lipat, tablet |
-| Media ringan (MP3/WebP) | ✅ audio 51,5→5,5 MB, gambar 33,6→4,7 MB; halaman HP 0,7–1,6 MB |
+| Patch mode cloud di game 01/02/03 (+ fallback origin) | ✅ tes 83 / 54 / 29 lulus, sumber = salinan `games/` (sync tanpa diff) |
+| Hub: gateway (`dispatch.cjs`), visitors, players, custom games, Studio, API | ✅ tes hub 16/16 (`hub.test.cjs` + `hosting.test.cjs`: loader Hostinger, meta CSP, media ringan) |
+| Front-end arcade v1.1 (gelar, target, saran Bipy, LIVE, bagikan, confetti) + Studio + inject | ✅ QA Chromium 1600×900 & 390×844: 0 error konsol, 0 scroll horizontal |
+| Responsif semua perangkat (skin drop/spin/nyapit, dashboard ≤380 px) | ✅ 9 profil perangkat tanpa scroll horizontal; alur Beauty Drop diuji di HP, lipat, tablet (branch PR #1) |
+| Media ringan (MP3/WebP) | ✅ audio 51,5→5,5 MB, gambar 33,6→4,7 MB; halaman HP 0,7–1,6 MB (branch PR #1) |
 | CI GitHub Actions (npm test + paket Hostinger) | ✅ `.github/workflows/ci.yml` |
-| ZIP Hostinger | ✅ `npm run package:hostinger` (v1.1.0, ±96 MB) |
-| Repo GitHub `yusufmuh/gamysuf.fun` | ✅ kode di `main`; perbaikan v1.1 di PR dari `claude/zen-meitner-wrzrju` → merge oleh pemilik |
-| Deploy ke hPanel gamysuf.fun | ⏳ pemilik: Import Git repository `yusufmuh/gamysuf.fun` (main), isi `ADMIN_PIN` sendiri, lalu cek `/hub-api/health` |
-| Kode klaim di hasil demo Beauty Drop | ✅ online disembunyikan oleh skin; opsional perbaiki juga di folder `03 bipy-beauty-drop` untuk mode demo booth |
+| GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat); v1.1 di PR #1 dari `claude/zen-meitner-wrzrju`, merge oleh pemilik = deploy produksi |
+| Deploy Hostinger | ✅ gamysuf.fun menyajikan hub + 3 game dari `main`; ADMIN_PIN sudah diisi pemilik |
+| Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
+| Keamanan | ⚠️ `.git/config` lokal menyimpan token GitHub (ghp_…) di URL remote: cabut token itu dan pakai `gh auth login` |
+
+### Catatan runtime Hostinger (penting untuk AI berikutnya)
+- Loader Node Hostinger membajak `http.Server.prototype.listen` dan tidak selalu menjalankan `hub/server.cjs` sebagai `require.main`.
+- Karena itu: (a) selama `createApp` game, `createHub` mengganti `listen()` dengan penanda siap tanpa soket — server internal game tidak terikat ke port/soket mana pun dan memakai origin cadangan `127.0.0.1:4300`; (b) gateway memanggil handler game **in-memory** lewat `hub/dispatch.cjs`, bukan lewat TCP; (c) `shouldAutostart()` menyalakan server kecuali di-require dari `tests/`, `scripts/`, `artifacts/` atau di dalam Electron (paksa dengan `GAMYSUF_AUTOSTART=1/0`).
+- Tes `tests/hosting.test.cjs` meniru kondisi ini; jalankan sebelum push karena push ke `main` = deploy produksi.
+- CDN Hostinger (hcdn) **mengganti header Content-Security-Policy** menjadi `upgrade-insecure-requests`. Karena itu `withMetaCsp()` menanam kebijakan yang sama sebagai `<meta http-equiv>` di semua HTML (hub, game via gateway, game tambahan). Header lain (X-Frame-Options, nosniff, Referrer-Policy) tetap lolos. Skin online (`/hub/skins/…`) dan media ringan berasal dari origin yang sama sehingga lolos kebijakan itu.
+- Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
 
 ## 11. Log serah-terima
 - **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.
-- **2026-09-27 (pemilik)**: tiga commit perbaikan Hostinger — entry guard untuk runner, listen asli untuk server internal game, dispatch di memori.
-- **2026-09-27 (Claude, sesi cloud)**: v1.1.0. Perbaikan: entry guard kini tidak menyalakan server produksi kedua saat `hub/server.cjs` dimuat skrip/tes (sebelumnya QA/skrip ikut membuka port 3000 dan menulis `~/gamysuf-data`); dispatch di memori dipindah ke `hub/dispatch.cjs` (statusCode implisit, writeHead dengan reason, streaming aset biner, error handler → 500/502, batas waktu 30 dtk → 504); beranda tidak lagi melebar ke samping (album); celah kosong di Studio; 401 di konsol Studio (endpoint `/hub-api/session`). Fitur engagement v1.1 (§4), `/hub-api/health`, meta OG/canonical, robots menutup `/g/*/admin.html`. QA kini jalan di Linux/cloud lewat Playwright + Chromium (`scripts/capture-playwright.cjs`) dan memeriksa scroll horizontal. CI GitHub Actions. Game 01/02/03 tidak diubah (folder aslinya tidak ada di sesi cloud).
-- **2026-09-27 (Claude, sesi cloud, lanjutan)**: permintaan "semua game responsif di HP/laptop/tablet/HP lipat, permulus dashboard, sempurnakan Beauty Drop". Audit Playwright 9 profil perangkat → skin online `hub/public/skins/` (drop: tata letak HP/tablet/lipat + getar + tilt + layar penuh + sembunyikan kode klaim demo; spin: header & teks HP; nyapit: urutan mesin & dialog koin), dashboard ≤380 px & meta PWA iOS, `inject.js` ringkas di HP. Media ringan `npm run media:lite` (lamejs untuk MP3, Chromium untuk WebP) + negosiasi `Accept` di gateway. Tes 12/12, QA 0 error. Tidak memakai kredensial pemilik; deploy Hostinger tetap lewat Import Git (lihat §7).
-- **2026-09-27 (Claude, sesi cloud)**: menggabungkan `main` (46a2da0, origin cadangan Hostinger dari pemilik) ke branch PR; konflik `hub/server.cjs` diselesaikan dengan mempertahankan origin cadangan di atas `dispatch.cjs`. Server internal game kini tidak lagi membuka soket (listen no-op saat createApp). Tes 12/12, simulasi runner Hostinger (listen hanya sekali) lulus.
+- **2026-09-27 (agen lain, identitas git pemilik)**: 4 commit perbaikan Hostinger (entry guard, isolasi listen, dispatch in-memory, fallback origin), membuat repo `yusufmuh/gamysuf.fun`, deploy ke gamysuf.fun.
+- **2026-09-27 (Claude, sesi cloud, branch PR #1)**: v1.1.0 — entry guard tidak menyalakan server kedua saat dimuat skrip/tes; dispatch dipindah ke `hub/dispatch.cjs` (statusCode implisit, writeHead dengan reason, streaming aset biner, 5xx untuk error/batas waktu); beranda tidak melebar (album); celah Studio; `/hub-api/session`, `/hub-api/health`; fitur engagement v1.1 (§4); meta OG/canonical; robots menutup `/g/*/admin.html`; QA Playwright + Chromium dengan cek scroll horizontal; CI GitHub Actions.
+- **2026-09-27 (Claude, sesi cloud, branch PR #1)**: responsif semua perangkat lewat skin online `hub/public/skins/` (drop: tata letak HP/tablet/lipat, getar, tilt, layar penuh, sembunyikan kode klaim demo; spin: header & teks HP; nyapit: urutan mesin & dialog koin), dashboard ≤380 px & meta PWA iOS, `inject.js` ringkas di HP; media ringan `npm run media:lite` (lamejs → MP3, Chromium → WebP) + negosiasi `Accept` di gateway.
+- **2026-09-27 (Claude)**: memindahkan fallback origin ke sumber game 01/02/03, entry guard yang tidak menyalakan server saat di-require alat lokal, alamat socket loader aman, label demo jujur di Beauty Drop, `tests/hosting.test.cjs` (3 skenario loader), QA ulang, PRD.
+- **2026-09-27 (Claude)**: CSP ditanam sebagai meta karena CDN mengganti header; hub tidak autostart di Electron.
+- **2026-09-27 (Claude, sesi cloud, branch PR #1)**: menggabungkan `main` (46a2da0, lalu dbb1d68 & 83eb7ee) ke PR #1. Konflik `hub/server.cjs`: `shouldAutostart()` dan `withMetaCsp()` versi `main` dipakai, digabung dengan `dispatch.cjs`, skin online, dan media ringan; server game tanpa soket (listen no-op saat createApp). Tes 16/16, QA 0 error, alur Beauty Drop HP/tablet lulus di bawah meta CSP.

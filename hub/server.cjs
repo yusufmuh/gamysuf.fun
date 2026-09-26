@@ -29,6 +29,18 @@ const HUB_CSP="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-i
 /* Game tambahan hasil unggahan boleh memakai pola umum game HTML5 (inline
    script, eval, wasm, CDN https). Hanya pemegang ADMIN_PIN yang bisa unggah. */
 const PLAY_CSP="default-src 'self' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https: wss: data: blob:; font-src 'self' data: https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'";
+/* CDN Hostinger (hcdn) mengganti header Content-Security-Policy dengan
+   "upgrade-insecure-requests", jadi kebijakan yang sama juga ditanam sebagai
+   <meta http-equiv> di setiap halaman HTML. Direktif yang tidak berlaku di
+   meta (frame-ancestors, sandbox, report-*) dibuang; X-Frame-Options tetap
+   dikirim sebagai header. */
+function withMetaCsp(html,policy){
+ if(!policy||/http-equiv=["']Content-Security-Policy["']/i.test(html))return html;
+ const content=String(policy).split(';').map(part=>part.trim()).filter(part=>part&&!/^(?:frame-ancestors|sandbox|report-uri|report-to)\b/i.test(part)).join('; ');
+ const tag=`<meta http-equiv="Content-Security-Policy" content="${content.replace(/"/g,'&quot;')}">`;
+ return /<head[^>]*>/i.test(html)?html.replace(/<head[^>]*>/i,match=>`${match}${tag}`):tag+html;
+}
+
 const HOP=new Set(['connection','keep-alive','proxy-authenticate','proxy-authorization','te','trailer','transfer-encoding','upgrade']);
 const VISITOR_COOKIE='gamysuf_vid';
 const ADMIN_COOKIE='gamysuf_admin';
@@ -187,7 +199,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   const type=TYPES[path.extname(file).toLowerCase()];
   if(!type)return notFound(ctx);
   const headers={'Content-Type':type,'Cache-Control':/text\/html/.test(type)?'no-cache':cache,'Content-Security-Policy':csp,'X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin',...extra};
-  if(transform&&/text\/html/.test(type))return send(ctx,200,Buffer.from(transform(fs.readFileSync(file,'utf8'))),headers);
+  if(/text\/html/.test(type)){
+   const html=fs.readFileSync(file,'utf8');
+   return send(ctx,200,Buffer.from(withMetaCsp(transform?transform(html):html,csp)),headers);
+  }
   const size=fs.statSync(file).size;
   const cookies=ctx.cookies.length?{'Set-Cookie':ctx.cookies}:{};
   ctx.res.writeHead(200,{...headers,...cookies,'Content-Length':size});
@@ -258,7 +273,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   let text=upstream.body.toString('utf8');
   if(upstream.statusCode===200&&req.method==='POST'&&mount.game.resultRoutes.includes(route))recordResult(ctx,mount,route,text);
   text=rewriteOutgoing(text,mount.prefix);
-  if(/text\/html/i.test(type)&&(route==='/'||route==='/index.html'))text=text.replace(/<\/head>/i,`${mount.skin}<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
+  if(/text\/html/i.test(type)){
+   text=withMetaCsp(text,upstream.headers['content-security-policy']);
+   if(route==='/'||route==='/index.html')text=text.replace(/<\/head>/i,`${mount.skin}<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
+  }
   const buffer=Buffer.from(text,'utf8');
   out['content-length']=String(buffer.length);
   res.writeHead(upstream.statusCode,out);
@@ -419,9 +437,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
 
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,host,resolve);});
  const address=server.address();
+ const boundPort=typeof address==='object'&&address?address.port:null;
  return {
   server,players,custom,mounts,dataDir,pinConfigured:pinValid,
-  origin:`http://127.0.0.1:${address.port}`,
+  origin:boundPort?`http://127.0.0.1:${boundPort}`:null,
   async close(){
    players.flush();
    await new Promise(resolve=>server.close(resolve));
@@ -430,17 +449,24 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  };
 }
 
-/* Mulai otomatis saat dijalankan langsung (npm start) atau dimuat pembungkus
-   hosting dari luar proyek (runner Hostinger memakai require(), jadi
-   require.main !== module). Tes dan skrip proyek (tests/, scripts/) hanya
-   memakai createHub, tanpa ikut menyalakan server produksi kedua. */
+/* Kapan server dinyalakan otomatis:
+   - dijalankan langsung (`node hub/server.cjs`, `npm start`);
+   - dimuat loader hosting yang berada di luar folder proyek (Hostinger tidak
+     selalu menjalankan berkas ini sebagai modul utama).
+   Tidak menyala hanya saat di-require dari folder alat proyek sendiri
+   (tests/, scripts/, artifacts/), supaya QA/Electron tidak membuka port
+   3000 di 0.0.0.0. Pembungkus lain, termasuk milik hosting, tetap menyala.
+   GAMYSUF_AUTOSTART=1/0 memaksa perilaku tersebut. */
 function shouldAutostart(){
- if(require.main===module)return true;
- if(process.env.GAMYSUF_NO_AUTOSTART==='1'||process.env.NODE_ENV==='test'||process.execArgv.includes('--test'))return false;
- const main=require.main?.filename||'';
- return !['tests','scripts'].some(dir=>main.startsWith(path.join(ROOT,dir)+path.sep));
+ if(process.env.GAMYSUF_AUTOSTART==='1')return true;
+ if(process.env.GAMYSUF_AUTOSTART==='0'||process.env.NODE_ENV==='test'||process.execArgv.includes('--test'))return false;
+ /* Hub tidak pernah berjalan di dalam Electron di produksi; di sana ia hanya
+    di-require oleh alat QA (require.main kosong di proses utama Electron). */
+ if(process.versions.electron)return false;
+ if(require.main===module||!require.main?.filename)return true;
+ const [top]=path.relative(ROOT,path.resolve(require.main.filename)).split(/[\\/]/);
+ return !['tests','scripts','artifacts'].includes(top);
 }
-
 if(shouldAutostart()){
  const local=process.argv.includes('--local');
  const adminPin=process.env.ADMIN_PIN||(local?'123456':null);
@@ -453,7 +479,8 @@ if(shouldAutostart()){
   allowedHosts:process.env.ALLOWED_HOSTS||null
  }).then(hub=>{
   const address=hub.server.address();
-  console.log(`Gamysuf Arcade v${VERSION} (${local?'lokal':'cloud'}) siap di port ${address.port} · data: ${hub.dataDir}${hub.pinConfigured?'':' · PERINGATAN: ADMIN_PIN belum diisi/valid, Studio dan dashboard game terkunci'}${local?` · PIN lokal: ${adminPin}`:''}`);
+  const where=typeof address==='object'&&address?`port ${address.port}`:`socket ${address||'loader hosting'}`;
+  console.log(`Gamysuf Arcade v${VERSION} (${local?'lokal':'cloud'}) siap di ${where} · data: ${hub.dataDir}${hub.pinConfigured?'':' · PERINGATAN: ADMIN_PIN belum diisi/valid, Studio dan dashboard game terkunci'}${local?` · PIN lokal: ${adminPin}`:''}`);
   const stop=()=>{try{hub.players.flush();}catch{}process.exit(0);};
   process.on('SIGTERM',stop);
   process.on('SIGINT',stop);

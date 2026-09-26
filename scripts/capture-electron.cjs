@@ -7,6 +7,7 @@ const {app,BrowserWindow}=require('electron');
 const fs=require('node:fs');
 const os=require('node:os');
 const path=require('node:path');
+process.env.GAMYSUF_AUTOSTART='0';
 const {createHub}=require('../hub/server.cjs');
 
 const mode=process.env.CAPTURE_MODE||'covers';
