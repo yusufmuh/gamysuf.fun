@@ -36,7 +36,7 @@ hub/custom-games.cjs  slot game tambahan (ZIP HTML5 / tautan), sampul, pengatura
 hub/public/           index.html (arcade), studio.html, css/, js/hub.js, js/studio.js, js/inject.js, assets/
 games/{spin,nyapit,drop}/  salinan runtime game
 scripts/              sync-games.cjs, capture(-electron).cjs, package-hostinger.cjs
-tests/hub.test.cjs    9 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP)
+tests/*.test.cjs      13 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP, hosting)
 ```
 
 ### Alur permintaan
@@ -79,7 +79,7 @@ Statistik (pemain, aktif hari ini, main hari ini, total), daftar game bawaan + t
 ## 8. Menjalankan & verifikasi
 ```bash
 npm install && npm run dev      # 127.0.0.1:4400, PIN lokal 123456
-npm test                        # 9 tes hub
+npm test                        # 13 tes hub dan hosting
 npm run qa                      # 16 tangkapan layar + daftar error konsol (artifacts/qa/1600x900)
 npm run qa -- 1366x768
 npm run qa:responsive           # Chromium/Firefox/WebKit + gameplay; perlu Playwright beserta browsernya

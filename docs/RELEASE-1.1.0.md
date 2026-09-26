@@ -17,7 +17,7 @@ Rilis web, 27 September 2026. Domain tujuan: https://gamysuf.fun/.
 - Tes server: hub 13/13, Spin 83/83, Nyapit 54/54, Drop 29/29.
 - Pemeriksaan aset dan sintaks ketiga sumber lulus.
 - Tur Electron 1600×900: 16 tangkapan, nol error konsol.
-- Matriks responsif: 616/616 pemeriksaan lulus. Chromium pada lebar 320, 360, 390, 540, 768, 844 lanskap, 1024, 1366, dan 1920; Firefox/WebKit pada 320, 390, 768, 1366. Putaran animasi penuh ketiga game diuji pada Chromium 390; Drop dilipat/dibuka 390→540→390 saat kapsul jatuh lalu hasil ditutup dan tombol main kembali aktif.
+- Matriks responsif tersimpan: 616/616 pemeriksaan lulus. Chromium pada lebar 320, 360, 390, 540, 768, 844 lanskap, 1366, dan 1920; Firefox/WebKit pada 320, 390, 768, 1366. Putaran animasi penuh ketiga game diuji pada Chromium 390; Drop diuji dengan perubahan viewport 390→540→390 saat kapsul jatuh lalu hasil ditutup dan tombol main kembali aktif.
 - Pemeriksaan Drop setelah penyesuaian tablet terakhir: 24/24 pada 768×1024 dan 24/24 pada 1024×1366. Papan dan tombol terlihat bersama. Interaksi dashboard: 24/24.
 - Rincian browser tersimpan di `artifacts/qa-responsive/report.json`; interaksi dashboard 24/24 lulus, rinciannya di `artifacts/hub-interaction-qa/report.json`.
 - Seluruh permainan uji memakai data lokal sementara. Stok booth dan profil produksi tidak digunakan untuk QA.

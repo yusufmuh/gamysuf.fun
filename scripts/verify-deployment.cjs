@@ -4,6 +4,7 @@
 const fs=require('node:fs');
 const path=require('node:path');
 const crypto=require('node:crypto');
+const {execFileSync}=require('node:child_process');
 const root=path.join(__dirname,'..');
 const pkg=require('../package.json');
 const base=process.argv[2]||'https://gamysuf.fun';
@@ -27,7 +28,8 @@ async function main(){
   if(!html.includes('Content-Security-Policy'))throw new Error(`${route}: CSP meta not present.`);
  }
  for(const file of ['css/responsive.css','js/hub.js','js/inject.js','assets/covers/spin.jpg','assets/covers/nyapit.jpg','assets/covers/drop.jpg']){
-  const expected=fs.readFileSync(path.join(root,'hub','public',file));
+  // Compare the committed bytes that Linux deploys, regardless of Windows checkout line endings.
+  const expected=execFileSync('git',['show',`HEAD:hub/public/${file}`],{cwd:root,maxBuffer:10*1024*1024});
   const actual=await read(`/hub/${file}?v=${pkg.version}`);
   const localHash=hash(expected),liveHash=hash(actual);
   checks[checks.length-1].localSha256=localHash;
