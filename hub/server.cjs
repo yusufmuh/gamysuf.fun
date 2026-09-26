@@ -369,7 +369,8 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  };
 }
 
-if(require.main===module){
+const isTest=process.execArgv.includes('--test')||process.env.NODE_ENV==='test'||Boolean(module.parent&&/\.test\./.test(module.parent.filename||''));
+if(!isTest){
  const local=process.argv.includes('--local');
  const adminPin=process.env.ADMIN_PIN||(local?'123456':null);
  createHub({
