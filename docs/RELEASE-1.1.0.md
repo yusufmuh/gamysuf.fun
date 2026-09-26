@@ -24,7 +24,7 @@ Rilis web, 27 September 2026. Domain tujuan: https://gamysuf.fun/.
 
 ## Deployment
 
-Rilis disiapkan untuk repo `yusufmuh/gamysuf.fun`, entry `hub/server.cjs`, konfigurasi Hostinger yang sudah ada. Status build dan probe setelah publikasi disimpan dalam `artifacts/deployment-1.1.0.json`. File itu hanya ditulis setelah ada bukti dari Hostinger dan domain.
+Rilis 1.1.0 sudah live melalui repo `yusufmuh/gamysuf.fun`, entry `hub/server.cjs`, Node 20 dan konfigurasi Hostinger yang sudah ada. Build berhasil; probe domain memeriksa 12 endpoint publik dan SHA-256 kode terhadap Git. CDN mengompresi ulang JPEG: ketiga sampul tetap 1200×675, dHash tidak berubah, dan SSIM 0,982–0,987. Bukti probe: `artifacts/deployment-1.1.0.json`; bukti gambar terdekode: `artifacts/live-image-verification/report.json`. Screenshot live mengonfirmasi dashboard dan arena Drop pada lebar HP, tanpa error konsol yang teramati. Permainan produksi tidak dijalankan untuk QA.
 
 ## Batas verifikasi
 

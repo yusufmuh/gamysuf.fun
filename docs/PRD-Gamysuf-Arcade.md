@@ -110,7 +110,7 @@ Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.1.0**, tujuan https://
 | Hub: gateway (dispatch in-memory), visitors, players, custom games, Studio, API | ✅ tes hub 13/13 (termasuk simulasi loader Hostinger & meta CSP) |
 | Front-end arcade + Studio + inject | ✅ 616 pemeriksaan responsif + 24 interaksi, Chromium/Firefox/WebKit; QA Electron 16 tangkapan, 0 error konsol |
 | GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat) |
-| Deploy Hostinger | Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan; lihat bukti rilis di atas |
+| Deploy Hostinger | ✅ web 1.1.0 live; 12 endpoint publik lulus. Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan |
 | Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
 | Keamanan | ⚠️ `.git/config` lokal menyimpan token GitHub (ghp_…) di URL remote: cabut token itu dan pakai `gh auth login` |
 

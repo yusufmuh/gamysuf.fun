@@ -9,6 +9,8 @@ const root=path.join(__dirname,'..');
 const pkg=require('../package.json');
 const base=process.argv[2]||'https://gamysuf.fun';
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+const imageEvidencePath=path.join(root,'artifacts','live-image-verification','report.json');
+const imageEvidence=fs.existsSync(imageEvidencePath)?JSON.parse(fs.readFileSync(imageEvidencePath,'utf8')):null;
 
 async function main(){
  const checks=[];
@@ -34,13 +36,22 @@ async function main(){
   const localHash=hash(expected),liveHash=hash(actual);
   checks[checks.length-1].localSha256=localHash;
   checks[checks.length-1].liveSha256=liveHash;
-  checks[checks.length-1].ok=localHash===liveHash;
-  if(localHash!==liveHash)throw new Error(`${file}: deployed bytes differ from verified local artifact.`);
+  const check=checks[checks.length-1];
+  check.verification='exact committed bytes';
+  check.ok=localHash===liveHash;
+  if(!check.ok&&file.startsWith('assets/covers/')){
+   // CDN JPEG recompression requires separate decoded-image evidence bound to both hashes.
+   const evidence=imageEvidence?.images?.find(item=>item.url===new URL(`/hub/${file}?v=${pkg.version}`,base).href);
+   const similarity=evidence?.decoded_similarity;
+   check.ok=Boolean(evidence&&evidence.local.sha256===localHash&&evidence.live.sha256===liveHash&&evidence.same_dimensions&&similarity?.ssim_0_1>=0.98&&similarity.dhash_hamming_bits_64===0);
+   if(check.ok){check.verification='decoded image evidence for CDN JPEG';check.ssim=similarity.ssim_0_1;check.evidence='artifacts/live-image-verification/report.json';}
+  }
+  if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed covers.`);
  }
  const report={verifiedAt:new Date().toISOString(),base,version:catalog.version,checks};
  const out=path.join(root,'artifacts',`deployment-${pkg.version}.json`);
  fs.mkdirSync(path.dirname(out),{recursive:true});
  fs.writeFileSync(out,JSON.stringify(report,null,2)+'\n');
- console.log(`Verified ${base}: v${catalog.version}, ${checks.length} successful public endpoints; six artifact hashes match.`);
+ console.log(`Verified ${base}: v${catalog.version}, ${checks.length} successful public endpoints; code hashes and all cover images verified.`);
 }
 main().catch(error=>{console.error(error.message);process.exitCode=1;});
