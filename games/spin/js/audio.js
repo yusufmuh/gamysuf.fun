@@ -2,6 +2,7 @@
 class BoothAudio {
   constructor() {
     this.ctx = null;
+    this.suspendedByPage = false;
     this.enabled = true;
     this.volume = 0.75;
     this.voice = true;
@@ -33,6 +34,7 @@ class BoothAudio {
   async activate() {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return false;
       this.ctx = new AudioCtx();
 
       // Master Nodes
@@ -72,6 +74,22 @@ class BoothAudio {
       await this.ctx.resume();
     }
     this.apply();
+    return true;
+  }
+
+  async handleVisibility() {
+    if (!this.ctx) return;
+    try {
+      if (document.hidden && this.ctx.state === 'running') {
+        await this.ctx.suspend();
+        this.suspendedByPage = true;
+      } else if (!document.hidden && this.suspendedByPage) {
+        this.suspendedByPage = false;
+        if (this.enabled && this.ctx.state === 'suspended') await this.ctx.resume();
+      }
+    } catch {
+      this.suspendedByPage = false;
+    }
   }
 
   apply() {
@@ -122,7 +140,7 @@ class BoothAudio {
 
   // --- Background Music (BGM) & Jingles ---
   async playBGM(track = this.bgmTrack, loop = this.bgmLoop) {
-    await this.activate();
+    if (!await this.activate()) return;
     this.bgmTrack = track;
     this.bgmLoop = loop;
 
@@ -235,7 +253,7 @@ class BoothAudio {
   async clip(name, spoken = true) {
     this.stopVoices();
     if (!this.enabled || (spoken && !this.voice)) return;
-    await this.activate();
+    if (!await this.activate()) return;
     const generation = this.generation;
 
     try {
@@ -406,3 +424,4 @@ class BoothAudio {
   }
 }
 window.boothAudio = new BoothAudio();
+document.addEventListener('visibilitychange', () => window.boothAudio.handleVisibility());

@@ -34,3 +34,13 @@ input[type="file"]{padding:10px;border-radius:14px;border:1.5px dashed var(--lin
 .form-grid .full{grid-column:1/-1}
 .upload-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width:900px){.studio-stats{grid-template-columns:repeat(2,1fr)}.studio-grid,.form-grid,.upload-row{grid-template-columns:1fr}.custom-item{grid-template-columns:1fr}}
+.studio-main,#studioApp,.studio-grid>*{min-width:0}
+#studioApp{display:grid;gap:24px}
+.studio-stats,.studio-grid{padding:0}
+.studio input[type="checkbox"]{width:20px;height:20px;min-height:20px;padding:0;flex:none;accent-color:var(--pink)}
+.studio .topnav{flex-wrap:wrap}.studio .topnav .brand{flex:none}.studio .topnav .nav-links{white-space:nowrap}
+.builtin{grid-template-columns:minmax(0,1fr) auto}
+.builtin b,.builtin small,.custom-item b,.custom-item small{overflow-wrap:anywhere}
+.studio input,.studio select,.studio textarea{min-width:0;max-width:100%;font-size:16px}
+.studio .panel>header{flex-wrap:wrap}
+@media(max-width:480px){.studio-main{padding-top:20px}.studio .panel{padding:18px}.builtin{grid-template-columns:1fr}.builtin .btn{width:100%}.stat b{font-size:1.7rem}.stat small{font-size:.65rem}.studio .login-panel{margin-top:10px;width:100%}.studio .topnav .nav-links a{padding-inline:5px;font-size:.8rem}.studio .custom-item{min-width:0}.studio .hide-list label{min-height:44px}}

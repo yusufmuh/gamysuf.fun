@@ -886,3 +886,39 @@ body.kiosk:not([data-stage=home]) #kioskExit{display:flex}
   .mode-switch-thumb{transition:none}
   .showcase-prize{transition:none}
 }
+
+/* The desktop height cap must not clip the stacked game on tablets and phones. */
+@media(max-width:1120px){
+  .machine-panel,.host-panel,.score-panel{max-height:none}
+  .host-panel{overflow:visible}
+  .host-panel .mascot-stage{flex:none;min-height:160px}
+}
+@media(max-width:760px){
+  .game-shell{min-height:0}
+  .machine-panel{display:flex;min-width:0}
+  .cabinet{flex:none;height:clamp(350px,58dvh,460px);min-height:350px;touch-action:pan-y}
+  .machine-console{gap:8px}
+  .play-button{touch-action:manipulation}
+  .machine-crown{padding-left:12px;padding-right:100px}
+  .machine-crown strong{font-size:clamp(14px,4vw,22px);white-space:normal;line-height:1.05}
+  .crown-state-wrap{right:8px}
+  .crown-state-wrap .dj-mini-eq{display:none}
+  .host-panel .mascot-stage{height:210px}
+}
+@media(max-width:760px) and (max-height:560px) and (orientation:landscape){
+  .topbar{min-height:50px}
+  .game-shell{padding:6px 10px;gap:10px}
+  .cabinet{height:clamp(300px,68dvh,380px);min-height:300px}
+  .machine-crown{height:46px}
+  .machine-console{min-height:62px;padding:7px}
+  .play-button{min-height:48px}
+  .fairness-note{margin-top:6px}
+}
+@media(max-width:380px){
+  .topbar{padding-inline:7px}
+  .topbar-actions{gap:3px}
+  .icon-button,.admin-link{min-width:35px}
+  .machine-crown{padding-right:82px}
+  .machine-state{font-size:7px;padding:4px 5px}
+  .play-button{padding:8px;gap:6px}
+}

@@ -19,7 +19,9 @@ npm install
 npm run dev                 # http://127.0.0.1:4400 · PIN lokal 123456
 npm test                    # tes gateway, pemain, Studio, keamanan ZIP
 npm run sync                # salin ulang game dari folder 01/02/03
-npm run qa                  # tur visual Electron → artifacts/qa (tambah "covers" untuk sampul)
+npm run qa                  # tur visual Electron → artifacts/qa
+npm run qa:responsive       # Chromium, Firefox, WebKit; viewport 320–1920 px dan gameplay
+node scripts/capture-gameplay-covers.cjs # sampul gameplay → artifacts/cover-candidates
 npm run package:hostinger   # release/Gamysuf-Arcade-<versi>-Hostinger.zip
 ```
 

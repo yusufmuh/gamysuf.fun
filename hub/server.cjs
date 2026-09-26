@@ -286,7 +286,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    text=rewriteOutgoing(text,mount.prefix);
    if(/text\/html/i.test(type)){
     text=withMetaCsp(text,upstreamResult.headers['content-security-policy']);
-    if(route==='/'||route==='/index.html')text=text.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
+    if(route==='/'||route==='/index.html')text=text.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js?v=${VERSION}" data-game="${mount.game.slug}"></script></head>`);
    }
    const buffer=Buffer.from(text,'utf8');
    out['content-length']=String(buffer.length);
@@ -386,7 +386,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   try{relative=decodeURIComponent(rest);}catch{return notFound(ctx);}
   if(relative.endsWith('/'))relative+='index.html';
   const file=custom.sitePath(id,relative);
-  const inject=html=>html.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js" data-game="custom:${id}"></script></head>`);
+  const inject=html=>html.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js?v=${VERSION}" data-game="custom:${id}"></script></head>`);
   return serveFile(ctx,file,{csp:PLAY_CSP,cache:'public, max-age=3600',transform:relative.endsWith('index.html')?inject:null});
  }
 

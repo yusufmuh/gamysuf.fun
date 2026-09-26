@@ -174,6 +174,7 @@ const MASCOT_POSES = [
 let currentPoseIndex = 0;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const audio = new window.BoothAudio();
+document.addEventListener('visibilitychange', () => audio.handleVisibility());
 
 const $ = id => document.getElementById(id);
 const cabinet = $('cabinet'), claw = $('claw'), clawSprite = $('clawSprite');

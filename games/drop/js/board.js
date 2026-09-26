@@ -78,6 +78,7 @@
   setTheme(name){this.theme=THEMES[name]||THEMES.drop;this.draw();}
 
   resize(){
+   if(this.ball?.animating){this.resizePending=true;return;}
    const rect=this.canvas.getBoundingClientRect();
    if(rect.width<10||rect.height<10)return;
    const dpr=Math.min(2,window.devicePixelRatio||1);
@@ -181,6 +182,7 @@
    ctx.scale(this.dpr,this.dpr);
    const now=performance.now();
 
+   if(this.slotGlow&&now-this.slotGlow.t0>1600)this.slotGlow=null;
    if(this.slotGlow){
     const age=(now-this.slotGlow.t0)/1000;
     const pulse=.55+.45*Math.sin(age*9);
@@ -275,6 +277,13 @@
   drop({duration=7000,onPin,onRelease}={}){
    this.clear();
    const {steps,slot}=this.route();
+   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    this.ball={x:this.slotX(slot),y:this.slotBottom-this.ballR-6,angle:0,animating:false};
+    this.slotGlow={slot,t0:performance.now()};
+    this.draw();
+    const rect=this.canvas.getBoundingClientRect();
+    return Promise.resolve({slot,x:rect.left+this.ball.x,y:rect.top+this.ball.y,r:this.ballR});
+   }
    const dropMs=clamp(duration*.48,2600,5200);
    const entryMs=420,finalMs=520;
    const hopBase=(dropMs-entryMs-finalMs)/(this.rows-1);
@@ -302,6 +311,7 @@
     let index=0,segmentStart=performance.now();
     const finish=()=>{
      this.ball.animating=false;this.trail=[];
+     if(this.resizePending){this.resizePending=false;this.resize();this.ball.x=this.slotX(slot);this.ball.y=this.slotBottom-this.ballR-6;this.draw();}
      const rect=this.canvas.getBoundingClientRect();
      resolve({slot,x:rect.left+this.ball.x,y:rect.top+this.ball.y,r:this.ballR});
     };

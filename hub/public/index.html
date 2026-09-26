@@ -13,8 +13,9 @@
   <link rel="apple-touch-icon" href="/hub/assets/brand/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preload" href="/hub/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/hub/css/hub.css?v=1.0.0">
-  <script defer src="/hub/js/hub.js?v=1.0.0"></script>
+  <link rel="stylesheet" href="/hub/css/hub.css?v=1.1.0">
+  <link rel="stylesheet" href="/hub/css/responsive.css?v=1.1.0">
+  <script defer src="/hub/js/hub.js?v=1.1.0"></script>
 </head>
 <body data-ready="0">
   <div class="backdrop" aria-hidden="true"><div class="glow glow-a"></div><div class="glow glow-b"></div><div class="glow glow-c"></div><div class="grid-floor"></div><div class="grain"></div></div>
@@ -37,17 +38,20 @@
   </header>
 
   <div class="announce" id="announce" hidden><span class="announce-dot" aria-hidden="true"></span><span id="announceText"></span><a id="announceLink" href="#" hidden>Selengkapnya →</a></div>
+  <div class="connection-note" id="connectionNote" role="status" hidden><span id="connectionText"></span><button id="retryLoad" type="button">Coba lagi</button></div>
 
   <main>
     <section class="hero" aria-labelledby="heroTitle">
       <div class="hero-copy">
         <p class="eyebrow"><span id="heroGameCount">3</span> GAME BPEDIA · 1 PROFIL · <span id="heroCardCount">57</span> KARTU KOLEKSI</p>
         <h1 id="heroTitle">Arcade Bpedia,<br><em>di genggamanmu.</em></h1>
-        <p class="lead">Putar roda, capit kapsul, dan jatuhkan kapsul Bipy. Setiap permainan memberi XP, kartu koleksi, dan tempat di papan peringkat mingguan.</p>
+        <p class="lead">Satu putaran lagi? Temani Bipy berburu kartu, coba keberuntunganmu, dan isi album dengan temuan baru.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" id="heroPlay" href="/g/drop/"><span>Main sekarang</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn-ghost" href="#guide">Cara kerja arcade</a>
+          <a class="btn btn-ghost" href="#games">Lihat semua game</a>
         </div>
+        <p class="play-note"><span aria-hidden="true">✦</span> Gratis di browser · Sentuh, klik, atau keyboard</p>
+        <a class="resume-link" id="resumeGame" href="/g/drop/" hidden></a>
         <dl class="hero-stats">
           <div><dt>Game aktif</dt><dd id="statGames">3</dd></div>
           <div><dt>Kartu koleksi</dt><dd id="statCards">57</dd></div>
@@ -62,11 +66,16 @@
             <div><small id="cabinetEvent">TAKEOVER X 2026</small><h2 id="cabinetTitle">Bipy Beauty Drop</h2><p id="cabinetTagline"></p></div>
             <a class="btn btn-gold" id="cabinetPlay" href="/g/drop/">Main</a>
           </div>
-          <div class="cabinet-dots" id="cabinetDots" role="tablist" aria-label="Pilih game unggulan"></div>
+          <div class="cabinet-dots" id="cabinetDots" role="group" aria-label="Pilih game unggulan"></div>
         </div>
         <img class="hero-bipy" src="/hub/assets/brand/bipy-peek.png" alt="Bipy mengintip dari kabinet" width="150">
         <span class="token t1" aria-hidden="true">G</span><span class="token t2" aria-hidden="true">G</span><span class="token t3" aria-hidden="true">G</span>
       </div>
+    </section>
+
+    <section class="games" id="games" aria-labelledby="gamesTitle">
+      <header class="section-head"><p class="eyebrow">PILIH ARENA</p><h2 id="gamesTitle">Mau main yang mana?</h2><p>Putar, capit, atau drop. Semua hadiah online menjadi kartu digital untuk album milikmu.</p></header>
+      <div class="game-grid" id="gameGrid" aria-busy="true"></div>
     </section>
 
     <section class="daily" id="daily" aria-labelledby="dailyTitle">
@@ -97,11 +106,6 @@
           <p class="muted small">Rekor terbaik: <b id="streakBest">0</b> hari · 3 hari = lencana <b>Api Menyala</b></p>
         </article>
       </div>
-    </section>
-
-    <section class="games" id="games" aria-labelledby="gamesTitle">
-      <header class="section-head"><p class="eyebrow">PILIH ARENA</p><h2 id="gamesTitle">Tiga game, satu profil</h2><p>Semua game berjalan di cloud. Hasil diacak server game, bukan browser, jadi setiap kartu yang kamu dapat benar-benar hoki.</p></header>
-      <div class="game-grid" id="gameGrid"></div>
     </section>
 
     <section class="album" id="album" aria-labelledby="albumTitle">
@@ -169,7 +173,8 @@
       <div class="faq" id="faq">
         <details><summary>Apakah hadiah dari game online bisa ditukar?</summary><p>Tidak. Di arcade online kamu mendapat kartu koleksi digital dan XP. Hadiah fisik (produk dan voucher) hanya diberikan di booth Bpedia saat event, menggunakan perangkat booth yang dijaga petugas.</p></details>
         <details><summary>Progres saya tersimpan di mana?</summary><p>Di server Gamysuf, terhubung ke perangkat ini lewat cookie. Buka <b>Atur profil</b> untuk menyalin kode pemulihan, lalu masukkan kode itu di perangkat lain untuk memindahkan progres.</p></details>
-        <details><summary>Kenapa tampilan game terasa kecil di HP?</summary><p>Ketiga game dirancang untuk layar booth yang lebar. Putar HP ke posisi mendatar atau main dari laptop untuk pengalaman terbaik.</p></details>
+        <details><summary>Bisa main di HP, tablet, atau laptop?</summary><p>Bisa. Tata letak mengikuti ukuran layar, termasuk ketika HP diputar atau layar lipat dibuka. Gunakan tombol sentuh di HP dan tablet, atau mouse dan keyboard di laptop. Progres pindah perangkat memakai kode pemulihan di profil.</p></details>
+        <details><summary>Bagaimana mengatur suara dan animasi?</summary><p>Suara mulai setelah kamu menyentuh tombol permainan. Tombol suara tersedia di setiap game. Animasi mengikuti pengaturan kurangi gerakan di perangkatmu.</p><button class="btn btn-small btn-ghost" id="motionToggle" type="button" aria-pressed="false">Kurangi animasi dashboard</button></details>
         <details><summary>Bagaimana streak dihitung?</summary><p>Main minimal sekali setiap hari (WIB). Melewatkan satu hari membuat streak kembali ke 1 saat kamu main lagi. Rekor terbaik tetap tersimpan.</p></details>
         <details><summary>Saya petugas booth. Bagaimana mengaktifkan mode resmi?</summary><p>Buka dashboard game di perangkat booth dan masuk dengan PIN petugas. Hanya perangkat yang sudah masuk yang memakai stok asli dan mode resmi; pengunjung online tetap di mode demo.</p></details>
         <details><summary>Akan ada game baru?</summary><p>Ya. Arcade ini punya slot untuk game berikutnya. Saat game baru rilis, kartunya akan muncul di bagian Pilih Arena.</p></details>
@@ -181,8 +186,16 @@
     <div class="footer-brand"><img src="/hub/assets/brand/icon-192.png" alt="" width="44" height="44"><div><b>GAMYSUF ARCADE</b><p>Rumah game booth Bpedia. Main sebentar, koleksi selamanya.</p></div></div>
     <div class="footer-links"><a href="#games">Game</a><a href="#guide">Panduan</a><a href="https://beautypediaofc.com" rel="noopener" target="_blank">Beautypedia</a><a href="/studio">Studio</a></div>
     <img class="footer-bpedia" src="/hub/assets/brand/bpedia-logo-reverse.png" alt="Bpedia" width="140">
-    <p class="footer-note">Hadiah fisik hanya berlaku di booth Bpedia saat event resmi. © 2026 Gamysuf · <span id="versionTag">v1.0.0</span></p>
+    <p class="footer-note">Hadiah fisik hanya berlaku di booth Bpedia saat event resmi. © 2026 Gamysuf · <span id="versionTag">v1.1.0</span></p>
   </footer>
+
+  <nav class="mobile-nav" aria-label="Navigasi cepat">
+    <a href="#games" data-section="games"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10c3 0 5 11 3 12-2 1-4-3-5-3H9c-1 0-3 4-5 3C2 18 4 7 7 7Z"/><path d="M6 11h5M8.5 8.5v5M16 11h.01M18 13h.01"/></svg><span>Game</span></a>
+    <a href="#daily" data-section="daily"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 3h6M8 12l3 3 5-6"/></svg><span>Misi</span></a>
+    <a href="#album" data-section="album"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="12" height="16" rx="2"/><path d="M8 22h10a2 2 0 0 0 2-2V7M8 8h4M8 12h4"/></svg><span>Koleksi</span></a>
+    <a href="#ranking" data-section="ranking"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0ZM8 6H4v3a4 4 0 0 0 4 4M16 6h4v3a4 4 0 0 1-4 4M12 13v6M8 21h8"/></svg><span>Peringkat</span></a>
+    <a href="#guide" data-section="guide"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 1 1 4 2c-1 .5-1.5 1-1.5 2.5M12 17h.01"/></svg><span>Panduan</span></a>
+  </nav>
 
   <div class="modal" id="onboardModal" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" hidden>
     <div class="modal-card onboard">
