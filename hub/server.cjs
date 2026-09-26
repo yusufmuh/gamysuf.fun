@@ -90,7 +90,8 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
    const app=await createApp({dataDir:gameData,port:0,rng,cloud:{engineFor:(req,real)=>visitors.get(req.headers['x-gamysuf-visitor'],real),sessionTtlMs:GAME_SESSION_TTL}});
    const handler=app.server.listeners('request')[0];
-    mounts.set(game.slug,{game,app,visitors,handler,origin:app.origin,prefix:`/g/${game.slug}`});
+    const validOrigin=(app.origin&&!app.origin.includes('undefined'))?app.origin:`http://127.0.0.1:${4300+mounts.size}`;
+    mounts.set(game.slug,{game,app,visitors,handler,origin:validOrigin,prefix:`/g/${game.slug}`});
   }
  }finally{
   http.Server.prototype.listen=hostingerListen;
@@ -231,8 +232,9 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   }
   const cookies=String(req.headers.cookie||'').split(';').map(part=>part.trim()).filter(part=>part&&!part.startsWith(`${ADMIN_COOKIE}=`)&&!part.startsWith(`${VISITOR_COOKIE}=`));
   if(cookies.length)headers.cookie=cookies.join('; ');
-  headers.host=new URL(mount.origin).host;
-   if(origin&&sameOrigin)headers.origin=mount.origin;
+  const targetOrigin=(mount.origin&&!mount.origin.includes('undefined'))?mount.origin:'http://127.0.0.1:4300';
+   headers.host=new URL(targetOrigin).host;
+   if(origin&&sameOrigin)headers.origin=targetOrigin;
    headers['x-gamysuf-visitor']=ctx.vid;
    let body=null;
    if(!['GET','HEAD'].includes(req.method)){
