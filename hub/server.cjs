@@ -76,17 +76,23 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  const players=new Players(path.join(dataDir,'hub','players.json'),{now});
  const custom=new CustomGames(path.join(dataDir,'hub'));
  const mounts=new Map();
-
- for(const game of GAMES){
-  const gameDir=path.join(ROOT,'games',game.slug);
-  const gameData=path.join(dataDir,'games',game.slug);
-  fs.mkdirSync(gameData,{recursive:true});
-  await seedGameAuth(game.slug,gameData,pinValid?adminPin:null);
-  const {createApp}=require(path.join(gameDir,'server.cjs'));
-  const {Engine}=require(path.join(gameDir,'core','engine.cjs'));
-  const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
-  const app=await createApp({dataDir:gameData,port:0,rng,cloud:{engineFor:(req,real)=>visitors.get(req.headers['x-gamysuf-visitor'],real),sessionTtlMs:GAME_SESSION_TTL}});
-  mounts.set(game.slug,{game,app,visitors,port:app.server.address().port,origin:app.origin,prefix:`/g/${game.slug}`});
+ const hostingerListen=http.Server.prototype.listen;
+ const nativeListen=require('node:net').Server.prototype.listen;
+ try{
+  http.Server.prototype.listen=nativeListen;
+  for(const game of GAMES){
+   const gameDir=path.join(ROOT,'games',game.slug);
+   const gameData=path.join(dataDir,'games',game.slug);
+   fs.mkdirSync(gameData,{recursive:true});
+   await seedGameAuth(game.slug,gameData,pinValid?adminPin:null);
+   const {createApp}=require(path.join(gameDir,'server.cjs'));
+   const {Engine}=require(path.join(gameDir,'core','engine.cjs'));
+   const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
+   const app=await createApp({dataDir:gameData,port:0,rng,cloud:{engineFor:(req,real)=>visitors.get(req.headers['x-gamysuf-visitor'],real),sessionTtlMs:GAME_SESSION_TTL}});
+   mounts.set(game.slug,{game,app,visitors,port:app.server.address().port,origin:app.origin,prefix:`/g/${game.slug}`});
+  }
+ }finally{
+  http.Server.prototype.listen=hostingerListen;
  }
  const builtinSlugs=GAMES.map(game=>game.slug);
 
