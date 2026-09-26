@@ -9,7 +9,8 @@ const http=require('node:http');
 const {zipSync,strToU8}=require('fflate');
 const {createHub}=require('../hub/server.cjs');
 const {rewriteOutgoing,rewriteIncoming,rewriteCookie}=require('../hub/rewrite.cjs');
-const {Players,validNickname,levelFor}=require('../hub/players.cjs');
+const {Players,validNickname,levelFor,titleFor}=require('../hub/players.cjs');
+const {dispatch}=require('../hub/dispatch.cjs');
 
 const HOST='gamysuf.fun';
 const ORIGIN=`https://${HOST}`;
@@ -74,6 +75,38 @@ test('tiga game tampil lewat gateway dengan URL berawalan dan tombol Gamysuf',as
  assert.equal((await call(hub,'/g/drop/server.cjs')).status,404);
 });
 
+test('dispatch memanggil handler game di memori: status, header, streaming, error, batas waktu',async()=>{
+ const plain=await dispatch((req,res)=>{res.statusCode=404;res.setHeader('Set-Cookie','a=1');res.end(`tidak ada ${req.url}`);},{url:'/x'});
+ assert.equal(plain.statusCode,404);
+ assert.deepEqual(plain.headers['set-cookie'],['a=1']);
+ assert.equal(plain.body.toString(),'tidak ada /x');
+ const echoed=await dispatch((req,res)=>{const parts=[];req.on('data',part=>parts.push(part));req.on('end',()=>res.writeHead(201,'Dibuat',{'Content-Type':'application/json'}).end(Buffer.concat(parts)));},{method:'POST',body:Buffer.from('{"a":1}')});
+ assert.equal(echoed.statusCode,201);
+ assert.equal(echoed.body.toString(),'{"a":1}');
+ const received=[];
+ const sink=new (require('node:stream').Writable)({write(chunk,_encoding,callback){received.push(chunk);callback();}});
+ const streamed=await dispatch((_req,res)=>{res.writeHead(200,{'Content-Type':'image/png'});res.write(Buffer.from([1,2]));res.end(Buffer.from([3]));},{onHead:head=>head.headers['content-type']==='image/png'?sink:null});
+ assert.equal(streamed.streamed,true);
+ assert.deepEqual([...Buffer.concat(received)],[1,2,3]);
+ await assert.rejects(dispatch(()=>{throw new Error('meledak');}),/meledak/);
+ await assert.rejects(dispatch(async()=>{throw new Error('async');}),/async/);
+ await assert.rejects(dispatch(()=>{},{timeoutMs:30}),error=>error.status===504);
+});
+
+test('aset biner game diteruskan utuh lewat gateway',async t=>{
+ const hub=await hubFor(t);
+ const file=path.join(__dirname,'..','games','drop','assets','audio','bpedia_sonic_logo_pop.mp3');
+ const bytes=await new Promise((resolve,reject)=>{
+  http.get({host:'127.0.0.1',port:hub.server.address().port,path:'/g/drop/assets/audio/bpedia_sonic_logo_pop.mp3',headers:{host:HOST}},res=>{
+   const chunks=[];res.on('data',chunk=>chunks.push(chunk));res.on('end',()=>resolve({status:res.statusCode,type:res.headers['content-type'],body:Buffer.concat(chunks)}));
+  }).on('error',reject);
+ });
+ assert.equal(bytes.status,200);
+ assert.equal(bytes.type,'audio/mpeg');
+ assert.ok(bytes.body.equals(fs.readFileSync(file)));
+ assert.equal((await call(hub,'/g/drop/assets/tidak-ada.png')).status,404);
+});
+
 test('pengunjung publik bermain di mesin demo pribadi; stok asli tidak tersentuh',async t=>{
  const hub=await hubFor(t);
  const played=await call(hub,'/g/nyapit/api/play',{method:'POST',visitor:vid('a'),body:{requestId:'hub-test-0001',username:'A'}});
@@ -123,6 +156,15 @@ test('hasil permainan tercatat di server: XP, kartu, misi, lencana, peringkat',a
  assert.equal(me.plays,1);
  assert.ok(me.xp>=30);
  assert.ok(me.badges.find(badge=>badge.id==='first-play').unlockedAt);
+ assert.equal(me.title,'Pendatang Baru');
+ assert.deepEqual(me.today.games,['drop']);
+ const tri=me.badges.find(badge=>badge.id==='tri-arena');
+ assert.deepEqual([tri.current,tri.goal],[1,3],'progres lencana Tiga Arena');
+ assert.equal(me.badges.find(badge=>badge.id==='collector-all').goal,(await call(hub,'/hub-api/album')).json.total);
+ const catalog=(await call(hub,'/hub-api/catalog')).json;
+ assert.equal(catalog.games.find(game=>game.slug==='drop').plays,1);
+ assert.equal(catalog.totals.playsToday,1);
+ assert.ok(Array.isArray(catalog.activity));
  const again=await call(hub,'/g/drop/api/play',{method:'POST',body:{requestId:'hub-xp-000001',game:'drop'}});
  assert.equal(again.status,200);
  assert.equal((await call(hub,'/hub-api/me')).json.plays,1,'requestId sama tidak dihitung dua kali');
@@ -143,6 +185,7 @@ test('logika pemain: streak, misi, batas XP harian, level, nama sopan',()=>{
  let events=players.record(id,{slug:'drop',outcome:card(1),requestKey:'r1',totalCards:57,builtinSlugs:['spin','nyapit','drop']});
  assert.ok(events.some(event=>event.text.includes('legendaris')));
  assert.ok(players.view(id).badges.find(badge=>badge.id==='lucky').unlockedAt);
+ assert.match(players.recent()[0].text,/legendaris Kartu 1/,'kartu legendaris masuk pita aktivitas');
  players.record(id,{slug:'spin',outcome:card(2),requestKey:'r2'});
  players.record(id,{slug:'nyapit',outcome:{zonk:true},requestKey:'r3',builtinSlugs:['spin','nyapit','drop']});
  const view=players.view(id);
@@ -162,6 +205,9 @@ test('logika pemain: streak, misi, batas XP harian, level, nama sopan',()=>{
  assert.ok(after.xp-before<70*5+200,'XP permainan berhenti setelah batas harian');
  assert.equal(levelFor(0).level,1);
  assert.equal(levelFor(100).level,2);
+ assert.equal(titleFor(1),'Pendatang Baru');
+ assert.equal(titleFor(4),'Pemburu Hoki');
+ assert.equal(titleFor(30),'Legenda Bpedia');
  assert.equal(validNickname('  Rina   K '),'Rina K');
  assert.equal(validNickname('dasar goblok'),null);
  players.flush();
@@ -171,12 +217,15 @@ test('logika pemain: streak, misi, batas XP harian, level, nama sopan',()=>{
 test('Studio: login PIN, CSRF, dan slot game tambahan (tautan & ZIP aman)',async t=>{
  const hub=await hubFor(t);
  assert.equal((await call(hub,'/hub-api/admin/state')).status,401);
+ assert.deepEqual((await call(hub,'/hub-api/session')).json,{admin:false,pinConfigured:true});
+ assert.equal((await call(hub,'/hub-api/health')).json.ok,true);
  assert.equal((await call(hub,'/hub-api/login',{method:'POST',body:{pin:'111111'}})).status,401);
  assert.equal((await call(hub,'/hub-api/login',{method:'POST',client:'lain',body:{pin:'246810'}})).status,403);
  const login=await call(hub,'/hub-api/login',{method:'POST',body:{pin:'246810'}});
  assert.equal(login.status,200);
  const cookie=login.headers['set-cookie'].find(item=>item.startsWith('gamysuf_admin=')).split(';')[0];
  const admin=(route,body)=>call(hub,route,{method:body?'POST':'GET',body,cookie});
+ assert.equal((await admin('/hub-api/session')).json.admin,true);
  assert.equal((await admin('/hub-api/admin/state')).json.games.length,3);
 
  assert.equal((await admin('/hub-api/admin/game',{slug:'drop',title:'Bentrok',type:'link',url:'https://x.test'})).status,400,'slug bawaan tidak boleh dipakai');

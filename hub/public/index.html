@@ -6,15 +6,21 @@
   <title>Gamysuf Arcade · Main game Bpedia, koleksi kartu, naik level</title>
   <meta name="description" content="Arcade online berisi tiga game booth Bpedia: Spin Wheels, Nyapit Bareng Bpedia, dan Bipy Beauty Drop. Main gratis, kumpulkan kartu hadiah, selesaikan misi harian, dan naik ke papan peringkat.">
   <meta name="theme-color" content="#12050c">
-  <meta property="og:title" content="Gamysuf Arcade">
-  <meta property="og:description" content="Tiga game Bpedia dalam satu arcade. Main, koleksi kartu, naik level.">
-  <meta property="og:image" content="/hub/assets/covers/drop.jpg">
+  <link rel="canonical" href="https://gamysuf.fun/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gamysuf.fun/">
+  <meta property="og:site_name" content="Gamysuf Arcade">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="Gamysuf Arcade · Main, koleksi kartu, naik level">
+  <meta property="og:description" content="Tiga game Bpedia dalam satu arcade. Main gratis, kumpulkan kartu, selesaikan misi harian, rebut puncak peringkat.">
+  <meta property="og:image" content="https://gamysuf.fun/hub/assets/covers/drop.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/hub/assets/brand/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preload" href="/hub/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/hub/css/hub.css?v=1.0.0">
-  <script defer src="/hub/js/hub.js?v=1.0.0"></script>
+  <link rel="stylesheet" href="/hub/css/hub.css?v=1.1.0">
+  <script defer src="/hub/js/hub.js?v=1.1.0"></script>
 </head>
 <body data-ready="0">
   <div class="backdrop" aria-hidden="true"><div class="glow glow-a"></div><div class="glow glow-b"></div><div class="glow glow-c"></div><div class="grid-floor"></div><div class="grain"></div></div>
@@ -48,6 +54,7 @@
           <a class="btn btn-primary" id="heroPlay" href="/g/drop/"><span>Main sekarang</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="#guide">Cara kerja arcade</a>
         </div>
+        <p class="hero-tip" id="heroTip" hidden><img src="/hub/assets/avatars/wink.png" alt="" width="34" height="34"><span><b>Saran Bipy</b><span id="heroTipText"></span></span></p>
         <dl class="hero-stats">
           <div><dt>Game aktif</dt><dd id="statGames">3</dd></div>
           <div><dt>Kartu koleksi</dt><dd id="statCards">57</dd></div>
@@ -69,19 +76,25 @@
       </div>
     </section>
 
+    <div class="live" id="live" hidden><span class="live-tag"><i aria-hidden="true"></i>LIVE</span><div class="live-track"><ul class="live-list" id="liveList" aria-live="off"></ul></div></div>
+
     <section class="daily" id="daily" aria-labelledby="dailyTitle">
       <header class="section-head"><p class="eyebrow">MARKAS HARIAN</p><h2 id="dailyTitle">Misi hari ini</h2><p>Misi baru setiap tengah malam WIB. Selesaikan semuanya untuk lencana <b>Misi Tuntas</b>.</p></header>
       <div class="daily-grid">
         <article class="panel profile-panel">
-          <div class="level-ring" id="levelRing" style="--p:0"><img id="profileAvatar" src="/hub/assets/avatars/wave.png" alt="" width="96" height="96"><b id="profileLevel">1</b></div>
-          <div class="profile-body">
-            <p class="eyebrow">PROFIL PEMAIN</p>
-            <h3 id="profileName">Tamu</h3>
-            <p class="muted" id="profileXp">0 / 100 XP menuju level 2</p>
-            <div class="bar"><i id="profileXpBar"></i></div>
-            <div class="profile-meta"><span><b id="profilePlays">0</b> kali main</span><span><b id="profileCards">0</b> kartu</span><span><b id="profileBadges">0</b> lencana</span></div>
-            <button class="btn btn-small btn-ghost" id="openProfile" type="button">Atur profil &amp; kode pemulihan</button>
+          <div class="profile-top">
+            <div class="level-ring" id="levelRing" style="--p:0"><img id="profileAvatar" src="/hub/assets/avatars/wave.png" alt="" width="96" height="96"><b id="profileLevel">1</b></div>
+            <div class="profile-body">
+              <p class="eyebrow">PROFIL PEMAIN</p>
+              <h3 id="profileName">Tamu</h3>
+              <p class="title-tag" id="profileTitle">Pendatang Baru</p>
+              <p class="muted" id="profileXp">0 / 100 XP menuju level 2</p>
+              <div class="bar"><i id="profileXpBar"></i></div>
+              <div class="profile-meta"><span><b id="profilePlays">0</b> kali main</span><span><b id="profileCards">0</b> kartu</span><span><b id="profileBadges">0</b> lencana</span></div>
+            </div>
           </div>
+          <div class="next-goal" id="nextGoal" hidden></div>
+          <div class="profile-actions"><button class="btn btn-small btn-ghost" id="openProfile" type="button">Profil &amp; kode pemulihan</button><button class="btn btn-small btn-ghost" id="shareProgress" type="button">Bagikan progres</button></div>
         </article>
         <article class="panel missions-panel">
           <header><h3>Misi harian</h3><span class="reset" id="missionReset">Reset 00:00:00</span></header>
@@ -115,7 +128,7 @@
     </section>
 
     <section class="ranking" id="ranking" aria-labelledby="rankingTitle">
-      <header class="section-head"><p class="eyebrow">PAPAN PERINGKAT</p><h2 id="rankingTitle">Siapa paling hoki minggu ini?</h2><p>XP dihitung dari hasil permainan di server. Peringkat mingguan direset setiap Senin pukul 00.00 WIB.</p></header>
+      <header class="section-head"><p class="eyebrow">PAPAN PERINGKAT</p><h2 id="rankingTitle">Siapa paling hoki minggu ini?</h2><p>XP dihitung dari hasil permainan di server. Peringkat mingguan direset setiap Senin pukul 00.00 WIB.</p><p class="week-reset"><span class="announce-dot" aria-hidden="true"></span>Musim minggu ini berakhir dalam <b id="weekReset">–</b></p></header>
       <div class="ranking-grid">
         <article class="panel board-panel">
           <div class="tabs" role="tablist" aria-label="Rentang peringkat">
@@ -172,6 +185,7 @@
         <details><summary>Kenapa tampilan game terasa kecil di HP?</summary><p>Ketiga game dirancang untuk layar booth yang lebar. Putar HP ke posisi mendatar atau main dari laptop untuk pengalaman terbaik.</p></details>
         <details><summary>Bagaimana streak dihitung?</summary><p>Main minimal sekali setiap hari (WIB). Melewatkan satu hari membuat streak kembali ke 1 saat kamu main lagi. Rekor terbaik tetap tersimpan.</p></details>
         <details><summary>Saya petugas booth. Bagaimana mengaktifkan mode resmi?</summary><p>Buka dashboard game di perangkat booth dan masuk dengan PIN petugas. Hanya perangkat yang sudah masuk yang memakai stok asli dan mode resmi; pengunjung online tetap di mode demo.</p></details>
+        <details><summary>Apa itu gelar pemain?</summary><p>Gelar naik bersama level: Pendatang Baru (Lv 1), Pemburu Hoki (Lv 3), Kolektor Muda (Lv 5), Bintang Arcade (Lv 8), Master Kapsul (Lv 12), dan Legenda Bpedia (Lv 16). Gelarmu tampil di profil dan papan peringkat.</p></details>
         <details><summary>Akan ada game baru?</summary><p>Ya. Arcade ini punya slot untuk game berikutnya. Saat game baru rilis, kartunya akan muncul di bagian Pilih Arena.</p></details>
       </div>
     </section>
@@ -206,6 +220,7 @@
         <p class="eyebrow" id="gameModalEvent"></p>
         <h2 id="gameModalTitle"></h2>
         <p class="muted" id="gameModalDesc"></p>
+        <div class="detail-progress" id="gameModalProgress"></div>
         <h3>Cara main</h3>
         <ol class="howto" id="gameModalSteps"></ol>
         <div class="detail-cols">

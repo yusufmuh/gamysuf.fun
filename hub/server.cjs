@@ -11,6 +11,7 @@ const {createVisitorEngines}=require('./visitors.cjs');
 const {Players}=require('./players.cjs');
 const {CustomGames,MAX_GAMES}=require('./custom-games.cjs');
 const {rewriteOutgoing,rewriteIncoming,rewriteCookie,rewriteLocation}=require('./rewrite.cjs');
+const {dispatch}=require('./dispatch.cjs');
 
 const scrypt=promisify(crypto.scrypt);
 const ROOT=path.join(__dirname,'..');
@@ -76,6 +77,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  const players=new Players(path.join(dataDir,'hub','players.json'),{now});
  const custom=new CustomGames(path.join(dataDir,'hub'));
  const mounts=new Map();
+ /* Runner Node.js Hostinger (lsnode) mengganti http.Server.listen agar server
+    pertama terikat ke soketnya. Server internal game harus memakai listen asli
+    supaya soket itu tetap milik hub; trafik game dipanggil langsung di memori
+    lewat dispatch.cjs, bukan lewat port internal. */
  const hostingerListen=http.Server.prototype.listen;
  const nativeListen=require('node:net').Server.prototype.listen;
  try{
@@ -90,7 +95,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
    const app=await createApp({dataDir:gameData,port:0,rng,cloud:{engineFor:(req,real)=>visitors.get(req.headers['x-gamysuf-visitor'],real),sessionTtlMs:GAME_SESSION_TTL}});
    const handler=app.server.listeners('request')[0];
-    mounts.set(game.slug,{game,app,visitors,handler,origin:app.origin,prefix:`/g/${game.slug}`});
+   mounts.set(game.slug,{game,app,visitors,handler,origin:app.origin,prefix:`/g/${game.slug}`});
   }
  }finally{
   http.Server.prototype.listen=hostingerListen;
@@ -102,6 +107,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   return mount.game.cards(mount.app.engine.state).filter(card=>!seen.has(card.cardId)&&seen.add(card.cardId)).map(card=>({...card,key:`${mount.game.slug}:${card.cardId}`,image:card.image?mount.prefix+card.image:null}));
  }
  const totalCards=()=>[...mounts.values()].reduce((sum,mount)=>sum+cardsOf(mount).length,0);
+ const viewOf=(vid,options={})=>({...players.view(vid,{...options,totalCards:totalCards(),builtinSlugs}),recoveryCode:vid});
 
  const adminSessions=new Map();
  let attempts=0,lockUntil=0;
@@ -160,64 +166,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   }catch(error){console.error(`Gagal mencatat hasil ${mount.game.slug}: ${error.message}`);}
  }
 
- 
-  function dispatchInMemory(handler,{method='GET',url='/',headers={},body=null}){
-   return new Promise((resolve,reject)=>{
-    const {Readable,Writable}=require('node:stream');
-    const streamReq=new Readable({
-     read(){
-      if(body)this.push(body);
-      this.push(null);
-     }
-    });
-    streamReq.method=method;
-    streamReq.url=url;
-    streamReq.headers=headers;
-
-    let statusCode=200;
-    const resHeaders={};
-    const chunks=[];
-    const streamRes=new Writable({
-     write(chunk,enc,cb){
-      chunks.push(Buffer.isBuffer(chunk)?chunk:Buffer.from(chunk));
-      cb();
-     }
-    });
-    streamRes.headersSent=false;
-    streamRes.setHeader=(k,v)=>{
-     const lk=k.toLowerCase();
-     if(lk==='set-cookie'){
-      if(!resHeaders[lk])resHeaders[lk]=[];
-      if(Array.isArray(v))resHeaders[lk].push(...v);
-      else resHeaders[lk].push(v);
-     }else{
-      resHeaders[lk]=v;
-     }
-    };
-    streamRes.getHeader=k=>resHeaders[k.toLowerCase()];
-    streamRes.writeHead=(code,a,b)=>{
-     statusCode=code;
-     streamRes.headersSent=true;
-     const hdrs=typeof a==='object'&&a!==null?a:typeof b==='object'&&b!==null?b:{};
-     for(const [k,v] of Object.entries(hdrs))streamRes.setHeader(k,v);
-    };
-    streamRes.on('finish',()=>{
-     resolve({
-      statusCode,
-      headers:resHeaders,
-      body:Buffer.concat(chunks)
-     });
-    });
-    streamRes.on('error',reject);
-    try{
-     handler(streamReq,streamRes);
-    }catch(err){
-     reject(err);
-    }
-   });
-  }
-
-  async function proxy(ctx,mount,rest){
+ async function proxy(ctx,mount,rest){
   const {req,res}=ctx;
   const route=rest.split('?')[0]||'/';
   const origin=req.headers.origin;
@@ -226,52 +175,43 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   if(!pinValid&&mount.game.loginRoutes.includes(route))throw fail('Dashboard terkunci: isi ADMIN_PIN (6-12 digit angka) di Environment variables hosting, lalu redeploy.',503);
   const headers={};
   for(const [key,value] of Object.entries(req.headers)){
-   if(HOP.has(key)||key.startsWith('x-gamysuf-')||['host','origin','referer','accept-encoding','cookie'].includes(key))continue;
+   if(HOP.has(key)||key.startsWith('x-gamysuf-')||['host','origin','referer','accept-encoding','cookie','content-length'].includes(key))continue;
    headers[key]=value;
   }
   const cookies=String(req.headers.cookie||'').split(';').map(part=>part.trim()).filter(part=>part&&!part.startsWith(`${ADMIN_COOKIE}=`)&&!part.startsWith(`${VISITOR_COOKIE}=`));
   if(cookies.length)headers.cookie=cookies.join('; ');
   headers.host=new URL(mount.origin).host;
-   if(origin&&sameOrigin)headers.origin=mount.origin;
-   headers['x-gamysuf-visitor']=ctx.vid;
-   let body=null;
-   if(!['GET','HEAD'].includes(req.method)){
-    const limit=route.endsWith('/restore')?320*1024*1024:/upload|prize/.test(route)?16*1024*1024:2*1024*1024;
-    body=await readBody(req,limit);
-    if(/json/i.test(req.headers['content-type']||''))body=Buffer.from(rewriteIncoming(body.toString('utf8'),mount.prefix));
-    headers['content-length']=String(body.length);
-   }
-
-   const upstreamResult=await dispatchInMemory(mount.handler,{
-    method:req.method,
-    url:rest,
-    headers,
-    body
-   });
-
-   const type=String(upstreamResult.headers['content-type']||'');
-   const out={};
-   for(const [key,value] of Object.entries(upstreamResult.headers))if(!HOP.has(key)&&key!=='content-length'&&key!=='set-cookie')out[key]=value;
-   const setCookies=[...(upstreamResult.headers['set-cookie']?[].concat(upstreamResult.headers['set-cookie']):[]).map(cookie=>rewriteCookie(cookie,mount.prefix,ctx.secure)),...ctx.cookies];
+  if(origin&&sameOrigin)headers.origin=mount.origin;
+  headers['x-gamysuf-visitor']=ctx.vid;
+  let body=null;
+  if(!['GET','HEAD'].includes(req.method)){
+   const limit=route.endsWith('/restore')?320*1024*1024:/upload|prize/.test(route)?16*1024*1024:2*1024*1024;
+   body=await readBody(req,limit);
+   if(/json/i.test(req.headers['content-type']||''))body=Buffer.from(rewriteIncoming(body.toString('utf8'),mount.prefix));
+   headers['content-length']=String(body.length);
+  }
+  let out=null,type='';
+  const upstream=await dispatch(mount.handler,{method:req.method,url:rest,headers,body,onHead:head=>{
+   type=String(head.headers['content-type']||'');
+   out={};
+   for(const [key,value] of Object.entries(head.headers))if(!HOP.has(key)&&key!=='content-length'&&key!=='set-cookie')out[key]=value;
+   const setCookies=[...[].concat(head.headers['set-cookie']||[]).map(cookie=>rewriteCookie(cookie,mount.prefix,ctx.secure)),...ctx.cookies];
    if(setCookies.length)out['set-cookie']=setCookies;
    if(out.location)out.location=rewriteLocation(out.location,mount.prefix);
-
-   if(!/text\/html|text\/css|javascript|application\/json/i.test(type)||req.method==='HEAD'){
-    if(upstreamResult.headers['content-length'])out['content-length']=upstreamResult.headers['content-length'];
-    res.writeHead(upstreamResult.statusCode,out);
-    if(req.method!=='HEAD')res.end(upstreamResult.body);
-    else res.end();
-    return;
-   }
-
-   let text=upstreamResult.body.toString('utf8');
-   if(upstreamResult.statusCode===200&&req.method==='POST'&&mount.game.resultRoutes.includes(route))recordResult(ctx,mount,route,text);
-   text=rewriteOutgoing(text,mount.prefix);
-   if(/text\/html/i.test(type)&&(route==='/'||route==='/index.html'))text=text.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
-   const buffer=Buffer.from(text,'utf8');
-   out['content-length']=String(buffer.length);
-   res.writeHead(upstreamResult.statusCode,out);
-   res.end(buffer);
+   if(/text\/html|text\/css|javascript|application\/json/i.test(type)&&req.method!=='HEAD')return null;
+   if(head.headers['content-length']!==undefined)out['content-length']=head.headers['content-length'];
+   res.writeHead(head.statusCode,out);
+   return res;
+  }});
+  if(upstream.streamed)return;
+  let text=upstream.body.toString('utf8');
+  if(upstream.statusCode===200&&req.method==='POST'&&mount.game.resultRoutes.includes(route))recordResult(ctx,mount,route,text);
+  text=rewriteOutgoing(text,mount.prefix);
+  if(/text\/html/i.test(type)&&(route==='/'||route==='/index.html'))text=text.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js" data-game="${mount.game.slug}"></script></head>`);
+  const buffer=Buffer.from(text,'utf8');
+  out['content-length']=String(buffer.length);
+  res.writeHead(upstream.statusCode,out);
+  res.end(buffer);
  }
 
  function checkPost(ctx){
@@ -295,21 +235,24 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   const settings=custom.settings();
 
   if(route==='/hub-api/catalog'){
-   const games=GAMES.filter(game=>!settings.hidden.includes(game.slug)).map(game=>({...publicGame(game),cards:cardsOf(mounts.get(game.slug)).length}));
-   return send(ctx,200,{version:VERSION,games,custom:custom.list().map(publicCustom),slots:Math.max(0,MAX_GAMES-custom.list({includeDrafts:true}).length),settings:{announcement:settings.announcement,announcementLink:settings.announcementLink,featured:settings.featured},totals:{cards:totalCards(),players:players.stats().players}});
+   const stats=players.stats();
+   const games=GAMES.filter(game=>!settings.hidden.includes(game.slug)).map(game=>({...publicGame(game),cards:cardsOf(mounts.get(game.slug)).length,plays:stats.byGame[game.slug]||0}));
+   return send(ctx,200,{version:VERSION,games,custom:custom.list().map(publicCustom),slots:Math.max(0,MAX_GAMES-custom.list({includeDrafts:true}).length),settings:{announcement:settings.announcement,announcementLink:settings.announcementLink,featured:settings.featured},totals:{cards:totalCards(),players:stats.players,plays:stats.plays,playsToday:stats.playsToday},activity:players.recent()});
   }
+  if(route==='/hub-api/session')return send(ctx,200,{admin:Boolean(adminToken(req)),pinConfigured:pinValid});
+  if(route==='/hub-api/health')return send(ctx,200,{ok:true,version:VERSION,uptime:Math.round(process.uptime()),games:[...mounts.keys()],pinConfigured:pinValid});
   if(route==='/hub-api/me'&&req.method==='GET'){
    const since=Number(url.searchParams.get('since'))||0;
-   return send(ctx,200,{...players.view(ctx.vid,{since}),recoveryCode:ctx.vid});
+   return send(ctx,200,viewOf(ctx.vid,{since}));
   }
-  if(route==='/hub-api/me'){post();players.setProfile(ctx.vid,body);return send(ctx,200,{...players.view(ctx.vid),recoveryCode:ctx.vid});}
+  if(route==='/hub-api/me'){post();players.setProfile(ctx.vid,body);return send(ctx,200,viewOf(ctx.vid));}
   if(route==='/hub-api/me/restore'){
    post();
    const code=String(body.code||'').toLowerCase().replace(/[^a-f0-9]/g,'');
    if(!/^[a-f0-9]{32}$/.test(code)||!players.has(code))throw fail('Kode pemulihan tidak ditemukan.',404);
    ctx.vid=code;
    ctx.cookies=[`${VISITOR_COOKIE}=${code}; Path=/; Max-Age=31536000; HttpOnly; SameSite=Lax${ctx.secure?'; Secure':''}`];
-   return send(ctx,200,{...players.view(code),recoveryCode:code});
+   return send(ctx,200,viewOf(code));
   }
   if(route==='/hub-api/leaderboard'){
    const range=url.searchParams.get('range')==='all'?'all':'week';
@@ -431,8 +374,18 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  };
 }
 
-const isTest=process.execArgv.includes('--test')||process.env.NODE_ENV==='test'||Boolean(module.parent&&/\.test\./.test(module.parent.filename||''));
-if(!isTest){
+/* Mulai otomatis saat dijalankan langsung (npm start) atau dimuat pembungkus
+   hosting dari luar proyek (runner Hostinger memakai require(), jadi
+   require.main !== module). Tes dan skrip proyek (tests/, scripts/) hanya
+   memakai createHub, tanpa ikut menyalakan server produksi kedua. */
+function shouldAutostart(){
+ if(require.main===module)return true;
+ if(process.env.GAMYSUF_NO_AUTOSTART==='1'||process.env.NODE_ENV==='test'||process.execArgv.includes('--test'))return false;
+ const main=require.main?.filename||'';
+ return !['tests','scripts'].some(dir=>main.startsWith(path.join(ROOT,dir)+path.sep));
+}
+
+if(shouldAutostart()){
  const local=process.argv.includes('--local');
  const adminPin=process.env.ADMIN_PIN||(local?'123456':null);
  createHub({

@@ -7,6 +7,16 @@
  const avatarSrc=name=>`/hub/assets/avatars/${AVATARS.includes(name)?name:'wave'}.png`;
  const RARITY={legendary:'Legendaris',epic:'Epik',rare:'Langka',common:'Umum'};
  const number=value=>Number(value||0).toLocaleString('id-ID');
+ const pct=(part,whole)=>whole?Math.max(0,Math.min(100,Math.round(part/whole*100))):0;
+ const two=value=>String(value).padStart(2,'0');
+ const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function ago(at){
+  const minutes=Math.max(0,Math.round((Date.now()-at)/60000));
+  if(minutes<1)return 'baru saja';
+  if(minutes<60)return `${minutes} mnt lalu`;
+  if(minutes<1440)return `${Math.round(minutes/60)} jam lalu`;
+  return `${Math.round(minutes/1440)} hari lalu`;
+ }
  const BADGE_ICONS={
   'first-play':'<path d="M5 19l4-4M9 15l10-10M14 5h5v5"/>',
   'tri-arena':'<rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="8" width="5" height="12" rx="1.5"/><rect x="17" y="12" width="4" height="8" rx="1.5"/>',
@@ -60,7 +70,7 @@
   const featured=Math.max(0,list.findIndex(game=>game.slug===catalog.settings.featured));
   feature(featured);
   clearInterval(store.cycle);
-  if(list.length>1&&!matchMedia('(prefers-reduced-motion: reduce)').matches)store.cycle=setInterval(()=>feature((store.featured+1)%list.length),6500);
+  if(list.length>1&&!reducedMotion())store.cycle=setInterval(()=>feature((store.featured+1)%list.length),6500);
   if(catalog.settings.announcement){
    $('announce').hidden=false;
    $('announceText').textContent=catalog.settings.announcement;
@@ -93,7 +103,7 @@
   const progress=Math.round(me.levelInto/me.levelNeed*100);
   $('chipAvatar').src=avatarSrc(me.avatar);
   $('chipName').textContent=name;
-  $('chipLevel').textContent=`Level ${me.level}`;
+  $('chipLevel').textContent=`Lv ${me.level} · ${me.title}`;
   $('chipXpBar').style.width=`${progress}%`;
   $('chipStreakCount').textContent=me.streak.count;
   $('chipStreak').classList.toggle('cold',!me.streak.playedToday);
@@ -101,6 +111,8 @@
   $('profileLevel').textContent=me.level;
   $('levelRing').style.setProperty('--p',progress);
   $('profileName').textContent=name;
+  $('profileTitle').textContent=me.title;
+  $('profileTitle').title=me.nextTitle?`Gelar berikutnya: ${me.nextTitle.title} (level ${me.nextTitle.level})`:'Gelar tertinggi di arcade';
   $('profileXp').textContent=`${number(me.levelInto)} / ${number(me.levelNeed)} XP menuju level ${me.level+1} · total ${number(me.xp)} XP`;
   $('profileXpBar').style.width=`${progress}%`;
   $('profilePlays').textContent=number(me.plays);
@@ -116,7 +128,62 @@
   $('streakTrack').innerHTML=Array.from({length:7},(_,index)=>`<i class="${index<lit?'on':''}"></i>`).join('');
   const unlocked=me.badges.filter(badge=>badge.unlockedAt).length;
   $('badgeCount').textContent=`${unlocked} / ${me.badges.length}`;
-  $('badgeList').innerHTML=me.badges.map(badge=>`<li class="badge ${badge.unlockedAt?'on':''}" title="${esc(badge.detail)}"><span class="badge-icon">${svg(BADGE_ICONS[badge.id]||BADGE_ICONS.lucky)}</span><b>${esc(badge.name)}</b><small>${esc(badge.detail)}</small></li>`).join('');
+  const goal=nextGoal();
+  $('badgeList').innerHTML=me.badges.map(badge=>{
+   const meter=!badge.unlockedAt&&badge.goal>1?`<span class="badge-meter"><i style="width:${pct(badge.current,badge.goal)}%"></i></span><small class="badge-count">${badge.current}/${badge.goal}</small>`:'';
+   return `<li class="badge ${badge.unlockedAt?'on':''} ${goal?.id===badge.id?'near':''}" title="${esc(badge.detail)}"><span class="badge-icon">${svg(BADGE_ICONS[badge.id]||BADGE_ICONS.lucky)}</span><b>${esc(badge.name)}</b><small>${esc(badge.detail)}</small>${meter}</li>`;
+  }).join('');
+  $('nextGoal').hidden=!goal;
+  if(goal)$('nextGoal').innerHTML=`<span class="badge-icon">${svg(BADGE_ICONS[goal.id]||BADGE_ICONS.lucky)}</span><div><small>Target berikutnya · +30 XP</small><b>${esc(goal.name)}</b><div class="bar"><i style="width:${pct(goal.current,goal.goal)}%"></i></div><small>${goal.current}/${goal.goal} · ${esc(goal.detail)}</small></div>`;
+  renderTip();
+ }
+
+ /* Lencana terkunci yang paling dekat untuk dibuka: memberi pemain satu
+    tujuan jelas setiap kali membuka beranda. */
+ function nextGoal(){
+  const locked=(store.me?.badges||[]).filter(badge=>!badge.unlockedAt&&badge.goal>0);
+  return locked.sort((a,b)=>b.current/b.goal-a.current/a.goal||(a.goal-a.current)-(b.goal-b.current))[0]||null;
+ }
+
+ /* ── Saran Bipy: game yang paling berguna dimainkan sekarang ── */
+ function recommendation(){
+  const list=store.catalog?.games||[];
+  const me=store.me;
+  if(!list.length||!me)return null;
+  const missing=game=>Math.max(0,game.cards-cardsOwnedIn(game.slug));
+  const mission=me.missions.find(item=>item.id==='two-games');
+  if(!me.today.plays){
+   const game=list.find(item=>item.slug===store.catalog.settings.featured)||list[0];
+   return {game,text:`main sekali hari ini untuk bonus harian +20 XP${me.streak.count?` dan menjaga streak ${me.streak.count} hari`:''}.`};
+  }
+  if(mission&&!mission.done){
+   const fresh=list.find(item=>!me.today.games.includes(item.slug));
+   if(fresh)return {game:fresh,text:`coba ${fresh.title} untuk misi "${mission.title}" (+${mission.xp} XP).`};
+  }
+  const best=[...list].sort((a,b)=>missing(b)-missing(a))[0];
+  if(missing(best)>0)return {game:best,text:`${best.title} masih menyimpan ${missing(best)} kartu yang belum kamu temukan.`};
+  return {game:list[0],text:'album lengkap! Sekarang kejar puncak papan peringkat minggu ini.'};
+ }
+ function renderTip(){
+  const tip=recommendation();
+  $('heroTip').hidden=!tip;
+  if(!tip)return;
+  $('heroTipText').innerHTML=` ${esc(tip.text)} <a href="${esc(tip.game.url)}">Main ${esc(tip.game.title)} →</a>`;
+ }
+
+ /* ── Pita aktivitas langsung ─────────────────────── */
+ function renderLive(){
+  const catalog=store.catalog;
+  const title=slug=>games().find(game=>game.slug===slug)?.title||'arcade';
+  const items=(catalog.activity||[]).map(item=>`<li><img src="${avatarSrc(item.avatar)}" alt=""><b>${esc(item.name)}</b> ${esc(item.text)} <small>${esc(title(item.game))} · ${ago(item.at)}</small></li>`);
+  if(catalog.totals.playsToday)items.unshift(`<li><span class="live-hot">${svg(TOAST_ICONS.streak)}</span><b>${number(catalog.totals.playsToday)} permainan</b> hari ini dari ${number(catalog.totals.players)} pemain</li>`);
+  $('live').hidden=!items.length;
+  if(!items.length)return;
+  const track=items.join('');
+  const still=items.length<2||reducedMotion();
+  $('liveList').classList.toggle('still',still);
+  $('liveList').innerHTML=still?track:track+track.replace(/<li>/g,'<li aria-hidden="true">');
+  $('liveList').style.setProperty('--items',items.length);
  }
 
  /* ── Kartu game + slot ───────────────────────────── */
@@ -126,9 +193,11 @@
    const owned=cardsOwnedIn(game.slug);
    const plays=store.me?.playsByGame?.[game.slug]||0;
    const progress=game.builtin?`${owned}/${game.cards} kartu · ${plays}x main`:'Game tambahan';
+   const meter=game.builtin?`<span class="game-meter" aria-hidden="true"><i style="width:${pct(owned,game.cards)}%"></i></span>`:'';
+   const popular=game.plays?`<p class="game-pop">${svg(TOAST_ICONS.streak)}Dimainkan ${number(game.plays)}× di arcade</p>`:'';
    return `<article class="game-card" style="--accent:${esc(game.accent||'#E62B5E')}">
-    <div class="game-cover">${game.cover?`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" loading="lazy">`:''}<span class="game-badge">${esc((game.event||'ARENA BARU').toUpperCase())}</span><span class="game-progress">${esc(progress)}</span></div>
-    <div class="game-body"><h3>${esc(game.title)}</h3><p class="game-mech">${esc(game.mechanic||'')}</p><p>${esc(game.description||game.tagline||'')}</p>
+    <div class="game-cover">${game.cover?`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" loading="lazy">`:''}<span class="game-badge">${esc((game.event||'ARENA BARU').toUpperCase())}</span><span class="game-progress">${esc(progress)}</span>${meter}</div>
+    <div class="game-body"><h3>${esc(game.title)}</h3><p class="game-mech">${esc(game.mechanic||'')}</p>${popular}<p>${esc(game.description||game.tagline||'')}</p>
      <div class="game-actions"><button class="btn btn-ghost btn-small" type="button" data-howto="${esc(game.slug)}">Cara main</button><a class="btn btn-primary btn-small" href="${esc(game.url)}" ${game.external?'target="_blank" rel="noopener"':''}>Main</a></div></div>
    </article>`;
   });
@@ -164,9 +233,9 @@
   const board=store.boards[store.range];
   if(!board)return;
   const [first,second,third,...rest]=board.top;
-  const slot=(row,cls)=>row?`<div class="podium-slot ${cls}"><span class="rank">${row.rank}</span><img src="${avatarSrc(row.avatar)}" alt=""><b>${esc(row.name)}</b><small>Lv ${row.level} · ${number(row.score)} XP</small></div>`:'<div></div>';
+  const slot=(row,cls)=>row?`<div class="podium-slot ${cls}"><span class="rank">${row.rank}</span><img src="${avatarSrc(row.avatar)}" alt=""><b>${esc(row.name)}</b><small>Lv ${row.level} · ${number(row.score)} XP</small><em>${esc(row.title||'')}</em></div>`:'<div></div>';
   $('podium').innerHTML=board.top.length?slot(second,'second')+slot(first,'first')+slot(third,'third'):'<p class="empty" style="grid-column:1/-1">Belum ada pemain di periode ini. Jadilah yang pertama!</p>';
-  $('board').innerHTML=rest.map(row=>`<li class="${row.you?'you':''}"><span class="pos">${row.rank}</span><img src="${avatarSrc(row.avatar)}" alt=""><div><b>${esc(row.name)}${row.you?' (kamu)':''}</b><small>Level ${row.level} · ${row.cards} kartu</small></div><span class="score">${number(row.score)}</span></li>`).join('');
+  $('board').innerHTML=rest.map(row=>`<li class="${row.you?'you':''}"><span class="pos">${row.rank}</span><img src="${avatarSrc(row.avatar)}" alt=""><div><b>${esc(row.name)}${row.you?' (kamu)':''}</b><small>Lv ${row.level} · ${esc(row.title||'')} · ${row.cards} kartu</small></div><span class="score">${number(row.score)}</span></li>`).join('');
   $('youRow').hidden=!board.you;
   if(board.you)$('youRow').textContent=`Posisimu: #${board.you.rank} dari ${number(board.players)} pemain · ${number(board.you.score)} XP`;
  }
@@ -205,6 +274,9 @@
   $('gameModalEvent').textContent=`${(game.event||'').toUpperCase()}${game.mechanic?' · '+game.mechanic.toUpperCase():''}`;
   $('gameModalTitle').textContent=game.title;
   $('gameModalDesc').textContent=game.description||game.tagline||'';
+  const owned=cardsOwnedIn(game.slug),plays=store.me?.playsByGame?.[game.slug]||0;
+  $('gameModalProgress').hidden=!game.builtin;
+  if(game.builtin)$('gameModalProgress').innerHTML=`<div><b>${owned}/${game.cards}</b><small>kartu ditemukan</small></div><div><b>${number(plays)}</b><small>kali kamu main</small></div><div><b>${number(game.plays||0)}</b><small>main di arcade</small></div><div class="bar"><i style="width:${pct(owned,game.cards)}%"></i></div>`;
   $('gameModalSteps').innerHTML=(game.howTo||[]).map(step=>`<li>${esc(step)}</li>`).join('')||'<li>Buka game lalu ikuti petunjuk di layar.</li>';
   $('gameModalControls').innerHTML=(game.controls||[]).map(([key,action])=>`<dt>${esc(key)}</dt><dd>${esc(action)}</dd>`).join('')||'<dt>Klik</dt><dd>Ikuti tombol di layar</dd>';
   $('gameModalTips').innerHTML=(game.tips||[]).map(tip=>`<li>${esc(tip)}</li>`).join('')||'<li>Selamat bermain!</li>';
@@ -231,6 +303,20 @@
   $('toasts').append(element);
   setTimeout(()=>{element.classList.add('leave');setTimeout(()=>element.remove(),400);},4200);
  }
+ function confetti(){
+  if(reducedMotion())return;
+  const layer=document.createElement('div');
+  layer.className='confetti';
+  layer.setAttribute('aria-hidden','true');
+  const colors=['#F5B83D','#E62B5E','#F9A2C1','#A77BFF','#4CC99A'];
+  for(let index=0;index<70;index++){
+   const piece=document.createElement('i');
+   piece.style.cssText=`left:${Math.random()*100}%;background:${colors[index%colors.length]};animation-delay:${Math.random()*.6}s;animation-duration:${2.2+Math.random()*1.6}s;--x:${Math.round(Math.random()*160-80)}px;--r:${Math.round(Math.random()*720-360)}deg`;
+   layer.append(piece);
+  }
+  document.body.append(layer);
+  setTimeout(()=>layer.remove(),4600);
+ }
  function showFeed(){
   const key='gamysuf-feed-seen';
   const seen=Number(localStorage.getItem(key))||0;
@@ -238,8 +324,10 @@
   if(!events.length)return;
   const important=events.filter(event=>event.type!=='xp');
   const xp=events.reduce((sum,event)=>sum+(event.xp||0),0);
-  const queue=[...important.slice(-2),{type:'xp',text:'XP baru sejak kunjungan terakhir',xp}].filter(event=>event.type!=='xp'||event.xp>0);
+  const keep=matchMedia('(max-width:640px)').matches?1:2;
+  const queue=[...important.slice(-keep),{type:'xp',text:'XP baru sejak kunjungan terakhir',xp}].filter(event=>event.type!=='xp'||event.xp>0);
   queue.forEach((event,index)=>setTimeout(()=>toast(event),index*650));
+  if(important.some(event=>event.type==='level'||event.type==='badge'))setTimeout(confetti,300);
   localStorage.setItem(key,String(Math.max(...events.map(event=>event.at))));
  }
 
@@ -249,13 +337,32 @@
   const left=Math.ceil(wib/day)*day-wib;
   const h=String(Math.floor(left/3600000)).padStart(2,'0'),m=String(Math.floor(left%3600000/60000)).padStart(2,'0'),s=String(Math.floor(left%60000/1000)).padStart(2,'0');
   $('missionReset').textContent=`Reset ${h}:${m}:${s}`;
+  const weekday=new Date(wib).getUTCDay();
+  const weekLeft=left+(((8-weekday)%7||7)-1)*day;
+  const days=Math.floor(weekLeft/day),rest=weekLeft%day;
+  $('weekReset').textContent=`${days?`${days} hari `:''}${two(Math.floor(rest/3600000))}:${two(Math.floor(rest%3600000/60000))}:${two(Math.floor(rest%60000/1000))}`;
+ }
+
+ /* ── Bagikan progres (Web Share / salin) ─────────── */
+ async function shareProgress(){
+  const me=store.me;
+  if(!me)return;
+  const url=`${location.origin}/`;
+  const text=`Aku ${me.title} level ${me.level} di Gamysuf Arcade: ${me.cards.length}/${store.album?.total||0} kartu, streak ${me.streak.count} hari. Berani adu hoki?`;
+  try{
+   if(navigator.share){await navigator.share({title:'Gamysuf Arcade',text,url});return;}
+   await navigator.clipboard.writeText(`${text} ${url}`);
+   toast({type:'badge',text:'Teks ajakan tersalin. Tempel ke chat temanmu!',xp:0});
+  }catch(error){
+   if(error?.name!=='AbortError')toast({type:'xp',text:'Browser menolak berbagi. Salin alamat gamysuf.fun secara manual.',xp:0});
+  }
  }
 
  async function refresh({initial=false}={}){
-  const [catalog,me,album]=await Promise.all([initial||!store.catalog?api('/hub-api/catalog'):store.catalog,api('/hub-api/me'),api('/hub-api/album')]);
+  const [catalog,me,album]=await Promise.all([api('/hub-api/catalog'),api('/hub-api/me'),api('/hub-api/album')]);
   store.catalog=catalog;store.me=me;store.album=album;
   if(initial)renderHero();
-  renderMe();renderGames();renderAlbum();
+  renderMe();renderGames();renderAlbum();renderLive();
   await loadBoard(store.range);
   showFeed();
  }
@@ -280,6 +387,7 @@
  $('playerChip').addEventListener('click',openProfile);
  $('openProfile').addEventListener('click',openProfile);
  $('openAlbum').addEventListener('click',()=>openModal('albumModal'));
+ $('shareProgress').addEventListener('click',shareProgress);
  $('onboardSkip').addEventListener('click',()=>{localStorage.setItem('gamysuf-onboarded','1');closeModal($('onboardModal'));});
  $('onboardSave').addEventListener('click',async()=>{
   $('onboardError').textContent='';
