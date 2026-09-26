@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2a0a18">
+  <title>BIPY BEAUTY DROP · Bpedia × TAKEOVER X</title>
+  <link rel="icon" href="/assets/icon.ico">
+  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/game.css?v=1.0.0">
+  <script defer src="/js/audio.js?v=1.0.0"></script>
+  <script defer src="/js/fx.js?v=1.0.0"></script>
+  <script defer src="/js/board.js?v=1.0.0"></script>
+  <script defer src="/js/game.js?v=1.0.0"></script>
+</head>
+<body data-stage="boot">
+  <div class="scene" aria-hidden="true">
+    <div class="scene-photo"></div>
+    <div class="scene-bricks"></div>
+    <svg class="scene-truss" viewBox="0 0 1600 260" preserveAspectRatio="none">
+      <path d="M0 40H1600M0 118H1600" />
+      <path d="M0 118L80 40L160 118L240 40L320 118L400 40L480 118L560 40L640 118L720 40L800 118L880 40L960 118L1040 40L1120 118L1200 40L1280 118L1360 40L1440 118L1520 40L1600 118" />
+      <path class="truss-drop" d="M240 118V168M720 118V190M1200 118V172M1480 118V150" />
+    </svg>
+    <div class="lamp lamp-a"></div>
+    <div class="lamp lamp-b"></div>
+    <div class="lamp lamp-c"></div>
+    <div class="beam beam-a"></div>
+    <div class="beam beam-b"></div>
+    <div class="beam beam-c"></div>
+    <div class="scene-vignette"></div>
+    <div class="grain"></div>
+  </div>
+  <canvas id="fxCanvas" class="fx-canvas" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <img class="brand-logo" src="/assets/brand/bpedia-logo-reverse.png" alt="Bpedia">
+    <div class="event-chip">
+      <b>TAKEOVER X</b>
+      <em>The Vault of Time</em>
+      <span>3–4 Okt 2026 · The Brickhall Fatmawati</span>
+    </div>
+    <div class="top-actions">
+      <button id="backButton" class="ghost-button" type="button" hidden><span aria-hidden="true">←</span> Kembali</button>
+      <button id="modeButton" class="mode-pill" type="button" title="Ganti mode demo atau resmi">MODE DEMO</button>
+      <button id="soundButton" class="icon-button" type="button" aria-label="Matikan suara" aria-pressed="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="speaker" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+      </button>
+      <a class="icon-button" href="/admin.html" aria-label="Dashboard petugas">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M21.2 12h-2.4M5.2 12H2.8M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7M18.5 18.5l-1.7-1.7M7.2 7.2L5.5 5.5"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section id="homeView" class="view home-view" aria-labelledby="homeTitle">
+      <div class="hero">
+        <p class="eyebrow">BOOTH BPEDIA · HADIAH MURNI HOKI</p>
+        <h1 id="homeTitle" class="title"><span class="title-script">Bipy</span><span class="title-main">Beauty</span><span class="title-main">Drop</span></h1>
+        <p class="tagline">Belanja Bikin Bahagia</p>
+        <div class="hosts-stage">
+          <div class="hosts-glow"></div>
+          <div class="hosts-figure">
+            <img class="hosts-duo" src="/assets/images/hosts-duo.png" alt="Host cosplayer Zoro dan Sanji">
+            <p class="host-bubble bubble-zoro" id="bubbleZoro"><b>Zoro</b><span></span></p>
+            <p class="host-bubble bubble-sanji" id="bubbleSanji"><b>Sanji</b><span></span></p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="mission-board" aria-labelledby="missionTitle">
+        <img class="bipy-peek" id="bipyPeek" src="/assets/brand/rt-bipy-peek.png" alt="Bipy mengintip">
+        <div class="ticket">
+          <header class="ticket-head">
+            <p class="eyebrow">KARTU MISI BOOTH</p>
+            <h2 id="missionTitle">Selesaikan misi, kumpulkan stempel Bipy</h2>
+          </header>
+          <ol id="missionList" class="mission-list"></ol>
+        </div>
+        <div class="cta-stack">
+          <button id="startDrop" class="cta cta-drop" type="button">
+            <span class="cta-capsule" aria-hidden="true"></span>
+            <span class="cta-text"><b>Beauty Drop</b><small>Misi 1 · lepas kapsul, bawa pulang hadiah</small></span>
+            <span class="cta-arrow" aria-hidden="true">→</span>
+          </button>
+          <button id="startFan" class="cta cta-fan" type="button">
+            <span class="cta-avatars" aria-hidden="true"><img src="/assets/images/host-zoro.jpg" alt=""><img src="/assets/images/host-sanji.jpg" alt=""></span>
+            <span class="cta-text"><b>Gacha Fanservice</b><small id="fanCtaNote">Misi 3 · bareng Zoro &amp; Sanji</small></span>
+            <span class="cta-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </aside>
+
+      <footer class="ticker" aria-label="Hadiah dan tagar acara">
+        <div class="ticker-track" id="tickerTrack"></div>
+      </footer>
+    </section>
+
+    <section id="dropView" class="view drop-view" aria-labelledby="dropTitle" hidden>
+      <aside class="drop-panel">
+        <p class="eyebrow" id="dropEyebrow">MISI 1 · BEAUTY DROP</p>
+        <h2 id="dropTitle">Lepas kapsulmu</h2>
+        <p class="drop-lead" id="dropLead">Bipy menjatuhkan satu kapsul kelopak ke papan vault. Begitu mendarat, kapsul mekar dan hadiahmu terbuka.</p>
+        <label class="name-field" for="playerName"><span>Nama tamu <small>(opsional)</small></span>
+          <input id="playerName" maxlength="24" autocomplete="off" spellcheck="false" placeholder="mis. Rina">
+        </label>
+        <button id="dropButton" class="drop-button" type="button"><span>DROP!</span><small>tekan Spasi / Enter</small></button>
+        <p class="fair-note" id="fairNote">Semua kapsul punya kesempatan yang sama. Tidak ada persentase, murni hoki.</p>
+        <div class="capsule-meter" id="capsuleMeter"><b id="capsuleCount">0</b><span id="capsuleLabel">kapsul menunggu di mesin</span></div>
+        <div class="mini-hosts">
+          <img src="/assets/images/hosts-duo.png" alt="">
+          <p class="host-bubble mini-bubble" id="miniBubble"><b></b><span></span></p>
+        </div>
+      </aside>
+
+      <div class="machine">
+        <div class="machine-crown">
+          <img id="bipyDropper" class="bipy-dropper" src="/assets/brand/rt-bipy-wave.png" alt="Bipy siap menjatuhkan kapsul">
+          <span id="heldCapsule" class="held-capsule" aria-hidden="true"></span>
+        </div>
+        <div class="machine-frame"><canvas id="boardCanvas" aria-label="Papan pin Vault of Time"></canvas></div>
+        <div class="machine-plate"><span>THE VAULT OF TIME</span><b>BPEDIA × TAKEOVER X</b></div>
+      </div>
+
+      <aside class="contents-panel">
+        <h3 id="contentsTitle">Isi mesin kapsul</h3>
+        <p id="contentsNote" class="contents-note">Hadiah yang sama dengan booth Bpedia sebelumnya.</p>
+        <div id="contentsGrid" class="contents-grid"></div>
+      </aside>
+    </section>
+
+    <section id="fanView" class="view fan-view" aria-labelledby="fanTitle" hidden>
+      <header class="fan-head">
+        <p class="eyebrow">MISI 3 · CHECKOUT DI BOOTH BPEDIA</p>
+        <h2 id="fanTitle">Pilih host favoritmu</h2>
+        <p class="schedule-chip" id="hostSchedule"></p>
+      </header>
+      <div class="host-cards" id="hostCards"></div>
+      <div class="method-row">
+        <button class="method-card" type="button" data-method="gacha">
+          <span class="method-tag">Checkout Rp100rb</span>
+          <b>Gacha Fanservice</b>
+          <small>Kapsul memilih salah satu fanservice secara acak.</small>
+        </button>
+        <button class="method-card method-pick" type="button" data-method="pilih">
+          <span class="method-tag">Checkout Rp150rb</span>
+          <b>Pilih Sendiri</b>
+          <small>Bebas memilih fanservice favoritmu.</small>
+        </button>
+      </div>
+      <p class="fan-closed" id="fanClosed" hidden></p>
+    </section>
+
+    <section id="pickView" class="view pick-view" aria-labelledby="pickTitle" hidden>
+      <header class="fan-head">
+        <p class="eyebrow">CHECKOUT RP150RB · PILIH SENDIRI</p>
+        <h2 id="pickTitle">Pilih fanservice bareng <span id="pickHostName">host</span></h2>
+      </header>
+      <div class="pick-grid" id="pickGrid"></div>
+    </section>
+  </main>
+
+  <div id="revealLayer" class="reveal-layer" role="dialog" aria-modal="true" aria-labelledby="revealTitle" hidden>
+    <div class="reveal-rays"></div>
+    <div id="capsuleBig" class="capsule-big" aria-hidden="true">
+      <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span>
+      <span class="petal p4"></span><span class="petal p5"></span><span class="petal p6"></span>
+      <span class="cap-half cap-top"></span><span class="cap-half cap-bottom"></span>
+    </div>
+    <div class="reveal-content" id="revealContent">
+      <article class="tcg-card" id="tcgCard">
+        <div class="tcg-inner">
+          <header class="tcg-head"><span id="cardRarity"></span><span id="cardStars" class="tcg-stars"></span></header>
+          <div class="tcg-art" id="cardArt"><img id="cardImage" src="/assets/products/bundling.svg" alt=""><span id="cardIcon" class="tcg-icon"></span></div>
+          <h3 class="tcg-name" id="cardName"></h3>
+          <p class="tcg-sub" id="cardSub"></p>
+          <footer class="tcg-foot"><span id="cardSerial"></span><span>TAKEOVER X · 03–04.10.26</span></footer>
+        </div>
+      </article>
+      <section class="reveal-info">
+        <p class="eyebrow" id="revealEyebrow"></p>
+        <h2 id="revealTitle"></h2>
+        <p class="reveal-lead" id="revealLead"></p>
+        <div class="voucher-box" id="voucherBox" hidden><small>Kode voucher</small><b id="voucherCode"></b><span>Masukkan saat checkout di aplikasi Bpedia.</span></div>
+        <div class="claim-box"><small id="claimLabel">Kode klaim untuk petugas</small><b id="claimCode"></b><span id="claimPlayer"></span></div>
+        <p class="reveal-terms" id="revealTerms"></p>
+        <p class="demo-note" id="demoNote" hidden>SIMULASI DEMO · tidak mengurangi stok dan tidak tercatat</p>
+        <p class="host-bubble reveal-bubble" id="revealBubble"><b></b><span></span></p>
+        <button id="closeReveal" class="primary-button" type="button">Selesai · pemain berikutnya</button>
+      </section>
+    </div>
+  </div>
+
+  <div id="confirmLayer" class="confirm-layer" hidden>
+    <div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+      <h2 id="confirmTitle"></h2>
+      <p id="confirmText"></p>
+      <div class="confirm-actions">
+        <button id="confirmCancel" class="ghost-button" type="button">Batal</button>
+        <button id="confirmOk" class="primary-button" type="button">Ya, lanjut</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pauseBanner" class="pause-banner" role="status" hidden>Permainan sedang dijeda petugas</div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

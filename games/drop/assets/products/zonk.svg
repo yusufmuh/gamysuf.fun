@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Zonk belum beruntung">
+  <rect width="240" height="240" rx="28" fill="#fff4f6"/>
+  <circle cx="120" cy="112" r="64" fill="#f8bbd0"/>
+  <circle cx="98" cy="100" r="7" fill="#880e4f"/>
+  <circle cx="142" cy="100" r="7" fill="#880e4f"/>
+  <path d="M94 140c14-12 38-12 52 0" stroke="#880e4f" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <text x="120" y="212" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="800" fill="#ad1457">COBA LAGI YA</text>
+</svg>

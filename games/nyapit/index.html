@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#250938">
+  <title>NYAPIT BARENG BPEDIA · Cozzone Up 2026</title>
+  <link rel="icon" href="/assets/icon.ico">
+  <link rel="stylesheet" href="/css/style.css?v=1.4.0">
+  <link rel="stylesheet" href="/css/festival.css?v=1.4.0">
+  <link rel="stylesheet" href="/css/stage.css?v=1.4.0">
+  <script defer src="/js/audio.js?v=1.4.0"></script>
+  <script defer src="/js/physics.js?v=1.4.0"></script>
+  <script defer src="/js/mascot.js?v=1.4.0"></script>
+  <script defer src="/js/runners.js?v=1.4.0"></script>
+  <script defer src="/js/festival.js?v=1.4.0"></script>
+  <script defer src="/js/app.js?v=1.4.0"></script>
+</head>
+<body class="game-page" data-stage="home">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="ambient ambient-festival" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand-lockup" href="/" aria-label="NYAPIT BARENG BPEDIA, halaman utama permainan">
+      <img src="/assets/brand/bpedia-logo.png" alt="Bpedia">
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="event-lockup">
+        <b>NYAPIT BARENG BPEDIA</b>
+        <small class="cozzone-top-badge"><i class="neon-pulse-dot"></i> COZZONE UP 2026 · FEB UNIVERSITAS PANCASILA</small>
+      </span>
+    </a>
+    <div class="topbar-status" aria-label="Status aplikasi">
+      <span id="mode" class="mode-chip">Memuat…</span>
+    </div>
+    <nav class="topbar-actions" aria-label="Kontrol aplikasi">
+      <button id="backHome" class="icon-button" type="button" hidden>← Home</button>
+      <button id="sound" class="icon-button" type="button" aria-label="Matikan suara" aria-pressed="false"><span aria-hidden="true">♪</span><b>Suara</b></button>
+      <button id="fullscreen" class="icon-button" type="button" aria-label="Masuk layar penuh"><span aria-hidden="true">⛶</span><b>Layar penuh</b></button>
+      <a class="admin-link" href="/admin.html"><span aria-hidden="true">⚙</span> Admin</a>
+    </nav>
+  </header>
+
+  <main id="festivalHome" class="festival-home" aria-labelledby="homeTitle">
+    <div class="home-spots" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="festoon" aria-hidden="true">
+      <svg class="festoon-wire" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 6 Q 300 54 600 20 T 1200 6"/></svg>
+      <div class="festoon-bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <section class="home-hero">
+      <div class="hero-copy">
+        <p class="festival-kicker"><span></span> BPEDIA PLAYGROUND · COZZONE UP 2026</p>
+        <h1 id="homeTitle">NYAPIT<br>BARENG<br><em>BPEDIA<span>✦</span></em></h1>
+        <p class="hero-description">Satu koin. Satu kejutan.<br>Siap rebut hadiah dari geng kecil B!?</p>
+        <div class="home-entry">
+          <label for="homeUsername">Nama panggungmu <small>opsional</small></label>
+          <input id="homeUsername" maxlength="24" autocomplete="off" placeholder="Tulis username kamu…">
+          <button id="startFestival" type="button" disabled><span class="cta-coin" aria-hidden="true">B!</span><span>MAIN SEKARANG<small>Koin virtual · tanpa pembayaran</small></span><b aria-hidden="true">↗</b></button>
+          <div class="mode-switch" role="group" aria-label="Pilih mode permainan">
+            <span class="mode-switch-label">Mode</span>
+            <div class="mode-switch-track">
+              <span class="mode-switch-thumb" aria-hidden="true"></span>
+              <button id="modeDemo" class="mode-switch-btn" type="button" data-mode="demo" aria-pressed="false">
+                <b>Demo</b><small>Latihan</small>
+              </button>
+              <button id="modeLive" class="mode-switch-btn" type="button" data-mode="live" aria-pressed="false">
+                <b>Main Resmi</b><small>Hadiah nyata</small>
+              </button>
+            </div>
+          </div>
+          <p id="homeStatus" role="status">Menyiapkan panggung…</p>
+        </div>
+      </div>
+      <div class="hero-show" aria-label="Maskot B! menyambutmu di panggung Cozzone">
+        <div class="show-orbit" aria-hidden="true"></div>
+        <span class="show-word" aria-hidden="true">PLAY!</span>
+        <div class="hero-beams" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="hero-mascot-glow" aria-hidden="true"></div>
+        <span class="mascot-ground-shadow" aria-hidden="true"></span>
+        <div class="hero-mascot-wrap"><img src="/assets/images/mascot-v3/host.png" alt="B! melambai dengan ceria" class="hero-mascot"></div>
+        <div class="hero-plinth" aria-hidden="true"><span>THE B! STAGE</span></div>
+        <span class="floating-ticket ticket-one">GOOD VIBES<br><b>GREAT PRIZES</b></span>
+        <span class="floating-ticket ticket-two">✦<br>YOUR LUCKY DAY</span>
+        <img class="hero-sidekick sidekick-one" src="/assets/images/mascot-v3/focus.png" alt="">
+        <img class="hero-sidekick sidekick-two" src="/assets/images/mascot-v3/celebrate.png" alt="">
+      </div>
+      <aside class="home-winners" aria-labelledby="winnersTitle">
+        <div class="winners-heading"><p class="festival-kicker">THE LUCKY ONES</p><span>★</span></div>
+        <h2 id="winnersTitle">Wall of <em>Winners.</em></h2>
+        <p class="winner-note">Pemenang resmi, hadiah nyata.</p>
+        <div id="homeWinners" class="winner-list"></div>
+        <div class="winner-footer"><span id="homeWinCount">0</span> hadiah dimenangkan di booth</div>
+      </aside>
+    </section>
+    <section class="prize-showcase" aria-labelledby="prizeShowcaseTitle">
+      <div class="showcase-heading"><div><p class="festival-kicker">A LITTLE SNEAK PEEK</p><h2 id="prizeShowcaseTitle">Kejutan yang menunggumu.</h2></div><button id="toggleMarquee" type="button" aria-pressed="false">Ⅱ Jeda galeri</button></div>
+      <div class="prize-marquee" id="prizeMarquee" tabindex="0" aria-label="Galeri hadiah. Arahkan kursor atau fokus untuk menjeda."><div id="prizeTrack" class="prize-track"></div></div>
+    </section>
+    <footer class="home-footer"><span>BEAUTY MEETS PLAY.</span><span>18–20 SEPTEMBER 2026 · FEB UNIVERSITAS PANCASILA</span><span>NYAPIT VOL. 02</span></footer>
+  </main>
+
+  <main id="gameStage" class="game-shell" hidden>
+    <aside class="host-panel glass-card" aria-labelledby="game-title">
+      <div class="host-copy">
+        <p class="eyebrow"><span class="glow-tag">COZZONE UP 2026</span> MODERN BAZAAR & MUSIC</p>
+        <h1 id="game-title">NYAPIT BARENG<br><em>BPEDIA</em></h1>
+        <p class="intro">Di panggung semarak Cozzone UP, <b>Maskot B!</b> siap meluncur dan mencapit kapsul kejutan untukmu. Usik bola, bidik, dan capit!</p>
+      </div>
+
+      <div id="mascotArea" class="mascot-stage" data-pose="host">
+        <div class="mascot-halo" aria-hidden="true"></div>
+        <div class="mascot-radiance" aria-hidden="true"></div>
+        <div class="mascot-particles" aria-hidden="true">
+          <i class="p-spark">✦</i><i class="p-heart">♡</i><i class="p-petal">✿</i><i class="p-spark2">✧</i>
+        </div>
+        <button id="mascot" type="button" aria-label="Sentuh untuk ganti ekspresi Maskot B!">
+          <img id="hostMascotImg" src="/assets/images/mascot-v3/host.png" alt="Maskot B! 3D Beautypedia">
+        </button>
+        <span class="mascot-shadow" aria-hidden="true"></span>
+        <div class="pose-control-bar">
+          <span id="poseBadge" class="pose-badge">Gaya: Halo, B!</span>
+          <button id="nextPoseBtn" class="pose-cycle-btn" type="button" title="Lihat empat ekspresi baru Maskot B!">Ganti Gaya ↻</button>
+        </div>
+      </div>
+
+      <div id="speech" class="speech-bubble" role="status" aria-live="polite">Halo BPEDIA, selamat datang di Cozzone Up!</div>
+
+      <div class="player-form">
+        <label for="username">Nama pemain <span>opsional</span></label>
+        <div class="input-shell">
+          <span aria-hidden="true">♡</span>
+          <input id="username" maxlength="24" autocomplete="off" spellcheck="false" placeholder="Contoh: Siti.Cantik">
+        </div>
+        <small>Kosongkan untuk nama otomatis booth.</small>
+      </div>
+
+      <div class="cozzone-event-card">
+        <div class="cec-head">
+          <span class="cec-tag">FESTIVAL PASS</span>
+          <b>COZZONE UP 2026</b>
+        </div>
+        <div class="cec-body">
+          <span>📍 Parkiran FEB Universitas Pancasila</span>
+          <span>📅 18–20 September 2026</span>
+          <small>New Date · Same Excitement · Bigger Energy ⚡</small>
+        </div>
+      </div>
+
+      <div class="control-hints" aria-label="Panduan kontrol">
+        <span><kbd>←</kbd><kbd>→</kbd> Geser</span>
+        <span><kbd>Klik Bola</kbd> Membal</span>
+        <span><kbd>Space</kbd> Capit</span>
+      </div>
+    </aside>
+
+    <section class="machine-panel" aria-labelledby="machine-title">
+      <div class="machine-crown">
+        <div class="festival-spotlights" aria-hidden="true">
+          <span class="spot-cone s-left"></span>
+          <span class="spot-cone s-center"></span>
+          <span class="spot-cone s-right"></span>
+        </div>
+        <div class="crown-brand">
+          <span class="cozzone-brand-pill">⚡ COZZONE UP STAGE · ECONOMIC FAIR 2026</span>
+          <strong id="machine-title">NYAPIT BARENG BPEDIA</strong>
+        </div>
+        <div class="crown-state-wrap">
+          <span id="machineState" class="machine-state"><i aria-hidden="true"></i> SIAP MAIN</span>
+          <div class="dj-mini-eq" aria-hidden="true">
+            <span class="eq-bar b1"></span>
+            <span class="eq-bar b2"></span>
+            <span class="eq-bar b3"></span>
+            <span class="eq-bar b4"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="cabinet" class="cabinet" tabindex="0" role="button" aria-label="Area capit. Sentuh atau klik bola untuk membal, gerakkan kursor untuk membidik, lalu klik atau tekan Spasi untuk mencapit">
+        <div class="cabinet-lights" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="frame-lights frame-left" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="frame-lights frame-right" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="glass-shine" aria-hidden="true"></div>
+        <div class="scan-line" aria-hidden="true"></div>
+        <div class="scan-beam" aria-hidden="true"></div>
+
+        <!-- Cozzone Stage Backdrop & Equalizers -->
+        <div class="cozzone-stage-backdrop" aria-hidden="true">
+          <div class="cs-neon-arch">COZZONE <b>UP</b> 2026</div>
+          <div class="cs-sub-banner">✦ FEB UNIVERSITAS PANCASILA · CREATIVE MARKET & DJ BEATS ✦</div>
+          <div class="cs-lasers">
+            <span class="cs-laser l-cyan"></span>
+            <span class="cs-laser l-pink"></span>
+            <span class="cs-laser l-gold"></span>
+          </div>
+        </div>
+
+        <div class="cabinet-side-eq eq-left" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="cabinet-side-eq eq-right" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+
+        <div class="rail" aria-hidden="true"><span class="rail-glint"></span></div>
+
+        <!-- Laser Aimer Reticle -->
+        <div id="aimGuide" class="aim-guide" aria-hidden="true">
+          <span class="aim-laser"></span>
+          <div class="aim-reticle">
+            <i class="reticle-ring"></i>
+            <span class="reticle-text">⌖ TARGET</span>
+          </div>
+        </div>
+
+        <!-- 3D Mascot B! Claw Diver -->
+        <div id="claw" class="claw mascot-diver-claw" aria-hidden="true">
+          <div class="trolley">
+            <span class="trolley-wheel left"></span>
+            <span class="trolley-laser"></span>
+            <span class="trolley-sensor"></span>
+            <span class="trolley-wheel right"></span>
+          </div>
+          <div class="cable">
+            <span class="cable-strand cable-l"></span>
+            <span class="cable-core"></span>
+            <span class="cable-strand cable-r"></span>
+          </div>
+          <div class="mascot-claw-diver">
+            <div class="diver-harness">
+              <span class="harness-glow"></span>
+            </div>
+            <div class="diver-body">
+              <img id="clawSprite" class="diver-mascot-img" src="/assets/images/mascot-v3/focus.png" alt="Maskot B! Sedang Mencapit">
+              <div class="diver-reach-arms">
+                <span class="reach-arm left-arm"><i></i></span>
+                <span class="reach-arm right-arm"><i></i></span>
+              </div>
+            </div>
+            <span class="claw-energy-ring"></span>
+          </div>
+          <div id="caughtPod" class="caught-pod" hidden>
+            <div class="pod-glow"></div>
+            <img id="caught" alt="Hadiah tertangkap">
+          </div>
+        </div>
+
+        <!-- Prize bay: capsules live here only. -->
+        <div class="pit-zone">
+          <div id="balls" class="prize-pit physics-pit" aria-label="Kapsul hadiah interaktif. Klik atau sentuh bola untuk membal"></div>
+          <div class="pit-floor" aria-hidden="true"></div>
+        </div>
+
+        <!-- Delivery bay: walled off from the capsules so a dropped prize never
+             lands back on the pile. -->
+        <div class="chute-bay" aria-hidden="true">
+          <span class="bay-wall"></span>
+          <div class="chute">
+            <div class="chute-neon-glow"></div>
+            <div class="chute-mouth"></div>
+            <span>PRIZE DROP</span>
+          </div>
+          <b class="bay-label">KERANJANG HADIAH</b>
+        </div>
+
+        <!-- Mini mascot runway, below the pile so nothing overlaps the capsules. -->
+        <div id="cozzoneCrowd" class="cozzone-crowd" data-state="cheer" aria-label="Maskot kecil B! berlarian di panggung">
+          <div class="runway-glow" aria-hidden="true"></div>
+          <div id="crowdTrack" class="crowd-track"></div>
+        </div>
+        <!-- Kurir B! memutari tepi kabinet; lintasannya bukan jalur lari bawah. -->
+        <div id="riderLayer" class="rider-layer" aria-hidden="true"></div>
+        <div id="tossLayer" class="toss-layer" aria-hidden="true"></div>
+
+        <div id="cabinetMessage" class="cabinet-message">
+          <b>Sentuh Bola & Arahkan B!</b>
+          <span>Klik/sentuh bola hadiah untuk membal, lalu tekan SPASI untuk menjepit!</span>
+        </div>
+      </div>
+
+      <div class="machine-console">
+        <div class="console-instructions">
+          <span class="console-led" aria-hidden="true"></span>
+          <div><small>CARA MAIN ADVANCE</small><b>USIK BOLA · BIDIK · CAPIT</b></div>
+        </div>
+        <button id="play" class="play-button" type="button">
+          <span class="button-spark" aria-hidden="true">✦</span>
+          <span><small>MASKOT B! SIAP MENGAMBIL BOLA</small><b>CAPIT SEKARANG</b></span>
+          <i aria-hidden="true">→</i>
+        </button>
+      </div>
+      <p class="fairness-note"><span aria-hidden="true">ⓘ</span> Hasil diacak aman berdasarkan peluang dan stok—posisi capit dan gerakan bola merupakan sensasi arcade interaktif.</p>
+      <p id="error" class="error-message" role="alert"></p>
+    </section>
+
+    <aside class="score-panel glass-card">
+      <div class="score-heading">
+        <div><p class="eyebrow">COZZONE LUCKY BEAUTIES</p><h2>Papan Peringkat</h2></div>
+        <span class="live-dot"><i aria-hidden="true"></i> LIVE</span>
+      </div>
+      <div id="ranking" class="ranking-list"></div>
+
+      <div class="odds-heading">
+        <div><p class="eyebrow">PELUANG SAAT INI</p><h3>Semua punya kejutan</h3></div>
+        <span title="Peluang otomatis menyesuaikan stok">ⓘ</span>
+      </div>
+      <div id="odds" class="odds-list"></div>
+      <p id="stockNotice" class="stock-notice"><span aria-hidden="true">◆</span> Mode demo tidak mengurangi stok atau masuk peringkat.</p>
+    </aside>
+  </main>
+
+  <dialog id="result" class="result-dialog" aria-labelledby="resultTitle">
+    <div class="result-card">
+      <button id="resultCloseIcon" class="dialog-close" type="button" aria-label="Tutup hasil">×</button>
+      <p id="resultEyebrow" class="eyebrow">CANTIK! KAMU DAPAT</p>
+      <div class="result-visual">
+        <div class="result-rays" aria-hidden="true"></div>
+        <div class="result-mascot-winner"><img id="resultMascotImg" src="/assets/images/mascot-v3/celebrate.png" alt="Maskot B! Merayakan"></div>
+        <div class="result-capsule"><img id="resultImage" alt="Hadiah"></div>
+        <span class="result-spark one" aria-hidden="true">✦</span>
+        <span class="result-spark two" aria-hidden="true">✦</span>
+      </div>
+      <div id="resultPrizeBadge" class="result-prize-theme-badge" hidden></div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultPlayer" class="result-player"></p>
+      <p id="resultCongrats" class="result-congrats-quote"></p>
+      <p id="resultTerms" class="result-terms"></p>
+      <div id="resultVoucherPass" class="voucher-ticket-pass" hidden>
+        <div class="vtp-ribbon"><span>PROMO APLIKASI BPEDIA</span></div>
+        <div class="vtp-body">
+          <div class="vtp-info">
+            <span class="vtp-label">KODE VOUCHER BELANJA</span>
+            <strong id="resultPromoCode" class="vtp-code">BPFOLKA5OO</strong>
+            <small id="resultPromoMinSpend" class="vtp-min">Min. Belanja Rp750.000</small>
+          </div>
+          <button id="btnCopyPromo" class="vtp-copy-btn" type="button" aria-label="Salin Kode Voucher">
+            <span class="vtp-copy-icon" aria-hidden="true">📋</span>
+            <span id="btnCopyPromoText">Salin Kode</span>
+          </button>
+        </div>
+        <p class="vtp-instruction">Masukkan kode ini saat checkout di aplikasi Bpedia untuk diskon spesial!</p>
+      </div>
+      <div id="resultCodeWrap" class="claim-code"><small>KODE PENCATATAN</small><b id="resultCode"></b><span>Tunjukkan kode ini kepada petugas booth</span></div>
+      <button id="closeResult" class="result-primary" type="button">Selesai · Kembali ke Home</button>
+      <small id="resultFootnote" class="result-footnote">Hadiah nyata ditandai “Diserahkan” oleh petugas melalui dashboard admin.</small>
+    </div>
+  </dialog>
+
+  <dialog id="coinDialog" class="coin-dialog" aria-labelledby="coinTitle">
+    <div class="coin-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <p class="festival-kicker">YOUR TURN TO SHINE</p>
+    <h2 id="coinTitle">Satu koin.<br><em>Let’s play!</em></h2>
+    <div class="coin-mechanism" aria-hidden="true"><div class="insert-coin">B!</div><div class="coin-slot"><span></span><b>BPEDIA ARCADE</b></div><div class="coin-ripple"></div></div>
+    <p>Koin masuk, panggung menyala.<br>B! siap menangkap kejutanmu.</p>
+    <button id="skipCoin" type="button">Lewati animasi →</button>
+  </dialog>
+
+  <button id="kioskExit" type="button">✕ Keluar layar penuh <kbd>Esc</kbd></button>
+  <div id="confetti" class="confetti-layer" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

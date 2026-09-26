@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Bundling paket misteri">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff4f6"/>
+      <stop offset="1" stop-color="#f7bcc3"/>
+    </linearGradient>
+    <linearGradient id="box" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f06292"/>
+      <stop offset="1" stop-color="#c2185b"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="28" fill="url(#bg)"/>
+  <rect x="48" y="96" width="144" height="104" rx="12" fill="url(#box)"/>
+  <rect x="48" y="78" width="144" height="30" rx="10" fill="#ad1457"/>
+  <rect x="110" y="78" width="20" height="122" fill="#fce4ec" opacity="0.85"/>
+  <rect x="48" y="132" width="144" height="16" fill="#fce4ec" opacity="0.85"/>
+  <path d="M120 78c-16-6-30-18-22-30 7-11 22-2 22 14 0-16 15-25 22-14 8 12-6 24-22 30z" fill="#f8bbd0"/>
+  <text x="120" y="60" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" fill="#880e4f">MISTERI</text>
+  <text x="120" y="222" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#880e4f">BUNDLING 2 PCS</text>
+</svg>

@@ -1,0 +1,178 @@
+{
+  "version": "1.4.0",
+  "status": "final-static-tts",
+  "type": "sulih suara sintetis perempuan, bukan rekaman manusia",
+  "runtime": "WAV PCM lokal; internet hanya untuk membuat ulang",
+  "override": "assets/audio/custom/ menimpa berkas mana pun di sini",
+  "brand": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "-7%",
+    "pronunciation": "Bipedia",
+    "locked": "kalimat publik dikunci PRD 9.1 dan disesuaikan v1.4.0",
+    "phrases": {
+      "slogan-app": "BPEDIA, semua ada di aplikasi",
+      "slogan-cantik": "Cantik bersama BPEDIA",
+      "slogan-belanja": "Belanja di BPEDIA, semua ada",
+      "slogan-adaada": "BPEDIA, cari skincare-mu dan temukan diskon di aplikasi... BPEDIA!",
+      "slogan-halo": "Halo BPEDIA, main yuk",
+      "slogan-skincare": "Download aplikasi BPEDIA dan temukan skincare mu"
+    },
+    "spokenScripts": {
+      "slogan-app": "Bipedia, semua ada di aplikasi.",
+      "slogan-cantik": "Cantik, bersama Bipedia.",
+      "slogan-belanja": "Belanja di Bipedia, semua ada.",
+      "slogan-adaada": "Bipedia! Cari skincare-mu, dan temukan diskon di aplikasi... Bipedia!",
+      "slogan-halo": "Halo Bipedia, main yuk.",
+      "slogan-skincare": "Download aplikasi Bipedia, dan temukan skincare kamu."
+    },
+    "pitch": {
+      "slogan-app": "+0Hz",
+      "slogan-cantik": "+4Hz",
+      "slogan-belanja": "-2Hz",
+      "slogan-adaada": "+8Hz",
+      "slogan-halo": "+8Hz",
+      "slogan-skincare": "-3Hz"
+    }
+  },
+  "mc": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "+8%",
+    "note": "celetuk booth v1.3 & v1.4, dibedakan oleh tempo ceria dan pitch",
+    "phrases": {
+      "mc-koin": "Koin sudah masuk! Yuk siap-siap, semoga beruntung ya!",
+      "mc-ayo": "Ayo dicoba dulu, siapa tahu lagi hoki.",
+      "mc-bidik": "Pelan-pelan bidiknya, nggak usah buru-buru.",
+      "mc-tegang": "Tahan… tahan…",
+      "mc-mantap": "Wah, keren banget! Selamat ya, berhasil dapat hadiah!",
+      "mc-hampir": "Yah, tinggal sedikit lagi.",
+      "mc-semangat": "Santai, masih ada kesempatan lain kok."
+    },
+    "spokenScripts": {
+      "mc-koin": "Koin sudah masuk! Yuk siap-siap, semoga beruntung ya!",
+      "mc-ayo": "Ayo dicoba dulu, siapa tahu lagi hoki.",
+      "mc-bidik": "Pelan-pelan bidiknya, nggak usah buru-buru.",
+      "mc-tegang": "Tahan... tahan...",
+      "mc-mantap": "Wah, keren banget! Selamat ya, berhasil dapat hadiah!",
+      "mc-hampir": "Yah, tinggal sedikit lagi.",
+      "mc-semangat": "Santai, masih ada kesempatan lain kok."
+    },
+    "pitch": {
+      "mc-koin": "+18Hz",
+      "mc-ayo": "+15Hz",
+      "mc-bidik": "+12Hz",
+      "mc-tegang": "+20Hz",
+      "mc-mantap": "+22Hz",
+      "mc-hampir": "+10Hz",
+      "mc-semangat": "+14Hz"
+    }
+  },
+  "prizes": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "+7%",
+    "note": "ucapan selamat individual untuk masing-masing hadiah",
+    "phrases": {
+      "prize-bundling": "Wah luar biasa! Selamat ya, kamu dapat Hadiah Utama Mystery Bundling!",
+      "prize-voucher-500000": "Keren banget! Selamat ya, kamu berhasil bawa pulang Voucher Spesial 500 Ribu Rupiah!",
+      "prize-voucher-100000": "Yeay selamat ya! Kamu mendapatkan Voucher Belanja 100 Ribu Rupiah!",
+      "prize-voucher-50": "Selamat ya! Kamu dapat Diskon 50 Persen belanja di aplikasi Bpedia!",
+      "prize-voucher-25": "Selamat ya! Kamu dapat Voucher Diskon 25 Persen di aplikasi Bpedia!",
+      "prize-voucher-newuser": "Selamat datang di Bpedia! Kamu dapat Voucher Pengguna Baru 25 Ribu Rupiah!",
+      "prize-powder-000": "Selamat ya! Kamu mendapatkan Pinkflash Lasting Matte Pressed Powder!",
+      "prize-foundation-04": "Selamat ya! Kamu berhasil membawa pulang Focallure Fluid Foundation 04!",
+      "prize-duo-m03": "Cantik banget! Selamat ya, kamu mendapatkan Pinkflash Duo Lipgloss!",
+      "prize-salsa-vinilash": "Selamat ya! Bulu mata makin lentik dengan Salsa Vinilash!",
+      "prize-salsa-vinilash-pro": "Keren banget! Selamat ya, kamu mendapatkan Salsa Vinilash Pro!",
+      "prize-stick-hs03": "Selamat ya! Riasan makin glowing dengan Duo Makeup Stick Pinkflash!",
+      "prize-creamy-or01": "Bibir makin manis! Selamat ya, kamu dapat Creamy Lipgloss Pinkflash!",
+      "prize-creamy-rd01": "Tampil makin fresh! Selamat ya, kamu dapat Creamy Lipgloss Pinkflash!",
+      "prize-foundation-03": "Selamat ya! Kamu mendapatkan Focallure Fluid Foundation 03!",
+      "prize-glossy-g03": "Bibir berkilau mempesona! Selamat ya, kamu dapat Pinkflash Lasting Glossy Lipgloss!",
+      "prize-watery-nu02": "Selamat ya! Kamu mendapatkan Pinkflash Watery Transferproof Lip Cream!",
+      "prize-balm-pk01": "Selamat ya! Bibir sehat dan lembap dengan Color Reviving Lip Balm!"
+    },
+    "spokenScripts": {
+      "prize-bundling": "Wah, luar biasa! Selamat ya, kamu dapat Hadiah Utama Mystery Bundling!",
+      "prize-voucher-500000": "Keren banget! Selamat ya, kamu berhasil bawa pulang Voucher Spesial lima ratus ribu rupiah!",
+      "prize-voucher-100000": "Yeay, selamat ya! Kamu mendapatkan Voucher Belanja seratus ribu rupiah!",
+      "prize-voucher-50": "Selamat ya! Kamu dapat Diskon lima puluh persen belanja di aplikasi Bipedia!",
+      "prize-voucher-25": "Selamat ya! Kamu dapat Voucher Diskon dua puluh lima persen di aplikasi Bipedia!",
+      "prize-voucher-newuser": "Selamat datang di Bipedia! Kamu dapat Voucher Pengguna Baru dua puluh lima ribu rupiah!",
+      "prize-powder-000": "Selamat ya! Kamu mendapatkan Pinkflash Lasting Matte Loose Pressed Powder nol nol nol!",
+      "prize-foundation-04": "Selamat ya! Kamu berhasil membawa pulang Focallure Fluid Foundation nol empat!",
+      "prize-duo-m03": "Cantik banget! Selamat ya, kamu mendapatkan Pinkflash Duo Lipgloss!",
+      "prize-salsa-vinilash": "Selamat ya! Bulu mata makin lentik dengan Salsa Vinilash!",
+      "prize-salsa-vinilash-pro": "Keren banget! Selamat ya, kamu mendapatkan Salsa Vinilash Pro!",
+      "prize-stick-hs03": "Selamat ya! Riasan makin glowing dengan Duo Makeup Stick Pinkflash!",
+      "prize-creamy-or01": "Bibir makin manis! Selamat ya, kamu dapat Creamy Lipgloss Pinkflash!",
+      "prize-creamy-rd01": "Tampil makin fresh! Selamat ya, kamu dapat Creamy Lipgloss Pinkflash!",
+      "prize-foundation-03": "Selamat ya! Kamu mendapatkan Focallure Fluid Foundation nol tiga!",
+      "prize-glossy-g03": "Bibir berkilau mempesona! Selamat ya, kamu dapat Pinkflash Lasting Glossy Lipgloss!",
+      "prize-watery-nu02": "Selamat ya! Kamu mendapatkan Pinkflash Watery Transferproof Lip Cream!",
+      "prize-balm-pk01": "Selamat ya! Bibir sehat dan lembap dengan Color Reviving Lip Balm!"
+    },
+    "pitch": {
+      "prize-bundling": "+16Hz",
+      "prize-voucher-500000": "+18Hz",
+      "prize-voucher-100000": "+16Hz",
+      "prize-voucher-50": "+16Hz",
+      "prize-voucher-25": "+16Hz",
+      "prize-voucher-newuser": "+16Hz",
+      "prize-powder-000": "+15Hz",
+      "prize-foundation-04": "+15Hz",
+      "prize-duo-m03": "+18Hz",
+      "prize-salsa-vinilash": "+16Hz",
+      "prize-salsa-vinilash-pro": "+16Hz",
+      "prize-stick-hs03": "+15Hz",
+      "prize-creamy-or01": "+17Hz",
+      "prize-creamy-rd01": "+17Hz",
+      "prize-foundation-03": "+15Hz",
+      "prize-glossy-g03": "+18Hz",
+      "prize-watery-nu02": "+16Hz",
+      "prize-balm-pk01": "+16Hz"
+    }
+  },
+  "beautyDrop": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "+6%",
+    "note": "kalimat baru Beauty Drop: momen kapsul dan hasil gacha fanservice misi 3",
+    "phrases": {
+      "bd-welcome": "Halo! Yuk main Bipy Beauty Drop di booth Bpedia!",
+      "bd-drop": "Kapsul dilepas! Semoga hoki ya!",
+      "bd-bloom": "Kapsulnya mau mekar… tahan napas!",
+      "bd-zonk": "Yah, kapsulnya belum mekar. Yuk ikuti misi booth lainnya!",
+      "fs-intro": "Gacha fanservice! Pilih host favoritmu dulu ya.",
+      "fs-hug": "Yeay! Kamu dapat fanservice Hug! Silakan antre ke area host ya.",
+      "fs-back-hug": "Wah! Kamu dapat fanservice Back Hug! Silakan antre ke area host ya.",
+      "fs-pet-pet": "Gemas! Kamu dapat fanservice Pet Pet! Silakan antre ke area host ya.",
+      "fs-flower": "Romantis! Kamu dapat fanservice Flower! Silakan antre ke area host ya.",
+      "fs-kiss-hand": "Kyaa! Kamu dapat fanservice Kiss on Hand! Silakan antre ke area host ya.",
+      "fs-pick": "Pilihan yang keren! Silakan antre ke area host ya."
+    },
+    "spokenScripts": {
+      "bd-welcome": "Halo! Yuk main, Bipi Byuti Drop, di booth Bipedia!",
+      "bd-drop": "Kapsul dilepas! Semoga hoki ya!",
+      "bd-bloom": "Kapsulnya mau mekar... tahan napas!",
+      "bd-zonk": "Yah, kapsulnya belum mekar. Yuk, ikuti misi booth lainnya!",
+      "fs-intro": "Gacha fan servis! Pilih host favoritmu dulu ya.",
+      "fs-hug": "Yeay! Kamu dapat fan servis, Hag! Silakan antre ke area host ya.",
+      "fs-back-hug": "Wah! Kamu dapat fan servis, Bek Hag! Silakan antre ke area host ya.",
+      "fs-pet-pet": "Gemas! Kamu dapat fan servis, Pet Pet! Silakan antre ke area host ya.",
+      "fs-flower": "Romantis! Kamu dapat fan servis, Flawer! Silakan antre ke area host ya.",
+      "fs-kiss-hand": "Kyaa! Kamu dapat fan servis, Kis on Hen! Silakan antre ke area host ya.",
+      "fs-pick": "Pilihan yang keren! Silakan antre ke area host ya."
+    },
+    "pitch": {
+      "bd-welcome": "+16Hz",
+      "bd-drop": "+18Hz",
+      "bd-bloom": "+20Hz",
+      "bd-zonk": "+12Hz",
+      "fs-intro": "+16Hz",
+      "fs-hug": "+18Hz",
+      "fs-back-hug": "+18Hz",
+      "fs-pet-pet": "+18Hz",
+      "fs-flower": "+18Hz",
+      "fs-kiss-hand": "+20Hz",
+      "fs-pick": "+16Hz"
+    }
+  }
+}

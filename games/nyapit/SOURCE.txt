@@ -1,0 +1,1 @@
+Disalin dari "02 nyapit" oleh scripts/sync-games.cjs. Ubah game di folder aslinya, lalu jalankan npm run sync.

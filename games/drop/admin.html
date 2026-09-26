@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#d81f57">
+  <title>Dashboard Petugas · BIPY BEAUTY DROP</title>
+  <link rel="icon" href="/assets/icon.ico">
+  <link rel="stylesheet" href="/css/style.css?v=1.0.0">
+  <script defer src="/js/audio.js?v=1.0.0"></script>
+  <script defer src="/js/admin.js?v=1.0.0"></script>
+</head>
+<body class="admin-page">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <main class="admin-shell">
+    <section id="loginView" class="admin-login" aria-labelledby="loginTitle">
+      <img class="login-logo" src="/assets/brand/bpedia-logo.png" alt="Bpedia">
+      <p class="eyebrow">KONTROL BOOTH · AKSES PETUGAS</p>
+      <h1 id="loginTitle">Dashboard Beauty Drop</h1>
+      <p>Masukkan PIN lokal untuk mengelola mesin kapsul, fanservice, klaim hadiah, dan laporan TAKEOVER X.</p>
+      <label class="pin-field" for="pin">
+        <span aria-hidden="true">◆</span>
+        <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="current-password" aria-describedby="pinHint" placeholder="••••">
+      </label>
+      <button id="doLogin" class="primary-button wide-button" type="button">Masuk sebagai petugas</button>
+      <div id="pinHint" class="login-hint">PIN awal: <b>1234</b> · Ganti sebelum booth dibuka.</div>
+      <p id="loginError" class="login-error" role="alert"></p>
+      <a class="back-link" href="/">← Kembali ke permainan</a>
+    </section>
+
+    <section id="adminView" class="admin-app" hidden>
+      <header class="admin-header">
+        <div class="admin-brand">
+          <img src="/assets/brand/bpedia-logo.png" alt="Bpedia">
+          <div><h1>Dashboard Booth</h1><p id="adminEventName">BIPY BEAUTY DROP</p></div>
+        </div>
+        <div class="admin-status">
+          <span id="adminMode" class="status-pill">MODE DEMO</span>
+          <span id="adminPause" class="status-pill paused" hidden>DIJEDA</span>
+          <span id="adminFan" class="status-pill">FANSERVICE BUKA</span>
+          <span id="adminRevision" class="status-pill">DATA R0</span>
+        </div>
+        <div class="admin-actions">
+          <a href="/" class="secondary-button"><span aria-hidden="true">←</span> Ke Game</a>
+          <button id="doLogout" class="secondary-button" type="button"><span aria-hidden="true">⎋</span> Keluar</button>
+        </div>
+      </header>
+
+      <nav class="admin-tabs" aria-label="Menu dashboard" role="tablist">
+        <button class="tab-button active" type="button" role="tab" aria-selected="true" aria-controls="tab-summary" data-tab="summary">Ringkasan</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-inventory" data-tab="inventory">Inventori &amp; Foto</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-capsules" data-tab="capsules">Isi Kapsul</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-fanservice" data-tab="fanservice">Fanservice</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-history" data-tab="history">Riwayat &amp; Klaim</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-ranking" data-tab="ranking">Peringkat</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-settings" data-tab="settings">Pengaturan &amp; Data</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="tab-access" data-tab="access">Akses</button>
+      </nav>
+
+      <section id="tab-summary" class="tab-pane active" role="tabpanel">
+        <div class="section-heading"><div><p class="eyebrow">KONDISI BOOTH SAAT INI</p><h2>Ringkasan operasional</h2><p>Semua angka berasal dari mode resmi; simulasi demo tidak dicampur.</p></div><button id="refreshSummary" class="secondary-button" type="button">↻ Segarkan data</button></div>
+        <div class="stat-grid">
+          <article class="stat-card" style="--stat-color:#e62b5e"><small>BEAUTY DROP</small><strong id="statPlays">0</strong><span>kapsul dimainkan</span></article>
+          <article class="stat-card" style="--stat-color:#f5b83d"><small>HADIAH KELUAR</small><strong id="statWon">0</strong><span id="statClaimedNote">0 sudah diserahkan</span></article>
+          <article class="stat-card" style="--stat-color:#9c7e8a"><small>BELUM MEKAR</small><strong id="statZonk">0</strong><span>hasil tanpa hadiah</span></article>
+          <article class="stat-card" style="--stat-color:#1f6b4a"><small>TIKET FANSERVICE</small><strong id="statFan">0</strong><span id="statFanNote">0 menunggu host</span></article>
+          <article class="stat-card" style="--stat-color:#b3164b"><small>KAPSUL DI MESIN</small><strong id="statCapsules">0</strong><span id="statCapsuleNote">0 berhadiah</span></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel-card">
+            <h3>Isi mesin kapsul</h3>
+            <div class="donut-layout"><div class="donut" id="stockDonut"><div class="donut-label"><strong id="donutValue">0</strong><small>kapsul</small></div></div><div id="stockLegend" class="legend"></div></div>
+          </article>
+          <article class="panel-card">
+            <h3>Aktivitas per jam</h3>
+            <div id="hourChart" class="hour-chart"></div>
+          </article>
+          <article class="panel-card">
+            <h3>Fanservice per jenis</h3>
+            <div id="summaryFan" class="effective-grid"></div>
+          </article>
+          <article class="panel-card">
+            <h3>Perlu perhatian</h3>
+            <div id="warningList" class="warning-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="tab-inventory" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading">
+          <div><p class="eyebrow">KATALOG HADIAH</p><h2>Inventori &amp; verifikasi foto</h2><p>Setiap unit stok = satu kapsul. Hadiah nonaktif atau stok nol otomatis keluar dari mesin.</p></div>
+          <div class="section-actions"><input id="inventorySearch" class="search-field" type="search" placeholder="Cari hadiah atau kategori…"><button id="addPrize" class="primary-button" type="button">＋ Tambah hadiah</button></div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="inventoryTable"><thead><tr><th>Foto</th><th>Hadiah</th><th>Kategori</th><th>Stok tersisa</th><th>Aktif</th><th>Foto dicek</th><th>Aksi</th></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+
+      <section id="tab-capsules" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading"><div><p class="eyebrow">MURNI HOKI · TANPA PERSENTASE</p><h2>Isi mesin kapsul</h2><p>Setiap kapsul punya kesempatan yang sama. Petugas hanya mengatur jumlah kapsul, bukan persentase.</p></div></div>
+        <div class="odds-grid">
+          <div>
+            <div class="slider-list">
+              <div class="form-group"><label for="setOpenCapsules">Kapsul per hadiah tak terbatas (voucher 25% &amp; pengguna baru)</label><input id="setOpenCapsules" type="number" min="0" max="500" step="1"><span class="form-help">0 berarti voucher tak terbatas tidak ikut di mesin.</span></div>
+              <div class="form-group"><label for="setEmptyCapsules">Kapsul belum mekar (tanpa hadiah)</label><input id="setEmptyCapsules" type="number" min="0" max="1000" step="1"><span class="form-help">Jumlah tetap. Otomatis keluar dari mesin bila semua hadiah habis.</span></div>
+              <div class="slider-row"><label for="setDuration">Durasi animasi</label><input id="setDuration" type="range" min="4000" max="12000" step="250"><span id="durationValue" class="slider-value">7,0 dtk</span></div>
+            </div>
+            <button id="saveCapsules" class="primary-button" type="button" style="margin-top:12px">Simpan isi kapsul &amp; durasi</button>
+          </div>
+          <article class="panel-card"><h3>Pratinjau isi mesin</h3><div id="capsulePreview" class="effective-grid"></div><div id="capsuleWarning" class="warning-list" style="margin-top:12px"></div></article>
+        </div>
+      </section>
+
+      <section id="tab-fanservice" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading"><div><p class="eyebrow">MISI 3 · ZORO &amp; SANJI</p><h2>Sesi fanservice</h2><p>Gacha (checkout Rp100rb) memilih merata dari jenis yang aktif. Pilih sendiri (checkout Rp150rb) langsung menerbitkan tiket.</p></div></div>
+        <div class="settings-grid">
+          <article class="settings-card">
+            <h3>Status sesi host</h3>
+            <label class="switch"><input id="fanOpen" type="checkbox"> Sesi fanservice buka</label>
+            <div class="form-group" style="margin-top:10px"><label for="fanSchedule">Jadwal / info host di layar</label><input id="fanSchedule" maxlength="160"></div>
+            <button id="saveFanSession" class="primary-button" type="button" style="margin-top:12px">Simpan sesi</button>
+            <p class="form-help">Boleh diubah kapan saja, termasuk saat ada hasil yang belum ditutup.</p>
+          </article>
+          <article class="settings-card">
+            <h3>Host bertugas</h3>
+            <div id="hostList" class="slider-list"></div>
+          </article>
+          <article class="settings-card full">
+            <h3>Jenis fanservice</h3>
+            <div id="fanList" class="slider-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="tab-history" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading">
+          <div><p class="eyebrow">TRANSAKSI MODE RESMI</p><h2>Riwayat, klaim &amp; antrean host</h2><p>Cocokkan kode BD-/FS- di layar pemain sebelum menandai diserahkan atau dilayani.</p></div>
+          <div class="section-actions"><a href="/api/admin/report.xlsx" class="success-button">⇩ Laporan Excel</a><a href="/api/admin/export" class="secondary-button">⇩ Riwayat CSV</a></div>
+        </div>
+        <div class="filter-row"><input id="historySearch" class="search-field" type="search" placeholder="Cari kode, pemain, hadiah, atau fanservice…"><select id="historyGame" aria-label="Filter permainan"><option value="all">Semua permainan</option><option value="drop">Beauty Drop</option><option value="fanservice">Fanservice</option></select><select id="historyStatus" aria-label="Filter status"><option value="all">Semua status</option><option value="unclaimed">Belum diserahkan / menunggu</option><option value="claimed">Sudah diserahkan / dilayani</option><option value="zonk">Belum mekar</option></select></div>
+        <div class="admin-table-wrap"><table class="admin-table" id="historyTable"><thead><tr><th>Kode</th><th>Waktu</th><th>Pemain</th><th>Hadiah / fanservice</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr></thead><tbody></tbody></table></div>
+      </section>
+
+      <section id="tab-ranking" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading"><div><p class="eyebrow">LUCKY BEAUTIES</p><h2>Peringkat Beauty Drop</h2><p>Urut berdasarkan poin, jumlah hadiah, lalu jumlah percobaan. Belum mekar bernilai nol poin.</p></div><div class="section-actions"><a href="/api/admin/leaderboard.csv" class="success-button">⇩ Ekspor CSV</a><button id="exportRanking" class="secondary-button" type="button">Salin tabel</button></div></div>
+        <div id="adminLeaderboard" class="leaderboard-admin"></div>
+      </section>
+
+      <section id="tab-settings" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading"><div><p class="eyebrow">OPERASIONAL BOOTH</p><h2>Pengaturan &amp; pengamanan data</h2><p>Aktifkan mode resmi hanya setelah stok fisik, foto, dan ketentuan voucher diverifikasi.</p></div></div>
+        <div class="settings-grid">
+          <article class="settings-card">
+            <h3>Identitas &amp; mode acara</h3>
+            <div class="form-group"><label for="setEventName">Nama acara</label><input id="setEventName" maxlength="100"></div>
+            <div class="inline-fields" style="margin-top:10px"><div class="form-group"><label for="setMode">Mode</label><select id="setMode"><option value="demo">Demo · tanpa stok/riwayat</option><option value="live">Permainan resmi</option></select></div><label class="switch"><input id="setPaused" type="checkbox"> Jeda permainan</label></div>
+          </article>
+          <article class="settings-card full">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+              <div>
+                <h3>Audio booth</h3>
+                <p class="form-help" style="margin:0">Atur volume tiap kanal, kejernihan (EQ), dan kompresor dinamis sesuai speaker booth.</p>
+              </div>
+              <label class="switch"><input id="setSound" type="checkbox"> Suara aktif secara bawaan</label>
+            </div>
+            <div class="audio-controls-grid">
+              <div class="slider-list">
+                <div class="slider-row"><label for="setVolume">Volume Master</label><input id="setVolume" type="range" min="0" max="100" step="1"><span id="volumeValue" class="slider-value">70%</span></div>
+                <div class="slider-row"><label for="setBgmVolume">Musik (BGM)</label><input id="setBgmVolume" type="range" min="0" max="100" step="1"><span id="bgmVolumeValue" class="slider-value">75%</span></div>
+                <div class="slider-row"><label for="setSfxVolume">Efek Suara (SFX)</label><input id="setSfxVolume" type="range" min="0" max="100" step="1"><span id="sfxVolumeValue" class="slider-value">85%</span></div>
+                <div class="slider-row"><label for="setVoiceVolume">Suara MC</label><input id="setVoiceVolume" type="range" min="0" max="100" step="1"><span id="voiceVolumeValue" class="slider-value">90%</span></div>
+              </div>
+              <div class="slider-list">
+                <div class="form-group">
+                  <label for="setAudioProfile">Profil suara / EQ</label>
+                  <select id="setAudioProfile">
+                    <option value="crisp">Jernih &amp; terang (rekomendasi)</option>
+                    <option value="punchy">Panggung festival (bass &amp; treble)</option>
+                    <option value="flat">Netral / flat</option>
+                  </select>
+                  <span class="form-help">Mode jernih mengangkat treble 3,5 kHz dan memotong dengung di bawah 45 Hz.</span>
+                </div>
+                <div class="form-group">
+                  <label for="setCompressor">Kompresor dinamis</label>
+                  <select id="setCompressor">
+                    <option value="gentle">Lembut &amp; terbuka (rekomendasi)</option>
+                    <option value="standard">Standar</option>
+                    <option value="off">Nonaktif</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="audio-test-pad">
+              <span style="font-size:11px;font-weight:900;color:#6e4b56;margin-right:4px">Uji suara:</span>
+              <button id="testBgmBtn" class="secondary-button tiny-button" type="button">▶ Tes musik BGM</button>
+              <button id="testSfxBtn" class="secondary-button tiny-button" type="button">Tes efek mekar</button>
+              <button id="testVoiceBtn" class="secondary-button tiny-button" type="button">Tes suara MC</button>
+              <button id="resetAudioBtn" class="tiny-button" type="button" style="margin-left:auto">↺ Rekomendasi bawaan</button>
+            </div>
+          </article>
+          <article class="settings-card full">
+            <h3>Ketentuan voucher umum</h3>
+            <div class="form-group"><label for="setVoucherTerms">Teks ketentuan</label><textarea id="setVoucherTerms" maxlength="2000"></textarea><span class="form-help">Ditampilkan bersama ketentuan hadiah pada kartu hasil voucher.</span></div>
+            <button id="saveSettings" class="primary-button" type="button" style="margin-top:12px">Simpan pengaturan</button>
+          </article>
+          <article class="settings-card">
+            <h3>Cadangan lengkap</h3>
+            <p class="form-help">Cadangan JSON menyertakan data acara dan foto unggahan. Simpan setelah setiap hari acara.</p>
+            <a href="/api/admin/backup" class="success-button" style="margin-top:10px">⇩ Unduh cadangan</a>
+          </article>
+          <article class="settings-card">
+            <h3>Pulihkan cadangan</h3>
+            <div class="backup-drop"><input id="restoreFile" type="file" accept="application/json,.json"><p class="form-help">Setelah dipulihkan, sistem kembali ke mode demo dan dijeda.</p></div>
+            <div class="inline-fields" style="margin-top:9px"><div class="form-group"><label for="restoreConfirm">Ketik PULIHKAN</label><input id="restoreConfirm" autocomplete="off"></div><button id="doRestore" class="secondary-button" type="button">Pulihkan</button></div>
+          </article>
+          <article class="settings-card full danger-zone">
+            <h3>Mulai acara baru</h3>
+            <p class="form-help">Data saat ini diarsipkan lokal, lalu inventori, kapsul, fanservice, dan pengaturan kembali ke nilai awal PRD. Arsip tidak dihapus.</p>
+            <div class="inline-fields" style="margin-top:9px"><button id="doReset" class="danger-button" type="button">Arsipkan &amp; reset</button><small id="resetHint" class="reset-hint">Sekali klik untuk mulai, klik kedua untuk memastikan.</small></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="tab-access" class="tab-pane" role="tabpanel" hidden>
+        <div class="section-heading"><div><p class="eyebrow">KEAMANAN LOKAL</p><h2>Ganti PIN operator</h2><p>Sesi berakhir setelah 30 menit tanpa akses. Lima PIN salah mengunci login selama 60 detik.</p></div></div>
+        <article class="settings-card" style="max-width:560px">
+          <div class="inventory-editor"><div class="form-group"><label for="curPin">PIN saat ini</label><input id="curPin" type="password" inputmode="numeric" maxlength="12" autocomplete="current-password"></div><div class="form-group"><label for="newPin">PIN baru · 4–12 digit</label><input id="newPin" type="password" inputmode="numeric" maxlength="12" autocomplete="new-password"></div><div class="form-group full"><label for="confirmPin">Ulangi PIN baru</label><input id="confirmPin" type="password" inputmode="numeric" maxlength="12" autocomplete="new-password"></div></div>
+          <button id="changePin" class="primary-button" type="button" style="margin-top:13px">Ganti PIN &amp; keluar dari semua sesi</button>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="prizeModal" class="modal" aria-labelledby="prizeModalTitle">
+    <form id="prizeForm" class="modal-inner" method="dialog">
+      <div class="modal-header"><div><h2 id="prizeModalTitle">Edit hadiah</h2><p>Perubahan baru berlaku setelah tombol simpan.</p></div><button id="closePrizeModal" class="dialog-close" type="button" aria-label="Tutup">×</button></div>
+      <input id="prizeId" type="hidden">
+      <div class="inventory-editor">
+        <div class="form-group"><label for="prizeName">Nama singkat</label><input id="prizeName" maxlength="100" required></div>
+        <div class="form-group"><label for="prizeFullName">Nama lengkap</label><input id="prizeFullName" maxlength="180" required></div>
+        <div class="form-group"><label for="prizeTier">Kategori</label><select id="prizeTier"><option value="bundling">Bundling utama · 500 poin</option><option value="grand">Voucher utama · 400 poin</option><option value="voucher">Voucher potongan · sesuai jenis</option><option value="product">Produk gratis · 80 poin</option><option value="newuser">Voucher pengguna baru · 40 poin</option></select><span class="form-help">Poin dihitung otomatis untuk peringkat.</span></div>
+        <div class="form-group"><label for="prizeStock">Stok tersisa (= jumlah kapsul)</label><input id="prizeStock" type="number" min="0" max="10000" step="1"><label class="switch"><input id="prizeUnlimited" type="checkbox"> Tak terbatas</label></div>
+        <div class="form-group"><label for="prizeImage">Unggah foto · maks. 4 MB</label><div class="photo-preview"><img id="prizePreview" src="/assets/products/bundling.svg" alt="Pratinjau foto hadiah"><span>PNG, JPG, atau WebP</span></div><input id="prizeImage" type="file" accept="image/png,image/jpeg,image/webp"><label class="switch"><input id="prizeImageChecked" type="checkbox"> Foto sudah diverifikasi</label></div>
+        <div class="form-group full"><label for="prizeTerms">Ketentuan</label><textarea id="prizeTerms" maxlength="2000"></textarea></div>
+        <div class="form-group full"><label class="switch"><input id="prizeEnabled" type="checkbox"> Hadiah aktif dan masuk mesin kapsul</label></div>
+      </div>
+      <div class="modal-actions"><button id="deletePrize" class="danger-button" type="button">Hapus hadiah</button><button id="cancelPrize" class="secondary-button" type="button">Batal</button><button class="primary-button" type="submit">Simpan hadiah</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

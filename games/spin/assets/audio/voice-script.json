@@ -1,0 +1,20 @@
+{
+  "version": "2.6.0",
+  "voice": "id-ID-GadisNeural",
+  "type": "Natural human-like Indonesian voiceover",
+  "rate": "+0%",
+  "pitch": "+0Hz",
+  "brandDisplay": "Beautypedia",
+  "pronunciation": "Biutipedia (natural, warm human inflection)",
+  "phrases": {
+    "brand": "Biutipedia! Cantikmu, ada di sini!",
+    "welcome": "Halo! Selamat datang di booth Biutipedia! Yuk putar rodanya dan dapatkan hadiah menarik!",
+    "spin": "Ayo! Satu, dua, tiga... Putar!",
+    "mystery": "Wah, kamu dapat kotak misteri! Pilih satu dan temukan kejutannya!",
+    "suspense": "Kira-kira apa ya isinya? Yuk kita buka bersama!",
+    "win": "Selamat! Kamu mendapatkan hadiah spesial!",
+    "grand": "Selamat! Kamu mendapatkan hadiah utama!",
+    "bundle": "Selamat! Kamu mendapatkan paket bundling spesial!",
+    "zonk": "Yah, belum beruntung nih. Terima kasih sudah ikut seru-seruan bersama kami!"
+  }
+}

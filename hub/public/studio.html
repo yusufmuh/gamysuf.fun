@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Studio · Gamysuf Arcade</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/hub/css/hub.css?v=1.0.0">
+  <link rel="stylesheet" href="/hub/css/studio.css?v=1.0.0">
+  <script defer src="/hub/js/studio.js?v=1.0.0"></script>
+</head>
+<body class="studio">
+  <div class="backdrop" aria-hidden="true"><div class="glow glow-a"></div><div class="glow glow-b"></div><div class="grain"></div></div>
+  <header class="topnav">
+    <a class="brand" href="/"><img src="/hub/assets/brand/icon-192.png" alt="" width="40" height="40"><span class="brand-text"><b>GAMYSUF</b><small>studio</small></span></a>
+    <nav class="nav-links"><a href="/">← Arcade</a></nav>
+    <button class="btn btn-small btn-ghost" id="logoutButton" type="button" hidden>Keluar</button>
+  </header>
+
+  <main class="studio-main">
+    <section class="panel login-panel" id="loginPanel" aria-labelledby="loginTitle">
+      <p class="eyebrow">AKSES PEMILIK ARCADE</p>
+      <h1 id="loginTitle">Masuk Studio</h1>
+      <p class="muted">Gunakan <b>ADMIN_PIN</b> yang diatur di Environment variables hosting. PIN yang sama membuka dashboard setiap game.</p>
+      <label class="field" for="pin"><span>PIN</span><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12" placeholder="6-12 digit"></label>
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button class="btn btn-primary" id="loginButton" type="button">Masuk</button>
+    </section>
+
+    <div id="studioApp" hidden>
+      <section class="studio-stats" aria-label="Statistik arcade">
+        <article class="panel stat"><small>Pemain terdaftar</small><b id="stPlayers">0</b></article>
+        <article class="panel stat"><small>Aktif hari ini</small><b id="stActive">0</b></article>
+        <article class="panel stat"><small>Main hari ini</small><b id="stToday">0</b></article>
+        <article class="panel stat"><small>Total permainan</small><b id="stPlays">0</b></article>
+      </section>
+
+      <section class="studio-grid">
+        <article class="panel">
+          <header><h2>Game bawaan</h2><span class="muted small">Dashboard petugas tiap game</span></header>
+          <div id="builtinList" class="builtin-list"></div>
+          <p class="muted small">Mode resmi hanya berlaku di perangkat yang sudah masuk dashboard game. Pengunjung online selalu memakai mesin demo pribadi.</p>
+        </article>
+        <article class="panel">
+          <header><h2>Pengaturan arcade</h2></header>
+          <label class="field" for="annText"><span>Pengumuman di atas beranda</span><input id="annText" maxlength="160" placeholder="mis. Main langsung di booth Bpedia · TAKEOVER X 3–4 Okt"></label>
+          <label class="field" for="annLink"><span>Tautan pengumuman (opsional)</span><input id="annLink" maxlength="300" placeholder="https://… atau /#games"></label>
+          <label class="field" for="featured"><span>Game unggulan di kabinet</span><select id="featured"></select></label>
+          <fieldset class="field hide-list"><span>Sembunyikan game bawaan</span><div id="hideList"></div></fieldset>
+          <p class="form-error" id="settingsError" role="alert"></p>
+          <button class="btn btn-primary btn-small" id="saveSettings" type="button">Simpan pengaturan</button>
+        </article>
+      </section>
+
+      <section class="panel custom-panel" aria-labelledby="customTitle">
+        <header><div><p class="eyebrow">SLOT GAME TAMBAHAN</p><h2 id="customTitle">Tambah game lain</h2></div><span class="muted small" id="slotInfo"></span></header>
+        <p class="muted">Dua cara: <b>Unggah ZIP</b> berisi game HTML5 (index.html di akar) yang akan tampil di <code>/play/&lt;slug&gt;/</code>, atau <b>Tautan</b> ke game yang sudah online. Hanya unggah game yang kamu percaya.</p>
+        <div class="custom-list" id="customList"></div>
+        <form class="custom-form" id="customForm" autocomplete="off">
+          <input type="hidden" id="cfId">
+          <div class="form-grid">
+            <label class="field" for="cfSlug"><span>Slug alamat</span><input id="cfSlug" maxlength="40" placeholder="mis. bpedia-quiz" pattern="[a-z0-9-]+"></label>
+            <label class="field" for="cfTitle"><span>Judul</span><input id="cfTitle" maxlength="60" required></label>
+            <label class="field" for="cfSubtitle"><span>Subjudul / event</span><input id="cfSubtitle" maxlength="80"></label>
+            <label class="field" for="cfType"><span>Jenis</span><select id="cfType"><option value="static">Unggah ZIP (HTML5)</option><option value="link">Tautan eksternal</option></select></label>
+            <label class="field full" for="cfUrl" id="cfUrlField"><span>Tautan game (https://)</span><input id="cfUrl" maxlength="500" placeholder="https://"></label>
+            <label class="field full" for="cfDesc"><span>Deskripsi</span><textarea id="cfDesc" maxlength="400" rows="3"></textarea></label>
+            <label class="field full" for="cfHowTo"><span>Cara main (satu langkah per baris, maks 6)</span><textarea id="cfHowTo" rows="4"></textarea></label>
+            <label class="field" for="cfTags"><span>Tag (pisahkan koma)</span><input id="cfTags" maxlength="120" placeholder="kuis, santai"></label>
+            <label class="field" for="cfColor"><span>Warna aksen</span><input id="cfColor" type="color" value="#e62b5e"></label>
+            <label class="switch full"><input id="cfPublished" type="checkbox"> Tampilkan di beranda</label>
+          </div>
+          <div class="upload-row" id="uploadRow" hidden>
+            <label class="field" for="cfCover"><span>Sampul (PNG/JPG/WebP, 16:9)</span><input id="cfCover" type="file" accept="image/png,image/jpeg,image/webp"></label>
+            <label class="field" for="cfZip" id="cfZipField"><span>ZIP game (maks ±80 MB)</span><input id="cfZip" type="file" accept=".zip,application/zip"></label>
+          </div>
+          <p class="form-error" id="customError" role="alert"></p>
+          <div class="modal-actions"><button class="btn btn-ghost btn-small" id="cfReset" type="button">Form baru</button><button class="btn btn-primary btn-small" id="cfSave" type="submit">Simpan game</button></div>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="topTitle">
+        <header><h2 id="topTitle">Top 10 minggu ini</h2></header>
+        <ol class="board" id="topList"></ol>
+      </section>
+    </div>
+  </main>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+</html>

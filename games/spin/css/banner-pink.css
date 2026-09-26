@@ -1,0 +1,281 @@
+/* Pesta Folka banner palette: blush, candy pink, raspberry and warm cream. */
+:root{
+  --paper:#fff2f5;--ink:#492536;--muted:#785363;--pink:#ff9db9;--rose:#c92d5d;--berry:#a51c4b;--line:#edbfd0;--soft:#ffe2eb;
+  --audio-bass:0;--audio-mid:0;--audio-treble:0;--audio-energy:0;--audio-pulse:1;--audio-glow:0px;--audio-light:0;
+}
+body{background:radial-gradient(ellipse at 5% 10%,#fec8cf 0,transparent 50%),radial-gradient(ellipse at 95% 15%,#fed2d8 0,transparent 46%),radial-gradient(ellipse at 50% 45%,#fff8fa 0,transparent 65%),radial-gradient(ellipse at 90% 88%,#f6c1cf 0,transparent 48%),linear-gradient(145deg,#fec7cf 0,#fff1f5 32%,#fff9fa 56%,#feeef2 78%,#f6c2ce 100%);background-attachment:fixed}
+.site-header{border-bottom-color:#df9eb780}.brand>span{border-left-color:#dc96b0}.event-line{color:#6e3a51}.event-motto{color:#795263}
+.folka-banner{background:linear-gradient(105deg,#c72c5b,#dc416e 64%,#c92b5c);color:#fff9f5;border:1px solid #f67ea3;box-shadow:0 5px 0 #f8a8c0,0 14px 26px #a42b4c19}
+.folka-banner button{color:#fff2cf}.intro-panel h1 em{color:#c3295d}.intro-copy strong{color:#ad204e}.intro-stats>div+div{border-color:#dfa1b6}
+.speech-bubble{background:#fff9fb;border-color:#eeb1c5;box-shadow:0 5px 0 #f5c3d080,0 10px 20px #9d254712}.mascot-shadow{background:#ae315627}
+.wheel-label,.arena-wheel-heading{color:#9d3157}.label-line{background:#d16d90}
+
+/* === Audio-Reactive & Idle Animated Wheel === */
+.wheel-stage{
+  filter:drop-shadow(0 20px calc(30px + var(--audio-glow, 0px)) rgba(183, 53, 97, calc(0.18 + var(--audio-energy, 0) * 0.25)));
+  transition:filter 0.12s ease;
+}
+.wheel-machine{
+  transform-origin:center 70%;
+  animation:wheelIdleBreathing 6s ease-in-out infinite alternate;
+}
+body.is-spinning .wheel-machine{
+  animation:none;
+}
+@keyframes wheelIdleBreathing{
+  0%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-8px) scale(1.018);}
+  100%{transform:translateY(0) scale(1);}
+}
+
+.wheel-frame{
+  background:conic-gradient(from 20deg,#ffc3d6,#ff93b2,#ec618d,#ffb4cd,#fff0f4,#f784a7,#ffc3d6);
+  box-shadow:0 12px 0 #df5a85,0 19px 0 #f9a5be,0 26px calc(34px + var(--audio-glow, 0px)) rgba(145, 35, 71, calc(0.22 + var(--audio-bass, 0) * 0.35)),inset 0 3px 2px #fff2f7;
+  transition:box-shadow 0.08s ease;
+}
+.wheel-frame:after{border-color:#fff1f580}.wheel-face{background:#fff2f5;box-shadow:0 0 0 2px #ffe8ee,0 0 0 5px #e67c9d,inset 0 0 13px #a73360}
+
+.wheel-light{
+  background:#fff1cc;
+  box-shadow:0 0 calc(6px + var(--audio-glow, 0px) * 0.7) #ffe1a5,0 1px 2px #aa476a80;
+  transform:scale(calc(1 + var(--audio-light, 0) * 0.35));
+  transition:transform 0.06s ease, box-shadow 0.06s ease;
+}
+.wheel-hub{
+  background:radial-gradient(circle at 30% 20%,#fff9f8,#ffc5d7);border-color:#ffe8b9;
+  box-shadow:0 5px 0 #d26a89,0 10px calc(16px + var(--audio-glow, 0px) * 0.5) #82264436;
+  transform:translate(-50%,-50%) scale(calc(1 + var(--audio-bass, 0) * 0.04));
+  transition:transform 0.06s ease, box-shadow 0.06s ease;
+}
+.wheel-hub>span,.wheel-hub strong{color:#7f3553}.wheel-pointer{filter:drop-shadow(0 5px 2px #96305255)}
+.wheel-pointer:before{background:linear-gradient(130deg,#ffc4d8,#f477a3 60%,#df4d7f);clip-path:polygon(50% 100%,5% 46%,0 25%,10% 8%,30% 0,70% 0,90% 8%,100% 25%,95% 46%);box-shadow:inset 0 2px 0 #fff2f5}
+.wheel-pointer span{left:0;top:10%;width:100%;height:45%;border:0;border-radius:0;background:none;box-shadow:none}
+.wheel-pointer span:after{content:'♥';position:absolute;inset:0;text-align:center;color:#fff1ed;font-size:clamp(17px,1.6vw,22px);line-height:1.15;filter:drop-shadow(0 1px 1px #b6476b)}
+.wheel-item{color:#492637}.wheel-item.grand{color:#603c21}.wheel-item.bundling,.wheel-item.bonus{color:#fff7f6}.wheel-item.bonus .wheel-symbol{color:#ffe5af}.wheel-item.zonk{color:#77526a}
+.wheel-foot{background:linear-gradient(90deg,#e77397,#ffc2d5,#ef8aaa)}
+
+.orbit{
+  border-color:rgba(220,116,149,calc(0.14 + var(--audio-mid, 0) * 0.3));
+  transform:scale(calc(1 + var(--audio-bass, 0) * 0.035));
+  transition:border-color 0.08s ease, transform 0.08s ease;
+  animation:orbitRotate 40s linear infinite;
+}
+.orbit-two{
+  animation:orbitRotate 60s linear infinite reverse;
+}
+@keyframes orbitRotate{
+  from{transform:scale(calc(1 + var(--audio-bass, 0) * 0.035)) rotate(0deg);}
+  to{transform:scale(calc(1 + var(--audio-bass, 0) * 0.035)) rotate(360deg);}
+}
+.wheel-star{
+  color:#e886a4;
+  animation:starFloat 4s ease-in-out infinite alternate;
+  transform:scale(calc(1 + var(--audio-treble, 0) * 0.45));
+  transition:transform 0.06s ease;
+}
+.star-b{animation-delay:-2s;}
+@keyframes starFloat{
+  0%{transform:scale(1) rotate(0deg);filter:drop-shadow(0 0 2px #f8a8c0);}
+  100%{transform:scale(1.25) rotate(15deg);filter:drop-shadow(0 0 8px #e8628b);}
+}
+
+.spin-button,.btn:not(.secondary):not(.danger){background:linear-gradient(120deg,#d72e65,#bd2454);color:#fff9fc}.spin-button{box-shadow:0 5px 0 #952044,0 12px 22px #c33a6533}.spin-button:hover:not(:disabled){background:linear-gradient(120deg,#e44378,#c1265c)}
+.btn.secondary{background:#fff8fb;border-color:#e5a6bb;color:#843552}.mode-badge:not(.live){background:#fff3f7;color:#993356;border-color:#e8a0bb}.mode-switch{background:#fff4f8;border-color:#e9b4c7}.mode-switch button[aria-pressed=true]{background:#b92355;color:#fff}
+.mode-switch button[aria-pressed=true] span{color:inherit;opacity:.9}
+.mystery-feature{background:#ffe5ee;border-color:#e9a2be;color:#91345c}.eligibility-chip{background:#ffe5ee;color:#8d2f55}.odds-link,.spin-hint{color:#795065}
+.grand-prize-card{background:linear-gradient(155deg,#fff8fa,#ffe2ec);border-color:#e9adbf;box-shadow:0 9px 25px #a62f4e0b}.grand-note{border-color:#e9b4c5}.stock-pill{background:#fff4da;color:#794c2d}.mini-stock>div{border-color:#e4b1c3}.mini-icon{background:#ffe1eb;color:#a42c58}
+.app-card{background:#fff8fa;border-color:#ebbdcd}.prize-shelf{border-color:#e3a8bd}.social-strip,.site-footer{border-color:#e0a3b9}.shelf-product{background:#fff6f9}.catalog-card,.catalog-photo{border-color:#edc0d1}
+.arena-dialog{background:radial-gradient(ellipse at 15% 15%,#fec8cf 0,transparent 52%),radial-gradient(ellipse at 85% 15%,#fed2d8 0,transparent 48%),radial-gradient(ellipse at 50% 50%,#fffafc 0,transparent 65%),radial-gradient(ellipse at 85% 85%,#f6c1cf 0,transparent 50%),linear-gradient(155deg,#fec9d1 0,#fff3f6 36%,#feeef2 72%,#f6c2ce 100%)}
+.arena-header{background:#fff2f7ed;border-bottom-color:#e9b0c5}.arena-footer{background:#fff2f7;border-top-color:#e9b0c5}.arena-companion{background:linear-gradient(150deg,#fff9fc,#ffe4ed);border-color:#eeb4ca;box-shadow:0 15px 40px #b22b5310}
+.arena-dialog .spin-button{box-shadow:0 5px 0 #982149,0 12px 26px #bd365e33}.arena-intro h3 em{color:#bc2658}.arena-catalog{color:#8d3658;border-color:#e8b3c7}.arena-wheel-note{color:#754359}
+.is-box-game .arena-dialog{background:radial-gradient(ellipse at 30% 42%,#f9bbd7,transparent 60%),#fff0f6}.is-box-game .arena-wheel-heading,.is-box-game .box-intro .eyebrow{color:#9a315f}.beauty-box{background:#fff5f985;border-color:#e4a4c1}.beauty-box:hover:not(:disabled){border-color:#cc6895;box-shadow:0 14px 28px #9f315426}
+.box-stage #box-status,.bonus-earned{color:#8a2e5b;background:#ffe4ef;border-color:#e6a7c3}.bonus-compare>div,.bonus-comparison article{background:#fff0f6;border-color:#e8b0c9}.bonus-compare b,.bonus-comparison h3{color:#a32b60}.bonus-comparison small,.bonus-comparison p{color:#795067}
+.modal{background:#fff7fa;border-color:#edb4ca}.promo-code-display{background:#9c2753;color:#fff4df}.result-sub,.result-terms{color:#755063}.booth-call .speech-bubble{background:#b62b5b;color:#fff8ef}
+.admin-page{background:linear-gradient(140deg,#fff5f8,#ffe8f0)}.admin-sidebar{background:#fff3f8;border-color:#e8b0c7}.admin-header,.admin-topbar{border-color:#e8b0c7}.stat-card,.panel,.settings-card{border-color:#ecc0d1}.stat-card.golden{background:#fff0d7;border-color:#e8c69c}
+
+/* === Floating Music Controller Bar === */
+.music-control-bar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:linear-gradient(135deg,rgba(255,245,248,0.95),rgba(255,232,241,0.92));
+  backdrop-filter:blur(10px);
+  border:1px solid #f6b5cc;
+  border-radius:999px;
+  padding:5px 14px 5px 8px;
+  box-shadow:0 6px 18px rgba(165,28,75,0.12),inset 0 1px 0 #ffffff;
+  color:#6e2b45;
+  font-size:13px;
+  font-weight:600;
+  user-select:none;
+}
+.music-play-btn{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#e6396e,#bd1f50);
+  border:none;
+  color:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 3px 8px rgba(189,31,80,0.35);
+  transition:transform 0.15s ease, background 0.15s ease;
+  flex-shrink:0;
+}
+.music-play-btn:hover{
+  transform:scale(1.06);
+  background:linear-gradient(135deg,#f04c7f,#cb2458);
+}
+.music-play-btn svg{width:16px;height:16px;fill:currentColor;}
+
+.music-eq{
+  display:flex;
+  align-items:flex-end;
+  gap:2.5px;
+  height:16px;
+  padding:0 2px;
+}
+.eq-bar{
+  width:3px;
+  background:#d13866;
+  border-radius:2px;
+  height:4px;
+  transition:height 0.08s ease;
+}
+.music-control-bar.is-playing .eq-bar:nth-child(1){
+  height:calc(4px + var(--audio-bass, 0) * 12px);
+}
+.music-control-bar.is-playing .eq-bar:nth-child(2){
+  height:calc(4px + var(--audio-mid, 0) * 12px);
+}
+.music-control-bar.is-playing .eq-bar:nth-child(3){
+  height:calc(4px + var(--audio-energy, 0) * 12px);
+}
+.music-control-bar.is-playing .eq-bar:nth-child(4){
+  height:calc(4px + var(--audio-treble, 0) * 12px);
+}
+
+.music-title-wrap{
+  display:flex;
+  flex-direction:column;
+  min-width:110px;
+  max-width:180px;
+  overflow:hidden;
+}
+.music-title{
+  font-size:12px;
+  font-weight:700;
+  color:#8c234a;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
+}
+.music-sub{
+  font-size:10px;
+  color:#a55c76;
+  font-weight:500;
+}
+.music-track-select{
+  background:#fff0f5;
+  border:1px solid #eab0c5;
+  border-radius:12px;
+  padding:4px 8px;
+  font-size:11px;
+  font-weight:600;
+  color:#7e2e4f;
+  cursor:pointer;
+  outline:none;
+}
+.music-track-select:focus{
+  border-color:#cb2458;
+}
+
+.music-loop-btn{
+  background:#ffe8f0;
+  border:1px solid #ebacc3;
+  color:#8d2e53;
+  border-radius:12px;
+  padding:4px 9px;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  transition:all 0.15s ease;
+}
+.music-loop-btn[aria-pressed="true"]{
+  background:linear-gradient(135deg,#c72c5b,#a51c4b);
+  border-color:#921841;
+  color:#ffffff;
+  box-shadow:0 2px 6px rgba(165,28,75,0.25);
+}
+.music-loop-btn svg{width:12px;height:12px;fill:currentColor;}
+
+.music-vol-slider{
+  width:55px;
+  height:4px;
+  accent-color:#c92d5d;
+  cursor:pointer;
+}
+
+/* Audio Studio in Admin */
+.audio-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+  gap:16px;
+  margin-top:16px;
+}
+.audio-card{
+  background:#fff7fa;
+  border:1px solid #ecc0d1;
+  border-radius:14px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 4px 12px rgba(165,28,75,0.04);
+}
+.audio-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+.audio-card-head h3{
+  margin:0;
+  font-size:15px;
+  color:#782346;
+}
+.audio-card-head small{
+  color:#9a5b73;
+  font-size:11px;
+}
+.audio-card-phrase{
+  font-size:12px;
+  color:#613347;
+  background:#ffedf3;
+  border:1px solid #f6ccda;
+  padding:8px 12px;
+  border-radius:8px;
+  font-style:italic;
+}
+.audio-card-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:auto;
+  flex-wrap:wrap;
+}
+
+@media(min-width:681px){.arena-companion{max-height:calc(100dvh - 126px);overflow-y:auto;scrollbar-width:thin}}
+@media(max-height:850px) and (min-width:681px){
+ .arena-companion{padding:16px!important}.arena-mascot-zone{height:235px;margin-top:8px;flex-shrink:0}.arena-mascot-zone .mascot-rig{width:185px;height:247px;left:22px;top:-34px}.arena-mascot-zone .mascot-button{top:30px;height:210px}
+ .arena-intro h3{font-size:28px;margin:12px 0 8px}.arena-catalog{padding:12px 4px;margin-top:8px;flex-shrink:0}#stage-controls-slot .spin-button{height:56px}#stage-controls-slot .spin-hint{margin-top:11px}
+}
+@media(max-height:710px) and (min-width:681px){
+ .arena-mascot-zone{height:180px}.arena-mascot-zone .mascot-rig{width:150px;height:200px;left:40px;top:-30px}.arena-mascot-zone .mascot-button{top:23px;height:160px}.arena-mascot-zone .speech-bubble{font-size:9px;padding:7px 10px}.arena-intro h3{font-size:25px;margin-top:9px}.arena-catalog{font-size:11px;padding:9px 4px}
+}
+@media(prefers-reduced-motion:reduce){body{background-attachment:scroll}}

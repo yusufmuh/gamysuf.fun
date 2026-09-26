@@ -1,0 +1,143 @@
+/* Shared controls and the second booth game. No remote assets or UI libraries. */
+[hidden] { display: none !important; }
+.play-toolbar { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:5px 0 18px; border-bottom:1px solid var(--line); }
+.game-tabs,.mode-switch { display:flex; align-items:center; gap:5px; }
+.game-tabs button { display:flex; gap:11px; align-items:center; padding:11px 18px; border:1px solid transparent; border-radius:8px; font-size:12px; font-weight:700; text-align:left; transition:background .2s; }
+.game-tabs button svg { width:21px; height:21px; color:var(--rose); }
+.game-tabs button small { display:block; margin-top:3px; font-size:9px; font-weight:400; color:var(--muted); }
+.game-tabs button[aria-pressed=true] { background:#f6e5e7; border-color:#e9cbd3; }
+.game-tabs button:hover { background:#f7eceb; }
+.mode-switch { padding:4px; border:1px solid #eadcda; border-radius:9px; background:#f6f0ea; }
+.mode-switch button { padding:9px 15px; font-size:11px; text-align:left; border-radius:6px; font-weight:700; }
+.mode-switch button span { display:block; font-size:8px; font-weight:450; margin-top:3px; color:var(--muted); }
+.mode-switch button[aria-pressed=true] { background:#fff; box-shadow:0 1px 4px #54222c16; color:var(--rose); }
+.mode-switch button[data-mode=live][aria-pressed=true] { background:#e8f0e7; color:#315b42; }
+.arena-game-tabs { margin-left:auto; }
+.arena-header > .game-tabs,.arena-header > .mode-switch { border-left:0; padding-left:4px; }
+.arena-game-tabs button { font-size:11px; padding:9px 13px; gap:8px; white-space:nowrap; }
+.arena-game-tabs svg { width:17px; height:17px; }
+.arena-mode-tabs button { padding:9px 11px; font-size:10px; }
+.arena-header { gap:14px; }
+.arena-header h2 { white-space:nowrap; }
+.mode-modal { width:530px; }
+.mode-modal .form-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
+.mode-admin-link { display:flex; align-items:center; justify-content:center; gap:7px; font-size:11px; margin-top:20px; color:var(--rose); }
+.mode-admin-link svg { width:15px; height:15px; }
+.main-voucher-card .grand-visual { position:relative; inset:auto; width:100%; height:141px; }
+.main-voucher-card .grand-visual .voucher-art { transform:rotate(-7deg) scale(.84); }
+.main-voucher-card .grand-visual .product-photo { width:100%; height:130px; object-fit:contain; }
+.gold-voucher { border-color:#b78a41; background:linear-gradient(135deg,#fff5d8,#efd29c); color:#69451e; box-shadow:5px 6px 0 #bb9358; }
+.gold-voucher b { font-size:30px; }
+.wheel-item.grand { color:#604521; }
+.wheel-item.grand .wheel-symbol { color:#926422; }
+.social-strip { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:18px; padding:7px 0; }
+.social-strip > span { font-size:8px; letter-spacing:1.7px; color:var(--muted); }
+.social-links { display:flex; flex-wrap:wrap; align-items:center; gap:7px; }
+.social-links a { width:31px; height:31px; display:grid; place-items:center; border:1px solid #e6d6d6; border-radius:50%; color:#815868; background:#fffaf7; transition:transform .2s,background .2s; }
+.social-links a:hover { background:#f2dce2; transform:translateY(-2px); }
+.social-links svg { width:15px; height:15px; }
+.social-links a span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.arena-footer .social-links { gap:7px; }
+.arena-footer .social-links a { width:25px; height:25px; }
+.arena-footer .social-links svg { width:12px; height:12px; }
+.arena-footer { min-height:40px; }
+.box-stage { width:100%; max-width:960px; margin:auto; padding:25px 6px 8px; text-align:center; }
+.box-intro .eyebrow { font-size:9px; color:var(--rose); letter-spacing:2px; }
+.box-intro h2 { font-size:clamp(36px,3.5vw,60px); line-height:1.04; letter-spacing:-1.8px; font-weight:550; margin:16px 0 13px; }
+.box-intro h2 em { color:var(--rose); font-size:1.2em; }
+.box-intro p { font-size:12px; color:var(--muted); line-height:1.6; }
+.beauty-boxes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; padding:25px 0 12px; }
+.beauty-box { --box-color:#e8a6b8; --box-top:#f8d5de; --box-edge:#b46780; display:flex; flex-direction:column; align-items:center; position:relative; padding:17px 8px 19px; border:1px solid transparent; border-radius:17px; transition:background .25s,border-color .25s,transform .25s; }
+.beauty-box:nth-child(2) { --box-color:#b93d64; --box-top:#d8809b; --box-edge:#7e2445; }
+.beauty-box:nth-child(3) { --box-color:#e6bc94; --box-top:#f7ddc6; --box-edge:#ba8960; }
+.beauty-box:hover:not(:disabled) { background:#fff9f4; border-color:#eacbd4; transform:translateY(-6px); }
+.box-number { font:italic 27px Editorial,Georgia,serif; color:#c7a5ad; align-self:flex-start; }
+.box-object { position:relative; display:block; width:100%; height:208px; perspective:650px; }
+.box-object:after { content:''; position:absolute; bottom:-2px; width:80%; height:20px; border-radius:50%; background:#7a29442b; filter:blur(9px); left:10%; z-index:-1; }
+.box-front { position:absolute; width:86%; height:127px; bottom:8px; left:7%; background:linear-gradient(100deg,var(--box-top),var(--box-color) 35%,var(--box-color) 76%,var(--box-edge)); border-radius:4px 4px 10px 10px; box-shadow:0 9px 0 var(--box-edge),inset 0 2px 0 #ffffff7a; transform:rotateX(5deg); }
+.box-front:before { content:''; position:absolute; left:42%; width:17%; top:0; bottom:-6px; background:#ffedd7a6; }
+.box-front > span { position:absolute; left:34%; top:35%; width:33%; height:48%; display:grid; place-items:center; font:italic 42px Editorial,Georgia,serif; color:#855467; background:#fff5e8; border:1px solid #dfc299; border-radius:50%; }
+.box-lid { position:absolute; left:3%; bottom:128px; width:94%; height:35px; background:linear-gradient(var(--box-top) 38%,var(--box-color) 40%); border-radius:6px; box-shadow:0 5px 0 var(--box-edge); transform-origin:center 100%; z-index:3; }
+.box-lid:after { content:''; position:absolute; width:17%; height:100%; left:42%; background:#fff0d8a8; }
+.box-lid > span:before,.box-lid > span:after { content:''; position:absolute; width:31%; height:34px; top:-27px; border:9px solid #fff0d8; border-radius:50% 50% 5px 50%; box-shadow:inset 0 0 0 1px #dbbaa6; }
+.box-lid > span:before { left:22%; transform:rotate(19deg); }
+.box-lid > span:after { right:19%; transform:scaleX(-1) rotate(19deg); }
+.box-label { margin-top:23px; font-size:12px; font-weight:700; }
+.beauty-box > small { margin-top:8px; font-size:7px; letter-spacing:1px; color:var(--muted); }
+.box-reveal { position:absolute; inset:12px 8% 8px; z-index:4; display:grid; place-items:center; opacity:0; transform:translateY(20px) scale(.6); pointer-events:none; }
+.box-reveal .product-photo { width:100%; height:165px; object-fit:contain; mix-blend-mode:multiply; }
+.box-reveal .voucher-art { width:142px; height:104px; }
+.box-reveal .voucher-art b { font-size:22px; }
+.box-reveal .bundle-art { width:128px; }
+.box-stage.is-unboxing .beauty-box:not(.is-selected),.box-stage.is-revealed .beauty-box:not(.is-selected) { opacity:.45; }
+.box-stage.is-unboxing .is-selected { background:#fff7ed; border-color:#debdc5; }
+.is-unboxing .is-selected .box-object { animation:box-jiggle var(--reveal-time) ease both; }
+.is-unboxing .is-selected .box-lid { animation:box-open var(--reveal-time) ease both; }
+.is-unboxing .is-selected .box-reveal { animation:box-prize var(--reveal-time) ease both; }
+.is-unboxing .is-selected .box-front { animation:box-fade var(--reveal-time) ease both; }
+.is-revealed .is-selected .box-reveal { opacity:1; transform:translateY(-7px); }
+.is-revealed .is-selected .box-lid { opacity:0; }
+.is-revealed .is-selected .box-front { opacity:.16; }
+.box-progress { width:70%; height:3px; background:#eddce0; border-radius:3px; margin:12px auto; overflow:hidden; }
+.box-progress > span { display:block; width:100%; height:100%; background:var(--rose); transform:scaleX(0); transform-origin:left; }
+.is-unboxing .box-progress > span { animation:box-loading var(--reveal-time) linear both; }
+#box-status { min-height:35px; margin-top:14px; font-size:11px; color:var(--muted); line-height:1.6; }
+.is-box-game .arena-wheel-heading { display:none; }
+@keyframes box-jiggle { 0%,10%,20%,30%,40%,50%,60%,100% { transform:rotate(0); } 15%,35%,55% { transform:rotate(-5deg); } 25%,45% { transform:rotate(5deg); } }
+@keyframes box-open { 0%,58% { transform:translateY(0); opacity:1; } 80%,100% { transform:translateY(-70px) rotateX(-120deg) rotateZ(-10deg); opacity:0; } }
+@keyframes box-prize { 0%,60% { opacity:0; transform:translateY(20px) scale(.6); } 84%,100% { opacity:1; transform:translateY(-7px) scale(1); } }
+@keyframes box-fade { 0%,65% { opacity:1; } 90%,100% { opacity:.16; } }
+@keyframes box-loading { to { transform:scaleX(1); } }
+@media(max-width:1100px) { .arena-header { gap:8px; padding:0 3%; } .arena-brand { width:75px; } .arena-header > div { padding-left:10px; } .arena-header .eyebrow { display:none; } .arena-header h2 { font-size:20px; } .arena-game-tabs button { font-size:10px; padding:8px; } .box-object { height:184px; } .box-front { height:110px; } .box-lid { bottom:111px; } .box-label { font-size:10px; } .beauty-boxes { gap:5px; } }
+@media(max-height:800px) and (min-width:900px) { .box-stage { padding-top:0; } .box-intro h2 { font-size:41px; margin:11px 0; } .beauty-boxes { padding-top:10px; } .box-object { height:173px; } .box-label { margin-top:15px; } }
+@media(max-width:680px) {
+ .play-toolbar { flex-direction:column; gap:12px; align-items:stretch; padding-top:0; }
+ .play-toolbar .game-tabs button { flex:1; font-size:11px; padding:10px 12px; }
+ .play-toolbar .mode-switch button { flex:1; text-align:center; }
+ .main-voucher-card .grand-visual { width:150px; height:132px; position:absolute; right:8px; top:46px; }
+ .main-voucher-card .grand-visual .voucher-art { transform:rotate(-7deg) scale(.68); }
+ .main-voucher-card h3 { max-width:160px; }
+ .main-voucher-card .grand-note { margin-top:16px; }
+ .arena-dialog[open] { display:block; }
+ .arena-header { min-height:118px; padding:9px 14px; gap:7px; flex-wrap:wrap; align-content:center; }
+ .arena-brand { width:62px; }
+ .arena-header > div:nth-child(2) { margin-right:auto; }
+ .arena-header .btn { margin-left:0; }
+ .arena-game-tabs { order:5; margin:0; flex:1; }
+ .arena-mode-tabs { order:6; }
+ .arena-game-tabs button { font-size:9px; padding:8px 6px; gap:5px; }
+ .arena-game-tabs svg { width:14px; height:14px; }
+ .arena-mode-tabs button { font-size:8px; padding:8px 7px; }
+ .arena-header > .mode-switch { padding-left:3px; }
+ .arena-layout { padding-top:17px; min-height:min-content; }
+ .arena-wheel-area,.arena-companion { flex-shrink:0; }
+ .arena-footer { min-height:65px; flex-direction:column; justify-content:center; gap:5px; font-size:8px; }
+ .arena-footer > span { display:block !important; }
+ .social-strip { flex-direction:column; gap:10px; }
+ .box-stage { padding-top:0; }
+ .box-intro h2 { font-size:37px; }
+ .box-intro p { font-size:10px; }
+ .box-intro .eyebrow { font-size:7px; }
+ .beauty-boxes { gap:2px; padding-top:5px; }
+ .beauty-box { padding:9px 4px; }
+ .box-object { height:134px; }
+ .box-front { height:75px; bottom:8px; }
+ .box-front > span { font-size:25px; }
+ .box-lid { bottom:80px; height:26px; }
+ .box-lid > span:before,.box-lid > span:after { height:24px; border-width:6px; top:-19px; }
+ .box-label { font-size:8px; margin-top:13px; }
+ .beauty-box > small { font-size:5px; letter-spacing:.4px; }
+ .box-reveal { inset:0 4%; }
+ .box-reveal .product-photo { height:111px; }
+ .box-reveal .voucher-art { width:86px; height:72px; gap:5px; box-shadow:2px 3px 0 #cfa0ad; }
+ .box-reveal .voucher-art b { font-size:13px; }
+ .box-reveal .voucher-art small,.box-reveal .voucher-art > span { font-size:5px; letter-spacing:.8px; }
+ #box-status { font-size:9px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .beauty-box,.social-links a { transition:none; }
+ .is-unboxing .is-selected .box-object,.is-unboxing .is-selected .box-lid,.is-unboxing .is-selected .box-reveal,.is-unboxing .is-selected .box-front,.is-unboxing .box-progress > span { animation:none; }
+ .is-unboxing .is-selected .box-reveal { opacity:1; transform:none; }
+ .is-unboxing .is-selected .box-lid { display:none; }
+ .is-unboxing .is-selected .box-front { opacity:.16; }
+}

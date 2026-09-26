@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Gamysuf Arcade · Main game Bpedia, koleksi kartu, naik level</title>
+  <meta name="description" content="Arcade online berisi tiga game booth Bpedia: Spin Wheels, Nyapit Bareng Bpedia, dan Bipy Beauty Drop. Main gratis, kumpulkan kartu hadiah, selesaikan misi harian, dan naik ke papan peringkat.">
+  <meta name="theme-color" content="#12050c">
+  <meta property="og:title" content="Gamysuf Arcade">
+  <meta property="og:description" content="Tiga game Bpedia dalam satu arcade. Main, koleksi kartu, naik level.">
+  <meta property="og:image" content="/hub/assets/covers/drop.jpg">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/hub/assets/brand/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preload" href="/hub/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/hub/css/hub.css?v=1.0.0">
+  <script defer src="/hub/js/hub.js?v=1.0.0"></script>
+</head>
+<body data-ready="0">
+  <div class="backdrop" aria-hidden="true"><div class="glow glow-a"></div><div class="glow glow-b"></div><div class="glow glow-c"></div><div class="grid-floor"></div><div class="grain"></div></div>
+  <a class="skip-link" href="#games">Langsung ke daftar game</a>
+
+  <header class="topnav" id="topnav">
+    <a class="brand" href="/" aria-label="Gamysuf Arcade, beranda">
+      <img src="/hub/assets/brand/icon-192.png" alt="" width="40" height="40">
+      <span class="brand-text"><b>GAMYSUF</b><small>arcade</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Navigasi utama">
+      <a href="#games">Game</a><a href="#daily">Misi</a><a href="#album">Koleksi</a><a href="#ranking">Peringkat</a><a href="#guide">Panduan</a>
+    </nav>
+    <button class="player-chip" id="playerChip" type="button" aria-label="Buka profil pemain">
+      <img id="chipAvatar" src="/hub/assets/avatars/wave.png" alt="" width="36" height="36">
+      <span class="chip-id"><b id="chipName">Tamu</b><small id="chipLevel">Level 1</small></span>
+      <span class="chip-xp" aria-hidden="true"><i id="chipXpBar"></i></span>
+      <span class="chip-streak" id="chipStreak" title="Streak harian"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c4.2 0 7-2.8 7-6.8 0-3.4-2.1-5.6-3.9-7.6-.4 1.9-1.4 3-2.6 3.4.5-3.2-.9-6.3-3.8-8-.1 3.1-1.7 5-3.2 6.8C4.1 11.5 5 13.4 5 15.2 5 19.2 7.8 22 12 22z"/></svg><b id="chipStreakCount">0</b></span>
+    </button>
+  </header>
+
+  <div class="announce" id="announce" hidden><span class="announce-dot" aria-hidden="true"></span><span id="announceText"></span><a id="announceLink" href="#" hidden>Selengkapnya →</a></div>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <p class="eyebrow"><span id="heroGameCount">3</span> GAME BPEDIA · 1 PROFIL · <span id="heroCardCount">57</span> KARTU KOLEKSI</p>
+        <h1 id="heroTitle">Arcade Bpedia,<br><em>di genggamanmu.</em></h1>
+        <p class="lead">Putar roda, capit kapsul, dan jatuhkan kapsul Bipy. Setiap permainan memberi XP, kartu koleksi, dan tempat di papan peringkat mingguan.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" id="heroPlay" href="/g/drop/"><span>Main sekarang</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#guide">Cara kerja arcade</a>
+        </div>
+        <dl class="hero-stats">
+          <div><dt>Game aktif</dt><dd id="statGames">3</dd></div>
+          <div><dt>Kartu koleksi</dt><dd id="statCards">57</dd></div>
+          <div><dt>Pemain</dt><dd id="statPlayers">0</dd></div>
+        </dl>
+      </div>
+      <div class="hero-stage">
+        <div class="cabinet" id="cabinet">
+          <div class="cabinet-marquee"><span class="bulbs" aria-hidden="true"></span><b>SEDANG TAYANG</b><span class="bulbs" aria-hidden="true"></span></div>
+          <div class="cabinet-screen" id="cabinetScreen"></div>
+          <div class="cabinet-info">
+            <div><small id="cabinetEvent">TAKEOVER X 2026</small><h2 id="cabinetTitle">Bipy Beauty Drop</h2><p id="cabinetTagline"></p></div>
+            <a class="btn btn-gold" id="cabinetPlay" href="/g/drop/">Main</a>
+          </div>
+          <div class="cabinet-dots" id="cabinetDots" role="tablist" aria-label="Pilih game unggulan"></div>
+        </div>
+        <img class="hero-bipy" src="/hub/assets/brand/bipy-peek.png" alt="Bipy mengintip dari kabinet" width="150">
+        <span class="token t1" aria-hidden="true">G</span><span class="token t2" aria-hidden="true">G</span><span class="token t3" aria-hidden="true">G</span>
+      </div>
+    </section>
+
+    <section class="daily" id="daily" aria-labelledby="dailyTitle">
+      <header class="section-head"><p class="eyebrow">MARKAS HARIAN</p><h2 id="dailyTitle">Misi hari ini</h2><p>Misi baru setiap tengah malam WIB. Selesaikan semuanya untuk lencana <b>Misi Tuntas</b>.</p></header>
+      <div class="daily-grid">
+        <article class="panel profile-panel">
+          <div class="level-ring" id="levelRing" style="--p:0"><img id="profileAvatar" src="/hub/assets/avatars/wave.png" alt="" width="96" height="96"><b id="profileLevel">1</b></div>
+          <div class="profile-body">
+            <p class="eyebrow">PROFIL PEMAIN</p>
+            <h3 id="profileName">Tamu</h3>
+            <p class="muted" id="profileXp">0 / 100 XP menuju level 2</p>
+            <div class="bar"><i id="profileXpBar"></i></div>
+            <div class="profile-meta"><span><b id="profilePlays">0</b> kali main</span><span><b id="profileCards">0</b> kartu</span><span><b id="profileBadges">0</b> lencana</span></div>
+            <button class="btn btn-small btn-ghost" id="openProfile" type="button">Atur profil &amp; kode pemulihan</button>
+          </div>
+        </article>
+        <article class="panel missions-panel">
+          <header><h3>Misi harian</h3><span class="reset" id="missionReset">Reset 00:00:00</span></header>
+          <ol class="missions" id="missionList"></ol>
+          <p class="muted small" id="capNote">Batas XP: 60 permainan per hari agar peringkat tetap adil.</p>
+        </article>
+        <article class="panel streak-panel">
+          <div class="flame" id="flame" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22c4.2 0 7-2.8 7-6.8 0-3.4-2.1-5.6-3.9-7.6-.4 1.9-1.4 3-2.6 3.4.5-3.2-.9-6.3-3.8-8-.1 3.1-1.7 5-3.2 6.8C4.1 11.5 5 13.4 5 15.2 5 19.2 7.8 22 12 22z"/></svg></div>
+          <p class="eyebrow">STREAK HARIAN</p>
+          <h3><b id="streakCount">0</b> hari beruntun</h3>
+          <p class="muted" id="streakNote">Main hari ini untuk menyalakan streak dan dapat +20 XP bonus harian.</p>
+          <div class="streak-track" id="streakTrack" aria-hidden="true"></div>
+          <p class="muted small">Rekor terbaik: <b id="streakBest">0</b> hari · 3 hari = lencana <b>Api Menyala</b></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="games" id="games" aria-labelledby="gamesTitle">
+      <header class="section-head"><p class="eyebrow">PILIH ARENA</p><h2 id="gamesTitle">Tiga game, satu profil</h2><p>Semua game berjalan di cloud. Hasil diacak server game, bukan browser, jadi setiap kartu yang kamu dapat benar-benar hoki.</p></header>
+      <div class="game-grid" id="gameGrid"></div>
+    </section>
+
+    <section class="album" id="album" aria-labelledby="albumTitle">
+      <header class="section-head row">
+        <div><p class="eyebrow">ALBUM KOLEKSI</p><h2 id="albumTitle">Kumpulkan semua kartu</h2><p>Setiap hadiah yang kamu dapat masuk album sebagai kartu digital. Lengkapi album untuk lencana <b>Kolektor Legendaris</b>.</p></div>
+        <button class="btn btn-ghost" id="openAlbum" type="button">Buka album lengkap</button>
+      </header>
+      <div class="album-progress"><div class="album-count"><b id="albumOwned">0</b><span>/ <span id="albumTotal">57</span> kartu</span></div><div class="bar big"><i id="albumBar"></i></div>
+        <ul class="rarity-legend"><li class="legendary">Legendaris</li><li class="epic">Epik</li><li class="rare">Langka</li><li class="common">Umum</li></ul></div>
+      <div class="album-rows" id="albumRows"></div>
+    </section>
+
+    <section class="ranking" id="ranking" aria-labelledby="rankingTitle">
+      <header class="section-head"><p class="eyebrow">PAPAN PERINGKAT</p><h2 id="rankingTitle">Siapa paling hoki minggu ini?</h2><p>XP dihitung dari hasil permainan di server. Peringkat mingguan direset setiap Senin pukul 00.00 WIB.</p></header>
+      <div class="ranking-grid">
+        <article class="panel board-panel">
+          <div class="tabs" role="tablist" aria-label="Rentang peringkat">
+            <button class="tab active" type="button" role="tab" aria-selected="true" data-range="week">Minggu ini</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-range="all">Sepanjang masa</button>
+          </div>
+          <div class="podium" id="podium"></div>
+          <ol class="board" id="board"></ol>
+          <p class="you-row" id="youRow" hidden></p>
+        </article>
+        <article class="panel badges-panel">
+          <header><h3>Lencana</h3><span class="muted" id="badgeCount">0 / 11</span></header>
+          <ul class="badges" id="badgeList"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="guide" id="guide" aria-labelledby="guideTitle">
+      <header class="section-head"><p class="eyebrow">PANDUAN</p><h2 id="guideTitle">Cara kerja Gamysuf Arcade</h2></header>
+      <ol class="steps">
+        <li><span>1</span><h3>Pilih arena</h3><p>Tiga game booth Bpedia siap dimainkan langsung di browser, tanpa unduh dan tanpa bayar.</p></li>
+        <li><span>2</span><h3>Main &amp; kumpulkan</h3><p>Setiap permainan memberi XP. Hadiah yang keluar tersimpan sebagai kartu di album koleksimu.</p></li>
+        <li><span>3</span><h3>Naik level</h3><p>Selesaikan misi harian, jaga streak, dan buka lencana untuk naik di papan peringkat.</p></li>
+        <li><span>4</span><h3>Datang ke booth</h3><p>Hadiah fisik hanya diberikan di booth Bpedia saat event, bersama petugas dan mode resmi.</p></li>
+      </ol>
+      <div class="guide-grid">
+        <article class="panel fair-panel">
+          <h3>Main adil, jelas aturannya</h3>
+          <ul class="checks">
+            <li>Hasil setiap permainan diacak oleh server game. Browser hanya menampilkan animasi.</li>
+            <li>Versi online selalu mode <b>demo</b>: stok hadiah asli di booth tidak berkurang.</li>
+            <li>XP permainan dihitung sampai 60 permainan per hari; setelah itu tetap bisa main untuk koleksi.</li>
+            <li>Tidak ada pembelian, top-up, atau persentase peluang tersembunyi.</li>
+          </ul>
+        </article>
+        <article class="panel xp-panel">
+          <h3>Tabel XP</h3>
+          <table class="xp-table">
+            <tbody>
+              <tr><td>Main satu kali</td><td>+10</td></tr>
+              <tr><td>Belum beruntung</td><td>+5</td></tr>
+              <tr><td>Kartu baru</td><td>+25</td></tr>
+              <tr><td>Kartu legendaris pertama</td><td>+50</td></tr>
+              <tr><td>Bonus harian (main pertama)</td><td>+20</td></tr>
+              <tr><td>Misi harian</td><td>+30 s.d. +50</td></tr>
+              <tr><td>Lencana baru</td><td>+30</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+      <div class="faq" id="faq">
+        <details><summary>Apakah hadiah dari game online bisa ditukar?</summary><p>Tidak. Di arcade online kamu mendapat kartu koleksi digital dan XP. Hadiah fisik (produk dan voucher) hanya diberikan di booth Bpedia saat event, menggunakan perangkat booth yang dijaga petugas.</p></details>
+        <details><summary>Progres saya tersimpan di mana?</summary><p>Di server Gamysuf, terhubung ke perangkat ini lewat cookie. Buka <b>Atur profil</b> untuk menyalin kode pemulihan, lalu masukkan kode itu di perangkat lain untuk memindahkan progres.</p></details>
+        <details><summary>Kenapa tampilan game terasa kecil di HP?</summary><p>Ketiga game dirancang untuk layar booth yang lebar. Putar HP ke posisi mendatar atau main dari laptop untuk pengalaman terbaik.</p></details>
+        <details><summary>Bagaimana streak dihitung?</summary><p>Main minimal sekali setiap hari (WIB). Melewatkan satu hari membuat streak kembali ke 1 saat kamu main lagi. Rekor terbaik tetap tersimpan.</p></details>
+        <details><summary>Saya petugas booth. Bagaimana mengaktifkan mode resmi?</summary><p>Buka dashboard game di perangkat booth dan masuk dengan PIN petugas. Hanya perangkat yang sudah masuk yang memakai stok asli dan mode resmi; pengunjung online tetap di mode demo.</p></details>
+        <details><summary>Akan ada game baru?</summary><p>Ya. Arcade ini punya slot untuk game berikutnya. Saat game baru rilis, kartunya akan muncul di bagian Pilih Arena.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand"><img src="/hub/assets/brand/icon-192.png" alt="" width="44" height="44"><div><b>GAMYSUF ARCADE</b><p>Rumah game booth Bpedia. Main sebentar, koleksi selamanya.</p></div></div>
+    <div class="footer-links"><a href="#games">Game</a><a href="#guide">Panduan</a><a href="https://beautypediaofc.com" rel="noopener" target="_blank">Beautypedia</a><a href="/studio">Studio</a></div>
+    <img class="footer-bpedia" src="/hub/assets/brand/bpedia-logo-reverse.png" alt="Bpedia" width="140">
+    <p class="footer-note">Hadiah fisik hanya berlaku di booth Bpedia saat event resmi. © 2026 Gamysuf · <span id="versionTag">v1.0.0</span></p>
+  </footer>
+
+  <div class="modal" id="onboardModal" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" hidden>
+    <div class="modal-card onboard">
+      <img class="onboard-bipy" src="/hub/assets/brand/bipy-wink.png" alt="" width="170">
+      <p class="eyebrow">SELAMAT DATANG DI ARCADE</p>
+      <h2 id="onboardTitle">Hai! Aku Bipy, pemandu arcade-mu.</h2>
+      <p class="muted">Pilih nama panggung dan avatar. Namamu tampil di papan peringkat, jadi pilih yang keren dan sopan.</p>
+      <label class="field" for="nicknameInput"><span>Nama panggung</span><input id="nicknameInput" maxlength="20" autocomplete="nickname" placeholder="mis. Rina Kolektor"></label>
+      <div class="avatar-picker" id="onboardAvatars" role="radiogroup" aria-label="Pilih avatar"></div>
+      <p class="form-error" id="onboardError" role="alert"></p>
+      <div class="modal-actions"><button class="btn btn-ghost" id="onboardSkip" type="button">Nanti saja</button><button class="btn btn-primary" id="onboardSave" type="button">Mulai petualangan</button></div>
+      <ul class="onboard-tips"><li><b>+10 XP</b> setiap main</li><li><b>+25 XP</b> setiap kartu baru</li><li><b>3 misi</b> baru setiap hari</li></ul>
+    </div>
+  </div>
+
+  <div class="modal" id="gameModal" role="dialog" aria-modal="true" aria-labelledby="gameModalTitle" hidden>
+    <div class="modal-card game-detail">
+      <button class="close" type="button" data-close aria-label="Tutup">×</button>
+      <div class="detail-cover"><img id="gameModalCover" src="/hub/assets/covers/drop.jpg" alt=""></div>
+      <div class="detail-body">
+        <p class="eyebrow" id="gameModalEvent"></p>
+        <h2 id="gameModalTitle"></h2>
+        <p class="muted" id="gameModalDesc"></p>
+        <h3>Cara main</h3>
+        <ol class="howto" id="gameModalSteps"></ol>
+        <div class="detail-cols">
+          <div><h3>Kontrol</h3><dl class="controls" id="gameModalControls"></dl></div>
+          <div><h3>Tips</h3><ul class="tips" id="gameModalTips"></ul></div>
+        </div>
+        <div class="modal-actions"><span class="muted small">Online = mode demo · kartu &amp; XP tersimpan otomatis</span><a class="btn btn-primary" id="gameModalPlay" href="#">Main sekarang</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="albumModal" role="dialog" aria-modal="true" aria-labelledby="albumModalTitle" hidden>
+    <div class="modal-card album-card">
+      <button class="close" type="button" data-close aria-label="Tutup">×</button>
+      <p class="eyebrow">ALBUM KOLEKSI</p>
+      <h2 id="albumModalTitle">Semua kartu</h2>
+      <div class="tabs" id="albumTabs" role="tablist" aria-label="Filter album"></div>
+      <div class="album-grid" id="albumGrid"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" hidden>
+    <div class="modal-card profile-card">
+      <button class="close" type="button" data-close aria-label="Tutup">×</button>
+      <p class="eyebrow">PROFIL</p>
+      <h2 id="profileModalTitle">Atur profil</h2>
+      <label class="field" for="profileNameInput"><span>Nama panggung</span><input id="profileNameInput" maxlength="20" autocomplete="nickname"></label>
+      <div class="avatar-picker" id="profileAvatars" role="radiogroup" aria-label="Pilih avatar"></div>
+      <p class="form-error" id="profileError" role="alert"></p>
+      <button class="btn btn-primary" id="profileSave" type="button">Simpan profil</button>
+      <div class="recovery">
+        <h3>Kode pemulihan</h3>
+        <p class="muted small">Simpan kode ini untuk memindahkan progres ke perangkat lain. Jangan bagikan ke orang lain.</p>
+        <div class="code-row"><code id="recoveryCode">••••</code><button class="btn btn-small btn-ghost" id="copyRecovery" type="button">Salin</button></div>
+        <label class="field" for="restoreInput"><span>Pindahkan progres dari perangkat lain</span><input id="restoreInput" placeholder="tempel kode pemulihan" autocomplete="off" spellcheck="false"></label>
+        <button class="btn btn-small btn-ghost" id="restoreButton" type="button">Pulihkan progres</button>
+      </div>
+      <div class="per-game" id="perGame"></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+</html>
