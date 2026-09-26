@@ -389,8 +389,8 @@ async function createApp({dataDir=path.join(__dirname,'.local-data','takeover-x-
  });
 
  await new Promise((resolve,reject)=>{app.once('error',reject);app.listen(port,host,resolve);});
- origin=`http://127.0.0.1:${app.address().port}`;
- origins=new Set([origin,`http://localhost:${app.address().port}`]);
+ const p=app.address()?.port;origin=`http://127.0.0.1:${p||(port||4300)}`;
+ origins=new Set([origin,`http://localhost:${p||(port||4300)}`]);
  return {server:app,engine,origin,dataDir,close:()=>new Promise(resolve=>app.close(resolve))};
 }
 

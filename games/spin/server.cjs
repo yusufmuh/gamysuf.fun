@@ -148,7 +148,7 @@ async function createApp({dataDir=path.join(__dirname,'.local-data','pesta-folka
    res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-cache'});if(req.method==='HEAD')res.end();else fs.createReadStream(file).pipe(res);
   }catch(e){if(!res.headersSent)send(e.status||500,{error:e.status?e.message:'Tidak dapat menyimpan / membaca data. Periksa ruang disk dan izin folder.'});else res.end();}
  });
- await new Promise((resolve,reject)=>{app.once('error',reject);app.listen(port,'127.0.0.1',resolve);});origin=`http://127.0.0.1:${app.address().port}`;
+ await new Promise((resolve,reject)=>{app.once('error',reject);app.listen(port,'127.0.0.1',resolve);});const p=app.address()?.port;origin=`http://127.0.0.1:${p||(port||4300)}`;
  return {server:app,engine,origin,dataDir,close:()=>new Promise(resolve=>app.close(resolve))};
 }
 if(require.main===module)createApp({port:Number(process.env.PORT)||4317,dataDir:process.env.BPEDIA_DATA_DIR||undefined}).then(app=>console.log(`Bpedia Spin Studio: ${app.origin}`)).catch(e=>{console.error(e.message);process.exitCode=1;});

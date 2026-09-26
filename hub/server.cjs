@@ -115,13 +115,17 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  const custom=new CustomGames(path.join(dataDir,'hub'));
  const mounts=new Map();
  /* Runner Node.js Hostinger (lsnode) mengganti http.Server.listen agar server
-    pertama terikat ke soketnya. Server internal game harus memakai listen asli
-    supaya soket itu tetap milik hub; trafik game dipanggil langsung di memori
-    lewat dispatch.cjs, bukan lewat port internal. */
+    pertama terikat ke soketnya. Trafik game dipanggil langsung di memori lewat
+    dispatch.cjs, jadi server internal game tidak perlu terikat ke port atau
+    soket mana pun: selama createApp, listen() hanya memberi tanda siap. Soket
+    hosting tetap milik hub dan tidak ada port internal yang terbuka. */
  const hostingerListen=http.Server.prototype.listen;
- const nativeListen=require('node:net').Server.prototype.listen;
  try{
-  http.Server.prototype.listen=nativeListen;
+  http.Server.prototype.listen=function(...args){
+   const ready=args.find(arg=>typeof arg==='function');
+   if(ready)process.nextTick(ready);
+   return this;
+  };
   for(const game of GAMES){
    const gameDir=path.join(ROOT,'games',game.slug);
    const gameData=path.join(dataDir,'games',game.slug);
@@ -132,7 +136,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
    const app=await createApp({dataDir:gameData,port:0,rng,cloud:{engineFor:(req,real)=>visitors.get(req.headers['x-gamysuf-visitor'],real),sessionTtlMs:GAME_SESSION_TTL}});
    const handler=app.server.listeners('request')[0];
-   mounts.set(game.slug,{game,app,visitors,handler,origin:app.origin,prefix:`/g/${game.slug}`,skin:skinTags(game.slug)});
+   /* Tanpa soket, app.address() kosong sehingga game memakai origin cadangan
+      127.0.0.1:4300; origin hanya label Host/Origin internal untuk dispatch. */
+   const validOrigin=(app.origin&&!app.origin.includes('undefined'))?app.origin:`http://127.0.0.1:${4300+mounts.size}`;
+   mounts.set(game.slug,{game,app,visitors,handler,origin:validOrigin,prefix:`/g/${game.slug}`,skin:skinTags(game.slug)});
   }
  }finally{
   http.Server.prototype.listen=hostingerListen;
@@ -222,8 +229,9 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   }
   const cookies=String(req.headers.cookie||'').split(';').map(part=>part.trim()).filter(part=>part&&!part.startsWith(`${ADMIN_COOKIE}=`)&&!part.startsWith(`${VISITOR_COOKIE}=`));
   if(cookies.length)headers.cookie=cookies.join('; ');
-  headers.host=new URL(mount.origin).host;
-  if(origin&&sameOrigin)headers.origin=mount.origin;
+  const targetOrigin=(mount.origin&&!mount.origin.includes('undefined'))?mount.origin:'http://127.0.0.1:4300';
+  headers.host=new URL(targetOrigin).host;
+  if(origin&&sameOrigin)headers.origin=targetOrigin;
   headers['x-gamysuf-visitor']=ctx.vid;
   let body=null;
   if(!['GET','HEAD'].includes(req.method)){
