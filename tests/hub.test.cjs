@@ -220,3 +220,16 @@ test('halaman hub dan aset statis tersaji dengan CSP',async t=>{
  assert.equal((await call(hub,'/hub/../package.json')).status,404);
  assert.equal((await call(hub,'/server.cjs')).status,404);
 });
+
+test('CSP juga ditanam sebagai meta karena CDN hosting mengganti header CSP',async t=>{
+ const hub=await hubFor(t);
+ const meta=/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/;
+ for(const route of ['/','/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/drop/admin.html']){
+  const page=await call(hub,route);
+  const match=page.text.match(meta);
+  assert.ok(match,`${route}: meta CSP hilang`);
+  assert.match(match[1],/script-src 'self'/,route);
+  assert.doesNotMatch(match[1],/frame-ancestors/,route);
+  assert.equal(page.text.match(/http-equiv="Content-Security-Policy"/g).length,1,`${route}: meta ganda`);
+ }
+});
