@@ -94,18 +94,24 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
-Terakhir diperbarui: 2026-09-27 oleh Claude (Opus 5.5).
+Terakhir diperbarui: 2026-09-27 oleh Claude (Opus 5.5). **LIVE di https://gamysuf.fun.**
 
 | Area | Status |
 |---|---|
-| Patch mode cloud di game 01/02/03 (+ baseline commit lokal 01 & 02) | ✅ tes 83/54/29 lulus |
-| Hub: gateway, visitors, players, custom games, Studio, API | ✅ |
+| Patch mode cloud di game 01/02/03 (+ fallback origin) | ✅ tes 83 / 54 / 29 lulus, sumber = salinan `games/` (sync tanpa diff) |
+| Hub: gateway (dispatch in-memory), visitors, players, custom games, Studio, API | ✅ tes hub 12/12 (termasuk simulasi loader Hostinger) |
 | Front-end arcade + Studio + inject | ✅ QA visual 1600×900, 0 error konsol |
-| Tes hub | ✅ 9/9 |
-| ZIP Hostinger | ✅ `npm run package:hostinger` |
-| Repo git lokal + commit | ✅ |
-| Push ke GitHub `yusufmuh/gamysuf-arcade` | ⏳ butuh pemilik login `gh auth login` (token lama tidak valid; password tidak dipakai) |
-| Deploy ke hPanel gamysuf.fun | ⏳ lewat browser pemilik; `ADMIN_PIN` wajib diisi pemilik sendiri |
+| GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat) |
+| Deploy Hostinger | ✅ gamysuf.fun menyajikan hub + 3 game; ADMIN_PIN sudah diisi pemilik |
+| Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
+| Keamanan | ⚠️ `.git/config` lokal menyimpan token GitHub (ghp_…) di URL remote: cabut token itu dan pakai `gh auth login` |
+
+### Catatan runtime Hostinger (penting untuk AI berikutnya)
+- Loader Node Hostinger membajak `http.Server.prototype.listen` dan tidak selalu menjalankan `hub/server.cjs` sebagai `require.main`.
+- Karena itu: (a) saat membuat server game, `createHub` sementara memakai `net.Server.prototype.listen` asli; (b) gateway memanggil handler game **in-memory** (`dispatchInMemory`), bukan lewat TCP; (c) `shouldAutostart()` menyalakan server kecuali di-require dari `tests/`, `scripts/`, `artifacts/` (paksa dengan `GAMYSUF_AUTOSTART=1/0`).
+- Tes `tests/hosting.test.cjs` meniru tiga kondisi ini; jalankan sebelum push karena push ke `main` = deploy produksi.
 
 ## 11. Log serah-terima
 - **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.
+- **2026-09-27 (agen lain, identitas git pemilik)**: 4 commit perbaikan Hostinger (entry guard, isolasi listen, dispatch in-memory, fallback origin), membuat repo `yusufmuh/gamysuf.fun`, deploy ke gamysuf.fun.
+- **2026-09-27 (Claude)**: memindahkan fallback origin ke sumber game 01/02/03, entry guard yang tidak menyalakan server saat di-require alat lokal, alamat socket loader aman, label demo jujur di Beauty Drop, `tests/hosting.test.cjs` (3 skenario loader), QA ulang, PRD.

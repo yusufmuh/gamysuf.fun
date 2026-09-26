@@ -422,9 +422,10 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
 
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,host,resolve);});
  const address=server.address();
+ const boundPort=typeof address==='object'&&address?address.port:null;
  return {
   server,players,custom,mounts,dataDir,pinConfigured:pinValid,
-  origin:`http://127.0.0.1:${address.port}`,
+  origin:boundPort?`http://127.0.0.1:${boundPort}`:null,
   async close(){
    players.flush();
    await new Promise(resolve=>server.close(resolve));
@@ -433,8 +434,22 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  };
 }
 
-const isTest=process.execArgv.includes('--test')||process.env.NODE_ENV==='test'||Boolean(module.parent&&/\.test\./.test(module.parent.filename||''));
-if(!isTest){
+/* Kapan server dinyalakan otomatis:
+   - dijalankan langsung (`node hub/server.cjs`, `npm start`);
+   - dimuat loader hosting yang berada di luar folder proyek (Hostinger tidak
+     selalu menjalankan berkas ini sebagai modul utama).
+   Tidak menyala hanya saat di-require dari folder alat proyek sendiri
+   (tests/, scripts/, artifacts/), supaya QA/Electron tidak membuka port
+   3000 di 0.0.0.0. Pembungkus lain, termasuk milik hosting, tetap menyala.
+   GAMYSUF_AUTOSTART=1/0 memaksa perilaku tersebut. */
+function shouldAutostart(){
+ if(process.env.GAMYSUF_AUTOSTART==='1')return true;
+ if(process.env.GAMYSUF_AUTOSTART==='0'||process.env.NODE_ENV==='test'||process.execArgv.includes('--test'))return false;
+ if(require.main===module||!require.main?.filename)return true;
+ const [top]=path.relative(ROOT,path.resolve(require.main.filename)).split(/[\\/]/);
+ return !['tests','scripts','artifacts'].includes(top);
+}
+if(shouldAutostart()){
  const local=process.argv.includes('--local');
  const adminPin=process.env.ADMIN_PIN||(local?'123456':null);
  createHub({
@@ -446,7 +461,8 @@ if(!isTest){
   allowedHosts:process.env.ALLOWED_HOSTS||null
  }).then(hub=>{
   const address=hub.server.address();
-  console.log(`Gamysuf Arcade v${VERSION} (${local?'lokal':'cloud'}) siap di port ${address.port} · data: ${hub.dataDir}${hub.pinConfigured?'':' · PERINGATAN: ADMIN_PIN belum diisi/valid, Studio dan dashboard game terkunci'}${local?` · PIN lokal: ${adminPin}`:''}`);
+  const where=typeof address==='object'&&address?`port ${address.port}`:`socket ${address||'loader hosting'}`;
+  console.log(`Gamysuf Arcade v${VERSION} (${local?'lokal':'cloud'}) siap di ${where} · data: ${hub.dataDir}${hub.pinConfigured?'':' · PERINGATAN: ADMIN_PIN belum diisi/valid, Studio dan dashboard game terkunci'}${local?` · PIN lokal: ${adminPin}`:''}`);
   const stop=()=>{try{hub.players.flush();}catch{}process.exit(0);};
   process.on('SIGTERM',stop);
   process.on('SIGINT',stop);
