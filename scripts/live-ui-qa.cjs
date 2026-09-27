@@ -13,6 +13,7 @@ const version=require('../package.json').version;
 const out=path.join(__dirname,'..','artifacts',`live-ui-${version}`);
 const checks=[];
 const errors=[];
+const cancelledImages=[];
 function check(ok,label,detail=''){
  checks.push({ok:Boolean(ok),label,detail});
  if(!ok)console.error(`FAIL ${label}: ${detail}`);
@@ -20,7 +21,12 @@ function check(ok,label,detail=''){
 function watch(page,label){
  page.on('pageerror',error=>errors.push(`${label} page: ${error.message}`));
  page.on('console',message=>{if(message.type()==='error')errors.push(`${label} console: ${message.text()}`);});
- page.on('requestfailed',request=>{
+  page.on('requestfailed',request=>{
+  // Theme/avatar rendering replaces image URLs; navigation can also cancel pending images.
+  // Keep these cancellations as evidence and verify the final visible images after decode().
+  if(request.resourceType()==='image'&&request.failure()?.errorText==='net::ERR_ABORTED'){
+   cancelledImages.push(`${label}: ${request.url()}`);return;
+  }
   if(request.url().startsWith(base))errors.push(`${label} request: ${request.url()} ${request.failure()?.errorText||''}`);
  });
  page.on('response',response=>{
@@ -147,7 +153,7 @@ async function main(){
  finally{
   await browser?.close();
   check(!errors.length,'browser console, HTTP and network clean',JSON.stringify(errors));
-  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({at:new Date().toISOString(),base,checks,errors},null,2));
+  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({at:new Date().toISOString(),base,checks,errors,cancelledImages},null,2));
  }
  console.log(`Live UI QA: ${checks.filter(item=>item.ok).length}/${checks.length} checks. ${out}`);
  if(checks.some(item=>!item.ok))process.exitCode=1;

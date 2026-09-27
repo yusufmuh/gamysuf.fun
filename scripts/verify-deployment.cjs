@@ -46,8 +46,10 @@ async function main(){
    // CDN image optimization requires separate decoded-image evidence bound to both hashes.
    const evidence=imageEvidence?.images?.find(item=>new URL(item.url).pathname===`/hub/${file}`);
    const similarity=evidence?.decoded_similarity;
-   check.ok=Boolean(evidence&&evidence.local.sha256===localHash&&evidence.live.sha256===liveHash&&evidence.same_dimensions&&similarity?.ssim_0_1>=0.98&&similarity.dhash_hamming_bits_64===0);
-   if(check.ok){check.verification='decoded image evidence for CDN image';check.ssim=similarity.ssim_0_1;check.evidence=path.relative(root,imageEvidencePath).replaceAll('\\','/');}
+   const resized=evidence?.normalized_comparison;
+   const proportionalDownscale=Boolean(resized?.reason==='hcdn proportional downscale'&&evidence.headers?.server==='hcdn'&&evidence.live.dimensions[0]===1600&&evidence.local.dimensions[0]>1600&&Math.abs(evidence.local.dimensions[0]/evidence.local.dimensions[1]-evidence.live.dimensions[0]/evidence.live.dimensions[1])<0.003&&JSON.stringify(resized.dimensions)===JSON.stringify(evidence.live.dimensions));
+   check.ok=Boolean(evidence&&evidence.local.sha256===localHash&&evidence.live.sha256===liveHash&&(evidence.same_dimensions||proportionalDownscale)&&similarity?.ssim_0_1>=0.98&&similarity.dhash_hamming_bits_64<=(proportionalDownscale?1:0));
+   if(check.ok){check.verification=proportionalDownscale?'decoded image evidence after CDN proportional downscale':'decoded image evidence for CDN image';check.ssim=similarity.ssim_0_1;check.evidence=path.relative(root,imageEvidencePath).replaceAll('\\','/');}
   }
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
  }
