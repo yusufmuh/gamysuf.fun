@@ -1,0 +1,19 @@
+/* Skin online Bipy Beauty Drop (hanya di Gamysuf Arcade, bukan versi booth).
+   Tata letak HP, tablet, lipat, dan mendatar kini ada di game itu sendiri
+   (games/drop/css/game.css, rilis web 1.1.0), jadi skin ini hanya menambah
+   hal kecil yang belum ada di sana. */
+
+button,a,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+@media (hover:none){
+ .cta:hover,.method-card:hover:not(:disabled),.icon-button:hover,.ghost-button:hover,.mode-pill:hover{transform:none}
+ .host-card:hover:not(:disabled):not(.selected),.pick-card:hover:not(:disabled){transform:none}
+}
+
+/* Dekorasi (pita hadiah, gelembung host) tidak boleh melebarkan halaman 1 px pun. */
+.stage{overflow-x:clip}
+
+/* Tablet mendatar & laptop 4:3–16:10 (di atas batas tata letak HP game):
+   gelembung Zoro tidak terpotong di tepi kiri. */
+@media (min-width:901px) and (min-aspect-ratio:1/1) and (max-aspect-ratio:8/5){
+ .bubble-zoro{right:62%;top:30%}
+}

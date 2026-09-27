@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /studio
 Disallow: /hub-api/
+Disallow: /g/*/admin.html

@@ -40,6 +40,13 @@ const BADGES=[
 ];
 const BLOCKED=['anjing','bangsat','babi','kontol','memek','ngentot','goblok','tolol','jancok','pepek','titit','fuck','shit','bitch','asshole'];
 
+/* Gelar pemain per rentang level: memberi tujuan jangka panjang yang terlihat
+   di chip profil dan papan peringkat. */
+const TITLES=[[1,'Pendatang Baru'],[3,'Pemburu Hoki'],[5,'Kolektor Muda'],[8,'Bintang Arcade'],[12,'Master Kapsul'],[16,'Legenda Bpedia']];
+const titleFor=level=>TITLES.reduce((title,[min,name])=>level>=min?name:title,TITLES[0][1]);
+const nextTitle=level=>TITLES.find(([min])=>min>level)||null;
+const ACTIVITY_LIMIT=24;
+
 function levelFor(xp){
  let level=1,need=100,rest=xp;
  while(rest>=need){rest-=need;level++;need=100+(level-1)*50;}
@@ -55,6 +62,30 @@ function validNickname(value){
  return trimmed;
 }
 
+const displayName=player=>player.nickname||`Tamu #${player.id.slice(-4).toUpperCase()}`;
+
+/* Progres setiap lencana (current/goal). Dipakai untuk membuka lencana saat
+   hasil tercatat dan untuk menampilkan "hampir dapat" di beranda. */
+function badgeProgress(player,{totalCards=0,builtinSlugs=[]}={}){
+ const owned=Object.values(player.cards);
+ const count=owned.length;
+ const has=rarity=>owned.some(card=>card.rarity===rarity)?1:0;
+ const played=builtinSlugs.filter(game=>player.playsByGame[game]).length;
+ return {
+  'first-play':{current:Math.min(player.plays,1),goal:1},
+  'tri-arena':{current:played,goal:builtinSlugs.length},
+  'collector-5':{current:Math.min(count,5),goal:5},
+  'collector-15':{current:Math.min(count,15),goal:15},
+  'collector-all':{current:Math.min(count,totalCards),goal:totalCards},
+  'lucky':{current:has('legendary'),goal:1},
+  'fan':{current:has('epic'),goal:1},
+  'streak-3':{current:Math.min(player.streak.count,3),goal:3},
+  'streak-7':{current:Math.min(player.streak.count,7),goal:7},
+  'marathon':{current:Math.min(player.plays,50),goal:50},
+  'mission-master':{current:player.daily.done.length,goal:MISSIONS.length}
+ };
+}
+
 class Players{
  constructor(file,{now=()=>Date.now()}={}){
   this.file=file;
@@ -67,6 +98,7 @@ class Players{
    catch{fs.copyFileSync(file,`${file}.corrupt-${Date.now()}`);data={players:{}};}
   }
   this.players=data.players||{};
+  this.activity=[];
   const stale=this.now()-120*24*3600*1000;
   for(const [id,player] of Object.entries(this.players))if(player.lastSeen<stale&&player.xp<100)delete this.players[id];
  }
@@ -158,40 +190,39 @@ class Players{
     add(mission.xp,`Misi selesai: ${mission.title}`,'mission');
    }
   }
-  const owned=Object.values(player.cards);
-  const unlocked={
-   'first-play':player.plays>=1,
-   'tri-arena':builtinSlugs.length>0&&builtinSlugs.every(game=>player.playsByGame[game]),
-   'collector-5':owned.length>=5,
-   'collector-15':owned.length>=15,
-   'collector-all':totalCards>0&&owned.length>=totalCards,
-   'lucky':owned.some(card=>card.rarity==='legendary'),
-   'fan':owned.some(card=>card.rarity==='epic'),
-   'streak-3':player.streak.count>=3,
-   'streak-7':player.streak.count>=7,
-   'marathon':player.plays>=50,
-   'mission-master':daily.done.length===MISSIONS.length
-  };
+  const progress=badgeProgress(player,{totalCards,builtinSlugs});
   for(const badge of BADGES){
-   if(unlocked[badge.id]&&!player.badges[badge.id]){
+   const {current,goal}=progress[badge.id];
+   if(goal>0&&current>=goal&&!player.badges[badge.id]){
     player.badges[badge.id]=now;
     add(XP.badge,`Lencana baru: ${badge.name}`,'badge');
    }
   }
   const after=levelFor(player.xp).level;
   if(after>before)events.push({at:now,type:'level',text:`Naik ke level ${after}!`,xp:0});
+  const highlight=events.find(event=>event.type==='card'&&/legendaris/i.test(event.text))
+   ?`dapat kartu legendaris ${outcome.name}`
+   :events.some(event=>event.type==='card')&&outcome.rarity==='epic'?`dapat kartu epik ${outcome.name}`
+   :after>before&&after%5===0?`naik ke level ${after} · ${titleFor(after)}`
+   :player.badges['collector-all']===now?'melengkapi seluruh album!':null;
+  if(highlight){
+   this.activity.push({at:now,game:slug,name:displayName(player),avatar:player.avatar,text:highlight});
+   if(this.activity.length>ACTIVITY_LIMIT)this.activity.splice(0,this.activity.length-ACTIVITY_LIMIT);
+  }
   player.feed.push(...events);
   if(player.feed.length>40)player.feed.splice(0,player.feed.length-40);
   this.save();
   return events;
  }
 
- view(id,{since=0}={}){
+ view(id,{since=0,totalCards=0,builtinSlugs=[]}={}){
   const player=this.ensure(id);
   this.roll(player);
   const level=levelFor(player.xp);
   const today=player.daily;
   const alive=player.streak.lastDay===today.day||player.streak.lastDay===shiftDay(today.day,-1);
+  const progress=badgeProgress({...player,streak:{...player.streak,count:alive?player.streak.count:0}},{totalCards,builtinSlugs});
+  const upcoming=nextTitle(level.level);
   return {
    id:player.id,
    tag:player.id.slice(-4).toUpperCase(),
@@ -202,12 +233,15 @@ class Players{
    level:level.level,
    levelInto:level.into,
    levelNeed:level.need,
+   title:titleFor(level.level),
+   nextTitle:upcoming?{level:upcoming[0],title:upcoming[1]}:null,
    plays:player.plays,
    playsByGame:player.playsByGame,
    streak:{count:alive?player.streak.count:0,best:player.streak.best,playedToday:today.plays>0},
    missions:MISSIONS.map(mission=>({id:mission.id,title:mission.title,goal:mission.goal,xp:mission.xp,progress:Math.min(mission.goal,mission.metric(today)),done:today.done.includes(mission.id)})),
    dailyCapLeft:Math.max(0,DAILY_PLAY_CAP-today.plays),
-   badges:BADGES.map(badge=>({...badge,unlockedAt:player.badges[badge.id]||null})),
+   today:{plays:today.plays,games:[...today.games]},
+   badges:BADGES.map(badge=>({...badge,unlockedAt:player.badges[badge.id]||null,...progress[badge.id]})),
    cards:Object.entries(player.cards).map(([key,card])=>({key,...card})),
    feed:player.feed.filter(event=>event.at>since)
   };
@@ -217,13 +251,15 @@ class Players{
   const week=weekKey(this.now());
   const score=player=>range==='week'?(player.week.key===week?player.week.xp:0):player.xp;
   const rows=Object.values(this.players).filter(player=>score(player)>0).sort((a,b)=>score(b)-score(a)||Object.keys(b.cards).length-Object.keys(a.cards).length||a.createdAt-b.createdAt);
-  const shape=(player,index)=>({rank:index+1,name:player.nickname||`Tamu #${player.id.slice(-4).toUpperCase()}`,avatar:player.avatar,level:levelFor(player.xp).level,score:score(player),cards:Object.keys(player.cards).length,you:player.id===id});
+  const shape=(player,index)=>{const level=levelFor(player.xp).level;return {rank:index+1,name:displayName(player),avatar:player.avatar,level,title:titleFor(level),score:score(player),cards:Object.keys(player.cards).length,you:player.id===id};};
   const top=rows.slice(0,limit).map(shape);
   const index=id?rows.findIndex(player=>player.id===id):-1;
   return {range,top,you:index>=limit?shape(rows[index],index):null,players:rows.length};
  }
 
  has(id){return Boolean(this.players[id]);}
+
+ recent(limit=8){return this.activity.slice(-limit).reverse().map(item=>({...item}));}
 
  stats(){
   const today=dayKey(this.now());
@@ -235,4 +271,4 @@ class Players{
  }
 }
 
-module.exports={Players,levelFor,validNickname,dayKey,weekKey,AVATARS,MISSIONS,BADGES,XP,DAILY_PLAY_CAP};
+module.exports={Players,levelFor,titleFor,validNickname,dayKey,weekKey,AVATARS,MISSIONS,BADGES,XP,DAILY_PLAY_CAP};

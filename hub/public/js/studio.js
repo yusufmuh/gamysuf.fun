@@ -136,5 +136,7 @@
  });
 
  fillForm();
- load().catch(error=>{showApp(false);if(error.status!==401)$('loginError').textContent=error.message;});
+ api('/hub-api/session')
+  .then(session=>session.admin?load():showApp(false))
+  .catch(error=>{showApp(false);if(error.status!==401)$('loginError').textContent=error.message;});
 })();

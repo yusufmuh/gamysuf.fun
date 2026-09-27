@@ -15,12 +15,14 @@
     "test": "node --test tests/*.test.cjs",
     "qa": "node scripts/capture.cjs",
     "qa:responsive": "node scripts/responsive-qa.cjs",
-    "package:hostinger": "node scripts/package-hostinger.cjs"
+    "package:hostinger": "node scripts/package-hostinger.cjs",
+    "media:lite": "node scripts/media-lite.cjs"
   },
   "dependencies": {
     "fflate": "0.8.3"
   },
   "devDependencies": {
+    "@breezystack/lamejs": "1.2.7",
     "html2canvas": "1.4.1"
   }
 }
