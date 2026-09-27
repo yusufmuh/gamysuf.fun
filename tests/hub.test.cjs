@@ -176,6 +176,10 @@ test('tanpa ADMIN_PIN semua login terkunci tetapi game tetap bisa dimainkan',asy
 test('hasil permainan tercatat di server: XP, kartu, misi, lencana, peringkat',async t=>{
  const hub=await hubFor(t);
  await call(hub,'/hub-api/me',{method:'POST',body:{nickname:'Rina',avatar:'wink'}});
+ assert.equal((await call(hub,'/hub-api/me',{method:'POST',body:{nickname:'Nama Baru',avatar:'tidak-ada'}})).status,400);
+ const unchanged=(await call(hub,'/hub-api/me')).json;
+ assert.equal(unchanged.nickname,'Rina','nama tidak boleh berubah saat avatar ditolak');
+ assert.equal(unchanged.avatar,'wink','avatar lama tetap tersimpan');
  await call(hub,'/g/drop/api/play',{method:'POST',body:{requestId:'hub-xp-000001',game:'drop'}});
  await call(hub,'/g/nyapit/api/result',{method:'POST',body:{id:'x'}});
  const me=(await call(hub,'/hub-api/me')).json;

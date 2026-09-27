@@ -103,6 +103,8 @@ app.whenReady().then(async()=>{
   console.error(error);
   process.exitCode=1;
  }finally{
+  // End renderer keep-alive requests before closing the isolated HTTP server.
+  if(!win.isDestroyed())win.destroy();
   await hub.close().catch(()=>{});
   fs.rmSync(dataDir,{recursive:true,force:true});
   app.exit(process.exitCode||0);

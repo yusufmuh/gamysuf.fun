@@ -1,0 +1,228 @@
+.album-rows.gmy-album-slider {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gmy-album-slider-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.gmy-album-slider-kicker {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--gold, #e8c481);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.gmy-album-slider-head h3 {
+  margin: 0;
+  color: var(--text, #fff7e9);
+  font-size: clamp(17px, 2.2vw, 23px);
+  line-height: 1.2;
+}
+
+.gmy-album-slider-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.gmy-album-slider-status {
+  min-width: 118px;
+  margin-right: 5px;
+  color: var(--muted, #c7aeb3);
+  font-size: 11px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gmy-album-slider-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line, #765058);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .055);
+  color: var(--text, #fff7e9);
+  font: inherit;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.gmy-album-slider-actions .gmy-album-slider-toggle {
+  width: auto;
+  min-width: 58px;
+  padding: 0 9px;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.gmy-album-slider-actions button:hover,
+.gmy-album-slider-actions button:focus-visible {
+  border-color: var(--gold, #e8c481);
+  background: rgba(232, 196, 129, .15);
+}
+
+.gmy-album-slider-actions button:disabled {
+  opacity: .44;
+  cursor: not-allowed;
+}
+
+.gmy-album-slider-track {
+  display: flex;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 3px 2px 10px;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 2px;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: rgba(232, 196, 129, .44) transparent;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gmy-album-slider-track:focus-visible {
+  outline: 2px solid var(--gold, #e8c481);
+  outline-offset: -2px;
+}
+
+.gmy-album-card {
+  position: relative;
+  display: flex;
+  flex: 0 0 calc((100% - 55px) / 6);
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .055);
+  color: var(--text, #fff7e9);
+  scroll-snap-align: start;
+}
+
+.gmy-album-card.rare { border-color: rgba(107, 190, 226, .54); }
+.gmy-album-card.epic { border-color: rgba(202, 145, 231, .6); }
+.gmy-album-card.legendary { border-color: rgba(241, 198, 114, .72); }
+
+.gmy-album-card-art {
+  position: relative;
+  display: grid;
+  width: 100%;
+  aspect-ratio: 1.18;
+  place-items: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .065);
+}
+
+.gmy-album-card-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gmy-album-card.locked .gmy-album-card-art {
+  background: radial-gradient(circle at 50% 25%, rgba(235, 178, 197, .15), transparent 70%), rgba(255, 255, 255, .045);
+}
+
+.gmy-album-question {
+  color: rgba(255, 247, 233, .55);
+  font-size: clamp(48px, 6vw, 76px);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.gmy-album-card-count {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 255, 255, .32);
+  border-radius: 999px;
+  background: rgba(31, 12, 23, .84);
+  color: #fff7e9;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.gmy-album-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 49px;
+  padding: 8px 9px 9px;
+}
+
+.gmy-album-card-copy small {
+  overflow: hidden;
+  color: var(--muted, #c7aeb3);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gmy-album-card-copy strong {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.gmy-album-slider-empty {
+  margin: 8px 0;
+  color: var(--muted, #c7aeb3);
+}
+
+html[data-theme="light"] .gmy-album-card,
+html[data-theme="light"] .gmy-album-slider-actions button {
+  background: rgba(91, 37, 49, .055);
+}
+
+html[data-theme="light"] .gmy-album-card-art {
+  background: rgba(91, 37, 49, .075);
+}
+
+html[data-theme="light"] .gmy-album-question {
+  color: rgba(91, 37, 49, .45);
+}
+
+@media (max-width: 1050px) {
+  .gmy-album-card { flex-basis: calc((100% - 33px) / 4); }
+}
+
+@media (max-width: 680px) {
+  .gmy-album-slider-head { align-items: start; flex-direction: column; gap: 9px; }
+  .gmy-album-slider-actions { width: 100%; }
+  .gmy-album-slider-status { flex: 1; min-width: 0; margin-right: 3px; text-align: left; }
+  .gmy-album-card { flex-basis: calc((100% - 11px) / 2.15); }
+  .gmy-album-card-art { aspect-ratio: 1.2; }
+}
+
+html[data-motion="reduce"] .gmy-album-slider-track { scroll-behavior: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gmy-album-slider-track { scroll-behavior: auto; }
+}

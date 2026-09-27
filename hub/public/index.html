@@ -23,9 +23,14 @@
   <link rel="apple-touch-icon" href="/hub/assets/brand/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preload" href="/hub/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/hub/css/hub.css?v=1.1.0">
-  <link rel="stylesheet" href="/hub/css/responsive.css?v=1.1.0">
-  <script defer src="/hub/js/hub.js?v=1.1.0"></script>
+  <script src="/hub/js/theme.js?v=1.2.0"></script>
+  <link rel="stylesheet" href="/hub/css/hub.css?v=1.2.0">
+  <link rel="stylesheet" href="/hub/css/responsive.css?v=1.2.0">
+  <link rel="stylesheet" href="/hub/css/avatars.css?v=1.2.0">
+  <link rel="stylesheet" href="/hub/css/album-slider.css?v=1.2.0">
+  <link rel="stylesheet" href="/hub/css/theme.css?v=1.2.0">
+  <script defer src="/hub/js/album-slider.js?v=1.2.0"></script>
+  <script defer src="/hub/js/hub.js?v=1.2.0"></script>
 </head>
 <body data-ready="0">
   <div class="backdrop" aria-hidden="true"><div class="glow glow-a"></div><div class="glow glow-b"></div><div class="glow glow-c"></div><div class="grid-floor"></div><div class="grain"></div></div>
@@ -33,14 +38,14 @@
 
   <header class="topnav" id="topnav">
     <a class="brand" href="/" aria-label="Gamysuf Arcade, beranda">
-      <img src="/hub/assets/brand/icon-192.png" alt="" width="40" height="40">
-      <span class="brand-text"><b>GAMYSUF</b><small>arcade</small></span>
+      <img class="arcade-wordmark" src="/hub/assets/brand/gamysuf-arcade-logo-v2.svg?v=1.2.0" alt="Gamysuf Arcade" width="200" height="64">
     </a>
     <nav class="nav-links" aria-label="Navigasi utama">
       <a href="#games">Game</a><a href="#daily">Misi</a><a href="#album">Koleksi</a><a href="#ranking">Peringkat</a><a href="#guide">Panduan</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Aktifkan tema terang" title="Aktifkan tema terang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><span class="theme-label">Terang</span></button>
     <button class="player-chip" id="playerChip" type="button" aria-label="Buka profil pemain">
-      <img id="chipAvatar" src="/hub/assets/avatars/wave.png" alt="" width="36" height="36">
+      <img id="chipAvatar" src="/hub/assets/avatars/character-wave.png?v=1.2.0" alt="" width="36" height="36">
       <span class="chip-id"><b id="chipName">Tamu</b><small id="chipLevel">Level 1</small></span>
       <span class="chip-xp" aria-hidden="true"><i id="chipXpBar"></i></span>
       <span class="chip-streak" id="chipStreak" title="Streak harian"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c4.2 0 7-2.8 7-6.8 0-3.4-2.1-5.6-3.9-7.6-.4 1.9-1.4 3-2.6 3.4.5-3.2-.9-6.3-3.8-8-.1 3.1-1.7 5-3.2 6.8C4.1 11.5 5 13.4 5 15.2 5 19.2 7.8 22 12 22z"/></svg><b id="chipStreakCount">0</b></span>
@@ -127,7 +132,7 @@
 
     <section class="album" id="album" aria-labelledby="albumTitle">
       <header class="section-head row">
-        <div><p class="eyebrow">ALBUM KOLEKSI</p><h2 id="albumTitle">Kumpulkan semua kartu</h2><p>Setiap hadiah yang kamu dapat masuk album sebagai kartu digital. Lengkapi album untuk lencana <b>Kolektor Legendaris</b>.</p></div>
+        <div><p class="eyebrow">ALBUM KOLEKSI</p><h2 id="albumTitle">Kumpulkan semua kartu</h2><p class="album-intro">Setiap hadiah yang kamu dapat masuk album sebagai kartu digital. Lengkapi album untuk lencana <b>Kolektor Legendaris</b>.</p></div>
         <button class="btn btn-ghost" id="openAlbum" type="button">Buka album lengkap</button>
       </header>
       <div class="album-progress"><div class="album-count"><b id="albumOwned">0</b><span>/ <span id="albumTotal">57</span> kartu</span></div><div class="bar big"><i id="albumBar"></i></div>
@@ -216,16 +221,12 @@
   </nav>
 
   <div class="modal" id="onboardModal" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" hidden>
-    <div class="modal-card onboard">
-      <img class="onboard-bipy" src="/hub/assets/brand/bipy-wink.png" alt="" width="170">
-      <p class="eyebrow">SELAMAT DATANG DI ARCADE</p>
-      <h2 id="onboardTitle">Hai! Aku Bipy, pemandu arcade-mu.</h2>
-      <p class="muted">Pilih nama panggung dan avatar. Namamu tampil di papan peringkat, jadi pilih yang keren dan sopan.</p>
-      <label class="field" for="nicknameInput"><span>Nama panggung</span><input id="nicknameInput" maxlength="20" autocomplete="nickname" placeholder="mis. Rina Kolektor"></label>
-      <div class="avatar-picker" id="onboardAvatars" role="radiogroup" aria-label="Pilih avatar"></div>
+    <div class="modal-card onboard character-modal">
+      <header class="character-heading"><p class="eyebrow">SELAMAT DATANG DI GAMYSUF ARCADE</p><h2 id="onboardTitle">Pilih Bipy versimu.</h2><p class="muted">Enam gaya, satu petualangan. Siapa teman mainmu?</p></header>
+      <div class="avatar-picker" id="onboardAvatars"></div>
+      <footer class="character-footer"><label class="field" for="nicknameInput"><span>Nama panggung</span><input id="nicknameInput" maxlength="20" autocomplete="nickname" placeholder="mis. Rina Kolektor"></label>
       <p class="form-error" id="onboardError" role="alert"></p>
-      <div class="modal-actions"><button class="btn btn-ghost" id="onboardSkip" type="button">Nanti saja</button><button class="btn btn-primary" id="onboardSave" type="button">Mulai petualangan</button></div>
-      <ul class="onboard-tips"><li><b>+10 XP</b> setiap main</li><li><b>+25 XP</b> setiap kartu baru</li><li><b>3 misi</b> baru setiap hari</li></ul>
+      <div class="modal-actions"><button class="btn btn-ghost" id="onboardSkip" type="button">Nanti saja</button><button class="btn btn-primary" id="onboardSave" type="button">Masuk arena <span aria-hidden="true">→</span></button></div></footer>
     </div>
   </div>
 
@@ -260,12 +261,12 @@
   </div>
 
   <div class="modal" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" hidden>
-    <div class="modal-card profile-card">
+    <div class="modal-card profile-card character-modal">
       <button class="close" type="button" data-close aria-label="Tutup">×</button>
       <p class="eyebrow">PROFIL</p>
       <h2 id="profileModalTitle">Atur profil</h2>
       <label class="field" for="profileNameInput"><span>Nama panggung</span><input id="profileNameInput" maxlength="20" autocomplete="nickname"></label>
-      <div class="avatar-picker" id="profileAvatars" role="radiogroup" aria-label="Pilih avatar"></div>
+      <div class="avatar-picker" id="profileAvatars"></div>
       <p class="form-error" id="profileError" role="alert"></p>
       <button class="btn btn-primary" id="profileSave" type="button">Simpan profil</button>
       <div class="recovery">

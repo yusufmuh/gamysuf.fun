@@ -58,7 +58,8 @@ tests/*.test.cjs      hub.test.cjs + hosting.test.cjs (gateway, dispatch, aset b
 - Data persisten di `~/gamysuf-data` (di luar `hbuilds/` Hostinger yang dibuat ulang setiap deploy).
 
 ## 4. Fitur pemain (engagement sehat, tanpa pembelian)
-- Onboarding: nama panggung + 6 avatar Bipy.
+- Onboarding: nama panggung + 6 avatar Bipy full body, galeri dan pratinjau karakter yang sama pada profil. ID profil lama dipertahankan.
+- Tema terang/gelap tersimpan di perangkat; logo Gamysuf Arcade bertema tulip Bpedia; album beranda berupa slider ringkas dengan jeda, sentuh dan keyboard.
 - XP: main +10, belum beruntung +5, kartu baru +25, legendaris pertama +50, bonus harian +20, misi +30/+40/+50, lencana +30. Batas 60 permainan ber-XP per hari.
 - Level: level n butuh 100 + 50(n−1) XP.
 - Streak harian (WIB), 3 misi harian (main 3×, 2 game berbeda, 1 kartu baru), 11 lencana.
@@ -117,13 +118,15 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - Penyesuaian versi online (HP/tablet, kejujuran demo) lewat skin hub, bukan mengubah salinan `games/`; media ringan lewat manifest checksum, bukan mengganti berkas game.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
+**Rilis web 1.2.0 (Codex, 2026-09-27):** menindaklanjuti komentar browser pemilik: maskot sambutan tidak lagi terpotong; galeri enam karakter full body dengan pratinjau dan pilihan tersimpan; logo tulip Gamysuf Arcade; tema terang/gelap; album bergerak yang menampilkan sedikit kartu pada HP. Validasi profil atomik diperbaiki. Avatar 332/332, tema 40/40, interaksi 24/24, tes hub 13/13; tur Electron 16 tangkapan tanpa error konsol. Catatan lengkap di `docs/RELEASE-1.2.0.md`; bukti publikasi akhir di `artifacts/deployment-1.2.0.json`. Sumber game 01/02/03 tidak berubah pada rilis ini.
+
 **Rilis web 1.1.0 (Codex, 2026-09-27):** dashboard memiliki navigasi sentuh, game sebelum misi, pilihan game unggulan yang stabil, pintasan game terakhir, pemulihan koneksi, fokus dialog, kontrol animasi, dan Studio responsif. Spin/Nyapit memperbaiki musik, arena, overflow, dan siklus audio. Drop menempatkan seluruh papan dan tombol dalam layar potret, menjaga animasi saat resize, membatasi loop cahaya, mengatur partikel berdasarkan waktu, memperbesar tombol, serta memperbaiki dialog dan pemulihan audio. Logo, maskot, hasil server, stok booth dan mode demo tetap memakai sumber asli.
 
 Validasi rilis dan deployment dicatat di `docs/RELEASE-1.1.0.md`. Paket arsip: `release/Gamysuf-Arcade-1.1.0-Hostinger.zip`. Salinan `games/` berasal dari sumber saudara 01/02/03; perubahan game selanjutnya tetap dilakukan di sumber tersebut.
 
 Pembaruan 2026-09-27 (Codex): ketiga sampul hub di `hub/public/assets/covers/` diganti tangkapan gameplay asli berukuran 1200×675. Spin menampilkan arena roda lengkap, Nyapit menampilkan kabinet capit beserta bola, dan Drop menampilkan kapsul yang sedang memantul di papan pin bersama Bipy. Sumber tangkapan sementara dan `capture.json` ada di `artifacts/cover-candidates/`; skrip reproduksi ada di `scripts/capture-gameplay-covers*.cjs`.
 
-Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.1.0**, tujuan https://gamysuf.fun. Bukti publikasi akhir: `artifacts/deployment-1.1.0.json` (versi, status HTTP dan SHA-256 berkas live).
+Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.2.0**, tujuan https://gamysuf.fun. Bukti publikasi akhir: `artifacts/deployment-1.2.0.json` (versi, status HTTP dan verifikasi aset live).
 
 Pembaruan 2026-09-27 (Claude, PR #1 dari `claude/zen-meitner-wrzrju`): menggabungkan `main` 0f0ac25 dengan skin online per game (`hub/public/skins/`), media ringan (`hub/media-lite/`, MP3/WebP), `hub/dispatch.cjs`, server game tanpa soket, dan fitur engagement v1.1 (gelar, target lencana, Saran Bipy, pita LIVE, bagikan, confetti). Merge PR #1 ke `main` = deploy produksi.
 
@@ -136,7 +139,7 @@ Pembaruan 2026-09-27 (Claude, PR #1 dari `claude/zen-meitner-wrzrju`): menggabun
 | Media ringan (MP3/WebP) | ✅ di PR #1: audio 51,5→5,5 MB, gambar 33,6→4,7 MB; halaman HP 0,7–1,6 MB |
 | CI GitHub Actions (npm test + paket Hostinger) | ✅ `.github/workflows/ci.yml` |
 | GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat); PR #1 dari `claude/zen-meitner-wrzrju`, merge oleh pemilik = deploy produksi |
-| Deploy Hostinger | ✅ web 1.1.0 live; 12 endpoint publik lulus. Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan |
+| Deploy Hostinger | Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan. Bukti per rilis: `artifacts/deployment-<versi>.json` |
 | Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
 | Keamanan | ⚠️ `.git/config` lokal menyimpan token GitHub (ghp_…) di URL remote: cabut token itu dan pakai `gh auth login` |
 
@@ -148,6 +151,7 @@ Pembaruan 2026-09-27 (Claude, PR #1 dari `claude/zen-meitner-wrzrju`): menggabun
 - Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
 
 ## 11. Log serah-terima
+- **2026-09-27 (Codex, web 1.2.0)**: perbaikan empat komentar UI pemilik (avatar full body, logo, tema, slider album). Asset master Bpedia tetap utuh; prompt/provenance varian baru tercatat. Cek galeri/avatar/tema memakai data lokal terisolasi; deployment tetap melalui main ke Hostinger.
 - **2026-09-27 (Codex, web 1.1.0)**: perbaikan dashboard dan tiga game lintas layar; QA browser dengan data sementara yang terpisah dari produksi; paket Hostinger dan skrip regresi responsif. Detail hasil akhir pada catatan rilis 1.1.0.
 - **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.
 - **2026-09-27 (agen lain, identitas git pemilik)**: 4 commit perbaikan Hostinger (entry guard, isolasi listen, dispatch in-memory, fallback origin), membuat repo `yusufmuh/gamysuf.fun`, deploy ke gamysuf.fun.
@@ -158,3 +162,4 @@ Pembaruan 2026-09-27 (Claude, PR #1 dari `claude/zen-meitner-wrzrju`): menggabun
 - **2026-09-27 (Codex)**: menangkap ulang ketiga sampul dari layar gameplay sebenarnya melalui Electron/gateway lokal, meninjau komposisi 16:9, menyimpan JPEG 1200×675 dan skrip reproduksi tanpa mengubah artwork game.
 - **2026-09-27 (Claude, sesi cloud, branch PR #1)**: menggabungkan `main` (46a2da0, lalu dbb1d68 & 83eb7ee) ke PR #1. Konflik `hub/server.cjs`: `shouldAutostart()` dan `withMetaCsp()` versi `main` dipakai, digabung dengan `dispatch.cjs`, skin online, dan media ringan; server game tanpa soket (listen no-op saat createApp). Tes 16/16, QA 0 error, alur Beauty Drop HP/tablet lulus di bawah meta CSP.
 - **2026-09-27 (Claude, sesi cloud, branch PR #1)**: menggabungkan `main` 0f0ac25 (rilis web 1.1.0 Codex: tata letak sentuh di game, `responsive.css`, sampul gameplay, QA lintas browser). Konflik: `hub.js` (toggle animasi & `storage` versi `main` dipakai; Saran Bipy, pita LIVE, gelar, target lencana, bagikan, confetti dipertahankan dan ikut toggle animasi; rotasi otomatis kabinet tetap dimatikan seperti `main`), `index.html` (urutan game→misi versi `main` + elemen v1.1 branch), `inject.js` (versi `main`), `server.cjs` (inject.js ber-versi + skin + dispatch.cjs), README/PRD/package.json (`qa:responsive` + `media:lite`). Pengukuran skin menyala/mati di 6 perangkat: tata letak Beauty Drop dari game lebih baik (tombol Beauty Drop terlihat di layar pertama), jadi aturan tata letak di `drop.css` dibuang; skin Spin (scroll samping) & Nyapit (tombol capit) tetap diperlukan. `media:lite` dibuat ulang untuk sampul baru; bug `file:null` di skrip diperbaiki. Tes 16/16, QA 1600×900 & 390×844 0 error.
+- **2026-09-27 (Claude, sesi cloud, branch PR #1)**: menggabungkan `main` e5e12e9 (rilis 1.2.0: avatar karakter, tema, carousel koleksi). Hanya tabel status PRD yang konflik. `media:lite` dibuat ulang: 6 avatar karakter + logo v2 dari ±7,1 MB PNG menjadi ±0,8 MB WebP (dicek visual berdampingan). Tes 16/16, QA 1600×900 & 390×844 0 error, interaksi hub 24/24, avatar QA 214/214 & tema QA 27/27 (Chromium; Firefox/WebKit tidak tersedia di sesi cloud).

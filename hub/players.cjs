@@ -133,15 +133,16 @@ class Players{
 
  setProfile(id,{nickname,avatar}={}){
   const player=this.ensure(id);
+  let clean;
   if(nickname!==undefined){
-   const clean=validNickname(nickname);
+   clean=validNickname(nickname);
    if(!clean)throw Object.assign(new Error('Nama 2-20 karakter (huruf, angka, spasi, titik, garis bawah) dan sopan.'),{status:400});
-   player.nickname=clean;
   }
   if(avatar!==undefined){
    if(!AVATARS.includes(avatar))throw Object.assign(new Error('Avatar tidak dikenal.'),{status:400});
-   player.avatar=avatar;
   }
+  if(nickname!==undefined)player.nickname=clean;
+  if(avatar!==undefined)player.avatar=avatar;
   this.roll(player);
   this.save();
   return player;

@@ -2,6 +2,17 @@
 :root{color-scheme:dark;--wrap:min(1240px,calc(100% - 48px))}
 html{scroll-padding-top:100px;scrollbar-gutter:stable}
 body{overflow-x:clip}
+@media(max-width:680px){
+ #album .section-head{gap:12px;margin-bottom:14px}
+ #album .section-head h2{font-size:1.45rem}
+ #album .album-intro{display:none}
+ #album #openAlbum{min-height:44px;padding:9px 16px;font-size:.75rem}
+ #album .album-progress{grid-template-columns:auto minmax(0,1fr);padding:10px 14px;gap:14px;margin-bottom:14px;border-radius:16px}
+ #album .album-count b{font-size:1.5rem}
+ #album .album-count span{font-size:.72rem;margin-left:2px}
+ #album .rarity-legend{display:none}
+ #album .gmy-album-slider-head>div:first-child{display:none}
+}
 button,a,input,summary{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button,a{ -webkit-user-drag:none }
 main,section,article,.hero-copy,.hero-stage,.panel,.game-body,.profile-body,.detail-body,.album-rows,.album-row,.card-strip{min-width:0}
