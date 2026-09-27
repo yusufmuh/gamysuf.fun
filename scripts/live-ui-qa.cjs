@@ -9,9 +9,11 @@ try{playwright=require('playwright');}
 catch{playwright=require(path.join(process.env.APPDATA||'/usr/local/lib','npm','node_modules','playwright'));}
 
 const base=(process.env.GAMYSUF_LIVE_URL||'https://gamysuf.fun').replace(/\/$/,'');
-const out=path.join(__dirname,'..','artifacts','live-ui-1.2.0');
+const version=require('../package.json').version;
+const out=path.join(__dirname,'..','artifacts',`live-ui-${version}`);
 const checks=[];
 const errors=[];
+const cancelledImages=[];
 function check(ok,label,detail=''){
  checks.push({ok:Boolean(ok),label,detail});
  if(!ok)console.error(`FAIL ${label}: ${detail}`);
@@ -19,7 +21,12 @@ function check(ok,label,detail=''){
 function watch(page,label){
  page.on('pageerror',error=>errors.push(`${label} page: ${error.message}`));
  page.on('console',message=>{if(message.type()==='error')errors.push(`${label} console: ${message.text()}`);});
- page.on('requestfailed',request=>{
+  page.on('requestfailed',request=>{
+  // Theme/avatar rendering replaces image URLs; navigation can also cancel pending images.
+  // Keep these cancellations as evidence and verify the final visible images after decode().
+  if(request.resourceType()==='image'&&request.failure()?.errorText==='net::ERR_ABORTED'){
+   cancelledImages.push(`${label}: ${request.url()}`);return;
+  }
   if(request.url().startsWith(base))errors.push(`${label} request: ${request.url()} ${request.failure()?.errorText||''}`);
  });
  page.on('response',response=>{
@@ -65,8 +72,8 @@ async function main(){
   const versionResponse=await deskPage.request.get(`${base}/hub-api/catalog`,{timeout:15000});
   check(versionResponse.ok(),'live catalog reachable',String(versionResponse.status()));
   const catalog=versionResponse.ok()?await versionResponse.json():{};
-  check(catalog.version==='1.2.0','live version 1.2.0',String(catalog.version));
-  if(catalog.version!=='1.2.0')throw new Error(`Live version is ${catalog.version||'unavailable'}; stopped before screenshots.`);
+  check(catalog.version===version,`live version ${version}`,String(catalog.version));
+  if(catalog.version!==version)throw new Error(`Live version is ${catalog.version||'unavailable'}; stopped before screenshots.`);
 
   await deskPage.goto(`${base}/`,{waitUntil:'domcontentloaded'});
   await pageReady(deskPage);
@@ -94,8 +101,8 @@ async function main(){
     'desktop light dashboard horizontal fit',JSON.stringify(lightLayout));
   check(await deskPage.locator('#themeToggle').getAttribute('aria-pressed')==='true',
     'desktop theme toggle marks light mode');
-  check(await deskPage.locator('.topnav .brand').evaluate(node=>getComputedStyle(node).backgroundColor)==='rgb(76, 16, 41)',
-    'light header gives ivory wordmark a burgundy background');
+  check((await deskPage.locator('.topnav .brand img').getAttribute('src')).includes('gamysuf-3d-light.png'),
+    'light header uses pink 3D wordmark');
   await waitVisibleImages(deskPage);
   check(!(await visibleBrokenImages(deskPage)).length,'desktop light dashboard visible assets loaded',
     JSON.stringify(await visibleBrokenImages(deskPage)));
@@ -123,11 +130,30 @@ async function main(){
     JSON.stringify(await visibleBrokenImages(mobilePage)));
   await mobilePage.screenshot({path:path.join(out,'03-mobile-album-390x844.png')});
   await mobile.close();
+  for(const game of ['spin','nyapit','drop']){
+   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+   const page=await context.newPage();watch(page,game);
+   await page.goto(`${base}/g/${game}/`,{waitUntil:'domcontentloaded'});
+   await page.locator('#gmyGamebar').waitFor();
+   await page.evaluate(()=>document.fonts.ready);
+   for(const theme of ['dark','light']){
+    if(theme==='light')await page.locator('[data-gmy-theme]').click();
+    await page.waitForFunction(value=>document.documentElement.dataset.theme===value,theme);
+    await waitVisibleImages(page);
+    const fit=await layout(page);
+    check(fit.scrollWidth<=fit.viewport+2,`${game} ${theme} mobile horizontal fit`,JSON.stringify(fit));
+    const logos=await page.locator('img[data-brand="bpedia"]').evaluateAll(images=>images.map(image=>({src:image.src,loaded:image.complete&&image.naturalWidth>0})));
+    check(logos.length&&logos.every(image=>image.loaded&&image.src.includes(theme==='light'?'bpedia-pink.png':'bpedia-white.png')),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
+    check(!(await visibleBrokenImages(page)).length,`${game} ${theme} visible assets loaded`);
+    await page.screenshot({path:path.join(out,`${game}-mobile-${theme}-390x844.png`)});
+   }
+   await context.close();
+  }
  }catch(error){check(false,'smoke tour completed',error.stack||String(error));}
  finally{
   await browser?.close();
   check(!errors.length,'browser console, HTTP and network clean',JSON.stringify(errors));
-  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({at:new Date().toISOString(),base,checks,errors},null,2));
+  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({at:new Date().toISOString(),base,checks,errors,cancelledImages},null,2));
  }
  console.log(`Live UI QA: ${checks.filter(item=>item.ok).length}/${checks.length} checks. ${out}`);
  if(checks.some(item=>!item.ok))process.exitCode=1;

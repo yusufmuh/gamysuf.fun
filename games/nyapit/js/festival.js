@@ -9,6 +9,19 @@ class FestivalFlow {
   this.motion=window.matchMedia('(prefers-reduced-motion: reduce)');
   this.$('startFestival').addEventListener('click',()=>this.start());
   this.$('homeUsername').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();this.start();}});
+  const keepEntryClear=()=>{
+   if(!window.matchMedia('(min-width:761px) and (max-height:480px) and (orientation:landscape)').matches)return;
+   const field=this.$('homeUsername').getBoundingClientRect();
+   const button=this.$('startFestival').getBoundingClientRect();
+   const topbar=document.querySelector('.topbar')?.getBoundingClientRect();
+   const gamebar=document.querySelector('#gmyGamebar')?.getBoundingClientRect();
+   const safeTop=(topbar?.bottom||0)+8;
+   const safeBottom=gamebar?.top||innerHeight-8;
+   const shift=Math.min(button.bottom+12-safeBottom,field.top-safeTop);
+   if(shift>0)window.scrollBy({top:Math.ceil(shift),behavior:'instant'});
+  };
+  this.$('homeUsername').addEventListener('focus',()=>setTimeout(keepEntryClear,30));
+  this.$('homeUsername').addEventListener('input',keepEntryClear);
   this.$('skipCoin').addEventListener('click',()=>this.enter());
   this.$('coinDialog').addEventListener('cancel',event=>{event.preventDefault();this.enter();});
   this.$('backHome').addEventListener('click',()=>{if(this.phase==='aim')this.home();});

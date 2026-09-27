@@ -2,7 +2,8 @@
    Di HP, aturan game menaruh mesin capit di atas panel host, tetapi aturan
    sesudahnya mengembalikan urutan panel host ke 0 sehingga tombol MAIN ada
    ±1100 px di bawah (dua layar gulir). Skin ini mengembalikan urutan mesin
-   lebih dulu dan membuat dialog koin muat di HP mendatar. */
+   lebih dulu, merapikan mahkota mesin di HP, dan membuat dialog koin muat di
+   HP mendatar. */
 
 button,a,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 
@@ -10,7 +11,17 @@ button,a,input{-webkit-tap-highlight-color:transparent;touch-action:manipulation
  .game-shell>.machine-panel{order:1}
  .game-shell>.host-panel{order:2}
  .game-shell>.score-panel{order:3}
- .chute-bay .bay-label{font-size:8px}
+ .mobile-prize-bay .chute>span{font-size:8px}
+ /* Badge status seharusnya absolut di ruang kanan yang sudah dicadangkan
+    (padding-right), tetapi .machine-crown>div milik game membuatnya ikut arus:
+    judul patah 3 baris keluar mahkota dan pita event terpotong di atas.
+    Badge ditaruh sejajar baris judul agar tidak menabrak pita event. */
+ .machine-crown{justify-content:flex-start}
+ .machine-crown>.crown-state-wrap{position:absolute;top:auto;bottom:12px;transform:none}
+ .machine-crown .cozzone-brand-pill{letter-spacing:.08em}
+}
+@media (max-width:380px){
+ .machine-crown .cozzone-brand-pill{font-size:8px;letter-spacing:.04em}
 }
 
 @media (max-height:560px) and (orientation:landscape){

@@ -1,84 +1,133 @@
 'use strict';
 
-/* Disisipkan gateway ke halaman setiap game: tombol kembali ke Gamysuf,
-   indikator level, dan notifikasi XP/kartu setelah hasil permainan keluar.
-   Tidak mengubah logika game; hanya mengamati fetch ke rute hasil. */
+// Shared game controls. Results, stock and XP remain authoritative on the server.
 (()=>{
  if(window.__gamysufInjected)return;
  window.__gamysufInjected=true;
  const game=document.currentScript?.dataset.game||'';
+ const builtin=['spin','nyapit','drop'].includes(game);
  const RESULT=/\/api\/(?:play|spin|bonus)$/;
- let since=Date.now();
  const nativeFetch=window.fetch.bind(window);
-
- const style=document.createElement('style');
- style.textContent=`
- .gmy-pill{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));min-height:44px;box-sizing:border-box;z-index:2147483000;display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(18,5,12,.9);color:#FFF7F8;border:1px solid rgba(245,184,61,.45);box-shadow:0 10px 30px rgba(0,0,0,.45);font:700 12px/1.2 Poppins,system-ui,sans-serif;text-decoration:none;opacity:.85;transition:opacity .2s,transform .2s;backdrop-filter:blur(8px);touch-action:manipulation}
- .gmy-pill:hover,.gmy-pill:focus-visible{opacity:1;transform:translateY(-2px)}
- .gmy-pill img{width:28px;height:28px;border-radius:50%}
- .gmy-pill small{display:block;font-weight:600;color:#F5C96B;font-size:10px}
- .gmy-toasts{position:fixed;right:14px;top:14px;z-index:2147483001;display:grid;gap:8px;width:min(300px,calc(100vw - 28px));pointer-events:none}
- .gmy-toast{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,#3b1026,#1d0914);border:1px solid rgba(245,184,61,.5);color:#FFF7F8;font:600 13px/1.3 Poppins,system-ui,sans-serif;box-shadow:0 14px 34px rgba(0,0,0,.5);animation:gmyIn .45s cubic-bezier(.34,1.56,.64,1)}
- .gmy-toast b{color:#F5C96B;white-space:nowrap}
- .gmy-toast.out{animation:gmyOut .3s ease forwards}
- @keyframes gmyIn{from{opacity:0;transform:translateY(-12px) scale(.96)}}
- @keyframes gmyOut{to{opacity:0;transform:translateY(-10px)}}
- @media(max-width:700px),(max-height:500px){.gmy-pill{width:44px;height:44px;padding:7px;justify-content:center}.gmy-pill>span{display:none}.gmy-toasts{top:max(70px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));width:min(270px,calc(100vw - 20px))}.gmy-toast{font-size:11px;padding:8px 12px}}
- @media (prefers-reduced-motion:reduce){.gmy-toast,.gmy-toast.out{animation:none}}
- body.modal-open .gmy-pill{visibility:hidden}`;
- document.head.append(style);
-
- const pill=document.createElement('a');
- pill.className='gmy-pill';
- pill.href='/';
- pill.setAttribute('aria-label','Kembali ke Gamysuf Arcade');
- pill.title='Kembali ke Gamysuf Arcade';
- try{if(['spin','nyapit','drop'].includes(game))localStorage.setItem('gamysuf-last-game',game);}catch{/* Optional shortcut; gameplay does not depend on local storage. */}
- pill.innerHTML='<img src="/hub/assets/brand/icon-192.png" alt=""><span>GAMYSUF<small id="gmyLevel">Arcade</small></span>';
- const toasts=document.createElement('div');
- toasts.className='gmy-toasts';
- toasts.setAttribute('aria-live','polite');
- const mount=()=>{document.body.append(pill,toasts);};
- if(document.body)mount();else document.addEventListener('DOMContentLoaded',mount,{once:true});
-
- function toast(text,xp){
-  const element=document.createElement('div');
-  element.className='gmy-toast';
-  const label=document.createElement('span');
-  label.textContent=text;
-  element.append(label);
-  if(xp){const points=document.createElement('b');points.textContent=`+${xp} XP`;element.append(points);}
-  toasts.append(element);
-  setTimeout(()=>{element.classList.add('out');setTimeout(()=>element.remove(),320);},3600);
+ const avatarFiles={wave:'wave',peek:'explorer',wink:'star',bag:'collector',stand:'stand',heart:'champion'};
+ const names={spin:'Spin Wheels',nyapit:'Nyapit Bareng Bpedia',drop:'Bipy Beauty Drop'};
+ const icons={back:'<path d="m14 6-6 6 6 6"/>',forward:'<path d="m10 6 6 6-6 6"/>',camera:'<path d="M8 5h8l2 3h3v12H3V8h3Z"/><circle cx="12" cy="13" r="4"/>',menu:'<path d="M5 6h14M5 12h14M5 18h14"/>',home:'<path d="m3 11 9-8 9 8M5 10v11h5v-7h4v7h5V10"/>',screen:'<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',sound:'<path d="M3 9h4l5-4v14l-5-4H3ZM16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4m0 3h.01"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>'};
+ const svg=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${icons[name]||icons.menu}</svg>`;
+ const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const avatarSrc=avatar=>`/hub/assets/avatars/character-${avatarFiles[avatar]||'wave'}.png?v=1.2.0`;
+ let since=Date.now(),me=null,muted=false,capturePromise=null,lastFocus=null;
+ try{if(builtin)localStorage.setItem('gamysuf-last-game',game);}catch{/* Optional shortcut. */}
+ const bar=document.createElement('nav');
+ bar.id='gmyGamebar';bar.className='gmy-gamebar';bar.setAttribute('aria-label','Game bar Gamysuf');bar.dataset.html2canvasIgnore='true';
+ const button=(action,title,icon)=>`<button type="button" data-gmy-action="${action}" aria-label="${title}" title="${title}">${svg(icon)}</button>`;
+ bar.innerHTML=`<button type="button" class="gmy-player" data-gmy-action="profile" aria-label="Buka detail profil"><img id="gmyAvatar" src="${avatarSrc('wave')}" alt="Avatar pemain"><span class="gmy-player-text"><b id="gmyName">Pemain</b><small id="gmyLevel">Gamysuf Arcade</small></span></button><span class="gmy-divider" aria-hidden="true"></span>${button('back','Kembali','back')}${button('forward','Maju','forward')}${button('capture','Screenshot game','camera')}<button type="button" data-gmy-theme aria-label="Ganti tema"><span>◐</span></button><button type="button" data-gmy-action="menu" aria-label="Kontrol game" aria-haspopup="menu" aria-expanded="false" aria-controls="gmyMenu">${svg('menu')}</button><div id="gmyMenu" class="gmy-menu" role="menu" hidden><b>${esc(names[game]||'Gamysuf Arcade')}</b><button type="button" role="menuitem" data-gmy-action="guide">${svg('help')}Cara main & kontrol</button><button type="button" role="menuitem" data-gmy-action="audio">${svg('sound')}<span id="gmyAudioLabel">Matikan suara</span></button><button type="button" role="menuitem" data-gmy-action="fullscreen">${svg('screen')}Layar penuh</button><a role="menuitem" href="/">${svg('home')}Kembali ke arcade</a></div>`;
+ const toasts=document.createElement('div');toasts.className='gmy-toasts';toasts.setAttribute('aria-live','polite');toasts.dataset.html2canvasIgnore='true';
+ const dialog=document.createElement('dialog');dialog.id='gmyDialog';dialog.className='gmy-dialog';dialog.setAttribute('aria-labelledby','gmyDialogTitle');dialog.dataset.html2canvasIgnore='true';
+ dialog.innerHTML=`<header><h2 id="gmyDialogTitle"></h2><button type="button" data-gmy-close aria-label="Tutup">${svg('close')}</button></header><div id="gmyDialogBody"></div>`;
+ const menu=bar.querySelector('#gmyMenu');
+ const menuButton=bar.querySelector('[data-gmy-action="menu"]');
+ function menuOpen(open){menu.hidden=!open;menuButton.setAttribute('aria-expanded',String(open));if(open)menu.querySelector('[role="menuitem"]')?.focus();}
+ function toast(message,xp=0){
+  const node=document.createElement('div');node.className='gmy-toast';node.textContent=message;
+  if(xp){const points=document.createElement('b');points.textContent=`+${xp} XP`;node.append(points);}
+  toasts.append(node);setTimeout(()=>node.remove(),4500);
  }
-
+ function openPanel(title,content){lastFocus=document.activeElement;menuOpen(false);dialog.querySelector('h2').textContent=title;dialog.querySelector('#gmyDialogBody').innerHTML=content;if(!dialog.open)dialog.showModal();}
+ function closePanel(){dialog.close();lastFocus?.focus();}
+ function profile(){
+  if(!me){toast('Profil sedang dimuat. Coba lagi sebentar.');check();return;}
+  openPanel('Profil pemain',`<div class="gmy-profile-head"><img src="${avatarSrc(me.avatar)}" alt="${esc(me.nickname||'Avatar Bipy')}"><div><p>${esc(me.nickname||('Tamu #'+me.tag))}</p><h3>Level ${Number(me.level)||1}</h3><span>${Number(me.xp)||0} XP · ${Number(me.streak?.count)||0} hari beruntun</span></div></div><div class="gmy-profile-stats">${Object.entries(names).map(([slug,title])=>`<div><b>${Number(me.playsByGame?.[slug])||0}</b><span>${title}</span></div>`).join('')}</div><a class="gmy-primary" href="/?profile=1">Lihat & atur profil lengkap</a>`);
+ }
+ function guide(){
+  const rows={spin:[['Masuk arena','Klik roda, lalu tekan tombol Putar roda.'],['Putar','Gunakan tombol utama atau Spasi saat arena aktif.'],['Kembali','Gunakan tombol tutup arena untuk kembali ke halaman game.']],nyapit:[['Mulai','Tekan Main, lalu masukkan koin di layar.'],['Bidik','Geser atau sentuh arena. Di keyboard, gunakan panah kiri/kanan.'],['Capit','Tekan tombol Capit atau Spasi. Tunggu sampai hasil tampil.']],drop:[['Pilih misi','Pilih Beauty Drop atau Gacha Fanservice.'],['Jatuhkan kapsul','Tekan DROP atau Spasi saat papan siap.'],['Fanservice','Pilih cosplayer, lalu ikuti pilihan misi di layar.']]};
+  openPanel('Cara main & kontrol',`<p class="gmy-intro">${esc(names[game]||'Ikuti petunjuk di dalam game.')}</p><dl class="gmy-controls">${(rows[game]||[]).map(([title,desc])=>`<dt>${title}</dt><dd>${desc}</dd>`).join('')}</dl><p class="gmy-note">Mode online memakai hadiah digital. Tema, suara, screenshot, dan profil tersedia di game bar.</p>`);
+ }
+ async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else toast('Browser ini belum mendukung layar penuh. Gunakan mode layar penuh browser.');}catch{toast('Layar penuh belum tersedia di browser ini.');}}
+ function loadCapture(){
+  if(window.html2canvas)return Promise.resolve(window.html2canvas);
+  if(capturePromise)return capturePromise;
+  capturePromise=new Promise((resolve,reject)=>{
+   const script=document.createElement('script');script.src='/hub/vendor/html2canvas-1.4.1.min.js';
+   const timeout=setTimeout(()=>{script.remove();capturePromise=null;reject(new Error('Capture timeout'));},15000);
+   script.onload=()=>{clearTimeout(timeout);resolve(window.html2canvas);};
+   script.onerror=()=>{clearTimeout(timeout);script.remove();capturePromise=null;reject(new Error('Capture unavailable'));};document.head.append(script);
+  });return capturePromise;
+ }
+ async function capture(){
+  const control=bar.querySelector('[data-gmy-action="capture"]');if(control.disabled)return;
+  menuOpen(false);control.disabled=true;control.setAttribute('aria-busy','true');
+  try{
+   const render=await loadCapture();
+   const arena=document.querySelector('.arena-dialog[open]');
+   const target=arena||document.body;
+   const canvas=await render(target,{
+    backgroundColor:getComputedStyle(target).backgroundColor,scale:Math.min(window.devicePixelRatio||1,2),
+    width:innerWidth,height:innerHeight,x:arena?0:scrollX,y:arena?0:scrollY,
+    windowWidth:innerWidth,windowHeight:innerHeight,useCORS:true,logging:false,
+    // The render-only about:blank clone must not reinterpret the page's CSP 'self'.
+    // The real document and its response security policy remain unchanged.
+    ignoreElements:node=>node.hasAttribute('data-html2canvas-ignore')||
+     (node.tagName==='META'&&node.httpEquiv?.toLowerCase()==='content-security-policy')||
+     (node.tagName==='LINK'&&node.rel?.toLowerCase().includes('icon')),
+    onclone:(_doc,copy)=>{
+     if(arena){copy.style.position='fixed';copy.style.inset='0';copy.style.margin='0';copy.style.animation='none';copy.scrollTop=arena.scrollTop;}
+    }
+   });
+   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+   if(!blob)throw new Error('No image');
+   const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`gamysuf-${game.replace(/[^a-z0-9-]/g,'')}-${Date.now()}.png`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);toast('Screenshot disimpan sebagai PNG.');
+  }catch{toast('Screenshot belum bisa dibuat. Coba kembali setelah gambar selesai dimuat.');}
+  finally{control.disabled=false;control.removeAttribute('aria-busy');}
+ }
  async function check(){
   try{
-   const response=await nativeFetch(`/hub-api/me?since=${since}`,{headers:{'x-gamysuf-client':'hub'},credentials:'same-origin'});
-   if(!response.ok)return;
-   const me=await response.json();
-   const level=document.getElementById('gmyLevel');
-   if(level)level.textContent=`Level ${me.level} · ${me.xp} XP`;
-   const events=me.feed||[];
-   if(!events.length)return;
-   since=Math.max(since,...events.map(event=>event.at));
-   const important=events.filter(event=>event.type!=='xp');
-   const total=events.reduce((sum,event)=>sum+(event.xp||0),0);
-   const list=important.length?important.slice(-3):[{text:'XP permainan',xp:total}];
-   list.forEach((event,index)=>setTimeout(()=>toast(event.text,event.xp),index*700));
-  }catch{/* Arcade opsional; game tetap berjalan tanpa notifikasi. */}
+   const response=await nativeFetch(`/hub-api/me?since=${since}`,{headers:{'x-gamysuf-client':'hub'},credentials:'same-origin'});if(!response.ok)return;
+   me=await response.json();bar.querySelector('#gmyAvatar').src=avatarSrc(me.avatar);bar.querySelector('#gmyName').textContent=me.nickname||('Tamu #'+me.tag);bar.querySelector('#gmyLevel').textContent=`Level ${me.level} · ${me.xp} XP`;
+   const events=me.feed||[];if(!events.length)return;
+   since=Math.max(since,...events.map(event=>event.at));const important=events.filter(event=>event.type!=='xp');const total=events.reduce((sum,event)=>sum+(event.xp||0),0);
+   (important.length?important.slice(-3):[{text:'XP permainan',xp:total}]).forEach((event,index)=>setTimeout(()=>toast(event.text,event.xp),index*700));
+  }catch{/* Game is usable when profile API is unavailable. */}
  }
-
- if(!game.startsWith('custom:')){
-  window.fetch=async(input,init)=>{
-   const response=await nativeFetch(input,init);
-   try{
-    const url=new URL(typeof input==='string'?input:input.url,location.href);
-    const method=String(init?.method||input?.method||'GET').toUpperCase();
-    if(method==='POST'&&RESULT.test(url.pathname)&&response.ok)setTimeout(check,7000);
-   }catch{/* abaikan URL yang tidak bisa dibaca */}
-   return response;
-  };
+ function relocateBar(){
+  // Spin uses a top-layer arena dialog. Controls must share that layer to remain clickable.
+  const host=document.querySelector('.arena-dialog[open]')||document.body;
+  if(bar.parentElement!==host)host.append(bar);
  }
- check();
+ function mount(){
+  document.documentElement.classList.add('gmy-has-bar');document.body.append(bar,toasts,dialog);window.GamysufTheme?.refresh();
+  if(!window.GamysufTheme)bar.querySelector('[data-gmy-theme]').hidden=true;
+  if(!builtin)bar.querySelector('[data-gmy-action="audio"]').hidden=true;
+  relocateBar();new MutationObserver(relocateBar).observe(document.body,{subtree:true,attributes:true,attributeFilter:['open']});
+  window.dispatchEvent(new CustomEvent('gamysuf:audio-query'));
+  check();
+ }
+ bar.addEventListener('click',event=>{
+  const target=event.target.closest('[data-gmy-action]');if(!target)return;
+  const action=target.dataset.gmyAction;if(action!=='menu')menuOpen(false);
+  if(action==='menu')menuOpen(menu.hidden);
+  else if(action==='profile')profile();else if(action==='guide')guide();
+  else if(action==='back'){if(history.length>1)history.back();else location.assign('/');}
+  else if(action==='forward')history.forward();else if(action==='capture')capture();else if(action==='fullscreen')fullscreen();
+  else if(action==='audio'){muted=!muted;window.dispatchEvent(new CustomEvent('gamysuf:audio',{detail:{muted}}));bar.querySelector('#gmyAudioLabel').textContent=muted?'Aktifkan suara':'Matikan suara';}
+ });
+ document.addEventListener('click',event=>{if(!bar.contains(event.target))menuOpen(false);});
+ document.addEventListener('keydown',event=>{
+  if(dialog.open){event.stopImmediatePropagation();if(event.key==='Escape'){event.preventDefault();closePanel();}return;}
+  if(bar.contains(event.target)){
+   event.stopImmediatePropagation();
+   if(event.key==='Escape'){menuOpen(false);menuButton.focus();}
+   if(!menu.hidden&&['ArrowUp','ArrowDown','Home','End'].includes(event.key)){
+    event.preventDefault();const items=[...menu.querySelectorAll('[role="menuitem"]')].filter(item=>!item.hidden);const index=items.indexOf(document.activeElement);const next=event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;items[next]?.focus();
+   }
+  }
+ },true);
+ dialog.querySelector('[data-gmy-close]').addEventListener('click',closePanel);
+ dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closePanel();}});
+ window.addEventListener('gamysuf:audio-state',event=>{muted=Boolean(event.detail?.muted);bar.querySelector('#gmyAudioLabel').textContent=muted?'Aktifkan suara':'Matikan suara';});
+ window.addEventListener('pageshow',()=>{check();window.GamysufTheme?.refresh();});
+ if(builtin)window.fetch=async(input,init)=>{
+  const response=await nativeFetch(input,init);
+  try{const url=new URL(typeof input==='string'?input:input.url,location.href);if(String(init?.method||input?.method||'GET').toUpperCase()==='POST'&&RESULT.test(url.pathname)&&response.ok)setTimeout(check,7000);}catch{/* Non-game requests pass through. */}
+  return response;
+ };
+ if(document.body)mount();else document.addEventListener('DOMContentLoaded',mount,{once:true});
 })();

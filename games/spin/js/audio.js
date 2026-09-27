@@ -17,6 +17,7 @@ class BoothAudio {
     this.bgmLoop = true;
     this.bgmVolume = 0.65;
     this.bgmAuto = true;
+    this.bgmRequest = 0;
     this.isDucked = false;
 
     // Audio-reactive analyser
@@ -140,12 +141,14 @@ class BoothAudio {
 
   // --- Background Music (BGM) & Jingles ---
   async playBGM(track = this.bgmTrack, loop = this.bgmLoop) {
-    if (!await this.activate()) return;
+    if (!this.enabled || !await this.activate() || this.ctx.state !== 'running') return false;
+    const request = ++this.bgmRequest;
     this.bgmTrack = track;
     this.bgmLoop = loop;
 
     try {
       const buffer = await this.loadBuffer(track);
+      if (request !== this.bgmRequest || !this.enabled || this.ctx.state !== 'running') return false;
       if (this.bgmSource) {
         try {
           this.bgmSource.stop();
@@ -169,12 +172,15 @@ class BoothAudio {
       this.bgmSource = source;
       this.bgmPlaying = true;
       this.notifyBgmChange();
+      return true;
     } catch (err) {
       console.warn('Bpedia BGM error:', err.message);
+      return false;
     }
   }
 
   pauseBGM() {
+    this.bgmRequest++;
     if (this.bgmSource) {
       try {
         this.bgmSource.stop();

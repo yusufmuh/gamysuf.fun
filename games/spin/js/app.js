@@ -3,7 +3,7 @@
  const {api,esc,icon,visual,toast,open,percent}=Bpedia,$=s=>document.querySelector(s);
  let state=null,spinning=false,rotation=0,result=null,poseTimer,soundOverride=null,requestId=null,confettiFrame,launchTimer;
  const arena=$('#stage-dialog'),wheelStage=$('#wheel-stage'),controls=$('.spin-controls'),mascot=$('.mascot-section');
- let lastDodge=0,escapeTimer,currentGame='wheel',bonusRequestId=null,lastActivity=Date.now(),firstUserGesture=false;
+ let lastDodge=0,escapeTimer,currentGame='wheel',bonusRequestId=null,lastActivity=Date.now(),autoMusicAttempted=false;
  const boxStage=$('#box-stage');
 
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -25,14 +25,14 @@
   if(!items.length)paths='<circle cx="300" cy="300" r="298" fill="#f4e7e6"/><text x="300" y="190" fill="#986577" text-anchor="middle" font-size="18">Hadiah sedang disiapkan</text>';
   $('#wheel-sectors').innerHTML=paths;$('#wheel-items').innerHTML=labels;
  }
- function pose(name,message){clearTimeout(poseTimer);const rig=$('#mascot-rig');rig.className='mascot-rig';void rig.offsetWidth;if(name)rig.classList.add(name);if(message)$('#mascot-speech').textContent=message;if(!['excited','nervous'].includes(name))poseTimer=setTimeout(()=>rig.className='mascot-rig',4100);}
+ function pose(name,message){clearTimeout(poseTimer);const rig=$('#mascot-rig');rig.className='mascot-rig bipy-rig';void rig.offsetWidth;if(name)rig.classList.add(name);if(message)$('#mascot-speech').textContent=message;if(!['excited','nervous'].includes(name))poseTimer=setTimeout(()=>rig.className='mascot-rig bipy-rig',4100);}
  function resetEscape(){clearTimeout(escapeTimer);const button=$('#mascot-button');button.style.setProperty('--escape-x','0px');button.style.setProperty('--escape-y','0px');button.style.setProperty('--escape-tilt','0deg');button.classList.remove('dodging');}
  function openArena(){
-  if(!state||arena.open)return;resetEscape();$('#stage-wheel-slot').append(wheelStage,boxStage);$('#stage-controls-slot').append(controls);$('#stage-mascot-slot').append(mascot);document.body.classList.add('arena-open');open(arena);render({redraw:!result});$('#spin-button').focus({preventScroll:true});pose('waving',currentGame==='boxes'?'Pilih kotakmu, atau biarkan aku memilih!':'Klik aku atau tombol putar. Ayo cari kejutanmu!');
+  if(!state||arena.open)return;resetEscape();$('#stage-wheel-slot').append(wheelStage,boxStage);$('#stage-controls-slot').append(controls);$('#stage-mascot-slot').append(mascot);$('.wheel-machine').tabIndex=-1;document.body.classList.add('arena-open');open(arena);render({redraw:!result});$('#spin-button').focus({preventScroll:true});pose('waving',currentGame==='boxes'?'Pilih kotakmu, atau biarkan aku memilih!':'Klik aku atau tombol putar. Ayo cari kejutanmu!');
  }
  function closeArena(){
   if(spinning||result||(state?.pending&&state.pending.stage!=='awaiting-box')){toast('Selesaikan putaran dan tutup hasil terlebih dahulu.');return;}
-  resetEscape();$('#home-wheel-slot').append(wheelStage);$('#home-box-slot').append(boxStage);$('#home-controls-slot').append(controls);$('#home-mascot-slot').append(mascot);arena.close();document.body.classList.remove('arena-open');render();$('#spin-button').focus({preventScroll:true});
+  resetEscape();$('#home-wheel-slot').append(wheelStage);$('#home-box-slot').append(boxStage);$('#home-controls-slot').append(controls);$('#home-mascot-slot').append(mascot);$('.wheel-machine').tabIndex=0;arena.close();document.body.classList.remove('arena-open');render();$('#spin-button').focus({preventScroll:true});
  }
  function play(){if(!arena.open)openArena();else if(state?.pending?.stage==='awaiting-box')openBonus(Math.floor(Math.random()*3));else spin();}
  function resetBoxes(){boxStage.classList.remove('is-unboxing','is-revealed');boxStage.querySelectorAll('[data-box]').forEach(b=>{b.classList.remove('is-selected');b.querySelector('.box-reveal').innerHTML='';});$('#box-status').textContent='Ketiga kotak setara. Pilih satu — tanpa zonk.';}
@@ -84,6 +84,7 @@
   $('#sound-button').setAttribute('aria-pressed',String(boothAudio.enabled));
   updateMusicBarUI();
  }
+ function publishAudioState(){window.dispatchEvent(new CustomEvent('gamysuf:audio-state',{detail:{muted:!boothAudio.enabled}}));}
  function updateMusicBarUI(){
   const bar=$('#music-player-bar'),btn=$('#music-play-btn'),loopBtn=$('#music-loop-btn'),loopText=$('#music-loop-text'),title=$('#music-track-title'),status=$('#music-track-status'),trackSelect=$('#music-track-select'),volSlider=$('#music-vol-slider');
   if(!bar)return;
@@ -109,7 +110,7 @@
   $('#spin-label').textContent=spinning?(currentGame==='boxes'?'Kotak sedang dibuka…':'Sedang berputar…'):state.settings.paused?'Permainan dijeda':state.odds.paused?'Hadiah sedang disiapkan':!arena.open?(currentGame==='boxes'?'Buka Beauty Box':'Buka spin layar penuh'):currentGame==='boxes'?'Pilihkan kotak untukku':demo?'Coba putar rodanya':'Putar & raih hadiah';
   $('#spin-hint').innerHTML=unavailable?'Petugas sedang menyiapkan hadiah berikutnya.':!arena.open?'Langsung spin · tanpa form verifikasi':demo?'Demo · tidak menyimpan hasil · <kbd>SPASI</kbd>':'Permainan · stok berkurang · <kbd>SPASI</kbd>';
   $('#stage-mode').textContent=$('#mode-badge').textContent;$('#stage-remaining').textContent=s.total;$('#close-arena').disabled=spinning||(!bonus&&!!state.pending)||!!result;
-  $('#mascot-button').setAttribute('aria-label',arena.open?(currentGame==='boxes'?'Pilih kotak bersama maskot Bpedia':'Putar roda bersama maskot Bpedia'):'Sapa maskot Bpedia');$('#stage-catalog span').textContent=`Lihat ${state.prizes.length} jenis hadiah`;
+  $('#mascot-button').setAttribute('aria-label',arena.open?(currentGame==='boxes'?'Pilih kotak bersama Bipy':'Putar roda bersama Bipy'):'Sapa Bipy');$('#stage-catalog span').textContent=`Lihat ${state.prizes.length} jenis hadiah`;
   $('#arena-stock-note').textContent=`${s.grand} utama · ${s.bundling} bundling · ${s.voucher} voucher · ${s.product} produk`;
   if(redraw&&!spinning&&!result)drawWheel(wheelItems());
   if(bonus){$('#spin-label').textContent=arena.open?'Pilihkan satu kotak':'Lanjutkan bonus Beauty Box';$('#spin-hint').textContent='Bonus sudah didapat · stok belum berkurang · buka satu kotak';}$('#eligibility-chip').textContent=demo?'DEMO · tanpa pengurangan stok':'PERMAINAN · LANGSUNG SPIN';const picks=['powder-000','foundation-04','duo-m03','salsa-vinilash','stick-hs03'].map(id=>state.prizes.find(p=>p.id===id)).filter(Boolean);
@@ -117,7 +118,7 @@
   const grand=state.prizes.find(p=>p.tier==='grand'&&p.enabled);$('#grand-visual').innerHTML=grand?visual(grand):'<span class="empty">Hadiah utama sedang disiapkan.</span>';$('#grand-title').textContent=grand?.name||'Hadiah utama';$('#grand-minimum').textContent=grand?.variant||'';$('#grand-note').textContent=grand?.stock?'Voucher eksklusif di aplikasi Beautypedia.':'Hadiah utama sudah habis / belum aktif.';
   syncSound();
  }
- async function refresh(){try{const next=await api('/api/state');const changed=!state||next.revision!==state.revision||next.settings.mode!==state.settings.mode;state=next;$('#connection-error').hidden=true;if(changed)render();if(next.pending&&!spinning&&!result&&!(next.pending.stage==='awaiting-box'&&currentGame==='boxes'))recover(next.pending);}catch(e){$('#connection-error').textContent='Koneksi lokal terputus. Stok tidak diubah. Buka ulang aplikasi jika diperlukan.';$('#connection-error').hidden=false;$('#spin-button').disabled=true;}}
+ async function refresh(){try{const next=await api('/api/state');const changed=!state||next.revision!==state.revision||next.settings.mode!==state.settings.mode;state=next;$('#connection-error').hidden=true;if(changed)render();if(!autoMusicAttempted){autoMusicAttempted=true;tryStartMusic();}if(next.pending&&!spinning&&!result&&!(next.pending.stage==='awaiting-box'&&currentGame==='boxes'))recover(next.pending);}catch(e){$('#connection-error').textContent='Koneksi lokal terputus. Stok tidak diubah. Buka ulang aplikasi jika diperlukan.';$('#connection-error').hidden=false;$('#spin-button').disabled=true;}}
  function animateTo(to,duration,count){return new Promise(resolve=>{const from=rotation,start=performance.now();let lastTick=-1;function frame(now){const t=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-t,5);rotation=from+(to-from)*ease;$('#wheel-rotor').style.transform=`rotate(${rotation}deg)`;const tick=Math.floor(rotation/(360/count));if(tick!==lastTick&&t<.995){boothAudio.tick(1-t);const pointer=$('#wheel-pointer');pointer.classList.remove('tick');void pointer.offsetWidth;pointer.classList.add('tick');lastTick=tick;}if(t<1)requestAnimationFrame(frame);else{rotation=to;resolve();}}requestAnimationFrame(frame);});}
  async function spin(){
   if(spinning||result||!state||state.pending||$('#spin-button').disabled||$('dialog[open]:not(#stage-dialog)'))return;
@@ -150,7 +151,7 @@
  function recover(r){if(r.stage==='awaiting-box'){enterBonus(r,true);return;}result=r;currentGame=r.game||'wheel';openArena();drawWheel(r.wheel);rotation=WheelMath.targetRotation(0,r.index,r.wheel.length,0);$('#wheel-rotor').style.transform=`rotate(${rotation}deg)`;showResult(r,true);render({redraw:false});}
 
  function resultScene(p){
-  const rig=$('#mascot-rig').cloneNode(true);rig.removeAttribute('id');rig.className='mascot-rig '+(p.tier==='grand'?'party':p.tier==='zonk'?'bowing':'dancing');rig.querySelector('.piece-head').alt='Maskot Bpedia '+(p.tier==='zonk'?'menyemangati':'merayakan hadiah');
+  const rig=$('#mascot-rig').cloneNode(true);rig.removeAttribute('id');rig.className='mascot-rig bipy-rig '+(p.tier==='grand'?'party':p.tier==='zonk'?'bowing':'dancing');rig.querySelector('.bipy-standing').alt='Bipy '+(p.tier==='zonk'?'menyemangati':'merayakan hadiah');
   return '<div class="result-scene '+(p.tier==='grand'?'is-grand':'')+'"><div class="result-mascot"><span class="result-bubble">'+(p.tier==='grand'?'WOOHOO! Hadiah utama!':p.tier==='zonk'?'Tetap semangat, ya!':'Selamat ya, beauty!')+'</span>'+rig.outerHTML+(p.tier==='grand'?'<span class="party-popper" aria-hidden="true"><i></i><b>✦</b><em>✧</em></span>':'')+'</div><div class="result-visual">'+visual(p)+'</div></div>';
  }
  function showResult(r,recovered=false){
@@ -184,10 +185,15 @@
  Bpedia.lightDismiss($('#result-dialog'),closeResult);
  arena.addEventListener('click',e=>{if(e.target===arena||e.target.classList.contains('arena-layout')||e.target.classList.contains('arena-wheel-area'))closeArena();});
  $('#wheel-lights').innerHTML=Array.from({length:40},(_,i)=>{const a=i/40*Math.PI*2;return `<span class="wheel-light" style="left:${50+48.25*Math.cos(a)}%;top:${50+48.25*Math.sin(a)}%;--delay:${i*.045}s"></span>`;}).join('');
+ const wheelMachine=$('.wheel-machine');wheelMachine.tabIndex=0;wheelMachine.setAttribute('role','button');wheelMachine.setAttribute('aria-label','Buka arena Spin Wheel untuk mulai bermain');
+ wheelMachine.addEventListener('click',()=>{if(!arena.open&&!spinning&&!result)openArena();});
+ wheelMachine.addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&!arena.open){event.preventDefault();if(!spinning&&!result)openArena();}});
  $('#spin-button').addEventListener('click',play);for(const id of ['rules-button','odds-button','terms-button'])$('#'+id).addEventListener('click',showRules);for(const id of ['catalog-button','all-prizes-button'])$('#'+id).addEventListener('click',()=>showCatalog());
  $('#shelf-products').addEventListener('click',e=>{const b=e.target.closest('[data-show-prize]');if(b)showCatalog(b.dataset.showPrize);});
  $('#mascot-button').addEventListener('click',async()=>{if(spinning||result)return;if(arena.open){play();return;}try{await boothAudio.activate();boothAudio.hello();}catch{}pose('waving','Hai! Semoga keberuntunganmu secantik senyummu.');});
- $('#sound-button').addEventListener('click',async()=>{try{if(!await boothAudio.activate())throw Error('Audio tidak didukung');soundOverride=!boothAudio.enabled;syncSound();if(soundOverride){boothAudio.hello();if(!boothAudio.bgmPlaying)boothAudio.playBGM();}else{boothAudio.stopVoices();boothAudio.pauseBGM();}toast(soundOverride?'Suara aktif. Musik latar siap diputar.':'Suara dimatikan.');}catch{toast('Perangkat audio belum tersedia.',true);}});
+ $('#sound-button').addEventListener('click',async()=>{soundOverride=!boothAudio.enabled;syncSound();if(soundOverride){try{await boothAudio.activate();boothAudio.hello();tryStartMusic();}catch{toast('Perangkat audio belum tersedia.',true);}}else{boothAudio.stopVoices();boothAudio.pauseBGM();}publishAudioState();toast(soundOverride?'Suara aktif. Musik latar siap diputar.':'Suara dimatikan.');});
+ window.addEventListener('gamysuf:audio',event=>{if(typeof event.detail?.muted!=='boolean')return;soundOverride=!event.detail.muted;if(state)syncSound();else{boothAudio.enabled=soundOverride;boothAudio.apply();}if(soundOverride)tryStartMusic();else{boothAudio.stopVoices();boothAudio.pauseBGM();}});
+ window.addEventListener('gamysuf:audio-query',publishAudioState);
  $('#fullscreen-button').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('Gunakan F11 untuk layar penuh.');}});
  document.addEventListener('keydown',e=>{if(e.code==='KeyM'&&!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)){$('#sound-button').click();return;}if(e.code==='Space'&&!['INPUT','TEXTAREA','SELECT','BUTTON','A'].includes(e.target.tagName)&&!e.repeat){e.preventDefault();if(!$('dialog[open]:not(#stage-dialog)'))play();}});
  $('#close-arena').addEventListener('click',closeArena);$('#stage-catalog').addEventListener('click',()=>showCatalog());arena.addEventListener('cancel',e=>{e.preventDefault();closeArena();});document.addEventListener('pointermove',dodge,{passive:true});mascot.addEventListener('pointerleave',()=>{clearTimeout(escapeTimer);escapeTimer=setTimeout(resetEscape,1200);});window.addEventListener('blur',resetEscape);reduced.addEventListener('change',resetEscape);
@@ -196,24 +202,22 @@
  $('#brand-sound').addEventListener('click',async()=>{try{await boothAudio.activate();boothAudio.brand();pose('dancing','Beautypedia! Cantikmu, ada di sini!');lastActivity=Date.now();}catch{toast('Audio belum tersedia.',true);}});
  document.addEventListener('pointerdown',()=>lastActivity=Date.now(),{passive:true});
 
- // Auto-play BGM on first user interaction gesture
- async function handleFirstGesture(){
-  if(firstUserGesture)return;
-  firstUserGesture=true;
-  try{
-   await boothAudio.activate();
-   if(boothAudio.enabled&&!boothAudio.bgmPlaying&&boothAudio.bgmAuto){
-    await boothAudio.playBGM();
-   }
-  }catch(e){}
+ // Browsers may block load-time autoplay. Retry on each real gesture until audio starts.
+ async function tryStartMusic(){
+  if(!state||!boothAudio.enabled||!boothAudio.bgmAuto||boothAudio.bgmPlaying)return;
+  try{await boothAudio.playBGM();}catch{}
  }
- ['pointerdown','keydown','click'].forEach(evt=>window.addEventListener(evt,handleFirstGesture,{once:true,passive:true}));
+ function handleMusicGesture(event){
+  if(event.target.closest?.('#music-play-btn, #sound-button, #music-track-select'))return;
+  tryStartMusic();
+ }
+ ['pointerdown','keydown'].forEach(type=>window.addEventListener(type,handleMusicGesture,{passive:true}));
 
  // Music & Jingle controller bar listeners
  $('#music-play-btn')?.addEventListener('click',async()=>{
   try{
-   await boothAudio.activate();
-   boothAudio.toggleBGM();
+   if(boothAudio.bgmPlaying){boothAudio.bgmAuto=false;boothAudio.pauseBGM();}
+   else{boothAudio.bgmAuto=true;await boothAudio.playBGM();}
    updateMusicBarUI();
   }catch(e){toast('Audio tidak dapat diaktifkan.',true);}
  });

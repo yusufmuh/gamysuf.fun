@@ -1,0 +1,328 @@
+/* Shared dashboard theme on the three hosted games. Loaded after each game's CSS. */
+html[data-gamysuf-game] {
+  color-scheme: dark;
+}
+html[data-gamysuf-game][data-theme="light"] {
+  color-scheme: light;
+}
+html[data-gamysuf-game] img.gmy-brand-image { object-fit: contain; mix-blend-mode: normal; }
+html[data-gamysuf-game] :is(button,a,input,select,textarea,[tabindex]):focus-visible {
+  outline: 3px solid #f4ba55;
+  outline-offset: 3px;
+}
+html[data-gamysuf-game][data-theme="light"] :is(button,a,input,select,textarea,[tabindex]):focus-visible {
+  outline-color: #9e1e55;
+}
+
+/* Spin keeps the pink wheel and product photographs bright inside a darker booth. */
+html[data-gamysuf-game="spin"][data-theme="dark"] {
+  --paper: #1b0a16;
+  --ink: #fff0eb;
+  --muted: #c8aab8;
+  --line: #754258;
+  --soft: #39172a;
+  --rose: #f374a0;
+  --berry: #e74c81;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] body.game-page {
+  background: radial-gradient(100% 80% at 50% 0%, #512139 0%, #250e1c 58%, #160815 100%);
+  color: var(--ink);
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.site-header,.event-line,.prize-shelf,.social-strip,.site-footer) {
+  border-color: var(--line);
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.event-line,.event-motto,.intro-copy,.spin-hint,.odds-link,.arena-wheel-note,.grand-note,.result-sub,.result-terms) {
+  color: #d7b7c4;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .intro-copy strong { color: #ffbad0; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.mascot-section,.mascot-button,.result-mascot) {
+  mix-blend-mode: normal;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .game-tabs button[aria-pressed="true"] {
+  background: #65304d;
+  color: #fff0eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .game-tabs button[aria-pressed="true"] small {
+  color: #f2c4d5;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.site-header .icon-button,.site-header .admin-link,.mode-switch,.music-control-bar) {
+  background: #371729;
+  border-color: #85506a;
+  color: #fff0eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.site-header .icon-button:hover,.site-header .admin-link:hover) {
+  background: #57243d;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.music-title,.music-sub,.music-loop-btn,.music-track-select) { color: #fff0eb; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.music-loop-btn,.music-track-select) {
+  background: #491d34;
+  border-color: #986079;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .music-loop-btn[aria-pressed="true"] {
+  background: #ae285b;
+  color: #fff;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.mode-badge:not(.live),.eligibility-chip,.mystery-feature) {
+  background: #512239;
+  border-color: #aa6683;
+  color: #ffe3eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .mode-badge.live {
+  background: #163f33;
+  border-color: #4e9f7d;
+  color: #c4f9de;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .mode-switch button[aria-pressed="true"] {
+  background: #b72459;
+  color: #fff;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.speech-bubble,.grand-prize-card,.app-card,.arena-companion,.beauty-box,.catalog-item,.step,.odds-card,.result-scene) {
+  background: #341627;
+  border-color: #8b4b66;
+  color: #fff0eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .grand-prize-card {
+  background: linear-gradient(145deg,#522039,#2b1223);
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.grand-prize-card p,.grand-note,.shelf-info small,.shelf-info span,.catalog-item p) {
+  color: #d7b7c4;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.mini-stock>div,.arena-catalog,.grand-note) { border-color: #754258; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.mini-icon,.stock-pill) {
+  background: #6b2947;
+  color: #ffe8ef;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .arena-dialog {
+  color: #fff0eb;
+  background: radial-gradient(ellipse at 52% 42%,#51223c 0%,#220d1d 68%,#180a17 100%);
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .arena-dialog::backdrop { background: #160a15; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.arena-header,.arena-footer) {
+  background: #250f1eea;
+  border-color: #80415f;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .arena-companion {
+  background: linear-gradient(150deg,#462139,#2d1428);
+  box-shadow: 0 18px 45px #09040855;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .arena-intro p strong { color: #fff0eb; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.arena-intro h3 em,.arena-wheel-heading) { color: #f8a4c5; }
+html[data-gamysuf-game="spin"][data-theme="dark"] .arena-catalog { color: #ffd5e3; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.modal,.mode-modal,.content-modal,.result-modal) {
+  background: #2d1425;
+  border-color: #a45e7e;
+  color: #fff0eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.modal .lead,.modal .rules-copy,.modal .result-detail,.modal .result-footnote) { color: #e2c3cd; }
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.step,.catalog-item,.catalog-photo,.notice,.form-field input,.form-field select,.form-field textarea) {
+  background: #402037;
+  border-color: #87536a;
+  color: #fff0eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] :is(.step p,.notice,.form-field small) { color: #ecd0db; }
+html[data-gamysuf-game="spin"][data-theme="dark"] .btn.secondary {
+  background: #482239;
+  border-color: #a45e7e;
+  color: #fff0eb;
+}
+html[data-gamysuf-game="spin"][data-theme="dark"] .wheel-hub { color: #fff0eb; background: radial-gradient(circle at 40% 25%,#6b2548,#351328); border-color:#f2aac5; }
+html[data-gamysuf-game="spin"][data-theme="dark"] .wheel-hub :is(span,strong) { color: #fff0eb; }
+html[data-gamysuf-game="spin"][data-theme="dark"] .wheel-item:not(.bundling):not(.bonus) { color: #492637; }
+html[data-gamysuf-game="spin"][data-theme="light"] body.game-page { background: #fff6f5; }
+
+/* Nyapit's festival remains a festival; light mode lifts its lobby and controls. */
+html[data-gamysuf-game="nyapit"][data-theme="dark"] body.game-page {
+  background: radial-gradient(110% 92% at 50% -10%,#44203d,#1b0a1b 63%,#130815);
+}
+html[data-gamysuf-game="nyapit"][data-theme="dark"] .game-page .topbar {
+  background: #210e22f2;
+  border-color: #714461;
+}
+html[data-gamysuf-game="nyapit"][data-theme="dark"] .game-page .topbar :is(.icon-button,.admin-link) {
+  background: #3e2138;
+  border-color: #83526d;
+  color: #fff0f3;
+}
+html[data-gamysuf-game="nyapit"][data-theme="dark"] .game-page .topbar :is(.event-lockup b,.event-lockup small) {
+  color: #ffe2ed;
+}
+html[data-gamysuf-game="nyapit"][data-theme="dark"] :is(.host-panel,.score-panel) {
+  background: #fff9f7;
+  border-color: #f7d4df;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] body.game-page {
+  background: linear-gradient(155deg,#fff8f5,#ffe9ef 63%,#f9e5ed);
+  color: #3d1a2e;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .game-page .topbar {
+  background: #fffaf8ed;
+  border-color: #e5bac9;
+  box-shadow: 0 6px 24px #81334c14;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .game-page .topbar :is(.icon-button,.admin-link) {
+  background: #fff4f6;
+  border-color: #dca8ba;
+  color: #782545;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .game-page .topbar .icon-button[aria-pressed="true"] {
+  background: #b82257;
+  color: #fff;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .game-page .topbar :is(.event-lockup b,.event-lockup small) { color: #7b2348; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .festival-kicker { color: #8e3f71; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .hero-copy h1 { color: #54213b; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .hero-copy h1 em { color: #b8235e; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] :is(.hero-description,.home-entry label,#homeStatus,.winner-note,.home-footer) {
+  color: #765468;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-entry label small { color: #765468; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-entry input {
+  background: #fff;
+  border-color: #cc9eb1;
+  color: #3d1a2e;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-entry input::placeholder { color: #826879; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .mode-switch-btn { color: #5a2d49; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .mode-switch-btn[aria-pressed="true"] { color: #fff; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .mode-switch[data-mode="live"] .mode-switch-btn[aria-pressed="true"] { color: #3a2208; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-winners {
+  background: linear-gradient(150deg,#fffdfb,#fff0f4);
+  border-color: #e7c0d1;
+  box-shadow: 0 18px 42px #85355017;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-winners h2 { color: #49243a; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-winners h2 em { color: #aa2757; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .winner-row {
+  color: #4b2b3c;
+  border-color: #ecd2db;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] :is(.winner-place,.winner-footer) { color: #775267; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-spots i { opacity: .38; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .hero-plinth {
+  background: linear-gradient(#c996d3,#7c467b);
+  box-shadow: 0 15px 0 #e5c5df,0 23px 35px #6b315833;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .show-orbit { border-color: #b976a255; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .home-footer { border-color: #e5bfce; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] :is(.host-panel,.score-panel) {
+  background: #fffefc;
+  border-color: #e9cbd6;
+  box-shadow: 0 16px 42px #81334c18;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .coin-dialog {
+  background: radial-gradient(ellipse at top,#fff9fa,#f6e1ee 78%);
+  border-color: #ba83b2;
+  color: #4b2040;
+}
+html[data-gamysuf-game="nyapit"][data-theme="light"] .coin-dialog>p:not(.festival-kicker) { color: #68425e; }
+html[data-gamysuf-game="nyapit"][data-theme="light"] .coin-dialog button { color: #72294e; }
+
+/* Drop's glass board, capsule, and collectible artwork retain their original palette. */
+html[data-gamysuf-game="drop"][data-theme="dark"] body { background: #180917; }
+html[data-gamysuf-game="drop"][data-theme="dark"] .scene {
+  background: radial-gradient(120% 90% at 50% 5%,#692340 0%,#2a0b1c 61%,#12050f 100%);
+}
+html[data-gamysuf-game="drop"][data-theme="dark"] :is(.event-chip,.contents-panel,.capsule-meter) {
+  border-color: #bc7594;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] body {
+  background: #fff5f4;
+  color: #4a1d34;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .scene {
+  background: radial-gradient(105% 84% at 50% 0%,#fbd5df 0%,#fff7f3 57%,#f5e5ec 100%);
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .scene-photo {
+  opacity: .16;
+  mix-blend-mode: multiply;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .scene-vignette {
+  background: radial-gradient(90% 80% at 50% 45%,transparent 50%,#cf9cab55 100%);
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .scene-bricks { opacity: .055; }
+html[data-gamysuf-game="drop"][data-theme="light"] .beam { opacity: .09; }
+html[data-gamysuf-game="drop"][data-theme="light"] .topbar {
+  background: #fff7f4ed;
+  border-bottom: 1px solid #e6bbc9;
+  box-shadow: 0 6px 24px #78314c20;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .eyebrow { color: #9c2a5e; }
+html[data-gamysuf-game="drop"][data-theme="light"] .event-chip {
+  background: linear-gradient(180deg,#fffaf7,#fbe8ef);
+  border-color: #c78a9f;
+  color: #4b1b33;
+  box-shadow: 0 8px 22px #7d345620;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .event-chip em { color: #8c3261; }
+html[data-gamysuf-game="drop"][data-theme="light"] .event-chip span { color: #684557; }
+html[data-gamysuf-game="drop"][data-theme="light"] .top-actions :is(.icon-button,.ghost-button,.mode-pill) {
+  background: #fff9f6e8;
+  border: 1px solid #cf98aa;
+  color: #642044;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .top-actions .mode-pill.live {
+  background: #e5f8eb;
+  border-color: #58a978;
+  color: #17543b;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .title-script { color: #ad225a; text-shadow: none; }
+html[data-gamysuf-game="drop"][data-theme="light"] .title-main {
+  color: #561d39;
+  text-shadow: .045em .045em 0 #f4b2ca,.09em .09em 0 #d488ab,0 10px 25px #743b5e2e;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .tagline { color: #7c3260; }
+html[data-gamysuf-game="drop"][data-theme="light"] .hosts-glow { opacity: .55; }
+html[data-gamysuf-game="drop"][data-theme="light"] .ticket { box-shadow: 0 24px 54px #75445a2b; }
+html[data-gamysuf-game="drop"][data-theme="light"] .ticker {
+  background: linear-gradient(90deg,#6e2546,#903253,#6e2546);
+  border-color: #e8acbf;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .drop-view :is(.eyebrow,.fair-note) { color: #7e2351; }
+html[data-gamysuf-game="drop"][data-theme="light"] .drop-view :is(.name-field input,.capsule-meter) {
+  background: #fff9f6;
+  border-color: #cb93a9;
+  color: #4a1d34;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .capsule-meter b { color: #4a1d34; }
+html[data-gamysuf-game="drop"][data-theme="light"] .capsule-meter span { color: #704d61; }
+html[data-gamysuf-game="drop"][data-theme="light"] .contents-panel {
+  background: linear-gradient(180deg,#fffaf7,#fcebf0);
+  border-color: #dcb0c0;
+  color: #4a1d34;
+  box-shadow: 0 20px 45px #7d345629;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] :is(.contents-note,.fan-tile small) { color: #704d61; }
+html[data-gamysuf-game="drop"][data-theme="light"] .fan-tile {
+  background: #f8e7ed;
+  border-color: #dcb0c0;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .fan-tile .icon {
+  background: #f2cbdc;
+  color: #9e2057;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .schedule-chip {
+  background: #fff0d7;
+  border-color: #be8627;
+  color: #6b4214;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .claim-box {
+  background: #fffaf7;
+  border-color: #bd839b;
+  color: #4a1d34;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .claim-box b { color: #4a1d34; }
+html[data-gamysuf-game="drop"][data-theme="light"] .claim-box span { color: #9d265e; }
+html[data-gamysuf-game="drop"][data-theme="light"] .reveal-layer {
+  background: radial-gradient(70% 70% at 50% 45%,#fbd9e4f5,#d4a7bfee);
+  color: #4a1d34;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] :is(.reveal-lead,.reveal-terms) { color: #624055; }
+html[data-gamysuf-game="drop"][data-theme="light"] .demo-note {
+  background: #fff0d3;
+  color: #785013;
+}
+html[data-gamysuf-game="drop"][data-theme="light"] .confirm-layer { background: #44203988; }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-gamysuf-game] :is(.scene .beam,.scene .grain,.ambient,.home-spots i) { animation: none !important; }
+}

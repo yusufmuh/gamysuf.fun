@@ -1,0 +1,36 @@
+/* Official Bipy full-body artwork replaces the old clipped puppet sprite. */
+.mascot-section,
+.arena-dialog .mascot-section,
+.result-mascot,
+.mascot-button {
+  mix-blend-mode: normal;
+}
+
+.bipy-rig .bipy-full {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity .24s ease;
+  filter: drop-shadow(0 9px 9px rgb(111 42 70 / 13%));
+}
+
+.bipy-rig .bipy-greeting { opacity: 0; }
+.bipy-rig:is(.waving, .dancing, .excited, .party, .pushing) .bipy-greeting { opacity: 1; }
+.bipy-rig:is(.waving, .dancing, .excited, .party, .pushing) .bipy-standing { opacity: 0; }
+
+.bipy-rig.escaping { animation: mascot-run .16s ease-in-out 6; }
+.bipy-rig.nervous { animation: nervous-rock .8s ease-in-out infinite; }
+
+/* The wheel's first click opens the focused arena; the control remains a large tap target. */
+#home-wheel-slot .wheel-machine { cursor: pointer; }
+#home-wheel-slot .wheel-machine:hover { filter: brightness(1.025); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bipy-rig,
+  .bipy-rig .bipy-full { animation: none !important; transition: none !important; }
+}

@@ -275,7 +275,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   text=rewriteOutgoing(text,mount.prefix);
   if(/text\/html/i.test(type)){
    text=withMetaCsp(text,upstream.headers['content-security-policy']);
-   if(route==='/'||route==='/index.html')text=text.replace(/<\/head>/i,`${mount.skin}<script defer src="/hub/js/inject.js?v=${VERSION}" data-game="${mount.game.slug}"></script></head>`);
+   if(route==='/'||route==='/index.html')text=text.replace(/<\/head>/i,`<script src="/hub/js/theme.js?v=${VERSION}" data-game="${mount.game.slug}"></script><link rel="stylesheet" href="/hub/css/game-theme.css?v=${VERSION}"><link rel="stylesheet" href="/hub/css/gamebar.css?v=${VERSION}">${mount.skin}<script defer src="/hub/js/inject.js?v=${VERSION}" data-game="${mount.game.slug}"></script></head>`);
   }
   const buffer=Buffer.from(text,'utf8');
   out['content-length']=String(buffer.length);
@@ -378,7 +378,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   try{relative=decodeURIComponent(rest);}catch{return notFound(ctx);}
   if(relative.endsWith('/'))relative+='index.html';
   const file=custom.sitePath(id,relative);
-  const inject=html=>html.replace(/<\/head>/i,`<script defer src="/hub/js/inject.js?v=${VERSION}" data-game="custom:${id}"></script></head>`);
+  const inject=html=>html.replace(/<\/head>/i,`<link rel="stylesheet" href="/hub/css/gamebar.css?v=${VERSION}"><script defer src="/hub/js/inject.js?v=${VERSION}" data-game="custom:${id}"></script></head>`);
   return serveFile(ctx,file,{csp:PLAY_CSP,cache:'public, max-age=3600',transform:relative.endsWith('index.html')?inject:null});
  }
 

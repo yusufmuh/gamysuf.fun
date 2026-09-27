@@ -521,7 +521,8 @@
  (async()=>{
   try{
    await refresh({initial:true});
-   if(!store.me.nickname&&!storage.get('gamysuf-onboarded')){avatarPicker('onboardAvatars','wave');openModal('onboardModal');}
+   if(new URLSearchParams(location.search).get('profile')==='1')openProfile();
+   else if(!store.me.nickname&&!storage.get('gamysuf-onboarded')){avatarPicker('onboardAvatars','wave');openModal('onboardModal');}
   }catch(error){
    connectionError(error.message);
   }finally{

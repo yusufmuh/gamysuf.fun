@@ -5,6 +5,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const crypto=require('node:crypto');
 const {execFileSync}=require('node:child_process');
+const {rewriteOutgoing}=require('../hub/rewrite.cjs');
 const root=path.join(__dirname,'..');
 const pkg=require('../package.json');
 const base=process.argv[2]||'https://gamysuf.fun';
@@ -30,7 +31,7 @@ async function main(){
   const html=(await read(route)).toString();
   if(!html.includes('Content-Security-Policy'))throw new Error(`${route}: CSP meta not present.`);
  }
- const assets=['css/responsive.css','css/avatars.css','css/theme.css','css/album-slider.css','js/hub.js','js/inject.js','js/theme.js','js/album-slider.js','assets/brand/gamysuf-arcade-logo-v2.svg',...['wave','stand','explorer','star','collector','champion'].map(name=>`assets/avatars/character-${name}.png`),'assets/covers/spin.jpg','assets/covers/nyapit.jpg','assets/covers/drop.jpg'];
+ const assets=['css/responsive.css','css/avatars.css','css/theme.css','css/album-slider.css','css/game-theme.css','css/gamebar.css','js/hub.js','js/inject.js','js/theme.js','js/album-slider.js','vendor/html2canvas-1.4.1.min.js',...['gamysuf-3d-dark','gamysuf-3d-light','bpedia-pink','bpedia-white'].map(name=>`assets/brand/${name}.png`),...['wave','stand','explorer','star','collector','champion'].map(name=>`assets/avatars/character-${name}.png`),'assets/covers/spin.jpg','assets/covers/nyapit.jpg','assets/covers/drop.jpg'];
  for(const file of assets){
   // Compare the committed bytes that Linux deploys, regardless of Windows checkout line endings.
   const expected=execFileSync('git',['show',`HEAD:hub/public/${file}`],{cwd:root,maxBuffer:10*1024*1024});
@@ -45,10 +46,21 @@ async function main(){
    // CDN image optimization requires separate decoded-image evidence bound to both hashes.
    const evidence=imageEvidence?.images?.find(item=>new URL(item.url).pathname===`/hub/${file}`);
    const similarity=evidence?.decoded_similarity;
-   check.ok=Boolean(evidence&&evidence.local.sha256===localHash&&evidence.live.sha256===liveHash&&evidence.same_dimensions&&similarity?.ssim_0_1>=0.98&&similarity.dhash_hamming_bits_64===0);
-   if(check.ok){check.verification='decoded image evidence for CDN image';check.ssim=similarity.ssim_0_1;check.evidence=path.relative(root,imageEvidencePath).replaceAll('\\','/');}
+   const resized=evidence?.normalized_comparison;
+   const proportionalDownscale=Boolean(resized?.reason==='hcdn proportional downscale'&&evidence.headers?.server==='hcdn'&&evidence.live.dimensions[0]===1600&&evidence.local.dimensions[0]>1600&&Math.abs(evidence.local.dimensions[0]/evidence.local.dimensions[1]-evidence.live.dimensions[0]/evidence.live.dimensions[1])<0.003&&JSON.stringify(resized.dimensions)===JSON.stringify(evidence.live.dimensions));
+   check.ok=Boolean(evidence&&evidence.local.sha256===localHash&&evidence.live.sha256===liveHash&&(evidence.same_dimensions||proportionalDownscale)&&similarity?.ssim_0_1>=0.98&&similarity.dhash_hamming_bits_64<=(proportionalDownscale?1:0));
+   if(check.ok){check.verification=proportionalDownscale?'decoded image evidence after CDN proportional downscale':'decoded image evidence for CDN image';check.ssim=similarity.ssim_0_1;check.evidence=path.relative(root,imageEvidencePath).replaceAll('\\','/');}
   }
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
+ }
+ for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css']})){
+  for(const file of files){
+   const committed=execFileSync('git',['show',`HEAD:games/${slug}/${file}`],{cwd:root,maxBuffer:10*1024*1024});
+   const expected=Buffer.from(rewriteOutgoing(committed.toString(),`/g/${slug}`));
+   const actual=await read(`/g/${slug}/${file}?v=${pkg.version}`);
+   const check=checks[checks.length-1];check.localSha256=hash(expected);check.liveSha256=hash(actual);check.ok=check.localSha256===check.liveSha256;check.verification='committed bytes after gateway URL rewrite';
+   if(!check.ok)throw new Error(`${slug}/${file}: live game code mismatch.`);
+  }
  }
  const report={verifiedAt:new Date().toISOString(),base,version:catalog.version,checks};
  const out=path.join(root,'artifacts',`deployment-${pkg.version}.json`);

@@ -12,7 +12,7 @@ Satu dashboard interaktif untuk tiga game booth Bpedia, berjalan di cloud (Hosti
 Fitur pemain: profil & avatar Bipy, XP & level dengan gelar (Pendatang Baru → Legenda Bpedia), streak harian, 3 misi harian, 11 lencana dengan progres "target berikutnya", album 57 kartu, papan peringkat mingguan (hitung mundur musim) & sepanjang masa, saran game dari Bipy, pita aktivitas LIVE, bagikan progres, kode pemulihan profil, panduan & FAQ.
 Studio pemilik (`/studio`): statistik, tautan dashboard tiap game, pengumuman, game unggulan, sembunyikan game, kelola game tambahan (maks. 6).
 
-Semua perangkat: dashboard dan ketiga game diuji di HP tegak/mendatar, HP lipat (tertutup/terbuka), tablet tegak/mendatar, laptop, Mac, dan desktop tanpa geser ke samping. Penyesuaian versi online ada di `hub/public/skins/<game>.css|js` (orbit & teks HP Spin, urutan mesin Nyapit, getar & kemiringan kartu Beauty Drop di HP; tata letak utama ada di game) sehingga versi booth tidak berubah. Aset berat disajikan ringan: WAV → MP3 dan PNG/JPG → WebP (±85 MB → ±10 MB) lewat `npm run media:lite`.
+Semua perangkat: dashboard dan ketiga game diuji di HP tegak/mendatar, HP lipat (tertutup/terbuka), tablet tegak/mendatar, laptop, Mac, dan desktop tanpa geser ke samping. Penyesuaian versi online ada di `hub/public/skins/<game>.css|js` (orbit & teks HP Spin, urutan & mahkota mesin Nyapit, getar & kemiringan kartu Beauty Drop di HP; tata letak utama ada di game) sehingga versi booth tidak berubah. Aset berat disajikan ringan: WAV → MP3 dan PNG/JPG → WebP (±97 MB → ±12 MB) lewat `npm run media:lite`.
 
 ## Menjalankan
 

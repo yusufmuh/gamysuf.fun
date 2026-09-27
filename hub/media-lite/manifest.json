@@ -1152,6 +1152,48 @@
   "sourceBytes": 71691,
   "bytes": 19372
  },
+ "hub/assets/avatars/character-champion.png": {
+  "sha1": "cba593ddd1f5d110428ff0fe82a5cee9ffd656f9",
+  "file": "hub/assets/avatars/character-champion.webp",
+  "type": "image/webp",
+  "sourceBytes": 1591295,
+  "bytes": 117310
+ },
+ "hub/assets/avatars/character-collector.png": {
+  "sha1": "03a0253dc27928ed576e9f2ad0c1a28bf8db7f2f",
+  "file": "hub/assets/avatars/character-collector.webp",
+  "type": "image/webp",
+  "sourceBytes": 812047,
+  "bytes": 105982
+ },
+ "hub/assets/avatars/character-explorer.png": {
+  "sha1": "2e1d70968df32c1980dbb5c94f06b1ac4ea5751e",
+  "file": "hub/assets/avatars/character-explorer.webp",
+  "type": "image/webp",
+  "sourceBytes": 896261,
+  "bytes": 113698
+ },
+ "hub/assets/avatars/character-stand.png": {
+  "sha1": "9798854c2cafb40ee0b2774bd9c8a7606925bbaf",
+  "file": "hub/assets/avatars/character-stand.webp",
+  "type": "image/webp",
+  "sourceBytes": 1177550,
+  "bytes": 143682
+ },
+ "hub/assets/avatars/character-star.png": {
+  "sha1": "60ba5d163d924211b939df0edf59e5a584170ff2",
+  "file": "hub/assets/avatars/character-star.webp",
+  "type": "image/webp",
+  "sourceBytes": 1147829,
+  "bytes": 124662
+ },
+ "hub/assets/avatars/character-wave.png": {
+  "sha1": "60dacbcfbefa4885e3f45da275fbffc58c62e415",
+  "file": "hub/assets/avatars/character-wave.webp",
+  "type": "image/webp",
+  "sourceBytes": 1159835,
+  "bytes": 134120
+ },
  "hub/assets/avatars/peek.png": {
   "sha1": "c5a651a6d2b0fefad42991d681c198f11a4e7ab1",
   "file": "hub/assets/avatars/peek.webp",
@@ -1208,6 +1250,13 @@
   "sourceBytes": 77358,
   "bytes": 28534
  },
+ "hub/assets/brand/gamysuf-arcade-logo-v2.png": {
+  "sha1": "57161f3d845decffb931292c1424dca00f4b4e72",
+  "file": "hub/assets/brand/gamysuf-arcade-logo-v2.webp",
+  "type": "image/webp",
+  "sourceBytes": 472151,
+  "bytes": 126398
+ },
  "hub/assets/brand/icon-512.png": {
   "sha1": "e973207fd59f2bd34a857307ffa14c8fa9732bb4",
   "file": "hub/assets/brand/icon-512.webp",
@@ -1236,53 +1285,46 @@
   "sourceBytes": 103241,
   "bytes": 56468
  },
- "hub/assets/avatars/character-champion.png": {
-  "sha1": "cba593ddd1f5d110428ff0fe82a5cee9ffd656f9",
-  "file": "hub/assets/avatars/character-champion.webp",
-  "type": "image/webp",
-  "sourceBytes": 1591295,
-  "bytes": 117310
- },
- "hub/assets/avatars/character-collector.png": {
-  "sha1": "03a0253dc27928ed576e9f2ad0c1a28bf8db7f2f",
-  "file": "hub/assets/avatars/character-collector.webp",
-  "type": "image/webp",
-  "sourceBytes": 812047,
-  "bytes": 105982
- },
- "hub/assets/avatars/character-explorer.png": {
-  "sha1": "2e1d70968df32c1980dbb5c94f06b1ac4ea5751e",
-  "file": "hub/assets/avatars/character-explorer.webp",
-  "type": "image/webp",
-  "sourceBytes": 896261,
-  "bytes": 113698
- },
- "hub/assets/avatars/character-stand.png": {
+ "spin/assets/images/bipy-full-berdiri.png": {
   "sha1": "9798854c2cafb40ee0b2774bd9c8a7606925bbaf",
-  "file": "hub/assets/avatars/character-stand.webp",
+  "file": "spin/assets/images/bipy-full-berdiri.webp",
   "type": "image/webp",
   "sourceBytes": 1177550,
   "bytes": 143682
  },
- "hub/assets/avatars/character-star.png": {
-  "sha1": "60ba5d163d924211b939df0edf59e5a584170ff2",
-  "file": "hub/assets/avatars/character-star.webp",
-  "type": "image/webp",
-  "sourceBytes": 1147829,
-  "bytes": 124662
- },
- "hub/assets/avatars/character-wave.png": {
+ "spin/assets/images/bipy-full-menyapa.png": {
   "sha1": "60dacbcfbefa4885e3f45da275fbffc58c62e415",
-  "file": "hub/assets/avatars/character-wave.webp",
+  "file": "spin/assets/images/bipy-full-menyapa.webp",
   "type": "image/webp",
   "sourceBytes": 1159835,
   "bytes": 134120
  },
- "hub/assets/brand/gamysuf-arcade-logo-v2.png": {
-  "sha1": "57161f3d845decffb931292c1424dca00f4b4e72",
-  "file": "hub/assets/brand/gamysuf-arcade-logo-v2.webp",
+ "hub/assets/brand/bpedia-pink.png": {
+  "sha1": "29bc928e25a28750961abc34307ad8d6aaca2749",
+  "file": "hub/assets/brand/bpedia-pink.webp",
   "type": "image/webp",
-  "sourceBytes": 472151,
-  "bytes": 126398
+  "sourceBytes": 778038,
+  "bytes": 198128
+ },
+ "hub/assets/brand/bpedia-white.png": {
+  "sha1": "bafb54ff311d75bbdd97cc2c1bd02b6bcf7b57dd",
+  "file": "hub/assets/brand/bpedia-white.webp",
+  "type": "image/webp",
+  "sourceBytes": 280075,
+  "bytes": 118936
+ },
+ "hub/assets/brand/gamysuf-3d-dark.png": {
+  "sha1": "8b69b23cb6add56b7a49ae7fe6799f8c5d9f20b6",
+  "file": "hub/assets/brand/gamysuf-3d-dark.webp",
+  "type": "image/webp",
+  "sourceBytes": 924679,
+  "bytes": 189504
+ },
+ "hub/assets/brand/gamysuf-3d-light.png": {
+  "sha1": "a677d0336dffc0ecd895a3d7f846fbdf5bf01a96",
+  "file": "hub/assets/brand/gamysuf-3d-light.webp",
+  "type": "image/webp",
+  "sourceBytes": 941492,
+  "bytes": 159932
  }
 }
