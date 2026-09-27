@@ -4,7 +4,15 @@
  const $=id=>document.getElementById(id);
  const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
  const AVATARS=['wave','peek','wink','bag','stand','heart'];
- const avatarSrc=name=>`/hub/assets/avatars/${AVATARS.includes(name)?name:'wave'}.png`;
+ const AVATAR_STYLE={
+  wave:{file:'wave',name:'Bipy Original',tag:'Si paling ramah',detail:'Satu sapaan kecil untuk memulai petualangan besar.'},
+  peek:{file:'explorer',name:'Bipy Explorer',tag:'Selalu penasaran',detail:'Peta siap, tas terisi. Arena baru menunggu untuk dijelajahi.'},
+  wink:{file:'star',name:'Bipy Star',tag:'Bersinar di arena',detail:'Jubah kecil, bintang besar. Bawa ceriamu ke setiap permainan.'},
+  bag:{file:'collector',name:'Bipy Collector',tag:'Pemburu koleksi',detail:'Selalu ada tempat untuk satu kartu baru di dalam koleksi.'},
+  stand:{file:'stand',name:'Bipy Classic',tag:'Santai dan percaya diri',detail:'Gaya khas Bipy. Siap menemanimu, dari putaran pertama.'},
+  heart:{file:'champion',name:'Bipy Champion',tag:'Semangat pemain',detail:'Kontroler di tangan, senyum di wajah. Waktunya masuk arena.'}
+ };
+ const avatarSrc=name=>`/hub/assets/avatars/character-${(AVATAR_STYLE[name]||AVATAR_STYLE.wave).file}.png?v=1.2.0`;
  const RARITY={legendary:'Legendaris',epic:'Epik',rare:'Langka',common:'Umum'};
  const number=value=>Number(value||0).toLocaleString('id-ID');
  const storage={
@@ -164,11 +172,7 @@
   $('albumOwned').textContent=album.owned;
   $('albumTotal').textContent=album.total;
   $('albumBar').style.width=`${album.total?Math.round(album.owned/album.total*100):0}%`;
-  $('albumRows').innerHTML=album.games.map(game=>{
-   const owned=game.cards.filter(card=>card.owned).length;
-   const sorted=[...game.cards].sort((a,b)=>Number(b.owned)-Number(a.owned));
-   return `<div class="album-row"><h3><span>${esc(game.title)}</span><b>${owned}/${game.cards.length}</b></h3><div class="card-strip">${sorted.map(miniCard).join('')}</div></div>`;
-  }).join('');
+  window.GamysufAlbumSlider.render(album);
   $('albumTabs').innerHTML=[`<button class="tab active" type="button" role="tab" aria-selected="true" data-album="all">Semua</button>`,...album.games.map(game=>`<button class="tab" type="button" role="tab" aria-selected="false" data-album="${esc(game.slug)}">${esc(game.title)}</button>`)].join('');
   renderAlbumGrid('all');
  }
@@ -220,7 +224,25 @@
  }
 
  function avatarPicker(container,selected){
-  $(container).innerHTML=AVATARS.map(name=>`<button type="button" role="radio" aria-checked="${name===selected}" data-avatar="${name}" aria-label="Avatar ${name}"><img src="${avatarSrc(name)}" alt=""></button>`).join('');
+  const active=AVATARS.includes(selected)?selected:'wave';
+  $(container).innerHTML=`<section class="avatar-stage" aria-label="Pratinjau karakter">
+   <span class="avatar-edition">BPEDIA ORIGINALS</span><div class="avatar-display"><div class="avatar-halo" aria-hidden="true"></div><img class="avatar-fullbody onboard-bipy" src="${avatarSrc(active)}" alt="${AVATAR_STYLE[active].name}, tampak seluruh tubuh" width="320" height="480"><div class="avatar-plinth" aria-hidden="true"></div></div>
+   <div class="avatar-caption" aria-live="polite"><span class="avatar-tag"></span><h3 class="avatar-name"></h3><p class="avatar-description"></p></div>
+  </section><section class="avatar-selection"><div class="avatar-selection-heading"><span>PILIH KARAKTER</span><span>06 VARIAN</span></div><div class="avatar-roster" role="radiogroup" aria-label="Pilih avatar">
+   ${AVATARS.map((name,index)=>`<button type="button" role="radio" tabindex="${name===active?0:-1}" aria-checked="${name===active}" data-avatar="${name}" aria-label="${AVATAR_STYLE[name].name}, ${AVATAR_STYLE[name].tag}"><span class="avatar-number">0${index+1}</span><span class="avatar-selected" aria-hidden="true">✓</span><img src="${avatarSrc(name)}" alt="" width="110" height="144"><span class="avatar-card-name">${AVATAR_STYLE[name].name.replace('Bipy ','')}</span></button>`).join('')}
+  </div><p class="avatar-help">Pilih gayamu. Avatar bisa diganti kapan saja lewat profil.</p></section>`;
+  selectAvatar($(container),active,false);
+ }
+ function selectAvatar(container,name,animate=true){
+  const style=AVATAR_STYLE[name];
+  if(!style)return;
+  container.querySelectorAll('[data-avatar]').forEach(button=>{const selected=button.dataset.avatar===name;button.setAttribute('aria-checked',String(selected));button.tabIndex=selected?0:-1;});
+  const preview=container.querySelector('.avatar-fullbody');
+  preview.src=avatarSrc(name);preview.alt=`${style.name}, tampak seluruh tubuh`;
+  container.querySelector('.avatar-tag').textContent=style.tag;
+  container.querySelector('.avatar-name').textContent=style.name;
+  container.querySelector('.avatar-description').textContent=style.detail;
+  if(animate&&!reducedMotion.matches&&document.documentElement.dataset.motion!=='reduce')preview.animate([{opacity:.4,transform:'translateY(8px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:260,easing:'ease-out'});
  }
  const pickedAvatar=container=>$(container).querySelector('[aria-checked="true"]')?.dataset.avatar||'wave';
 
@@ -301,7 +323,7 @@
   if(target.dataset.feature){feature(Number(target.dataset.feature));clearInterval(store.cycle);return;}
   if(target.dataset.range){loadBoard(target.dataset.range).catch(()=>{});return;}
   if(target.dataset.album){renderAlbumGrid(target.dataset.album);return;}
-  if(target.dataset.avatar){target.parentElement.querySelectorAll('[data-avatar]').forEach(button=>button.setAttribute('aria-checked',String(button===target)));return;}
+  if(target.dataset.avatar){selectAvatar(target.closest('.avatar-picker'),target.dataset.avatar);return;}
   if(target.hasAttribute('data-close')){closeModal(target.closest('.modal'));return;}
  });
  document.querySelectorAll('.modal').forEach(modal=>modal.addEventListener('click',event=>{if(event.target===modal&&modal.id!=='onboardModal')closeModal(modal);}));
@@ -309,16 +331,17 @@
   const open=document.querySelector('.modal.open');
   if(event.key==='Escape'&&open){closeModal(open);return;}
   if(event.key==='Tab'&&open){
-   const nodes=[...open.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex="0"]')].filter(node=>node.getClientRects().length);
+   const nodes=[...open.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex="0"]')].filter(node=>node.getClientRects().length&&node.tabIndex>=0);
    const first=nodes[0],last=nodes.at(-1);
    if(!first){event.preventDefault();open.focus();}
    else if(event.shiftKey&&(document.activeElement===first||document.activeElement===open)){event.preventDefault();last.focus();}
    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
   }
-  if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)&&event.target.matches('[role="tab"],[data-feature],[data-avatar]')){
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key)&&event.target.matches('[role="tab"],[data-feature],[data-avatar]')){
    const targets=[...event.target.parentElement.querySelectorAll('button')];
    const current=targets.indexOf(event.target);
-   const index=event.key==='Home'?0:event.key==='End'?targets.length-1:(current+(event.key==='ArrowRight'?1:-1)+targets.length)%targets.length;
+   const step=event.target.dataset.avatar&&['ArrowUp','ArrowDown'].includes(event.key)?3:1;
+   const index=event.key==='Home'?0:event.key==='End'?targets.length-1:(current+(['ArrowRight','ArrowDown'].includes(event.key)?step:-step)+targets.length)%targets.length;
    event.preventDefault();targets[index].focus();targets[index].click();
   }
  });
@@ -390,7 +413,7 @@
  (async()=>{
   try{
    await refresh({initial:true});
-   if(!store.me.nickname&&!storage.get('gamysuf-onboarded')){avatarPicker('onboardAvatars','wink');openModal('onboardModal');}
+   if(!store.me.nickname&&!storage.get('gamysuf-onboarded')){avatarPicker('onboardAvatars','wave');openModal('onboardModal');}
   }catch(error){
    connectionError(error.message);
   }finally{
