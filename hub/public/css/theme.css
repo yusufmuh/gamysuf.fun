@@ -18,7 +18,7 @@ html[data-theme="light"] .glow-c{background:#ffe7ad;opacity:.32}
 html[data-theme="light"] .grid-floor{background-image:linear-gradient(rgba(124,55,78,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(124,55,78,.07) 1px,transparent 1px)}
 html[data-theme="light"] .grain{opacity:.025}
 html[data-theme="light"] .topnav{background:rgba(255,250,248,.94);box-shadow:0 8px 28px rgba(89,33,54,.06)}
-html[data-theme="light"] .topnav .brand{padding-inline:8px;border-radius:12px;background:#4c1029;box-shadow:inset 0 0 0 1px #7a294a,0 5px 14px rgba(76,16,41,.13)}
+html[data-theme="light"] .topnav .brand{background:transparent;box-shadow:none}
 html[data-theme="light"] .brand-text small{color:#9b5b06}
 html[data-theme="light"] .player-chip{background:#fff;border-color:#e9cad4}
 html[data-theme="light"] .chip-xp{background:#edd6df}
@@ -85,6 +85,11 @@ html[data-theme="light"] .toast{background:linear-gradient(135deg,#fff,#fff1f4);
 html[data-theme="light"] .mobile-nav{background:rgba(255,250,248,.98);box-shadow:0 -8px 28px rgba(89,33,54,.07)}
 html[data-theme="light"] .mobile-nav a[aria-current="location"]{background:#f9e3e9;color:#941139}
 html[data-theme="light"] .footer-bpedia{opacity:1}
+.gmy-brand-image{object-fit:contain;mix-blend-mode:normal!important}
+.footer-brand{flex-direction:column;align-items:flex-start;gap:12px}
+.footer-brand .footer-gamysuf{width:190px;height:64px;object-fit:contain}
+.footer-brand p{margin:0;font-size:.8rem;line-height:1.7;color:var(--muted)}
+.footer-bpedia{height:52px;object-fit:contain;opacity:1}
 
 /* Header toggle: the SVG is supplied by theme.js and remains a 44 px target. */
 #themeToggle{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:44px;height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel-2);color:var(--text);font-size:.74rem;font-weight:700}

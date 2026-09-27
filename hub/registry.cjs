@@ -78,15 +78,15 @@ const GAMES=[
   accent:'#F5B83D',
   cover:'/hub/assets/covers/drop.jpg?v=1.1.0',
   tagline:'Bipy menjatuhkan kapsul kelopak; tunggu ia mekar jadi kartu hadiah.',
-  description:'Kapsul memantul di papan pin bergaya The Vault of Time, mendarat di pintu misteri, lalu mekar menjadi kartu koleksi berkilau. Ada juga Gacha Fanservice bersama host Zoro & Sanji.',
+  description:'Kapsul memantul di papan pin bergaya The Vault of Time, mendarat di pintu misteri, lalu mekar menjadi kartu koleksi berkilau. Ada juga Gacha Fanservice bersama cosplayer Zoro & Sanji.',
   howTo:[
    'Pilih Beauty Drop, isi nama (opsional), lalu tekan DROP! atau Spasi.',
    'Kapsul memantul di 10 baris pin dan mendarat di salah satu pintu vault.',
    'Kapsul bergetar lalu mekar menjadi kartu hadiah; kuncup berarti belum mekar.',
-   'Coba juga Gacha Fanservice: pilih host, lalu kapsul memilih fanservice-mu.'
+   'Coba juga Gacha Fanservice: pilih cosplayer, lalu kapsul memilih fanservice-mu.'
   ],
   tips:['Semua kapsul berpeluang sama: murni hoki, tanpa persentase.','Kartu fanservice terhitung kartu epik di album.'],
-  controls:[['Sentuh / klik','DROP! atau pilih host'],['Spasi / Enter','Aktifkan tombol yang dipilih'],['1 / 2','Pilih game di beranda'],['Esc','Kembali']],
+  controls:[['Sentuh / klik','DROP! atau pilih cosplayer'],['Spasi / Enter','Aktifkan tombol yang dipilih'],['1 / 2','Pilih game di beranda'],['Esc','Kembali']],
   admin:{path:'admin.html',login:'PIN = ADMIN_PIN'},
   loginRoutes:['/api/login'],
   resultRoutes:['/api/play'],

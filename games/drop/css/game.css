@@ -70,6 +70,9 @@ button:disabled{cursor:not-allowed}
 .mode-pill{padding:0 calc(var(--u)*1.2);font-weight:800;font-size:calc(var(--u)*.85);letter-spacing:.12em;border-color:rgba(245,184,61,.6);color:var(--honey-soft)}
 .mode-pill.live{border-color:rgba(76,201,154,.7);color:#7FE0B5;background:rgba(15,59,42,.6)}
 .icon-button:hover,.ghost-button:hover,.mode-pill:hover{transform:translateY(-1px);background:rgba(107,20,57,.7)}
+.admin-entry{min-height:calc(var(--u)*3.1);display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 calc(var(--u)*1.15);border:1px solid rgba(249,162,193,.45);border-radius:999px;background:rgba(42,10,24,.65);color:var(--pearl);text-decoration:none;font-size:calc(var(--u)*.82);font-weight:800;white-space:nowrap}
+.admin-entry svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.admin-entry:hover{background:rgba(107,20,57,.7)}
 
 .stage{position:relative;z-index:3;height:calc(100vh - var(--u)*6.6)}
 .view{position:absolute;inset:0;animation:viewIn .5s var(--ease-out) both}
@@ -436,4 +439,55 @@ body[data-host="sanji"] .machine-frame{background:linear-gradient(145deg,#FFF4DB
 }
 @media (prefers-reduced-motion:reduce){
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* Compact landing controls sit above the shared arcade gamebar. */
+@media (max-width:900px){
+ .topbar{grid-template-rows:auto auto;row-gap:5px}
+ .top-actions{grid-column:2;grid-row:1;flex-wrap:nowrap}
+ body:not([data-stage="home"]) .topbar{grid-template-columns:0 minmax(0,1fr)}
+ body:not([data-stage="home"]) .brand-logo{display:none}
+ .event-chip{grid-column:1/-1;grid-row:2;display:flex;justify-content:center;flex-wrap:wrap;gap:2px 7px;padding:5px 9px;border-radius:10px;font-size:9px;white-space:normal;text-align:center}
+ .event-chip b{font-size:10px}.event-chip em{font-size:11px}.event-chip span{font-size:9px}
+ .admin-entry{min-height:48px;padding:0 10px;font-size:10px}
+ .admin-entry svg{width:15px;height:15px}
+}
+@media (max-width:680px) and (orientation:portrait){
+ .home-view{padding-bottom:calc(var(--gmy-bar-space,76px) + 100px + env(safe-area-inset-bottom));}
+ .hero{min-height:calc(100dvh - 302px)}
+ .hosts-stage{left:0;right:0;width:100%;height:min(90%,calc((100vw - 32px)*.8978))}
+ .hosts-figure{left:0;right:auto}
+ .mission-board{justify-content:flex-start;padding-top:80px}
+ .mission-board .bipy-peek{top:100px;pointer-events:none}
+ .cta-stack{position:fixed;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:calc(var(--gmy-bar-space,76px) + env(safe-area-inset-bottom));z-index:12;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;border:1px solid rgba(249,162,193,.35);border-radius:18px;background:rgba(42,10,24,.94);box-shadow:0 12px 34px rgba(8,2,5,.48);backdrop-filter:blur(14px)}
+ .cta-stack .cta{min-height:60px;grid-template-columns:auto minmax(0,1fr);gap:8px;padding:8px;border-radius:12px}
+ .cta-stack .cta-capsule{width:24px;height:24px}
+ .cta-stack .cta-avatars img{width:23px;height:23px}
+ .cta-stack .cta-text{min-width:0}.cta-stack .cta-text b{font-size:clamp(11px,3.2vw,14px);line-height:1.16}
+ .cta-stack .cta-text small,.cta-stack .cta-arrow{display:none}
+ .cta-stack .cta:disabled{opacity:.55}
+}
+@media (max-width:380px) and (orientation:portrait){
+ .admin-entry{font-size:9px;padding:0 7px;min-height:44px}
+ .admin-entry svg{display:none}
+ .top-actions{gap:3px}
+ .top-actions .icon-button,.top-actions .mode-pill{min-height:44px;width:44px}
+}
+@media (max-height:500px) and (orientation:landscape){
+ .topbar{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-rows:auto;min-height:56px}
+ .event-chip{grid-column:2;grid-row:1;max-width:240px}
+ .top-actions{grid-column:3}
+ .admin-entry{min-height:44px}
+ .home-view{padding-bottom:76px}
+ .mission-board{justify-content:flex-start}
+ .cta-stack{order:-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .bipy-peek{top:46px;pointer-events:none}
+ .cta-stack .cta{min-height:50px;padding:5px 7px;gap:5px;grid-template-columns:auto minmax(0,1fr)}
+ .cta-stack .cta-text b{font-size:11px}.cta-stack .cta-text small,.cta-stack .cta-arrow{display:none}
+ .cta-stack .cta-capsule{width:22px;height:22px}.cta-stack .cta-avatars img{width:21px;height:21px}
+ .drop-panel .drop-lead{display:none}
+}
+@media (max-width:600px) and (orientation:portrait){
+ .machine-crown{height:32px}
+ .machine-frame{width:min(100%,500px,max(200px,calc((100svh - 440px)*.8)))}
 }

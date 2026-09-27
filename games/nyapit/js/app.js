@@ -383,6 +383,13 @@ function renderRanking() {
 function hash(text) { let val = 2166136261; for (const char of text) val = Math.imul(val ^ char.charCodeAt(0), 16777619); return val >>> 0; }
 
 let pitKey = '';
+const mobileArena = window.matchMedia('(max-width: 760px)');
+
+function capsuleLayout() {
+  if (window.innerWidth <= 420) return { rows: [4, 4, 4], gap: 27 };
+  if (mobileArena.matches) return { rows: [6, 6, 6], gap: 29 };
+  return { rows: [11, 10, 11, 10, 11], gap: 28 };
+}
 
 function renderBalls() {
   const prizes = state.prizes.filter(prize => prize.enabled && (prize.stock === null || prize.stock > 0));
@@ -398,15 +405,16 @@ function renderBalls() {
      harus menata diri dari awal — terlihat seperti tumpukan yang berkedut
      sendiri tiap belasan detik. Sekarang pit hanya dibangun ulang kalau daftar
      hadiahnya benar-benar berubah. */
-  const nextKey = JSON.stringify(prizes.map(prize => [prize.id, prize.image, prize.tier]));
+  const layout = capsuleLayout();
+  const nextKey = JSON.stringify([layout.rows, ...prizes.map(prize => [prize.id, prize.image, prize.tier])]);
   if (nextKey === pitKey && ballsDiv.querySelector('.prize-ball')) return;
   pitKey = nextKey;
   /* v1.3.1: lima baris, bukan enam. Kapsul tetap besar dan rapat sehingga
      tumpukan terlihat penuh, tetapi puncaknya turun dan papan neon
      "COZZONE UP 2026" di latar kabinet tidak lagi tertutup kapsul.
      (v1.2 mengisi 24% kabinet dengan 70 bola; v1.3 sempat 69 bola/6 baris.) */
-  const rowCounts = [11, 10, 11, 10, 11];
-  const ROW_GAP = 28;
+  const rowCounts = layout.rows;
+  const ROW_GAP = layout.gap;
   const ballsData = [];
   let prizeIndex = 0;
 
@@ -415,9 +423,11 @@ function renderBalls() {
       const prize = prizes[prizeIndex % prizes.length];
       prizeIndex++;
       const seed = hash(`${visualSeed}-${row}-${col}-${prize.id}`);
-      const colWidth = 88 / (count - 1);
+      const colWidth = (mobileArena.matches ? 82 : 88) / (count - 1);
       const stagger = (row % 2 === 1) ? (colWidth * 0.5) : 0;
-      const x = clamp(6 + col * colWidth + stagger + ((seed % 7) - 3) * 0.4, 4, 96);
+      const x = mobileArena.matches
+        ? clamp(8 + col * colWidth + stagger + ((seed % 7) - 3) * 0.4, 8, 90)
+        : clamp(6 + col * colWidth + stagger + ((seed % 7) - 3) * 0.4, 4, 96);
       /* y diukur dari dasar pit ke atas (lihat BallPhysicsEngine.init). */
       const y = 5 + row * ROW_GAP + ((seed >>> 4) % 4);
       const rotation = (seed % 31) - 15;
@@ -456,6 +466,14 @@ function renderBalls() {
   physicsEngine.init(ballsData);
 }
 
+let arenaResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(arenaResizeTimer);
+  arenaResizeTimer = setTimeout(() => {
+    if (state && !busy && festival.phase !== 'home') renderBalls();
+  }, 160);
+}, { passive: true });
+
 /* Jangkauan bidik dibaca dari DOM, bukan angka tetap. Sejak v1.3 kapsul hanya
    ada di kanan dinding keranjang hadiah, jadi batas lama 10–90% akan
    mengarahkan capit ke ruang kosong di atas keranjang. */
@@ -471,9 +489,43 @@ function aimBounds() {
 /* Titik jatuh hadiah: mulut keranjang, dalam persen lebar kabinet. */
 function chuteAimPercent() {
   const lane = cabinetLane();
+  if (mobileArena.matches) {
+    const external = document.querySelector('#mobilePrizeBay .chute')?.getBoundingClientRect();
+    if (!lane.width || !external?.width) return 76;
+    return clamp(((external.left + external.width / 2 - lane.left) / lane.width) * 100, 20, 78);
+  }
   const chute = document.querySelector('.chute')?.getBoundingClientRect();
   if (!lane.width || !chute?.width) return 9;
   return clamp(((chute.left + chute.width / 2 - lane.left) / lane.width) * 100, 3, 42);
+}
+
+function activeChute() {
+  return document.querySelector(mobileArena.matches ? '#mobilePrizeBay .chute' : '.chute-bay .chute');
+}
+
+async function animateMobilePrizeDrop(duration) {
+  const destination = activeChute()?.getBoundingClientRect();
+  const origin = caughtPod.getBoundingClientRect();
+  if (!destination?.width || !origin.width || reducedMotion.matches) return;
+  const size = Math.max(28, Math.min(42, origin.width));
+  const capsule = document.createElement('img');
+  capsule.src = caughtImg.src;
+  capsule.alt = '';
+  capsule.className = 'mobile-drop-pod';
+  capsule.style.width = `${size}px`;
+  capsule.style.height = `${size}px`;
+  capsule.style.left = `${origin.left + origin.width / 2 - size / 2}px`;
+  capsule.style.top = `${origin.top + origin.height / 2 - size / 2}px`;
+  document.body.append(capsule);
+  caughtPod.hidden = true;
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  const dx = destination.left + destination.width / 2 - (origin.left + origin.width / 2);
+  const dy = destination.top + destination.height * .42 - (origin.top + origin.height / 2);
+  capsule.style.transition = `transform ${duration}ms cubic-bezier(.36,.02,.7,1), opacity ${duration}ms ease-in`;
+  capsule.style.transform = `translate(${dx}px,${dy}px) scale(.65)`;
+  capsule.style.opacity = '.2';
+  await wait(duration + 40);
+  capsule.remove();
 }
 
 function setClawX(percent, duration = 120) {
@@ -728,6 +780,7 @@ function updateSoundButton() {
   soundBtn.setAttribute('aria-label', audio.enabled ? 'Matikan suara' : 'Nyalakan suara');
   soundBtn.querySelector('span').textContent = audio.enabled ? '♫' : '♪';
   soundBtn.querySelector('b').textContent = audio.enabled ? 'Suara nyala' : 'Suara mati';
+  window.dispatchEvent(new CustomEvent('gamysuf:audio-state', { detail: { muted: !audio.enabled } }));
 }
 
 soundBtn.addEventListener('click', async () => {
@@ -735,6 +788,30 @@ soundBtn.addEventListener('click', async () => {
   if (audio.enabled) { await audio.activate(); audio.startBgm(); if (festival.phase === 'grab') audio.startSuspense(); else say('slogan-app'); toast('Suara festival dinyalakan.'); }
   else { audio.stopBgm(); toast('Suara booth dimatikan.'); }
 });
+
+window.addEventListener('gamysuf:audio', async event => {
+  if (typeof event.detail?.muted !== 'boolean') return;
+  audio.enabled = !event.detail.muted;
+  soundOverride = audio.enabled;
+  audio.apply();
+  updateSoundButton();
+  if (audio.enabled) await audio.startBgm();
+  else audio.stopBgm();
+});
+window.addEventListener('gamysuf:audio-query', () => {
+  window.dispatchEvent(new CustomEvent('gamysuf:audio-state', { detail: { muted: !audio.enabled } }));
+});
+
+async function unlockBackgroundMusic() {
+  if (!audio.enabled) return;
+  await audio.startBgm();
+  if (audio.ctx?.state === 'running' && audio.bgm) {
+    window.removeEventListener('pointerdown', unlockBackgroundMusic);
+    window.removeEventListener('keydown', unlockBackgroundMusic);
+  }
+}
+window.addEventListener('pointerdown', unlockBackgroundMusic, { passive: true });
+window.addEventListener('keydown', unlockBackgroundMusic);
 
 reducedMotion.addEventListener('change', () => {
   if (reducedMotion.matches) $('confetti').innerHTML = '';
@@ -1003,11 +1080,13 @@ async function animateClaw(result, lockedAimX) {
     setMachineState('MENUJU DROP ZONE', true);
     await moveClaw({ top: Math.max(140, cRect.height - 210), duration: phase(.10) });
     claw.classList.remove('closed');
-    document.querySelector('.chute').classList.add('glow');
+    const chute = activeChute();
+    chute?.classList.add('glow');
     audio.release();
+    if (mobileArena.matches) await animateMobilePrizeDrop(phase(.10));
     caughtPod.hidden = true;
     await wait(phase(.06));
-    document.querySelector('.chute').classList.remove('glow');
+    chute?.classList.remove('glow');
   } else {
     claw.classList.remove('closed');
     await wait(phase(.08));
@@ -1213,8 +1292,9 @@ async function refreshState() {
 (async () => {
   try {
     state = await api('/api/state');
-    audio.configure(state.settings);
+    audio.configure({ ...state.settings, ...(soundOverride === null ? {} : { sound: soundOverride }) });
     renderState();
+    if (audio.enabled) audio.startBgm();
     initMascots();
     setHostPose(MASCOT_POSES[0], false);
     initCozzoneCrowd();

@@ -8,11 +8,11 @@
   <link rel="icon" href="/assets/icon.ico">
   <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/game.css?v=1.1.0">
-  <script defer src="/js/audio.js?v=1.1.0"></script>
+  <link rel="stylesheet" href="/css/game.css?v=1.3.0">
+  <script defer src="/js/audio.js?v=1.3.0"></script>
   <script defer src="/js/fx.js?v=1.1.0"></script>
   <script defer src="/js/board.js?v=1.1.0"></script>
-  <script defer src="/js/game.js?v=1.1.0"></script>
+  <script defer src="/js/game.js?v=1.3.0"></script>
 </head>
 <body data-stage="boot">
   <div class="scene" aria-hidden="true">
@@ -47,8 +47,9 @@
       <button id="soundButton" class="icon-button" type="button" aria-label="Matikan suara" aria-pressed="true">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="speaker" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
       </button>
-      <a class="icon-button" href="/admin.html" aria-label="Dashboard petugas">
+      <a class="admin-entry" href="/admin.html" aria-label="Masuk admin">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M21.2 12h-2.4M5.2 12H2.8M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7M18.5 18.5l-1.7-1.7M7.2 7.2L5.5 5.5"/></svg>
+        <span>Masuk admin</span>
       </a>
     </div>
   </header>
@@ -62,7 +63,7 @@
         <div class="hosts-stage">
           <div class="hosts-glow"></div>
           <div class="hosts-figure">
-            <img class="hosts-duo" src="/assets/images/hosts-duo.png" alt="Host cosplayer Zoro dan Sanji">
+            <img class="hosts-duo" src="/assets/images/hosts-duo.png" alt="Cosplayer Zoro dan Sanji">
             <p class="host-bubble bubble-zoro" id="bubbleZoro"><b>Zoro</b><span></span></p>
             <p class="host-bubble bubble-sanji" id="bubbleSanji"><b>Sanji</b><span></span></p>
           </div>
@@ -133,7 +134,7 @@
     <section id="fanView" class="view fan-view" aria-labelledby="fanTitle" hidden>
       <header class="fan-head">
         <p class="eyebrow">MISI 3 · CHECKOUT DI BOOTH BPEDIA</p>
-        <h2 id="fanTitle">Pilih host favoritmu</h2>
+        <h2 id="fanTitle">Pilih cosplayer favoritmu</h2>
         <p class="schedule-chip" id="hostSchedule"></p>
       </header>
       <div class="host-cards" id="hostCards"></div>
@@ -155,7 +156,7 @@
     <section id="pickView" class="view pick-view" aria-labelledby="pickTitle" hidden>
       <header class="fan-head">
         <p class="eyebrow">CHECKOUT RP150RB · PILIH SENDIRI</p>
-        <h2 id="pickTitle">Pilih fanservice bareng <span id="pickHostName">host</span></h2>
+        <h2 id="pickTitle">Pilih fanservice bareng <span id="pickHostName">cosplayer</span></h2>
       </header>
       <div class="pick-grid" id="pickGrid"></div>
     </section>

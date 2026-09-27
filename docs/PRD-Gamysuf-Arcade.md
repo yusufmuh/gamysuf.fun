@@ -41,7 +41,7 @@ tests/*.test.cjs      13 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keam
 
 ### Alur permintaan
 1. `/g/<slug>/*` → gateway memeriksa Origin (POST wajib same-origin), menulis ulang Host/Origin ke server internal game (127.0.0.1:port acak), menambah header `x-gamysuf-visitor`, lalu memproksi.
-2. Respons HTML/CSS/JS/JSON diberi awalan `/g/<slug>`; cookie sesi game dipindah ke `Path=/g/<slug>/api/` (+`Secure` di HTTPS); `inject.js` disisipkan ke halaman utama game (tombol GAMYSUF + notifikasi XP).
+2. Respons HTML/CSS/JS/JSON diberi awalan `/g/<slug>`; cookie sesi game dipindah ke `Path=/g/<slug>/api/` (+`Secure` di HTTPS); halaman utama menerima tema bersama dan `inject.js` (game bar, avatar/profil, screenshot lokal, navigasi, suara, layar penuh, panduan, notifikasi XP).
 3. Di dalam game (mode `cloud`): permintaan tanpa sesi admin → `cloud.engineFor()` = mesin demo milik pengunjung itu (stok asli aman, tidak ada tabrakan antar pengunjung). Perangkat yang login dashboard game → mesin asli (mode resmi booth).
 4. Respons hasil (`/api/play`, `/api/spin`, `/api/bonus`) dengan `demo:true` dicatat `players.record()` → XP/kartu/misi/lencana (anti-curang karena dibaca di server, idempoten per requestId).
 
@@ -54,7 +54,8 @@ tests/*.test.cjs      13 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keam
 
 ## 4. Fitur pemain (engagement sehat, tanpa pembelian)
 - Onboarding: nama panggung + 6 avatar Bipy full body, galeri dan pratinjau karakter yang sama pada profil. ID profil lama dipertahankan.
-- Tema terang/gelap tersimpan di perangkat; logo Gamysuf Arcade bertema tulip Bpedia; album beranda berupa slider ringkas dengan jeda, sentuh dan keyboard.
+- Tema terang/gelap tersimpan dan digunakan pada dashboard serta tiga game; logo Gamysuf 3D serta wordmark resmi Bpedia pink/putih mengikuti tema. Album beranda berupa slider ringkas dengan jeda, sentuh dan keyboard.
+- Semua game mencoba musik saat dibuka, memulihkan pada interaksi pertama bila autoplay dibatasi browser, dan menghormati pilihan bisu pemain.
 - XP: main +10, belum beruntung +5, kartu baru +25, legendaris pertama +50, bonus harian +20, misi +30/+40/+50, lencana +30. Batas 60 permainan ber-XP per hari.
 - Level: level n butuh 100 + 50(n−1) XP.
 - Streak harian (WIB), 3 misi harian (main 3×, 2 game berbeda, 1 kartu baru), 11 lencana.
@@ -97,6 +98,8 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
+**Rilis web 1.3.0 (Codex, 2026-09-27):** menindaklanjuti logo 3D dan identitas pink/putih, musik otomatis semua game, maskot resmi Spin, game bar dengan avatar/profil, dua tema lintas game, kapsul Nyapit mobile lebih sedikit dan chute eksternal, dock misi Drop, event mobile, Masuk admin, serta istilah cosplayer. Screenshot lokal memakai html2canvas yang dibundel; clone arena dan CSP Firefox ditangani tanpa mengubah kebijakan halaman asli. Detail uji dan batas browser pada `docs/RELEASE-1.3.0.md`; bukti publikasi versi/commit/aset di `artifacts/deployment-1.3.0.json`. Sumber game 01/02/03 diperbarui lalu disinkronkan ke `games/`.
+
 **Rilis web 1.2.0 (Codex, 2026-09-27):** menindaklanjuti komentar browser pemilik: maskot sambutan tidak lagi terpotong; galeri enam karakter full body dengan pratinjau dan pilihan tersimpan; logo tulip Gamysuf Arcade; tema terang/gelap; album bergerak yang menampilkan sedikit kartu pada HP. Validasi profil atomik diperbaiki. Avatar 332/332, tema 40/40, interaksi 24/24, tes hub 13/13; tur Electron 16 tangkapan tanpa error konsol. Catatan lengkap di `docs/RELEASE-1.2.0.md`; bukti publikasi akhir di `artifacts/deployment-1.2.0.json`. Sumber game 01/02/03 tidak berubah pada rilis ini.
 
 **Rilis web 1.1.0 (Codex, 2026-09-27):** dashboard memiliki navigasi sentuh, game sebelum misi, pilihan game unggulan yang stabil, pintasan game terakhir, pemulihan koneksi, fokus dialog, kontrol animasi, dan Studio responsif. Spin/Nyapit memperbaiki musik, arena, overflow, dan siklus audio. Drop menempatkan seluruh papan dan tombol dalam layar potret, menjaga animasi saat resize, membatasi loop cahaya, mengatur partikel berdasarkan waktu, memperbesar tombol, serta memperbaiki dialog dan pemulihan audio. Logo, maskot, hasil server, stok booth dan mode demo tetap memakai sumber asli.
@@ -105,13 +108,13 @@ Validasi rilis dan deployment dicatat di `docs/RELEASE-1.1.0.md`. Paket arsip: `
 
 Pembaruan 2026-09-27 (Codex): ketiga sampul hub di `hub/public/assets/covers/` diganti tangkapan gameplay asli berukuran 1200×675. Spin menampilkan arena roda lengkap, Nyapit menampilkan kabinet capit beserta bola, dan Drop menampilkan kapsul yang sedang memantul di papan pin bersama Bipy. Sumber tangkapan sementara dan `capture.json` ada di `artifacts/cover-candidates/`; skrip reproduksi ada di `scripts/capture-gameplay-covers*.cjs`.
 
-Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.2.0**, tujuan https://gamysuf.fun. Bukti publikasi akhir: `artifacts/deployment-1.2.0.json` (versi, status HTTP dan verifikasi aset live).
+Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.3.0**, tujuan https://gamysuf.fun. Bukti publikasi akhir: `artifacts/deployment-1.3.0.json` (versi, status HTTP dan verifikasi aset live).
 
 | Area | Status |
 |---|---|
 | Patch mode cloud di game 01/02/03 (+ fallback origin) | ✅ tes 83 / 54 / 29 lulus, sumber = salinan `games/` (sync tanpa diff) |
 | Hub: gateway (dispatch in-memory), visitors, players, custom games, Studio, API | ✅ tes hub 13/13 (termasuk simulasi loader Hostinger & meta CSP) |
-| Front-end arcade + Studio + inject | ✅ 616 pemeriksaan responsif + 24 interaksi, Chromium/Firefox/WebKit; QA Electron 16 tangkapan, 0 error konsol |
+| Front-end arcade + Studio + inject | ✅ rilis 1.3: 388 pemeriksaan responsif + 355 game bar, Chromium/Firefox/WebKit; QA Electron 16 tangkapan, 0 error konsol; bukti audio aktual Chromium |
 | GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat) |
 | Deploy Hostinger | Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan. Bukti per rilis: `artifacts/deployment-<versi>.json` |
 | Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
@@ -125,6 +128,7 @@ Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.2.0**, tujuan https://
 - Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
 
 ## 11. Log serah-terima
+- **2026-09-27 (Codex, web 1.3.0)**: menerapkan komentar browser lanjutan pada branding, suara, kontrol, profil, Spin/Nyapit/Drop. Wordmark master Bpedia disalin utuh; logo Gamysuf 3D memiliki dua varian. QA memakai profil dan stok lokal sementara; probe produksi hanya baca. Sumber game tetap berada di folder saudara. Deployment melalui main dan Hostinger seperti rilis sebelumnya; jangan menyatakan live sebelum memeriksa `artifacts/deployment-1.3.0.json` dan status build.
 - **2026-09-27 (Codex, web 1.2.0)**: perbaikan empat komentar UI pemilik (avatar full body, logo, tema, slider album). Asset master Bpedia tetap utuh; prompt/provenance varian baru tercatat. Cek galeri/avatar/tema memakai data lokal terisolasi; deployment tetap melalui main ke Hostinger.
 - **2026-09-27 (Codex, web 1.1.0)**: perbaikan dashboard dan tiga game lintas layar; QA browser dengan data sementara yang terpisah dari produksi; paket Hostinger dan skrip regresi responsif. Detail hasil akhir pada catatan rilis 1.1.0.
 - **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.

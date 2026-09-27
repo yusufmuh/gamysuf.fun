@@ -41,7 +41,7 @@
   win:[['sanji','Luar biasa! Hadiah ini memang ditakdirkan untukmu.'],['zoro','Hmph. Hoki yang tajam.'],['sanji','Bawa pulang dan tampil makin percaya diri!'],['zoro','Tebasan yang bersih. Selamat.']],
   grand:[['sanji','Hadiah utama! Hari ini kamu bintangnya!'],['zoro','…Tebasan sempurna. Aku akui.']],
   zonk:[['zoro','Tebasan berikutnya pasti kena.'],['sanji','Jangan sedih, misi booth masih menunggu!']],
-  fan:{zoro:['Siap. Tunjukkan tiketnya, aku tunggu.','Oke. Jangan kaget ya.','Aku di sini. Tidak akan tersesat kali ini.'],sanji:['Dengan senang hati, tamu spesial.','Suatu kehormatan melayanimu.','Tunggu aku di area host, ya.']}
+  fan:{zoro:['Siap. Tunjukkan tiketnya, aku tunggu.','Oke. Jangan kaget ya.','Aku di sini. Tidak akan tersesat kali ini.'],sanji:['Dengan senang hati, tamu spesial.','Suatu kehormatan melayanimu.','Tunggu aku di area cosplayer, ya.']}
  };
  const HOST_NAMES={zoro:'Zoro',sanji:'Sanji'};
 
@@ -97,10 +97,11 @@ function toast(message,type='normal'){
   audio.startBgm();
   if(first)audio.sonicLogo();
  }
- function syncSound(){
+function syncSound(){
   const on=!ui.muted&&Boolean(state?.settings.sound);
   $('soundButton').setAttribute('aria-pressed',String(on));
   $('soundButton').setAttribute('aria-label',on?'Matikan suara':'Nyalakan suara');
+  window.dispatchEvent(new CustomEvent('gamysuf:audio-state',{detail:{muted:!on}}));
   if(!audio)return;
   audio.configure(audioSettings());
   if(!on)audio.stopBgm();
@@ -134,7 +135,7 @@ function toast(message,type='normal'){
   $('pauseBanner').hidden=!state.settings.paused;
   const fanOpen=state.settings.fanserviceOpen&&state.hosts.some(host=>host.enabled);
   $('startFan').disabled=!fanOpen;
-  $('fanCtaNote').textContent=fanOpen?`Misi 3 · bareng ${state.hosts.filter(host=>host.enabled).map(host=>host.name).join(' & ')}`:'Host sedang istirahat · cek jadwal';
+  $('fanCtaNote').textContent=fanOpen?`Misi 3 · bareng ${state.hosts.filter(host=>host.enabled).map(host=>host.name).join(' & ')}`:'Cosplayer sedang istirahat · cek jadwal';
   renderMissions();
   renderTicker();
   renderMachine();
@@ -206,7 +207,7 @@ function toast(message,type='normal'){
   const name=fan?hostName(ui.host):'';
   $('dropEyebrow').textContent=fan?'MISI 3 · GACHA FANSERVICE':'MISI 1 · BEAUTY DROP';
   $('dropTitle').textContent=fan?`Gacha bareng ${name}`:'Lepas kapsulmu';
-  $('dropLead').textContent=fan?`Kapsul berwarna ${name} memilih satu fanservice. Setelah mekar, tunjukkan tiketmu ke petugas lalu antre ke area host.`:'Bipy menjatuhkan satu kapsul kelopak ke papan vault. Begitu mendarat, kapsul mekar dan hadiahmu terbuka.';
+  $('dropLead').textContent=fan?`Kapsul berwarna ${name} memilih satu fanservice. Setelah mekar, tunjukkan tiketmu ke petugas lalu antre ke area cosplayer.`:'Bipy menjatuhkan satu kapsul kelopak ke papan vault. Begitu mendarat, kapsul mekar dan hadiahmu terbuka.';
   $('fairNote').textContent=fan?'Semua fanservice aktif punya kesempatan yang sama. Murni hoki.':'Semua kapsul punya kesempatan yang sama. Tidak ada persentase, murni hoki.';
   $('contentsTitle').textContent=fan?'Isi kapsul fanservice':'Isi mesin kapsul';
   $('contentsNote').textContent=fan?'Kapsul memilih salah satu jenis di bawah ini.':'Hadiah yang sama dengan booth Bpedia sebelumnya.';
@@ -218,15 +219,15 @@ function toast(message,type='normal'){
   if(!hostById(ui.host)?.enabled)ui.host=enabled[0]?.id||null;
   $('hostCards').innerHTML=state.hosts.map(host=>{
    const selected=host.id===ui.host;
-   return `<button class="host-card ${selected?'selected':''}" type="button" data-host="${esc(host.id)}" aria-pressed="${selected}" ${host.enabled?'':'disabled'}><div class="host-card-inner"><img src="${esc(host.image)}" alt="${esc(host.name)}"><span class="host-card-badge">${host.enabled?(selected?'TERPILIH':'PILIH HOST'):'ISTIRAHAT'}</span><div class="host-card-info"><b>${esc(host.name)}</b><small>${esc(host.role)}</small></div></div></button>`;
+   return `<button class="host-card ${selected?'selected':''}" type="button" data-host="${esc(host.id)}" aria-pressed="${selected}" ${host.enabled?'':'disabled'}><div class="host-card-inner"><img src="${esc(host.image)}" alt="${esc(host.name)}"><span class="host-card-badge">${host.enabled?(selected?'TERPILIH':'PILIH COSPLAYER'):'ISTIRAHAT'}</span><div class="host-card-info"><b>${esc(host.name)}</b><small>${esc(host.role)}</small></div></div></button>`;
   }).join('');
   const open=state.settings.fanserviceOpen&&!state.settings.paused&&Boolean(ui.host);
   document.querySelectorAll('.method-card').forEach(button=>{button.disabled=!open;});
-  $('hostSchedule').textContent=state.settings.hostSchedule||'Jadwal host diumumkan petugas';
+  $('hostSchedule').textContent=state.settings.hostSchedule||'Jadwal cosplayer diumumkan petugas';
   $('hostSchedule').hidden=!state.settings.hostSchedule;
   const closed=!state.settings.fanserviceOpen;
   $('fanClosed').hidden=!closed;
-  $('fanClosed').textContent=closed?'Sesi fanservice sedang tutup. Host sedang istirahat — cek jadwal di atas atau tanya petugas.':'';
+  $('fanClosed').textContent=closed?'Sesi fanservice sedang tutup. Cosplayer sedang istirahat — cek jadwal di atas atau tanya petugas.':'';
  }
 
  function renderPick(){
@@ -356,9 +357,9 @@ function closeConfirm(answer){
    $('revealTitle').textContent=`${result.fanservice.name} bareng ${result.host.name}`;
    $('revealLead').textContent=result.fanservice.detail;
    $('voucherBox').hidden=true;
-   $('claimLabel').textContent='Tiket antre host';
+   $('claimLabel').textContent='Tiket antre cosplayer';
    $('claimCode').textContent=result.id;
-   $('claimPlayer').textContent=`${result.username} · tunjukkan tiket ini ke petugas, lalu antre ke area host`;
+   $('claimPlayer').textContent=`${result.username} · tunjukkan tiket ini ke petugas, lalu antre ke area cosplayer`;
    $('revealTerms').textContent=`Fanservice dilakukan sopan dan tetap on character. ${state.settings.hostSchedule||''}`.trim();
    $('claimCode').parentElement.hidden=false;
    return;
@@ -376,7 +377,7 @@ function closeConfirm(answer){
   if(zonk){
    $('revealEyebrow').textContent='KAPSUL BELUM MEKAR';
    $('revealTitle').textContent='Belum mekar kali ini';
-   $('revealLead').textContent='Terima kasih sudah main! Lanjutkan misi 2 untuk foto bareng host dan misi 3 untuk fanservice.';
+   $('revealLead').textContent='Terima kasih sudah main! Lanjutkan misi 2 untuk foto bareng cosplayer dan misi 3 untuk fanservice.';
    $('voucherBox').hidden=true;
    $('claimCode').textContent=result.id;
    $('claimCode').parentElement.hidden=true;
@@ -566,13 +567,23 @@ function startTilt(){
   const ok=await confirmDialog(live?'Kembali ke mode demo?':'Aktifkan mode resmi?',live?'Hasil berikutnya tidak mengurangi stok dan tidak tercatat di laporan.':'Setiap hasil akan mengurangi stok dan tercatat di laporan. Pastikan stok fisik dan foto hadiah sudah dicek petugas.',live?'Ganti ke demo':'Aktifkan resmi');
   if(!ok)return;
   try{state=await api('/api/mode',{mode:live?'demo':'live'});audio?.modeFlip(!live);renderAll();toast(live?'Mode demo aktif.':'Mode resmi aktif. Hasil tercatat.');}
-  catch(error){toast(error.status===401?'Di versi online, ganti mode lewat Dashboard petugas (ikon gerigi) setelah masuk dengan PIN.':error.message,'error');}
+  catch(error){toast(error.status===401?'Di versi online, ganti mode lewat Masuk admin setelah masuk dengan PIN.':error.message,'error');}
  });
  $('soundButton').addEventListener('click',()=>{
   ui.muted=!ui.muted;
   localStorage.setItem('bdrop-muted',ui.muted?'1':'0');
   syncSound();
   if(!ui.muted)unlockAudio();
+ });
+ window.addEventListener('gamysuf:audio',event=>{
+  if(typeof event.detail?.muted!=='boolean')return;
+  ui.muted=event.detail.muted;
+  localStorage.setItem('bdrop-muted',ui.muted?'1':'0');
+  syncSound();
+  if(!ui.muted)unlockAudio();
+ });
+ window.addEventListener('gamysuf:audio-query',()=>{
+  window.dispatchEvent(new CustomEvent('gamysuf:audio-state',{detail:{muted:ui.muted||!state?.settings.sound}}));
  });
  $('confirmOk').addEventListener('click',()=>closeConfirm(true));
  $('confirmCancel').addEventListener('click',()=>closeConfirm(false));
@@ -608,7 +619,7 @@ function startTilt(){
  document.addEventListener('visibilitychange',()=>{
   if(document.hidden){audio?.stopBgm();stopTilt();return;}
   refresh();
-  if(ui.audioUnlocked&&!ui.muted)audio?.startBgm();
+  if(ui.audioUnlocked&&!ui.muted&&state?.settings.sound)audio?.startBgm();
   if(ui.result)startTilt();
  });
 
@@ -622,8 +633,9 @@ function startTilt(){
   configureMachine();
   setStage('home');
   renderAll();
+  // Try immediately; browser autoplay policies defer playback until the first trusted input.
+  if(!ui.muted)void unlockAudio();
   if(state.pending)showResult(state.pending,{instant:true});
-  if(/Electron/.test(navigator.userAgent))unlockAudio();
   setTimeout(homeBubble,900);
   setInterval(homeBubble,5600);
   setInterval(()=>{if(!ui.busy&&!ui.result&&!document.hidden)refresh();},9000);

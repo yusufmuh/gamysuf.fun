@@ -117,6 +117,12 @@
 }
 .cabinet .chute.glow .chute-neon-glow{opacity:1;animation:bay-flash .6s ease-out}
 @keyframes bay-flash{from{transform:scale(.7);opacity:1}to{transform:scale(1.35);opacity:.35}}
+.mobile-prize-bay{display:none}
+.mobile-drop-pod{
+  position:fixed;z-index:1000;pointer-events:none;object-fit:contain;
+  border:3px solid #fff4cc;border-radius:50%;background:#f5adc7;
+  box-shadow:0 5px 18px rgba(35,4,50,.5),0 0 18px rgba(255,190,11,.65);
+}
 
 /* ---------- 3. Jalur lari maskot kecil ------------------------------------- */
 
@@ -865,8 +871,23 @@ body.kiosk:not([data-stage=home]) #kioskExit{display:flex}
   .frame-lights{display:none}
 }
 @media(max-width:760px){
-  .cabinet{height:clamp(360px,64vh,460px);--bay-width:22%;--lane-height:16%}
-  .cabinet .prize-ball{--size:clamp(34px,8.4vw,46px)}
+  .cabinet{height:clamp(360px,64vh,460px);--bay-width:0%;--lane-height:16%}
+  .cabinet .pit-zone{left:0}
+  .cabinet .chute-bay{display:none}
+  .cabinet .prize-ball{--size:clamp(32px,8vw,42px)}
+  .mobile-prize-bay{
+    display:flex;position:relative;align-items:center;justify-content:space-between;
+    min-height:78px;margin:14px 13px 6px;padding:8px 14px 8px 18px;
+    border:3px solid #f5a1bf;border-radius:18px;
+    background:linear-gradient(135deg,#451456,#7c245f 66%,#a33267);
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.26),0 7px 0 #8d2757,0 12px 20px rgba(44,4,50,.22);
+    color:#ffe8bc;
+  }
+  .mobile-prize-label{font-size:clamp(10px,2.8vw,13px);font-weight:900;letter-spacing:.12em;line-height:1.35}
+  .mobile-prize-bay .chute{position:relative;left:auto;bottom:auto;flex:none;width:76px;height:58px;animation:chute-pulse 3s ease-in-out infinite}
+  .mobile-prize-bay .chute-mouth{top:7px;width:50px;height:20px}
+  .mobile-prize-bay .chute>span{position:relative;z-index:2;font-size:6px}
+  .mobile-prize-bay .chute.glow .chute-neon-glow{opacity:1;animation:bay-flash .6s ease-out}
   .chute-bay .bay-label{font-size:6px}
   .runner{width:34px;height:42px}
   .runner-fig{width:30px;height:36px}

@@ -60,14 +60,14 @@ async function target(page, selector) {
 }
 async function pillClear(page,selector,label) {
   const overlap=await page.evaluate(selector=>{
-    const pill=document.querySelector('.gmy-pill');
+    const pill=document.querySelector('.gmy-gamebar');
     const control=document.querySelector(selector);
     if(!pill||!control||getComputedStyle(pill).visibility==='hidden')return false;
     const a=pill.getBoundingClientRect(),b=control.getBoundingClientRect();
     if(b.bottom<0||b.top>innerHeight)return false;
     return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
   },selector);
-  check(!overlap,`${label} arcade return pill clear of ${selector}`);
+  check(!overlap,`${label} game bar clear of ${selector}`);
 }
 async function visit(page, base, route, browserName, sizeId) {
   const errors=[];

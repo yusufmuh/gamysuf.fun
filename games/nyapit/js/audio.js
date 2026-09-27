@@ -182,7 +182,12 @@ class BoothAudio{
 
  async startBgm(){
   if(!this.enabled||this.bgm)return this.bgm;
-  if(this.bgmStarting)return this.bgmStarting;
+  // A boot-time autoplay attempt may be waiting on resume(). A later trusted
+  // gesture must invoke resume() again inside that gesture before awaiting it.
+  if(this.bgmStarting){
+   if(this.ctx?.state==='suspended')this.ctx.resume().catch(()=>{});
+   return this.bgmStarting;
+  }
   this.bgmStarting=(async()=>{
    if(!await this.activate()||!this.enabled)return null;
    try{
