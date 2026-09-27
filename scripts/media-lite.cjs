@@ -113,7 +113,8 @@ function sources(){
   const hash=sha1(bytes);
   const target=source.key.replace(/\.[a-z0-9]+$/i,source.kind==='audio'?'.mp3':'.webp');
   const old=previous[source.key];
-  if(old?.sha1===hash&&fs.existsSync(path.join(out,old.file))){manifest[source.key]=old;continue;}
+  /* file:null = versi ringan tidak cukup kecil; tetap dicatat agar tidak diulang. */
+  if(old?.sha1===hash&&(old.file===null||fs.existsSync(path.join(out,old.file)))){manifest[source.key]=old;continue;}
   if(source.kind==='image'){images.push({...source,bytes,hash,target});continue;}
   try{
    const mp3=encodeMp3(lamejs,readWav(bytes));

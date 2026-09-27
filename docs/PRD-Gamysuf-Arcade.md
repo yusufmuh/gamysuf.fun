@@ -11,7 +11,7 @@
 | Folder | `C:\Users\Yusuf\coding\00 game\00 gamysuf-arcade` |
 | Repo | GitHub `yusufmuh/gamysuf.fun` (branch `main`; kerja AI lewat branch `claude/*` + PR) |
 | Pemilik | Muhammad Yusuf |
-| Runtime | Node.js ≥20 (Hostinger: 22), satu proses, dependensi hanya `fflate` |
+| Runtime | Node.js ≥20 (Hostinger terverifikasi: 20), satu proses, dependensi produksi hanya `fflate` |
 
 Permintaan pengguna: "buat 3 game menjadi 1 dashboard interaktif yang bisa mengakses 3 game dan bisa menambahkan 1 project game lain; upload ke GitHub; domain gamysuf.fun di Hostinger; dashboard semenarik mungkin; seluruh game berjalan di cloud; buat petunjuk dll. yang profesional, menarik, dan membuat pemain ketagihan."
 
@@ -38,8 +38,8 @@ hub/players.cjs       profil, XP, level, streak, misi, lencana, album, peringkat
 hub/custom-games.cjs  slot game tambahan (ZIP HTML5 / tautan), sampul, pengaturan arcade
 hub/public/           index.html (arcade), studio.html, css/, js/hub.js, js/studio.js, js/inject.js, assets/
 games/{spin,nyapit,drop}/  salinan runtime game
-scripts/              sync-games.cjs, media-lite.cjs, capture.cjs (+ -electron / -playwright), package-hostinger.cjs
-tests/hub.test.cjs    12 tes (gateway, dispatch, aset biner, media ringan, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP)
+scripts/              sync-games.cjs, media-lite.cjs, capture.cjs (+ -electron / -playwright), responsive-qa.cjs, hub-interaction-qa.cjs, capture-gameplay-covers*.cjs, verify-deployment.cjs, package-hostinger.cjs
+tests/*.test.cjs      hub.test.cjs + hosting.test.cjs (gateway, dispatch, aset biner, media ringan, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP, loader Hostinger, meta CSP)
 .github/workflows/    ci.yml: npm test + paket Hostinger di setiap PR/push main
 ```
 
@@ -69,11 +69,11 @@ tests/hub.test.cjs    12 tes (gateway, dispatch, aset biner, media ringan, isola
 - v1.1 (engagement): gelar per level (Pendatang Baru Lv1, Pemburu Hoki Lv3, Kolektor Muda Lv5, Bintang Arcade Lv8, Master Kapsul Lv12, Legenda Bpedia Lv16); progres setiap lencana + kartu "Target berikutnya"; "Saran Bipy" di hero (bonus harian → misi 2 game → game dengan kartu terbanyak yang belum ditemukan); pita LIVE (jumlah main hari ini + kartu legendaris/epik, level kelipatan 5, album lengkap; di memori, 24 terakhir); popularitas per game; progres per game di modal Cara main; hitung mundur musim mingguan; tombol Bagikan progres (Web Share/salin); confetti saat naik level/lencana; toast ringkas di HP.
 
 ### Responsif & perangkat (skin online)
-Game booth dirancang untuk TV 16:9. Versi online memakai skin di `hub/public/skins/` (tidak menyentuh folder 01/02/03, tidak tertimpa `npm run sync`):
-- **Beauty Drop** (`drop.css/js`): layar tegak = tata letak mengalir & bisa digulir; HP tegak = unit `--u` 9–11,5 px, teks min. ±11 px, target sentuh ≥40 px, papan selebar layar, tombol DROP menempel di bawah & papan otomatis digulir ke tengah; HP mendatar = kontrol kiri, papan kanan + petunjuk putar HP; hasil demo tanpa kode klaim/syarat penukaran; getar halus (Android) saat DROP & kartu mekar; kartu hologram ikut kemiringan HP (Android, iOS dilewati agar tanpa izin sensor); tombol layar penuh di bilah atas untuk perangkat sentuh.
-- **Spin** (`spin.css`): pemutar musik pindah ke baris sendiri ≤900 px (pilih lagu & volume disembunyikan ≤1100 px); teks 5–8 px di HP dinaikkan; orbit dekoratif tidak melebarkan halaman.
-- **Nyapit** (`nyapit.css`): mesin capit kembali di urutan pertama di HP (tombol MAIN tidak lagi ±1100 px di bawah); dialog koin muat di HP mendatar.
-- `inject.js`: tombol GAMYSUF ringkas (ikon saja) di HP.
+Tata letak HP/tablet/lipat utama kini ada di game itu sendiri (rilis web 1.1.0 di `games/`, dari sumber 01/02/03). Skin di `hub/public/skins/` (tidak tertimpa `npm run sync`) hanya menambal yang belum ditangani game; setiap kali game di-sync, ukur ulang dengan skin menyala/mati dan buang aturan skin yang sudah tidak perlu:
+- **Beauty Drop** (`drop.css/js`): tanpa aturan tata letak (dipegang game). Tambahan: halaman tidak melebar 1 px oleh dekorasi, gelembung Zoro tidak terpotong di tablet mendatar, getar halus (Android) saat DROP & kartu mekar, papan digulir ke tengah bila tidak terlihat saat DROP, kartu hologram ikut kemiringan HP (Android; iOS dilewati agar tanpa izin sensor). Label kode demo jujur ("Kode simulasi") dari game dipakai apa adanya.
+- **Spin** (`spin.css`): teks 5–8 px di HP dinaikkan; orbit dekoratif roda tidak melebarkan halaman (tanpa skin: 27–100 px scroll samping di HP/lipat/tablet). Pemutar musik HP diatur game.
+- **Nyapit** (`nyapit.css`): mesin capit di urutan pertama di HP (tanpa skin tombol capit ±1185 px di bawah); dialog koin muat di HP mendatar.
+- `inject.js`: tombol GAMYSUF 44 px ikon saja di HP, disembunyikan saat dialog terbuka (versi `main`).
 Matriks uji: 390×844, 844×390, 344×882 (lipat tertutup), 884×1104 (lipat terbuka), 820×1180, 1180×820, 1366×768, 1440×900, 1920×1080 — tanpa scroll horizontal.
 
 ## 5. Studio (`/studio`)
@@ -95,11 +95,14 @@ Statistik (pemain, aktif hari ini, main hari ini, total), daftar game bawaan + t
 ## 8. Menjalankan & verifikasi
 ```bash
 npm install && npm run dev      # 127.0.0.1:4400, PIN lokal 123456
-npm test                        # 11 tes hub
+npm test                        # tes hub + hosting
 npm run qa                      # 16 tangkapan layar + error konsol + cek scroll horizontal (artifacts/qa/1600x900)
 npm run qa -- 1366x768          # juga 390x844 untuk HP
 CAPTURE_ENGINE=chromium npm run qa   # paksa Playwright/Chromium walau Electron ada
 npm run qa -- covers            # perbarui sampul game dari tampilan terbaru
+npm run qa:responsive           # Chromium/Firefox/WebKit + gameplay; perlu Playwright beserta browsernya
+node scripts/hub-interaction-qa.cjs # dialog, keyboard, koneksi, preferensi, Studio
+node scripts/capture-gameplay-covers.cjs # tinjau sampul di artifacts/cover-candidates
 npm run package:hostinger
 npm run media:lite              # setelah sync: MP3/WebP ringan (butuh devDependency lamejs; gambar butuh Playwright)
 ```
@@ -114,18 +117,26 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - Penyesuaian versi online (HP/tablet, kejujuran demo) lewat skin hub, bukan mengubah salinan `games/`; media ringan lewat manifest checksum, bukan mengganti berkas game.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
-Terakhir diperbarui: 2026-09-27 WIB oleh Claude (sesi cloud, merge `main` 83eb7ee ke PR #1). **LIVE di https://gamysuf.fun** (dari `main`).
+**Rilis web 1.1.0 (Codex, 2026-09-27):** dashboard memiliki navigasi sentuh, game sebelum misi, pilihan game unggulan yang stabil, pintasan game terakhir, pemulihan koneksi, fokus dialog, kontrol animasi, dan Studio responsif. Spin/Nyapit memperbaiki musik, arena, overflow, dan siklus audio. Drop menempatkan seluruh papan dan tombol dalam layar potret, menjaga animasi saat resize, membatasi loop cahaya, mengatur partikel berdasarkan waktu, memperbesar tombol, serta memperbaiki dialog dan pemulihan audio. Logo, maskot, hasil server, stok booth dan mode demo tetap memakai sumber asli.
+
+Validasi rilis dan deployment dicatat di `docs/RELEASE-1.1.0.md`. Paket arsip: `release/Gamysuf-Arcade-1.1.0-Hostinger.zip`. Salinan `games/` berasal dari sumber saudara 01/02/03; perubahan game selanjutnya tetap dilakukan di sumber tersebut.
+
+Pembaruan 2026-09-27 (Codex): ketiga sampul hub di `hub/public/assets/covers/` diganti tangkapan gameplay asli berukuran 1200×675. Spin menampilkan arena roda lengkap, Nyapit menampilkan kabinet capit beserta bola, dan Drop menampilkan kapsul yang sedang memantul di papan pin bersama Bipy. Sumber tangkapan sementara dan `capture.json` ada di `artifacts/cover-candidates/`; skrip reproduksi ada di `scripts/capture-gameplay-covers*.cjs`.
+
+Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.1.0**, tujuan https://gamysuf.fun. Bukti publikasi akhir: `artifacts/deployment-1.1.0.json` (versi, status HTTP dan SHA-256 berkas live).
+
+Pembaruan 2026-09-27 (Claude, PR #1 dari `claude/zen-meitner-wrzrju`): menggabungkan `main` 0f0ac25 dengan skin online per game (`hub/public/skins/`), media ringan (`hub/media-lite/`, MP3/WebP), `hub/dispatch.cjs`, server game tanpa soket, dan fitur engagement v1.1 (gelar, target lencana, Saran Bipy, pita LIVE, bagikan, confetti). Merge PR #1 ke `main` = deploy produksi.
 
 | Area | Status |
 |---|---|
 | Patch mode cloud di game 01/02/03 (+ fallback origin) | ✅ tes 83 / 54 / 29 lulus, sumber = salinan `games/` (sync tanpa diff) |
-| Hub: gateway (`dispatch.cjs`), visitors, players, custom games, Studio, API | ✅ tes hub 16/16 (`hub.test.cjs` + `hosting.test.cjs`: loader Hostinger, meta CSP, media ringan) |
-| Front-end arcade v1.1 (gelar, target, saran Bipy, LIVE, bagikan, confetti) + Studio + inject | ✅ QA Chromium 1600×900 & 390×844: 0 error konsol, 0 scroll horizontal |
-| Responsif semua perangkat (skin drop/spin/nyapit, dashboard ≤380 px) | ✅ 9 profil perangkat tanpa scroll horizontal; alur Beauty Drop diuji di HP, lipat, tablet (branch PR #1) |
-| Media ringan (MP3/WebP) | ✅ audio 51,5→5,5 MB, gambar 33,6→4,7 MB; halaman HP 0,7–1,6 MB (branch PR #1) |
+| Hub: gateway (`dispatch.cjs`), visitors, players, custom games, Studio, API | ✅ tes hub + hosting lulus (loader Hostinger, meta CSP, media ringan) |
+| Front-end arcade + Studio + inject | ✅ 616 pemeriksaan responsif + 24 interaksi, Chromium/Firefox/WebKit (main); QA Chromium PR #1 0 error konsol, 0 scroll horizontal |
+| Responsif per game (skin drop/spin/nyapit) & dashboard ≤380 px | ✅ di PR #1; skin menyesuaikan diri dengan tata letak game 1.1.0 dari `main` (lihat §3 Responsif) |
+| Media ringan (MP3/WebP) | ✅ di PR #1: audio 51,5→5,5 MB, gambar 33,6→4,7 MB; halaman HP 0,7–1,6 MB |
 | CI GitHub Actions (npm test + paket Hostinger) | ✅ `.github/workflows/ci.yml` |
-| GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat); v1.1 di PR #1 dari `claude/zen-meitner-wrzrju`, merge oleh pemilik = deploy produksi |
-| Deploy Hostinger | ✅ gamysuf.fun menyajikan hub + 3 game dari `main`; ADMIN_PIN sudah diisi pemilik |
+| GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat); PR #1 dari `claude/zen-meitner-wrzrju`, merge oleh pemilik = deploy produksi |
+| Deploy Hostinger | ✅ web 1.1.0 live; 12 endpoint publik lulus. Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan |
 | Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
 | Keamanan | ⚠️ `.git/config` lokal menyimpan token GitHub (ghp_…) di URL remote: cabut token itu dan pakai `gh auth login` |
 
@@ -137,10 +148,13 @@ Terakhir diperbarui: 2026-09-27 WIB oleh Claude (sesi cloud, merge `main` 83eb7e
 - Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
 
 ## 11. Log serah-terima
+- **2026-09-27 (Codex, web 1.1.0)**: perbaikan dashboard dan tiga game lintas layar; QA browser dengan data sementara yang terpisah dari produksi; paket Hostinger dan skrip regresi responsif. Detail hasil akhir pada catatan rilis 1.1.0.
 - **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.
 - **2026-09-27 (agen lain, identitas git pemilik)**: 4 commit perbaikan Hostinger (entry guard, isolasi listen, dispatch in-memory, fallback origin), membuat repo `yusufmuh/gamysuf.fun`, deploy ke gamysuf.fun.
 - **2026-09-27 (Claude, sesi cloud, branch PR #1)**: v1.1.0 — entry guard tidak menyalakan server kedua saat dimuat skrip/tes; dispatch dipindah ke `hub/dispatch.cjs` (statusCode implisit, writeHead dengan reason, streaming aset biner, 5xx untuk error/batas waktu); beranda tidak melebar (album); celah Studio; `/hub-api/session`, `/hub-api/health`; fitur engagement v1.1 (§4); meta OG/canonical; robots menutup `/g/*/admin.html`; QA Playwright + Chromium dengan cek scroll horizontal; CI GitHub Actions.
 - **2026-09-27 (Claude, sesi cloud, branch PR #1)**: responsif semua perangkat lewat skin online `hub/public/skins/` (drop: tata letak HP/tablet/lipat, getar, tilt, layar penuh, sembunyikan kode klaim demo; spin: header & teks HP; nyapit: urutan mesin & dialog koin), dashboard ≤380 px & meta PWA iOS, `inject.js` ringkas di HP; media ringan `npm run media:lite` (lamejs → MP3, Chromium → WebP) + negosiasi `Accept` di gateway.
 - **2026-09-27 (Claude)**: memindahkan fallback origin ke sumber game 01/02/03, entry guard yang tidak menyalakan server saat di-require alat lokal, alamat socket loader aman, label demo jujur di Beauty Drop, `tests/hosting.test.cjs` (3 skenario loader), QA ulang, PRD.
 - **2026-09-27 (Claude)**: CSP ditanam sebagai meta karena CDN mengganti header; hub tidak autostart di Electron.
+- **2026-09-27 (Codex)**: menangkap ulang ketiga sampul dari layar gameplay sebenarnya melalui Electron/gateway lokal, meninjau komposisi 16:9, menyimpan JPEG 1200×675 dan skrip reproduksi tanpa mengubah artwork game.
 - **2026-09-27 (Claude, sesi cloud, branch PR #1)**: menggabungkan `main` (46a2da0, lalu dbb1d68 & 83eb7ee) ke PR #1. Konflik `hub/server.cjs`: `shouldAutostart()` dan `withMetaCsp()` versi `main` dipakai, digabung dengan `dispatch.cjs`, skin online, dan media ringan; server game tanpa soket (listen no-op saat createApp). Tes 16/16, QA 0 error, alur Beauty Drop HP/tablet lulus di bawah meta CSP.
+- **2026-09-27 (Claude, sesi cloud, branch PR #1)**: menggabungkan `main` 0f0ac25 (rilis web 1.1.0 Codex: tata letak sentuh di game, `responsive.css`, sampul gameplay, QA lintas browser). Konflik: `hub.js` (toggle animasi & `storage` versi `main` dipakai; Saran Bipy, pita LIVE, gelar, target lencana, bagikan, confetti dipertahankan dan ikut toggle animasi; rotasi otomatis kabinet tetap dimatikan seperti `main`), `index.html` (urutan game→misi versi `main` + elemen v1.1 branch), `inject.js` (versi `main`), `server.cjs` (inject.js ber-versi + skin + dispatch.cjs), README/PRD/package.json (`qa:responsive` + `media:lite`). Pengukuran skin menyala/mati di 6 perangkat: tata letak Beauty Drop dari game lebih baik (tombol Beauty Drop terlihat di layar pertama), jadi aturan tata letak di `drop.css` dibuang; skin Spin (scroll samping) & Nyapit (tombol capit) tetap diperlukan. `media:lite` dibuat ulang untuk sampul baru; bug `file:null` di skrip diperbaiki. Tes 16/16, QA 1600×900 & 390×844 0 error.

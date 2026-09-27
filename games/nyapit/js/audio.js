@@ -20,7 +20,7 @@ const BGM_DUCK_SUSPENSE=.035;  // capit sedang menukik
 
 class BoothAudio{
  constructor(){
-  this.ctx=null;this.enabled=false;this.volume=.7;this.buffers=new Map();this.bgm=null;this.bgmStarting=null;this.voice=null;this.sloganAt=0;this.voiceSequence=0;
+  this.ctx=null;this.suspendedByPage=false;this.enabled=false;this.volume=.7;this.buffers=new Map();this.bgm=null;this.bgmStarting=null;this.voice=null;this.sloganAt=0;this.voiceSequence=0;
   this.bgmVolumeRatio=.75;this.sfxVolumeRatio=.85;this.voiceVolumeRatio=.90;
   this.audioProfile='crisp';this.compressorMode='gentle';
   this.bgmNormal=BGM_NORMAL;this.bgmDuckVoice=BGM_DUCK_VOICE;this.bgmDuckSuspense=BGM_DUCK_SUSPENSE;
@@ -49,6 +49,18 @@ class BoothAudio{
   }
   if(this.ctx.state==='suspended')await this.ctx.resume();
   this.apply();return true;
+ }
+
+ async handleVisibility(){
+  if(!this.ctx)return;
+  try{
+   if(document.hidden&&this.ctx.state==='running'){
+    await this.ctx.suspend();this.suspendedByPage=true;
+   }else if(!document.hidden&&this.suspendedByPage){
+    this.suspendedByPage=false;
+    if(this.enabled&&this.ctx.state==='suspended')await this.ctx.resume();
+   }
+  }catch{this.suspendedByPage=false;}
  }
 
  applyProfile(){

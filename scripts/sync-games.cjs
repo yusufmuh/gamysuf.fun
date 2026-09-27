@@ -40,6 +40,7 @@ for(const [slug,folder] of Object.entries(SOURCES)){
  const source=path.join(parent,folder);
  if(!fs.existsSync(path.join(source,'server.cjs')))throw new Error(`Game sumber tidak ditemukan: ${source}`);
  const target=path.join(root,'games',slug);
+ if(path.dirname(path.resolve(target))!==path.resolve(root,'games')||!Object.hasOwn(SOURCES,slug))throw new Error('Target sync berada di luar folder games.');
  fs.rmSync(target,{recursive:true,force:true});
  fs.mkdirSync(target,{recursive:true});
  const stats={files:0,bytes:0};

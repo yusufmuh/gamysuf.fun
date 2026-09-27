@@ -13,7 +13,7 @@
 
  const style=document.createElement('style');
  style.textContent=`
- .gmy-pill{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(18,5,12,.82);color:#FFF7F8;border:1px solid rgba(245,184,61,.45);box-shadow:0 10px 30px rgba(0,0,0,.45);font:700 12px/1.2 Poppins,system-ui,sans-serif;text-decoration:none;opacity:.72;transition:opacity .2s,transform .2s;backdrop-filter:blur(8px)}
+ .gmy-pill{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));min-height:44px;box-sizing:border-box;z-index:2147483000;display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(18,5,12,.9);color:#FFF7F8;border:1px solid rgba(245,184,61,.45);box-shadow:0 10px 30px rgba(0,0,0,.45);font:700 12px/1.2 Poppins,system-ui,sans-serif;text-decoration:none;opacity:.85;transition:opacity .2s,transform .2s;backdrop-filter:blur(8px);touch-action:manipulation}
  .gmy-pill:hover,.gmy-pill:focus-visible{opacity:1;transform:translateY(-2px)}
  .gmy-pill img{width:28px;height:28px;border-radius:50%}
  .gmy-pill small{display:block;font-weight:600;color:#F5C96B;font-size:10px}
@@ -23,29 +23,22 @@
  .gmy-toast.out{animation:gmyOut .3s ease forwards}
  @keyframes gmyIn{from{opacity:0;transform:translateY(-12px) scale(.96)}}
  @keyframes gmyOut{to{opacity:0;transform:translateY(-10px)}}
- .gmy-dock{position:fixed;left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));z-index:2147483000;display:flex;gap:8px;align-items:center}
- .gmy-dock .gmy-pill{position:static}
- @media (max-width:640px),(max-height:520px){
-  .gmy-pill{padding:4px;gap:0;opacity:.8}
-  .gmy-pill>span{display:none}
-  .gmy-toasts{top:auto;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 52px);right:12px;width:calc(100vw - 24px)}
-  .gmy-toast{font-size:12px;padding:8px 12px}
- }
- @media (prefers-reduced-motion:reduce){.gmy-toast,.gmy-toast.out{animation:none}}`;
+ @media(max-width:700px),(max-height:500px){.gmy-pill{width:44px;height:44px;padding:7px;justify-content:center}.gmy-pill>span{display:none}.gmy-toasts{top:max(70px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));width:min(270px,calc(100vw - 20px))}.gmy-toast{font-size:11px;padding:8px 12px}}
+ @media (prefers-reduced-motion:reduce){.gmy-toast,.gmy-toast.out{animation:none}}
+ body.modal-open .gmy-pill{visibility:hidden}`;
  document.head.append(style);
 
  const pill=document.createElement('a');
  pill.className='gmy-pill';
  pill.href='/';
  pill.setAttribute('aria-label','Kembali ke Gamysuf Arcade');
+ pill.title='Kembali ke Gamysuf Arcade';
+ try{if(['spin','nyapit','drop'].includes(game))localStorage.setItem('gamysuf-last-game',game);}catch{/* Optional shortcut; gameplay does not depend on local storage. */}
  pill.innerHTML='<img src="/hub/assets/brand/icon-192.png" alt=""><span>GAMYSUF<small id="gmyLevel">Arcade</small></span>';
- const dock=document.createElement('div');
- dock.className='gmy-dock';
- dock.append(pill);
  const toasts=document.createElement('div');
  toasts.className='gmy-toasts';
  toasts.setAttribute('aria-live','polite');
- const mount=()=>{document.body.append(dock,toasts);};
+ const mount=()=>{document.body.append(pill,toasts);};
  if(document.body)mount();else document.addEventListener('DOMContentLoaded',mount,{once:true});
 
  function toast(text,xp){

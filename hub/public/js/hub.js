@@ -7,9 +7,23 @@
  const avatarSrc=name=>`/hub/assets/avatars/${AVATARS.includes(name)?name:'wave'}.png`;
  const RARITY={legendary:'Legendaris',epic:'Epik',rare:'Langka',common:'Umum'};
  const number=value=>Number(value||0).toLocaleString('id-ID');
+ const storage={
+  get(key){try{return localStorage.getItem(key);}catch{return null;}},
+  set(key,value){try{localStorage.setItem(key,value);}catch{/* Private browsing can deny storage. The server profile still works. */}},
+  remove(key){try{localStorage.removeItem(key);}catch{/* Optional UI preference only. */}}
+ };
+ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+ const setMotion=()=>{
+  const reduced=reducedMotion.matches||storage.get('gamysuf-reduced-motion')==='1';
+  document.documentElement.dataset.motion=reduced?'reduce':'full';
+  $('motionToggle').setAttribute('aria-pressed',String(reduced));
+  $('motionToggle').textContent=reduced?'Animasi dashboard dikurangi':'Kurangi animasi dashboard';
+ };
+ setMotion();
+ reducedMotion.addEventListener('change',setMotion);
+ const motionReduced=()=>document.documentElement.dataset.motion==='reduce';
  const pct=(part,whole)=>whole?Math.max(0,Math.min(100,Math.round(part/whole*100))):0;
  const two=value=>String(value).padStart(2,'0');
- const reducedMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  function ago(at){
   const minutes=Math.max(0,Math.round((Date.now()-at)/60000));
   if(minutes<1)return 'baru saja';
@@ -45,7 +59,12 @@
  async function api(route,body){
   const options={headers:{'Content-Type':'application/json','x-gamysuf-client':'hub'},credentials:'same-origin'};
   if(body!==undefined){options.method='POST';options.body=JSON.stringify(body);}
-  const response=await fetch(route,options);
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),15000);
+  let response;
+  try{response=await fetch(route,{...options,signal:controller.signal});}
+  catch(error){throw new Error(error.name==='AbortError'?'Server belum merespons. Coba lagi sebentar.':'Koneksi terputus. Periksa internet lalu coba lagi.');}
+  finally{clearTimeout(timeout);}
   let output;
   try{output=await response.json();}catch{output={error:'Respons server tidak terbaca.'};}
   if(!response.ok)throw Object.assign(new Error(output.error||'Permintaan gagal.'),{status:response.status});
@@ -66,11 +85,12 @@
   $('versionTag').textContent=`v${catalog.version}`;
   const list=games().filter(game=>game.cover);
   $('cabinetScreen').innerHTML=list.map((game,index)=>`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" data-index="${index}" loading="${index?'lazy':'eager'}">`).join('');
-  $('cabinetDots').innerHTML=list.map((game,index)=>`<button type="button" role="tab" aria-label="${esc(game.title)}" data-feature="${index}"></button>`).join('');
+  $('cabinetDots').innerHTML=list.map((game,index)=>`<button type="button" aria-pressed="false" aria-label="Tampilkan ${esc(game.title)}" data-feature="${index}"></button>`).join('');
   const featured=Math.max(0,list.findIndex(game=>game.slug===catalog.settings.featured));
   feature(featured);
   clearInterval(store.cycle);
-  if(list.length>1&&!reducedMotion())store.cycle=setInterval(()=>feature((store.featured+1)%list.length),6500);
+  const recent=games().find(game=>game.slug===storage.get('gamysuf-last-game'));
+  if(recent){$('resumeGame').hidden=false;$('resumeGame').href=recent.url;$('resumeGame').textContent=`Main lagi: ${recent.title} →`;}
   if(catalog.settings.announcement){
    $('announce').hidden=false;
    $('announceText').textContent=catalog.settings.announcement;
@@ -85,7 +105,7 @@
   if(!game)return;
   store.featured=index;
   document.querySelectorAll('#cabinetScreen img').forEach(image=>image.classList.toggle('on',Number(image.dataset.index)===index));
-  document.querySelectorAll('#cabinetDots button').forEach(button=>button.setAttribute('aria-selected',String(Number(button.dataset.feature)===index)));
+  document.querySelectorAll('#cabinetDots button').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.feature)===index)));
   $('cabinetEvent').textContent=(game.event||'').toUpperCase();
   $('cabinetTitle').textContent=game.title;
   $('cabinetTagline').textContent=game.tagline||'';
@@ -180,7 +200,7 @@
   $('live').hidden=!items.length;
   if(!items.length)return;
   const track=items.join('');
-  const still=items.length<2||reducedMotion();
+  const still=items.length<2||motionReduced();
   $('liveList').classList.toggle('still',still);
   $('liveList').innerHTML=still?track:track+track.replace(/<li>/g,'<li aria-hidden="true">');
   $('liveList').style.setProperty('--items',items.length);
@@ -198,11 +218,11 @@
    return `<article class="game-card" style="--accent:${esc(game.accent||'#E62B5E')}">
     <div class="game-cover">${game.cover?`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" loading="lazy">`:''}<span class="game-badge">${esc((game.event||'ARENA BARU').toUpperCase())}</span><span class="game-progress">${esc(progress)}</span>${meter}</div>
     <div class="game-body"><h3>${esc(game.title)}</h3><p class="game-mech">${esc(game.mechanic||'')}</p>${popular}<p>${esc(game.description||game.tagline||'')}</p>
-     <div class="game-actions"><button class="btn btn-ghost btn-small" type="button" data-howto="${esc(game.slug)}">Cara main</button><a class="btn btn-primary btn-small" href="${esc(game.url)}" ${game.external?'target="_blank" rel="noopener"':''}>Main</a></div></div>
+     <div class="game-actions"><button class="btn btn-ghost btn-small" type="button" data-howto="${esc(game.slug)}" aria-label="Cara main ${esc(game.title)}">Cara main</button><a class="btn btn-primary btn-small" href="${esc(game.url)}" aria-label="Main ${esc(game.title)}" ${game.external?'target="_blank" rel="noopener"':''}>Main sekarang</a></div></div>
    </article>`;
   });
-  if(catalog.slots>0)cards.push(`<article class="slot-card"><span class="slot-icon">${svg('<path d="M12 5v14M5 12h14"/>')}</span><h3>Slot arena baru</h3><p>Game berikutnya sedang disiapkan. Mainkan tiga arena ini dulu dan kumpulkan kartunya.</p></article>`);
   $('gameGrid').innerHTML=cards.join('');
+  $('gameGrid').setAttribute('aria-busy','false');
  }
 
  /* ── Album ───────────────────────────────────────── */
@@ -218,14 +238,14 @@
    const sorted=[...game.cards].sort((a,b)=>Number(b.owned)-Number(a.owned));
    return `<div class="album-row"><h3><span>${esc(game.title)}</span><b>${owned}/${game.cards.length}</b></h3><div class="card-strip">${sorted.map(miniCard).join('')}</div></div>`;
   }).join('');
-  $('albumTabs').innerHTML=[`<button class="tab active" type="button" data-album="all">Semua</button>`,...album.games.map(game=>`<button class="tab" type="button" data-album="${esc(game.slug)}">${esc(game.title)}</button>`)].join('');
+  $('albumTabs').innerHTML=[`<button class="tab active" type="button" role="tab" aria-selected="true" data-album="all">Semua</button>`,...album.games.map(game=>`<button class="tab" type="button" role="tab" aria-selected="false" data-album="${esc(game.slug)}">${esc(game.title)}</button>`)].join('');
   renderAlbumGrid('all');
  }
 
  function renderAlbumGrid(filter){
   const cards=store.album.games.filter(game=>filter==='all'||game.slug===filter).flatMap(game=>game.cards).sort((a,b)=>Number(b.owned)-Number(a.owned));
   $('albumGrid').innerHTML=cards.map(miniCard).join('');
-  document.querySelectorAll('#albumTabs .tab').forEach(tab=>tab.classList.toggle('active',tab.dataset.album===filter));
+  document.querySelectorAll('#albumTabs .tab').forEach(tab=>{tab.classList.toggle('active',tab.dataset.album===filter);tab.setAttribute('aria-selected',String(tab.dataset.album===filter));});
  }
 
  /* ── Papan peringkat ─────────────────────────────── */
@@ -249,15 +269,22 @@
 
  /* ── Modal ───────────────────────────────────────── */
  function openModal(id){
+  if(!store.me)return;
   store.lastFocus=document.activeElement;
   const modal=$(id);
   modal.hidden=false;
-  requestAnimationFrame(()=>modal.classList.add('open'));
-  modal.querySelector('input,button')?.focus();
+  document.body.classList.add('modal-open');
+  for(const element of document.body.children){if(element!==modal&&!element.classList.contains('toasts')&&element.tagName!=='SCRIPT')element.inert=true;}
+  requestAnimationFrame(()=>{if(!modal.hidden)modal.classList.add('open');});
+  modal.setAttribute('tabindex','-1');
+  // Focus a non-input target first so mobile keyboards don't hide the welcome screen.
+  (modal.querySelector('[data-close]')||modal).focus({preventScroll:true});
  }
  function closeModal(modal){
   modal.classList.remove('open');
   modal.hidden=true;
+  document.body.classList.remove('modal-open');
+  for(const element of document.body.children)element.inert=false;
   store.lastFocus?.focus?.();
  }
 
@@ -287,6 +314,7 @@
 
  function openProfile(){
   const me=store.me;
+  if(!me)return;
   $('profileNameInput').value=me.nickname||'';
   avatarPicker('profileAvatars',me.avatar);
   $('recoveryCode').textContent=me.recoveryCode.match(/.{1,8}/g).join('-');
@@ -304,7 +332,7 @@
   setTimeout(()=>{element.classList.add('leave');setTimeout(()=>element.remove(),400);},4200);
  }
  function confetti(){
-  if(reducedMotion())return;
+  if(motionReduced())return;
   const layer=document.createElement('div');
   layer.className='confetti';
   layer.setAttribute('aria-hidden','true');
@@ -319,7 +347,7 @@
  }
  function showFeed(){
   const key='gamysuf-feed-seen';
-  const seen=Number(localStorage.getItem(key))||0;
+  const seen=Number(storage.get(key))||0;
   const events=(store.me?.feed||[]).filter(event=>event.at>seen);
   if(!events.length)return;
   const important=events.filter(event=>event.type!=='xp');
@@ -328,7 +356,7 @@
   const queue=[...important.slice(-keep),{type:'xp',text:'XP baru sejak kunjungan terakhir',xp}].filter(event=>event.type!=='xp'||event.xp>0);
   queue.forEach((event,index)=>setTimeout(()=>toast(event),index*650));
   if(important.some(event=>event.type==='level'||event.type==='badge'))setTimeout(confetti,300);
-  localStorage.setItem(key,String(Math.max(...events.map(event=>event.at))));
+  storage.set(key,String(Math.max(...events.map(event=>event.at))));
  }
 
  /* ── Hitung mundur misi (tengah malam WIB) ────────── */
@@ -365,12 +393,17 @@
   renderMe();renderGames();renderAlbum();renderLive();
   await loadBoard(store.range);
   showFeed();
+  $('connectionNote').hidden=true;
  }
 
  /* ── Event ───────────────────────────────────────── */
  document.addEventListener('click',async event=>{
   const target=event.target.closest('button,a');
   if(!target)return;
+  if(target.tagName==='A'){
+   const game=games().find(item=>item.url===target.getAttribute('href'));
+   if(game)storage.set('gamysuf-last-game',game.slug);
+  }
   if(target.dataset.howto){openGame(target.dataset.howto);return;}
   if(target.dataset.feature){feature(Number(target.dataset.feature));clearInterval(store.cycle);return;}
   if(target.dataset.range){loadBoard(target.dataset.range).catch(()=>{});return;}
@@ -380,20 +413,32 @@
  });
  document.querySelectorAll('.modal').forEach(modal=>modal.addEventListener('click',event=>{if(event.target===modal&&modal.id!=='onboardModal')closeModal(modal);}));
  document.addEventListener('keydown',event=>{
-  if(event.key!=='Escape')return;
   const open=document.querySelector('.modal.open');
-  if(open&&open.id!=='onboardModal')closeModal(open);
+  if(event.key==='Escape'&&open){closeModal(open);return;}
+  if(event.key==='Tab'&&open){
+   const nodes=[...open.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select,textarea,[tabindex="0"]')].filter(node=>node.getClientRects().length);
+   const first=nodes[0],last=nodes.at(-1);
+   if(!first){event.preventDefault();open.focus();}
+   else if(event.shiftKey&&(document.activeElement===first||document.activeElement===open)){event.preventDefault();last.focus();}
+   else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  }
+  if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)&&event.target.matches('[role="tab"],[data-feature],[data-avatar]')){
+   const targets=[...event.target.parentElement.querySelectorAll('button')];
+   const current=targets.indexOf(event.target);
+   const index=event.key==='Home'?0:event.key==='End'?targets.length-1:(current+(event.key==='ArrowRight'?1:-1)+targets.length)%targets.length;
+   event.preventDefault();targets[index].focus();targets[index].click();
+  }
  });
  $('playerChip').addEventListener('click',openProfile);
  $('openProfile').addEventListener('click',openProfile);
  $('openAlbum').addEventListener('click',()=>openModal('albumModal'));
  $('shareProgress').addEventListener('click',shareProgress);
- $('onboardSkip').addEventListener('click',()=>{localStorage.setItem('gamysuf-onboarded','1');closeModal($('onboardModal'));});
+ $('onboardSkip').addEventListener('click',()=>{storage.set('gamysuf-onboarded','1');closeModal($('onboardModal'));});
  $('onboardSave').addEventListener('click',async()=>{
   $('onboardError').textContent='';
   try{
    store.me=await api('/hub-api/me',{nickname:$('nicknameInput').value,avatar:pickedAvatar('onboardAvatars')});
-   localStorage.setItem('gamysuf-onboarded','1');
+   storage.set('gamysuf-onboarded','1');
    closeModal($('onboardModal'));
    renderMe();
    toast({type:'badge',text:`Selamat datang, ${store.me.nickname}!`,xp:0});
@@ -419,18 +464,43 @@
   $('profileError').textContent='';
   try{
    await api('/hub-api/me/restore',{code:$('restoreInput').value});
-   localStorage.removeItem('gamysuf-feed-seen');
+   storage.remove('gamysuf-feed-seen');
    location.reload();
   }catch(error){$('profileError').textContent=error.message;}
  });
- document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&store.catalog)refresh().catch(()=>{});});
+ function connectionError(message){$('connectionText').textContent=message;$('connectionNote').hidden=false;}
+ async function retry(){
+  $('retryLoad').disabled=true;
+  try{await refresh({initial:!store.catalog});}catch(error){connectionError(error.message);}
+  finally{$('retryLoad').disabled=false;}
+ }
+ $('retryLoad').addEventListener('click',retry);
+ $('motionToggle').addEventListener('click',()=>{storage.set('gamysuf-reduced-motion',storage.get('gamysuf-reduced-motion')==='1'?'0':'1');setMotion();});
+ addEventListener('offline',()=>connectionError('Kamu sedang offline. Sambungkan internet untuk bermain dan menyimpan progres.'));
+ addEventListener('online',retry);
+ document.addEventListener('visibilitychange',()=>{
+  document.documentElement.dataset.background=String(document.hidden);
+  if(!document.hidden&&store.catalog)refresh().catch(error=>connectionError(error.message));
+ });
+ if('IntersectionObserver' in window){
+  const visible=new Map();
+  const observer=new IntersectionObserver(entries=>{
+   for(const entry of entries)visible.set(entry.target.id,entry.isIntersecting?entry.intersectionRatio:0);
+   const active=[...visible.entries()].sort((a,b)=>b[1]-a[1])[0];
+   if(!active||!active[1])return;
+   document.querySelectorAll('.mobile-nav a').forEach(link=>{
+    if(link.dataset.section===active[0])link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+   });
+  },{rootMargin:'-85px 0px -25% 0px',threshold:[0,.1,.3,.5,.8]});
+  document.querySelectorAll('main>section[id]').forEach(section=>observer.observe(section));
+ }
 
  (async()=>{
   try{
    await refresh({initial:true});
-   if(!store.me.nickname&&!localStorage.getItem('gamysuf-onboarded')){avatarPicker('onboardAvatars','wink');openModal('onboardModal');}
+   if(!store.me.nickname&&!storage.get('gamysuf-onboarded')){avatarPicker('onboardAvatars','wink');openModal('onboardModal');}
   }catch(error){
-   toast({type:'xp',text:`Gagal memuat arcade: ${error.message}`,xp:0});
+   connectionError(error.message);
   }finally{
    document.body.dataset.ready='1';
   }

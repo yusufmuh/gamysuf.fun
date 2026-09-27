@@ -1,21 +1,9 @@
 /* Skin online Spin Wheels (hanya di Gamysuf Arcade, bukan versi booth).
-   Pemutar musik di bilah atas ditambahkan belakangan tanpa aturan HP, sehingga
-   header melebar ±710 px di layar 390 px. Di HP, aturan bawaan game juga
-   memakai huruf 5–8 px; skin ini menaikkan teks penting ke ukuran terbaca. */
+   Pemutar musik di HP kini diatur game sendiri (banner-pink.css, web 1.1.0).
+   Skin ini menambah: teks HP yang di game masih 5–8 px dinaikkan ke ukuran
+   terbaca, dan orbit dekoratif roda tidak melebarkan halaman ke samping. */
 
 button,a,input,select{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-
-@media (max-width:1100px){
- .music-track-select,.music-vol-slider{display:none}
-}
-
-@media (max-width:900px){
- .site-header{height:auto;flex-wrap:wrap;padding:10px 0;row-gap:10px}
- .music-control-bar{order:3;flex:1 1 100%;min-width:0}
- .music-title-wrap{flex:1;min-width:0}
- .music-title,.music-sub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- .music-loop-btn{margin-left:auto;flex:none}
-}
 
 @media (max-width:680px){
  .icon-button{width:40px;height:40px}

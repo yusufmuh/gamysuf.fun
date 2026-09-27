@@ -19,8 +19,8 @@ const GAMES=[
   event:'Pesta Folka 2026',
   mechanic:'Roda keberuntungan · Mystery Beauty Box',
   accent:'#E62B5E',
-  cover:'/hub/assets/covers/spin.jpg',
-  tagline:'Putar roda, buka Mystery Beauty Box, bawa pulang produk favorit.',
+  cover:'/hub/assets/covers/spin.jpg?v=1.1.0',
+  tagline:'Putar roda, buka Mystery Beauty Box, temukan kartu favorit.',
   description:'Roda hadiah dengan produk PINKFLASH, FOCALLURE, SALSA, dan voucher belanja Bpedia. Kalau jarum berhenti di Mystery Beauty Box, kamu memilih satu dari tiga kotak dan semuanya berhadiah.',
   howTo:[
    'Pilih Demo untuk bermain online, lalu tekan tombol Putar atau Spasi.',
@@ -29,7 +29,7 @@ const GAMES=[
    'Setiap hadiah baru masuk album koleksi dan menambah XP.'
   ],
   tips:['Mystery Beauty Box adalah jalan tercepat mendapat kartu langka.','Main tiap hari untuk menjaga streak dan misi harian.'],
-  controls:[['Spasi','Putar roda'],['M','Senyap'],['F11','Layar penuh']],
+  controls:[['Sentuh / klik','Putar roda atau pilih kotak'],['Spasi','Putar roda'],['M','Senyap']],
   admin:{path:'admin.html',login:'Username johan123, password = ADMIN_PIN'},
   loginRoutes:['/api/login'],
   resultRoutes:['/api/spin','/api/bonus'],
@@ -48,7 +48,7 @@ const GAMES=[
   event:'Cozzone UP 2026',
   mechanic:'Mesin capit digital · maskot B!',
   accent:'#7B3FC4',
-  cover:'/hub/assets/covers/nyapit.jpg',
+  cover:'/hub/assets/covers/nyapit.jpg?v=1.1.0',
   tagline:'Bidik kapsul, jatuhkan capit, dan rasakan tegangnya detik terakhir.',
   description:'Mesin capit penuh kapsul hadiah dengan maskot B! yang berlarian. Kamu mengarahkan capit ke kapsul pilihan; hadiah ditentukan mesin secara acak saat capit mengangkat kapsul.',
   howTo:[
@@ -58,7 +58,7 @@ const GAMES=[
    'Kapsul yang terangkat terbuka jadi kartu hadiah lengkap dengan kode NY-.'
   ],
   tips:['Mengaduk bola dengan menggeser tidak menghabiskan percobaan.','Voucher pengguna baru bisa langsung dipakai di aplikasi Bpedia.'],
-  controls:[['← → / A D','Gerakkan capit'],['Spasi / Enter','Turunkan capit'],['M','Senyap']],
+  controls:[['Sentuh / geser','Bidik kapsul'],['← → / A D','Gerakkan capit'],['Spasi / Enter','Turunkan capit'],['M','Senyap']],
   admin:{path:'admin.html',login:'PIN = ADMIN_PIN'},
   loginRoutes:['/api/login'],
   resultRoutes:['/api/play'],
@@ -76,7 +76,7 @@ const GAMES=[
   event:'TAKEOVER X 2026',
   mechanic:'Papan pin vault · kapsul mekar · kartu koleksi',
   accent:'#F5B83D',
-  cover:'/hub/assets/covers/drop.jpg',
+  cover:'/hub/assets/covers/drop.jpg?v=1.1.0',
   tagline:'Bipy menjatuhkan kapsul kelopak; tunggu ia mekar jadi kartu hadiah.',
   description:'Kapsul memantul di papan pin bergaya The Vault of Time, mendarat di pintu misteri, lalu mekar menjadi kartu koleksi berkilau. Ada juga Gacha Fanservice bersama host Zoro & Sanji.',
   howTo:[
@@ -86,7 +86,7 @@ const GAMES=[
    'Coba juga Gacha Fanservice: pilih host, lalu kapsul memilih fanservice-mu.'
   ],
   tips:['Semua kapsul berpeluang sama: murni hoki, tanpa persentase.','Kartu fanservice terhitung kartu epik di album.'],
-  controls:[['Spasi / Enter','DROP!'],['1 / 2','Pilih game di beranda'],['Esc','Kembali']],
+  controls:[['Sentuh / klik','DROP! atau pilih host'],['Spasi / Enter','Aktifkan tombol yang dipilih'],['1 / 2','Pilih game di beranda'],['Esc','Kembali']],
   admin:{path:'admin.html',login:'PIN = ADMIN_PIN'},
   loginRoutes:['/api/login'],
   resultRoutes:['/api/play'],

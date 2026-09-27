@@ -47,7 +47,8 @@
 
  const audio=window.BoothAudio?new window.BoothAudio():null;
  const ui={stage:'boot',game:'drop',host:null,busy:false,result:null,closeReady:false,muted:localStorage.getItem('bdrop-muted')==='1',audioUnlocked:false,lastInput:Date.now(),bubbleIndex:0,sloganIndex:0};
- let state=null,board=null,toastTimer=null,tiltFrame=0,confirmResolve=null;
+ let state=null,board=null,toastTimer=null,tiltFrame=0,confirmResolve=null,dialogReturnFocus=null;
+ const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 
  async function api(route,body){
   const options={headers:{'Content-Type':'application/json','x-bpedia-client':'beautydrop'}};
@@ -65,13 +66,19 @@
   return [...bytes].map(byte=>byte.toString(16).padStart(2,'0')).join('').replace(/^(.{8})(.{4})(.{4})(.{4})/,'$1-$2-$3-$4-');
  }
 
- function toast(message,type='normal'){
+function toast(message,type='normal'){
   const element=$('toast');
   element.textContent=message;
   element.classList.toggle('error',type==='error');
   element.classList.add('visible');
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>element.classList.remove('visible'),3200);
+}
+ function syncModal(){
+  const open=!$('revealLayer').hidden||!$('confirmLayer').hidden;
+  document.body.classList.toggle('modal-open',open);
+  document.querySelector('.topbar').inert=open;
+  document.querySelector('.stage').inert=open;
  }
 
  /* ── Audio ─────────────────────────────────────────── */
@@ -247,18 +254,23 @@
  }
 
  /* ── Konfirmasi ───────────────────────────────────── */
- function confirmDialog(title,text,okLabel='Ya, lanjut'){
+function confirmDialog(title,text,okLabel='Ya, lanjut'){
+  dialogReturnFocus=document.activeElement;
   $('confirmTitle').textContent=title;
   $('confirmText').textContent=text;
   $('confirmOk').textContent=okLabel;
   $('confirmLayer').hidden=false;
+  syncModal();
   $('confirmOk').focus();
   return new Promise(resolve=>{confirmResolve=resolve;});
  }
- function closeConfirm(answer){
+function closeConfirm(answer){
   if(!confirmResolve)return;
   $('confirmLayer').hidden=true;
+  syncModal();
   const resolve=confirmResolve;confirmResolve=null;resolve(answer);
+  if(dialogReturnFocus?.isConnected)dialogReturnFocus.focus();
+  dialogReturnFocus=null;
  }
 
  /* ── Permainan ────────────────────────────────────── */
@@ -414,7 +426,8 @@
   cheer();
  }
 
- async function reveal(result,from,{short=false}={}){
+async function reveal(result,from,{short=false}={}){
+  if(reducedMotion.matches){showResult(result,{instant:true});return;}
   const layer=$('revealLayer'),capsule=$('capsuleBig');
   fillCard(result);
   layer.classList.remove('open','zonk');
@@ -426,6 +439,7 @@
   capsule.style.setProperty('--fs',String(clamp((from.r*2)/size,.08,1)));
   ui.closeReady=false;$('closeReveal').disabled=true;
   layer.hidden=false;
+  syncModal();layer.focus();
   await frame();await frame();
   capsule.style.setProperty('--fx','0px');
   capsule.style.setProperty('--fy','0px');
@@ -460,6 +474,7 @@
   const layer=$('revealLayer');
   $('capsuleBig').hidden=instant;
   layer.hidden=false;
+  syncModal();
   layer.classList.toggle('zonk',result.game==='drop'&&result.prize.tier==='zonk');
   requestAnimationFrame(()=>layer.classList.add('open'));
   $('revealBubble').classList.remove('show');
@@ -468,15 +483,16 @@
   setTimeout(()=>$('closeReveal').focus(),100);
  }
 
- async function closeReveal(){
+async function closeReveal(){
   if(!ui.result||!ui.closeReady)return;
   ui.closeReady=false;$('closeReveal').disabled=true;
   const id=ui.result.id;
   try{state=await api('/api/result',{id});}
-  catch(error){toast(error.message,'error');}
+  catch(error){ui.closeReady=true;$('closeReveal').disabled=false;toast(error.message,'error');return;}
   stopTilt();
   const layer=$('revealLayer');
   layer.hidden=true;layer.classList.remove('open','zonk');
+  syncModal();
   $('capsuleBig').className='capsule-big';$('capsuleBig').hidden=false;
   $('heldCapsule').classList.remove('gone');
   $('bipyDropper').classList.remove('toss','celebrate');
@@ -485,13 +501,15 @@
   $('playerName').value='';
   await refresh();
   if(ui.stage==='pick')setStage('fan');
+  (ui.stage==='drop'?$('dropButton'):$('backButton')).focus();
   ui.lastInput=Date.now();
  }
 
  /* Kartu sedikit mengikuti arah pointer; tanpa pointer ia bergoyang pelan. */
  let pointer=null;
- function startTilt(){
+function startTilt(){
   stopTilt();
+  if(reducedMotion.matches||window.matchMedia('(pointer: coarse)').matches)return;
   const card=$('tcgCard'),t0=performance.now();
   const tick=now=>{
    const t=(now-t0)/1000;
@@ -560,27 +578,39 @@
  $('confirmCancel').addEventListener('click',()=>closeConfirm(false));
  $('confirmLayer').addEventListener('click',event=>{if(event.target===$('confirmLayer'))closeConfirm(false);});
 
- document.addEventListener('pointerdown',()=>{ui.lastInput=Date.now();if(!ui.audioUnlocked)unlockAudio();},{capture:true});
+ document.addEventListener('pointerdown',()=>{ui.lastInput=Date.now();if(!ui.audioUnlocked||audio?.ctx?.state==='suspended')unlockAudio();},{capture:true});
  document.addEventListener('keydown',event=>{
   ui.lastInput=Date.now();
-  if(!ui.audioUnlocked)unlockAudio();
+  if(!ui.audioUnlocked||audio?.ctx?.state==='suspended')unlockAudio();
   if(confirmResolve){
    if(event.key==='Escape'){event.preventDefault();closeConfirm(false);}
+   if(event.key==='Tab'){
+    const first=$('confirmCancel'),last=$('confirmOk');
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+   }
    return;
   }
   const typing=event.target.matches?.('input,textarea');
   if(ui.result){
+   if(event.key==='Tab'){event.preventDefault();$('closeReveal').focus();return;}
    if(['Enter',' '].includes(event.key)&&ui.closeReady){event.preventDefault();closeReveal();}
    return;
   }
   if(event.key==='Escape'&&!ui.busy){$('backButton').click();return;}
-  if(ui.stage==='drop'&&(event.key==='Enter'||(event.key===' '&&!typing))){event.preventDefault();dropCapsule();return;}
+  const interactive=event.target.closest?.('button,a,input,textarea,select,[role="button"]');
+  if(ui.stage==='drop'&&!interactive&&(event.key==='Enter'||event.key===' ')){event.preventDefault();dropCapsule();return;}
   if(ui.stage==='home'&&!typing){
    if(event.key==='1')$('startDrop').click();
    if(event.key==='2'&&!$('startFan').disabled)$('startFan').click();
   }
  });
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
+ document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){audio?.stopBgm();stopTilt();return;}
+  refresh();
+  if(ui.audioUnlocked&&!ui.muted)audio?.startBgm();
+  if(ui.result)startTilt();
+ });
 
  /* ── Mulai ────────────────────────────────────────── */
  async function boot(){

@@ -8,11 +8,11 @@
   <link rel="icon" href="/assets/icon.ico">
   <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/game.css?v=1.0.0">
-  <script defer src="/js/audio.js?v=1.0.0"></script>
-  <script defer src="/js/fx.js?v=1.0.0"></script>
-  <script defer src="/js/board.js?v=1.0.0"></script>
-  <script defer src="/js/game.js?v=1.0.0"></script>
+  <link rel="stylesheet" href="/css/game.css?v=1.1.0">
+  <script defer src="/js/audio.js?v=1.1.0"></script>
+  <script defer src="/js/fx.js?v=1.1.0"></script>
+  <script defer src="/js/board.js?v=1.1.0"></script>
+  <script defer src="/js/game.js?v=1.1.0"></script>
 </head>
 <body data-stage="boot">
   <div class="scene" aria-hidden="true">
@@ -42,7 +42,7 @@
       <span>3–4 Okt 2026 · The Brickhall Fatmawati</span>
     </div>
     <div class="top-actions">
-      <button id="backButton" class="ghost-button" type="button" hidden><span aria-hidden="true">←</span> Kembali</button>
+      <button id="backButton" class="ghost-button" type="button" aria-label="Kembali" hidden><span aria-hidden="true">←</span> Kembali</button>
       <button id="modeButton" class="mode-pill" type="button" title="Ganti mode demo atau resmi">MODE DEMO</button>
       <button id="soundButton" class="icon-button" type="button" aria-label="Matikan suara" aria-pressed="true">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="speaker" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
@@ -161,7 +161,7 @@
     </section>
   </main>
 
-  <div id="revealLayer" class="reveal-layer" role="dialog" aria-modal="true" aria-labelledby="revealTitle" hidden>
+  <div id="revealLayer" class="reveal-layer" role="dialog" aria-modal="true" aria-labelledby="revealTitle" tabindex="-1" hidden>
     <div class="reveal-rays"></div>
     <div id="capsuleBig" class="capsule-big" aria-hidden="true">
       <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span>

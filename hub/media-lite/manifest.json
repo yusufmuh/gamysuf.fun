@@ -300,6 +300,139 @@
   "sourceBytes": 495410,
   "bytes": 56425
  },
+ "drop/assets/brand/app-icon-512.png": {
+  "sha1": "8f34b43e2500e03f06c800bfa12c4b3c1a8dcebf",
+  "file": "drop/assets/brand/app-icon-512.webp",
+  "type": "image/webp",
+  "sourceBytes": 87298,
+  "bytes": 13128
+ },
+ "drop/assets/brand/bpedia-logo-horizontal-3d.png": {
+  "sha1": "761426a958e20ae89db425abfbc68b67a2d3ac74",
+  "file": "drop/assets/brand/bpedia-logo-horizontal-3d.webp",
+  "type": "image/webp",
+  "sourceBytes": 1382406,
+  "bytes": 261842
+ },
+ "drop/assets/brand/bpedia-logo-horizontal-flat.png": {
+  "sha1": "d5b75a63fdb087af02b2719150d0e06cba6027cc",
+  "file": "drop/assets/brand/bpedia-logo-horizontal-flat.webp",
+  "type": "image/webp",
+  "sourceBytes": 1061153,
+  "bytes": 214814
+ },
+ "drop/assets/brand/bpedia-logo-reverse.png": {
+  "sha1": "c445bea0a7e6ee106a1638d63f732a0d83872383",
+  "file": "drop/assets/brand/bpedia-logo-reverse.webp",
+  "type": "image/webp",
+  "sourceBytes": 126420,
+  "bytes": 44282
+ },
+ "drop/assets/brand/bpedia-logo.png": {
+  "sha1": "cb3c253285b020c2ee82f16090d9cfa926aaa5a3",
+  "file": "drop/assets/brand/bpedia-logo.webp",
+  "type": "image/webp",
+  "sourceBytes": 179210,
+  "bytes": 60274
+ },
+ "drop/assets/brand/bpedia-monogram.png": {
+  "sha1": "5898275330fb35603a045f2f4561e28398a4a638",
+  "file": "drop/assets/brand/bpedia-monogram.webp",
+  "type": "image/webp",
+  "sourceBytes": 87916,
+  "bytes": 34416
+ },
+ "drop/assets/brand/rt-bipy-bag.png": {
+  "sha1": "6a8f99b2e48440eedb43327c67480a4511fe8591",
+  "file": "drop/assets/brand/rt-bipy-bag.webp",
+  "type": "image/webp",
+  "sourceBytes": 300499,
+  "bytes": 54472
+ },
+ "drop/assets/brand/rt-bipy-peek.png": {
+  "sha1": "04f5f0377cdebee0ddd21eb3687d21bbbc645a43",
+  "file": "drop/assets/brand/rt-bipy-peek.webp",
+  "type": "image/webp",
+  "sourceBytes": 329377,
+  "bytes": 50944
+ },
+ "drop/assets/brand/rt-bipy-stand.png": {
+  "sha1": "0081301fe219829c027ee5951720bbc74984a006",
+  "file": "drop/assets/brand/rt-bipy-stand.webp",
+  "type": "image/webp",
+  "sourceBytes": 241896,
+  "bytes": 42546
+ },
+ "drop/assets/brand/rt-bipy-wave.png": {
+  "sha1": "2305c38de88c749f14e09d34d9f244bca99b9a80",
+  "file": "drop/assets/brand/rt-bipy-wave.webp",
+  "type": "image/webp",
+  "sourceBytes": 241359,
+  "bytes": 43674
+ },
+ "drop/assets/brand/rt-bipy-wink.png": {
+  "sha1": "b79319aa860631d3b1a99cf5b6c4e014e55ef1e2",
+  "file": "drop/assets/brand/rt-bipy-wink.webp",
+  "type": "image/webp",
+  "sourceBytes": 285102,
+  "bytes": 44316
+ },
+ "drop/assets/images/host-sanji.jpg": {
+  "sha1": "635727a7aefae4da6ab89d0b45eafb78b83355ea",
+  "file": "drop/assets/images/host-sanji.webp",
+  "type": "image/webp",
+  "sourceBytes": 83552,
+  "bytes": 50464
+ },
+ "drop/assets/images/host-zoro.jpg": {
+  "sha1": "9ea5cdf652fcffcf999376f4d8636bd5d070aed6",
+  "file": "drop/assets/images/host-zoro.webp",
+  "type": "image/webp",
+  "sourceBytes": 95067,
+  "bytes": 63888
+ },
+ "drop/assets/images/hosts-duo.png": {
+  "sha1": "ace46c3b8da0ca64ee6f803bafd64ad6672b2513",
+  "file": "drop/assets/images/hosts-duo.webp",
+  "type": "image/webp",
+  "sourceBytes": 907457,
+  "bytes": 124720
+ },
+ "drop/assets/products/creamy-rd01.jpg": {
+  "sha1": "08f165e61068bdf3d4aa3b9555486893009ccaac",
+  "file": "drop/assets/products/creamy-rd01.webp",
+  "type": "image/webp",
+  "sourceBytes": 267785,
+  "bytes": 21456
+ },
+ "drop/assets/products/curler.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "drop/assets/products/curler.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
+ "drop/assets/products/powder-000.jpg": {
+  "sha1": "af3ba9c912df6e6d5c14b5d0d9665db8b0b21f2d",
+  "file": "drop/assets/products/powder-000.webp",
+  "type": "image/webp",
+  "sourceBytes": 134481,
+  "bytes": 70722
+ },
+ "drop/assets/products/stick.jpg": {
+  "sha1": "206db3d0a899388dfe11e0f26ebfa3d957366899",
+  "file": "drop/assets/products/stick.webp",
+  "type": "image/webp",
+  "sourceBytes": 84295,
+  "bytes": 12366
+ },
+ "drop/assets/products/vinilash-pro.jpg": {
+  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
+  "file": "drop/assets/products/vinilash-pro.webp",
+  "type": "image/webp",
+  "sourceBytes": 168438,
+  "bytes": 27612
+ },
  "nyapit/assets/audio/bpedia-bgm.wav": {
   "sha1": "2a516777f812664be39901dc4b2d937e776f95e8",
   "file": "nyapit/assets/audio/bpedia-bgm.mp3",
@@ -523,139 +656,6 @@
   "type": "audio/mpeg",
   "sourceBytes": 495410,
   "bytes": 56425
- },
- "drop/assets/brand/app-icon-512.png": {
-  "sha1": "8f34b43e2500e03f06c800bfa12c4b3c1a8dcebf",
-  "file": "drop/assets/brand/app-icon-512.webp",
-  "type": "image/webp",
-  "sourceBytes": 87298,
-  "bytes": 13128
- },
- "drop/assets/brand/bpedia-logo-horizontal-3d.png": {
-  "sha1": "761426a958e20ae89db425abfbc68b67a2d3ac74",
-  "file": "drop/assets/brand/bpedia-logo-horizontal-3d.webp",
-  "type": "image/webp",
-  "sourceBytes": 1382406,
-  "bytes": 261842
- },
- "drop/assets/brand/bpedia-logo-horizontal-flat.png": {
-  "sha1": "d5b75a63fdb087af02b2719150d0e06cba6027cc",
-  "file": "drop/assets/brand/bpedia-logo-horizontal-flat.webp",
-  "type": "image/webp",
-  "sourceBytes": 1061153,
-  "bytes": 214814
- },
- "drop/assets/brand/bpedia-logo-reverse.png": {
-  "sha1": "c445bea0a7e6ee106a1638d63f732a0d83872383",
-  "file": "drop/assets/brand/bpedia-logo-reverse.webp",
-  "type": "image/webp",
-  "sourceBytes": 126420,
-  "bytes": 44282
- },
- "drop/assets/brand/bpedia-logo.png": {
-  "sha1": "cb3c253285b020c2ee82f16090d9cfa926aaa5a3",
-  "file": "drop/assets/brand/bpedia-logo.webp",
-  "type": "image/webp",
-  "sourceBytes": 179210,
-  "bytes": 60274
- },
- "drop/assets/brand/bpedia-monogram.png": {
-  "sha1": "5898275330fb35603a045f2f4561e28398a4a638",
-  "file": "drop/assets/brand/bpedia-monogram.webp",
-  "type": "image/webp",
-  "sourceBytes": 87916,
-  "bytes": 34416
- },
- "drop/assets/brand/rt-bipy-bag.png": {
-  "sha1": "6a8f99b2e48440eedb43327c67480a4511fe8591",
-  "file": "drop/assets/brand/rt-bipy-bag.webp",
-  "type": "image/webp",
-  "sourceBytes": 300499,
-  "bytes": 54472
- },
- "drop/assets/brand/rt-bipy-peek.png": {
-  "sha1": "04f5f0377cdebee0ddd21eb3687d21bbbc645a43",
-  "file": "drop/assets/brand/rt-bipy-peek.webp",
-  "type": "image/webp",
-  "sourceBytes": 329377,
-  "bytes": 50944
- },
- "drop/assets/brand/rt-bipy-stand.png": {
-  "sha1": "0081301fe219829c027ee5951720bbc74984a006",
-  "file": "drop/assets/brand/rt-bipy-stand.webp",
-  "type": "image/webp",
-  "sourceBytes": 241896,
-  "bytes": 42546
- },
- "drop/assets/brand/rt-bipy-wave.png": {
-  "sha1": "2305c38de88c749f14e09d34d9f244bca99b9a80",
-  "file": "drop/assets/brand/rt-bipy-wave.webp",
-  "type": "image/webp",
-  "sourceBytes": 241359,
-  "bytes": 43674
- },
- "drop/assets/brand/rt-bipy-wink.png": {
-  "sha1": "b79319aa860631d3b1a99cf5b6c4e014e55ef1e2",
-  "file": "drop/assets/brand/rt-bipy-wink.webp",
-  "type": "image/webp",
-  "sourceBytes": 285102,
-  "bytes": 44316
- },
- "drop/assets/images/host-sanji.jpg": {
-  "sha1": "635727a7aefae4da6ab89d0b45eafb78b83355ea",
-  "file": "drop/assets/images/host-sanji.webp",
-  "type": "image/webp",
-  "sourceBytes": 83552,
-  "bytes": 50464
- },
- "drop/assets/images/host-zoro.jpg": {
-  "sha1": "9ea5cdf652fcffcf999376f4d8636bd5d070aed6",
-  "file": "drop/assets/images/host-zoro.webp",
-  "type": "image/webp",
-  "sourceBytes": 95067,
-  "bytes": 63888
- },
- "drop/assets/images/hosts-duo.png": {
-  "sha1": "ace46c3b8da0ca64ee6f803bafd64ad6672b2513",
-  "file": "drop/assets/images/hosts-duo.webp",
-  "type": "image/webp",
-  "sourceBytes": 907457,
-  "bytes": 124720
- },
- "drop/assets/products/creamy-rd01.jpg": {
-  "sha1": "08f165e61068bdf3d4aa3b9555486893009ccaac",
-  "file": "drop/assets/products/creamy-rd01.webp",
-  "type": "image/webp",
-  "sourceBytes": 267785,
-  "bytes": 21456
- },
- "drop/assets/products/curler.jpg": {
-  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
-  "file": "drop/assets/products/curler.webp",
-  "type": "image/webp",
-  "sourceBytes": 168438,
-  "bytes": 27612
- },
- "drop/assets/products/powder-000.jpg": {
-  "sha1": "af3ba9c912df6e6d5c14b5d0d9665db8b0b21f2d",
-  "file": "drop/assets/products/powder-000.webp",
-  "type": "image/webp",
-  "sourceBytes": 134481,
-  "bytes": 70722
- },
- "drop/assets/products/stick.jpg": {
-  "sha1": "206db3d0a899388dfe11e0f26ebfa3d957366899",
-  "file": "drop/assets/products/stick.webp",
-  "type": "image/webp",
-  "sourceBytes": 84295,
-  "bytes": 12366
- },
- "drop/assets/products/vinilash-pro.jpg": {
-  "sha1": "e41afdfb0bedc0fe3b82ae5c901a161b9e3f29de",
-  "file": "drop/assets/products/vinilash-pro.webp",
-  "type": "image/webp",
-  "sourceBytes": 168438,
-  "bytes": 27612
  },
  "nyapit/assets/brand/bpedia-logo.png": {
   "sha1": "73de12e38cdc68bd8f0ec9e45146e9a62dc631bd",
@@ -1216,24 +1216,24 @@
   "bytes": 29728
  },
  "hub/assets/covers/drop.jpg": {
-  "sha1": "509e9bf22a001b8f39526de908988d008527b61f",
+  "sha1": "4d4d86b2e9b66cb2522f0e0a9c965c98a915ba1d",
   "file": "hub/assets/covers/drop.webp",
   "type": "image/webp",
-  "sourceBytes": 146066,
-  "bytes": 103742
+  "sourceBytes": 152020,
+  "bytes": 85914
  },
  "hub/assets/covers/nyapit.jpg": {
-  "sha1": "0e33635d018fe87cbea1abf05cf61d1f96c7714f",
+  "sha1": "c7ccd276a8709603002986cacecb579d70c7e604",
   "file": "hub/assets/covers/nyapit.webp",
   "type": "image/webp",
-  "sourceBytes": 91873,
-  "bytes": 59566
+  "sourceBytes": 174217,
+  "bytes": 100512
  },
  "hub/assets/covers/spin.jpg": {
-  "sha1": "d77b189a4d94a4cb71ee59f62608c9903abcc304",
+  "sha1": "c2cff0233363da6c01ea55f18415733683f906de",
   "file": "hub/assets/covers/spin.webp",
   "type": "image/webp",
-  "sourceBytes": 93335,
-  "bytes": 60572
+  "sourceBytes": 103241,
+  "bytes": 56468
  }
 }

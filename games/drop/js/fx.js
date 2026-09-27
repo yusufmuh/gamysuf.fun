@@ -5,7 +5,7 @@
 (()=>{
  const TAU=Math.PI*2;
  const PALETTE=['#E62B5E','#F7729A','#F9A2C1','#FBCFDB','#F5B83D','#FFF7F8'];
- let canvas,ctx,width=0,height=0,dpr=1,running=false,ambientOn=false,lastTime=0;
+ let canvas,ctx,width=0,height=0,dpr=1,running=false,ambientOn=false,lastTime=0,ambientBudget=0;
  const particles=[];
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
@@ -38,7 +38,11 @@
   lastTime=time;
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.clearRect(0,0,width,height);
-  if(ambientOn&&particles.filter(p=>p.kind==='dust').length<46&&Math.random()<.35)spawnDust();
+  if(ambientOn){
+   ambientBudget=Math.min(2,ambientBudget+dt*21);
+   let dust=particles.filter(p=>p.kind==='dust').length;
+   while(ambientBudget>=1&&dust<46){spawnDust();ambientBudget--;dust++;}
+  }
   for(let i=particles.length-1;i>=0;i--){
    const p=particles[i];
    p.age+=dt;
@@ -90,7 +94,7 @@
   start();
  }
 
- function ambient(on){ambientOn=Boolean(on)&&!reduced;if(ambientOn)start();}
+ function ambient(on){ambientOn=Boolean(on)&&!reduced;if(ambientOn)start();else ambientBudget=0;}
 
  function init(element){
   canvas=element;ctx=canvas.getContext('2d');

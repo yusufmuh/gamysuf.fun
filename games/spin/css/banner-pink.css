@@ -279,3 +279,44 @@ body.is-spinning .wheel-machine{
  .arena-mascot-zone{height:180px}.arena-mascot-zone .mascot-rig{width:150px;height:200px;left:40px;top:-30px}.arena-mascot-zone .mascot-button{top:23px;height:160px}.arena-mascot-zone .speech-bubble{font-size:9px;padding:7px 10px}.arena-intro h3{font-size:25px;margin-top:9px}.arena-catalog{font-size:11px;padding:9px 4px}
 }
 @media(prefers-reduced-motion:reduce){body{background-attachment:scroll}}
+
+@media(max-width:900px){
+ .site-header{height:auto;min-height:76px;flex-wrap:wrap;padding-block:10px;gap:8px}
+ .site-header .brand{flex:none}
+ .header-nav{margin-left:auto;min-width:0}
+ .music-control-bar{order:3;flex:1 0 100%;width:100%;min-width:0;max-width:100%;flex-wrap:wrap;justify-content:center;border-radius:16px;padding:8px;gap:7px}
+ .music-title-wrap{flex:1 1 115px;min-width:0;max-width:none}
+ .music-track-select{flex:1 1 145px;max-width:100%;min-width:0}
+ .music-vol-slider{flex:0 0 65px}
+}
+
+/* Keep the game reachable on short landscape phones and split-screen windows. */
+@media(max-width:680px) and (max-height:560px) and (orientation:landscape){
+ .arena-dialog[open]{grid-template-rows:52px minmax(0,1fr)}
+ .arena-header{min-height:52px}
+ .arena-header .arena-brand{width:58px}
+ .arena-header .arena-brand img{height:43px}
+ .arena-header h2{font-size:16px}
+ .arena-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,36%);align-items:center;gap:12px;padding:8px 12px}
+ .arena-wheel-heading,.arena-wheel-note,.arena-mascot-zone,.arena-footer{display:none}
+ #stage-wheel-slot .wheel-stage{width:min(100%,calc(100dvh - 82px));max-width:100%}
+ .arena-companion{display:flex;align-self:stretch;justify-content:center;width:auto;min-width:0;max-height:none;overflow:visible}
+ .arena-intro{display:flex;gap:8px;padding:0 0 8px}
+ #stage-controls-slot .spin-button{min-height:48px}
+ #stage-controls-slot .spin-hint{margin-top:7px}
+ .arena-catalog{padding:8px 2px}
+}
+@media(max-width:380px){
+ .page-shell{padding-inline:12px}
+ .music-control-bar{max-width:100%;min-width:0}
+ .play-toolbar,.folka-banner{min-width:0}
+ .game-tabs,.mode-switch{min-width:0}
+ .arena-header .arena-brand{width:58px}
+ .arena-header h2{font-size:16px}
+}
+@media(max-width:400px){
+ .game-layout .mascot-section{right:12px}
+ .intro-panel h1{max-width:215px}
+ .wheel-stage .orbit-one{inset:0}
+ .wheel-stage .orbit-two{inset:2%}
+}
