@@ -39,7 +39,7 @@ app.whenReady().then(async()=>{
   if(mode==='covers'){
    const out=path.join(root,'hub','public','assets','covers');
    fs.mkdirSync(out,{recursive:true});
-   for(const slug of ['spin','nyapit','drop']){
+   for(const slug of ['spin','nyapit','drop','gacha','heart']){
     await win.loadURL(`${base}/g/${slug}/`);
     await wait(9000);
     const image=(await shot()).resize({width:1200,quality:'best'});
@@ -68,7 +68,7 @@ app.whenReady().then(async()=>{
    await save('04-howto-drop.png');
    await js(`document.querySelector('.modal.open [data-close]')?.click()`);
    await wait(400);
-   for(const slug of ['spin','nyapit','drop']){
+   for(const slug of ['spin','nyapit','drop','gacha','heart']){
     await win.loadURL(`${base}/g/${slug}/`);
     await wait(6000);
     await save(`05-game-${slug}.png`);

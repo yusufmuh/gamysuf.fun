@@ -93,8 +93,8 @@ async function main(){
 
   // Skip writes only to this isolated browser's localStorage; no profile is submitted.
   await deskPage.locator('#onboardSkip').click();
-  check(await deskPage.locator('#newArena').isVisible()&&await deskPage.locator('#newArena').getAttribute('href')==='/g/gacha/',
-    'Gacha Pop shortcut is visible on dashboard');
+  check(await deskPage.locator('#newArena').isVisible()&&await deskPage.locator('#newArena').getAttribute('href')==='/g/heart/',
+    'Heart Parade shortcut is visible on dashboard');
   await deskPage.locator('#themeToggle').click();
   await deskPage.waitForFunction(()=>document.documentElement.dataset.theme==='light');
   await deskPage.locator('#topnav').scrollIntoViewIfNeeded();
@@ -132,7 +132,7 @@ async function main(){
     JSON.stringify(await visibleBrokenImages(mobilePage)));
   await mobilePage.screenshot({path:path.join(out,'03-mobile-album-390x844.png')});
   await mobile.close();
-  for(const game of ['spin','nyapit','drop','gacha']){
+  for(const game of ['spin','nyapit','drop','gacha','heart']){
    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
    const page=await context.newPage();watch(page,game);
    await page.goto(`${base}/g/${game}/`,{waitUntil:'domcontentloaded'});

@@ -1,0 +1,57 @@
+'use strict';
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
+const {chromium}=require(path.join(process.env.APPDATA,'npm','node_modules','playwright'));
+process.env.GAMYSUF_AUTOSTART='0';
+const {createHub}=require('../hub/server.cjs');
+const root=path.join(__dirname,'..'),out=path.join(root,'artifacts','heart-ui');
+async function main(){
+ fs.mkdirSync(out,{recursive:true});const dir=fs.mkdtempSync(path.join(os.tmpdir(),'heart-ui-'));
+ let hub,browser;const checks=[];
+ try{
+  hub=await createHub({dataDir:dir,adminPin:'246810',local:true});browser=await chromium.launch();
+  const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+  const page=await context.newPage(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(hub.origin+'/g/heart/');await page.locator('body[data-ready="1"]').waitFor();
+  await page.locator('[data-gmy-theme]').click();await page.evaluate(()=>document.fonts.ready);
+  await page.locator('.host-art').evaluateAll(images=>Promise.all(images.map(i=>i.decode())));
+  await page.screenshot({path:path.join(root,'hub/public/assets/covers/heart.jpg'),type:'jpeg',quality:88,clip:{x:0,y:0,width:1440,height:940}});
+  await page.screenshot({path:path.join(out,'heart-desktop.png'),fullPage:true});
+  await page.locator('#startButton').click();await page.locator('#consentCheck').check();
+  await page.locator('#pickService').selectOption('vow');await page.locator('#drawButton').click();
+  await page.locator('#resultDialog[open]').waitFor();const ticket=await page.locator('#ticketCode').textContent();
+  assert.equal(await page.locator('#resultTitle').textContent(),"Knight's Vow");checks.push('explicit menu and host choice');
+  const downloadPromise=page.waitForEvent('download');await page.locator('#saveCard').click();
+  const download=await downloadPromise;await download.saveAs(path.join(out,'keepsake-card.png'));checks.push('PNG card download');
+  await page.reload();await page.locator('#resultDialog[open]').waitFor();assert.equal(await page.locator('#ticketCode').textContent(),ticket);checks.push('pending ticket recovers after reload');
+  await page.route('**/g/heart/api/result',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'QA connection failure'})}));
+  await page.locator('#finishButton').click();await page.locator('#resultError:visible').waitFor();assert.ok(await page.locator('#resultDialog').isVisible());checks.push('failed acknowledgement retains ticket');
+  await page.unroute('**/g/heart/api/result');await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});
+  await page.route('**/g/heart/api/play',async route=>{await route.fetch();await route.abort('failed');});
+  await page.locator('#startButton').click();await page.locator('#consentCheck').check();await page.locator('#drawButton').click();
+  await page.locator('#resultDialog[open]').waitFor();assert.notEqual(await page.locator('#ticketCode').textContent(),ticket);checks.push('lost draw response recovers existing result');
+  await page.unroute('**/g/heart/api/play');await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});
+  await page.setViewportSize({width:390,height:844});await page.locator('.host-card[data-host="sanji"]').click();
+  await page.screenshot({path:path.join(out,'heart-phone.png'),fullPage:true});
+  await page.locator('#startButton').click();await page.locator('#consentCheck').check();await page.locator('#pickService').selectOption('twirl');await page.locator('#drawButton').click();
+  await page.locator('#resultDialog[open]').waitFor();await page.screenshot({path:path.join(out,'heart-phone-result.png')});
+  await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});
+  await page.goto(hub.origin+'/g/heart/admin.html');
+  await page.screenshot({path:path.join(out,'admin-login.png')});
+  await page.locator('#pin').fill('246810');await page.locator('#loginForm button').click();await page.locator('#adminContent:visible').waitFor();
+  await page.locator('#mode').selectOption('live');await page.locator('#duration').fill('1500');await page.locator('#settingsForm button').click();
+  await page.locator('#adminNotice:visible').waitFor();checks.push('staff session and reveal settings saved');
+  const booth=await context.newPage();await booth.goto(hub.origin+'/g/heart/');await booth.locator('body[data-ready="1"]').waitFor();
+  await booth.locator('#startButton').click();await booth.locator('#consentCheck').check();await booth.locator('#verifiedCheck').check();await booth.locator('#drawButton').click();
+  await booth.locator('#resultDialog[open]').waitFor();assert.match(await booth.locator('#ticketCode').textContent(),/^HP-/);
+  await booth.locator('#finishButton').click();await booth.locator('#resultDialog').waitFor({state:'hidden'});
+  await page.locator('#refreshQueue').click();await page.locator('#queueList [data-action="served"]').waitFor();
+  await page.screenshot({path:path.join(out,'admin-phone-ticket.png'),fullPage:true});
+  await page.locator('#queueList [data-action="served"]').click();await page.locator('#historyList .queue-ticket').waitFor({state:'attached'});
+  assert.equal(await page.locator('#queueList [data-action="served"]').count(),0);checks.push('official booth ticket created and served through UI');
+  await booth.close();
+  assert.deepEqual(errors,[]);checks.push('no uncaught browser errors');
+  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({checks,errors},null,2));console.log(`Heart UI: ${checks.length} checks passed; screenshots and card in ${out}`);
+ }finally{if(browser)await browser.close();if(hub)await hub.close();assert.ok(path.resolve(dir).startsWith(path.resolve(os.tmpdir())+path.sep));fs.rmSync(dir,{recursive:true,force:true});}
+}
+main().catch(e=>{console.error(e);process.exitCode=1;});

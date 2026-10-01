@@ -1,7 +1,7 @@
 'use strict';
 
 /* ZIP siap unggah untuk Hostinger (Node.js web app → Upload your files):
-   package.json di akar, hub + tiga game, tanpa tes/skrip/dokumen internal.
+   package.json di akar, hub + lima game, tanpa tes/skrip/dokumen internal.
    Cara lain yang direkomendasikan: impor repo GitHub (redeploy otomatis). */
 const fs=require('node:fs');
 const path=require('node:path');
@@ -29,7 +29,7 @@ const readme=`# Gamysuf Arcade ${pkg.version} · paket Hostinger
 5. Deploy, lalu buka https://gamysuf.fun (arcade) dan https://gamysuf.fun/studio (Studio pemilik).
 
 ## Login
-- Studio & dashboard Nyapit/Beauty Drop: PIN = ADMIN_PIN.
+- Studio & dashboard Nyapit/Beauty Drop/Gacha Pop/Heart Parade: PIN = ADMIN_PIN.
 - Dashboard Spin Wheels: username \`johan123\`, password = ADMIN_PIN.
 - Ganti PIN: ubah ADMIN_PIN di Environment variables lalu simpan (otomatis redeploy).
 `;

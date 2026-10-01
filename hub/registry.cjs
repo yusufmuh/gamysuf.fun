@@ -131,6 +131,18 @@ const GAMES=[
    return prizeCard(json.prize);
   },
   cards(state){return state.prizes.map(prizeCard).filter(Boolean);}
+ },
+ {
+  slug:'heart',title:'Bipy Heart Parade',brandTitle:'BIPY HEART PARADE',event:'Market-In 6.0',
+  mechanic:'Kapsul hati · Zoro & Sanji · tujuh momen manis',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.5.0',
+  tagline:'Dua pesona, tujuh momen manis. Pilih cosplayer dan buka kapsul hatimu.',
+  description:'Zoro dan Sanji tampil full body bersama Bipy Original, Jade, dan Golden Chef. Kapsul hati memilih satu dari tujuh fanservice romantis. Pilih kenyamananmu, simpan kartu kenang-kenangan, dan lengkapi 14 kombinasi momen.',
+  howTo:['Pilih Zoro atau Sanji dari panggung karakter.','Tekan Buka kapsul hati, lalu pilih interaksi tanpa sentuhan atau sentuhan ringan.','Konfirmasikan kenyamananmu. Kapsul hati berputar lalu membuka kartu momen.','Simpan kartu digital atau main lagi. Tiket demo online tidak berlaku untuk klaim booth.'],
+  tips:['Semua menu aktif dipilih acak oleh server. Timing tombol tidak mengubah hasil.','Setiap menu punya alternatif tanpa sentuhan. Tamu dan cosplayer boleh berhenti kapan saja.'],
+  controls:[['Sentuh / klik','Pilih cosplayer dan buka kapsul'],['Spasi','Buka pilihan momen dari beranda'],['M','Senyap'],['Esc','Tutup pilihan atau selesaikan kartu']],
+  admin:{path:'admin.html',login:'PIN = ADMIN_PIN'},loginRoutes:['/api/login'],resultRoutes:['/api/play'],
+  extract(_route,json){if(!json?.service||!json?.host)return null;return {cardId:`${json.host.id}-${json.service.id}`,name:`${json.service.name} · ${json.host.name}`,image:json.host.image,rarity:'epic'};},
+  cards(state){return state.hosts.flatMap(host=>state.services.map(service=>({cardId:`${host.id}-${service.id}`,name:`${service.name} · ${host.name}`,image:host.image,rarity:'epic'})));}
  }
 ];
 

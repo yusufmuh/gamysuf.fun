@@ -40,7 +40,7 @@ async function waitFor(check,timeout=20000){
  return false;
 }
 
-test('loader hosting di luar proyek yang membajak listen tetap menyajikan hub dan tiga game',async t=>{
+test('loader hosting di luar proyek yang membajak listen tetap menyajikan hub dan lima game',async t=>{
  const port=await freePort();
  /* Meniru loader LiteSpeed/Passenger: setiap http.Server.listen diarahkan ke
     satu soket milik loader. Hanya server pertama yang boleh memakainya. */
@@ -62,7 +62,7 @@ require(${JSON.stringify(HUB)});
  const home=await get(port,'/');
  assert.equal(home.status,200);
  assert.match(home.text,/Gamysuf Arcade/);
- for(const slug of ['spin','nyapit','drop','gacha']){
+ for(const slug of ['spin','nyapit','drop','gacha','heart']){
   const page=await get(port,`/g/${slug}/`);
   assert.equal(page.status,200,slug);
   const state=await get(port,`/g/${slug}/api/state`);

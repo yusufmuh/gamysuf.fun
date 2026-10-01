@@ -1,0 +1,1 @@
+Disalin dari "05 bipy-heart-parade" oleh scripts/sync-games.cjs. Ubah game di folder aslinya, lalu jalankan npm run sync.

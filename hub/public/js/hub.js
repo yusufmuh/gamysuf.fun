@@ -81,9 +81,9 @@
   $('statCards').textContent=number(catalog.totals.cards);
   $('statPlayers').textContent=number(catalog.totals.players);
   $('versionTag').textContent=`v${catalog.version}`;
-  const gacha=games().find(game=>game.slug==='gacha');
-  $('newArena').hidden=!gacha;
-  if(gacha)$('newArena').href=gacha.url;
+  const heart=games().find(game=>game.slug==='heart');
+  $('newArena').hidden=!heart;
+  if(heart)$('newArena').href=heart.url;
   const list=games().filter(game=>game.cover);
   $('cabinetScreen').innerHTML=list.map((game,index)=>`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" data-index="${index}" loading="${index?'lazy':'eager'}">`).join('');
   $('cabinetDots').innerHTML=list.map((game,index)=>`<button type="button" aria-pressed="false" aria-label="Tampilkan ${esc(game.title)}" data-feature="${index}"></button>`).join('');
