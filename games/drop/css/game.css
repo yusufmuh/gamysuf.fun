@@ -425,7 +425,7 @@ body[data-host="sanji"] .machine-frame{background:linear-gradient(145deg,#FFF4DB
  .drop-panel h2{grid-column:1/-1;grid-row:1;font-size:23px;margin:0}
  .machine{grid-column:1/-1;grid-row:2}
  .machine-crown{height:58px}.bipy-dropper{height:84px;margin-top:-8px}.held-capsule{top:23px;width:20px;height:20px;left:calc(50% + 17px)}
- .machine-frame{width:min(100%,500px,max(208px,calc((100svh - 332px)*.8)));aspect-ratio:.8}
+ .machine-frame{width:min(100%,500px,max(208px,calc((100svh - 360px - var(--gmy-bar-space,0px))*.8)));aspect-ratio:.8}
  .machine-plate{font-size:7px;padding:5px 8px;gap:8px}
  .drop-panel .name-field{grid-column:1;grid-row:3;margin:0;font-size:10px;gap:4px;align-self:end}
  .name-field input{width:100%;min-width:0;padding:0 10px;min-height:48px}

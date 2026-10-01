@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "status": "siap pakai offline",
+  "type": "suara MC booth Bpedia",
+  "runtime": "Web Audio, berkas WAV 44,1 kHz 16-bit mono",
+  "override": "Rekaman asli menimpa TTS lewat assets/audio/custom/manifest.json",
+  "brand": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "-7%",
+    "pronunciation": "Bipedia",
+    "locked": "kalimat publik dikunci PRD 9.1 dan disesuaikan v1.4.0",
+    "phrases": {
+      "slogan-app": "BPEDIA, semua ada di aplikasi",
+      "slogan-cantik": "Cantik bersama BPEDIA",
+      "slogan-belanja": "Belanja di BPEDIA, semua ada",
+      "slogan-adaada": "BPEDIA, cari skincare-mu dan temukan diskon di aplikasi... BPEDIA!",
+      "slogan-halo": "Halo BPEDIA, main yuk",
+      "slogan-skincare": "Download aplikasi BPEDIA dan temukan skincare mu"
+    },
+    "spokenScripts": {
+      "slogan-app": "Bipedia, semua ada di aplikasi.",
+      "slogan-cantik": "Cantik, bersama Bipedia.",
+      "slogan-belanja": "Belanja di Bipedia, semua ada.",
+      "slogan-adaada": "Bipedia! Cari skincare-mu, dan temukan diskon di aplikasi... Bipedia!",
+      "slogan-halo": "Halo Bipedia, main yuk.",
+      "slogan-skincare": "Download aplikasi Bipedia, dan temukan skincare kamu."
+    },
+    "pitch": {
+      "slogan-app": "+0Hz",
+      "slogan-cantik": "+4Hz",
+      "slogan-belanja": "-2Hz",
+      "slogan-adaada": "+8Hz",
+      "slogan-halo": "+8Hz",
+      "slogan-skincare": "-3Hz"
+    }
+  },
+  "mc": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "+8%",
+    "note": "celetuk booth v1.3 & v1.4, dibedakan oleh tempo ceria dan pitch",
+    "phrases": {
+      "mc-mantap": "Wah, keren banget! Selamat ya, berhasil dapat hadiah!",
+      "mc-ayo": "Ayo dicoba dulu, siapa tahu lagi hoki.",
+      "mc-semangat": "Santai, masih ada kesempatan lain kok."
+    }
+  },
+  "prizes": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "+7%",
+    "note": "ucapan selamat individual untuk masing-masing hadiah",
+    "phrases": {
+      "prize-foundation-04": "Selamat ya! Kamu berhasil membawa pulang Focallure Fluid Foundation 04!",
+      "prize-duo-m03": "Cantik banget! Selamat ya, kamu mendapatkan Pinkflash Duo Lipgloss!",
+      "prize-stick-hs03": "Selamat ya! Riasan makin glowing dengan Duo Makeup Stick Pinkflash!",
+      "prize-foundation-03": "Selamat ya! Kamu mendapatkan Focallure Fluid Foundation 03!",
+      "prize-powder-000": "Selamat ya! Kamu mendapatkan Pinkflash Lasting Matte Pressed Powder!",
+      "prize-creamy-rd01": "Tampil makin fresh! Selamat ya, kamu dapat Creamy Lipgloss Pinkflash!",
+      "prize-creamy-or01": "Bibir makin manis! Selamat ya, kamu dapat Creamy Lipgloss Pinkflash!",
+      "prize-glossy-g03": "Bibir berkilau mempesona! Selamat ya, kamu dapat Pinkflash Lasting Glossy Lipgloss!",
+      "prize-watery-nu02": "Selamat ya! Kamu mendapatkan Pinkflash Watery Transferproof Lip Cream!",
+      "prize-balm-pk01": "Selamat ya! Bibir sehat dan lembap dengan Color Reviving Lip Balm!"
+    }
+  },
+  "gachaPop": {
+    "voice": "id-ID-GadisNeural",
+    "rate": "+6%",
+    "note": "kalimat baru Gacha Pop: tuas, pop kapsul, panggilan keramaian, dan 7 hadiah baru Market-In 6.0",
+    "phrases": {
+      "gp-welcome": "Halo! Yuk main Bipy Gacha Pop di booth Bpedia! Sekali tap, langsung pop!",
+      "gp-tap": "Tuasnya diputar! Semoga hoki ya!",
+      "gp-pop": "Kapsulnya keluar… siap-siap, pop!",
+      "gp-empty": "Yah, kapsulnya kosong. Coba lagi ya!",
+      "gp-legend": "Wah, hadiah utama! Tepuk tangan dong!",
+      "gp-next": "Pemain berikutnya, silakan!",
+      "gp-crowd-1": "Ayo merapat! Gacha gratis di booth Bpedia, sekali tap langsung dapat hadiah!",
+      "gp-crowd-2": "Siapa mau kuas set karakter? Yuk, antre gacha Bpedia!",
+      "gp-crowd-3": "Market-In makin seru bareng Bpedia! Satu tap, satu kapsul, satu hadiah!",
+      "prize-bundling-1": "Luar biasa! Selamat ya, kamu dapat hadiah utama Produk Bundling Paket 1!",
+      "prize-bundling-2": "Luar biasa! Selamat ya, kamu dapat hadiah utama Produk Bundling Paket 2!",
+      "prize-bundling-3": "Luar biasa! Selamat ya, kamu dapat hadiah utama Produk Bundling Paket 3!",
+      "prize-kuas-doraemon": "Lucu banget! Selamat ya, kamu dapat Kuas Set Doraemon isi lima!",
+      "prize-kuas-cony": "Gemas! Selamat ya, kamu dapat Kuas Set Cony isi lima!",
+      "prize-kuas-hello-kitty": "Cantik banget! Selamat ya, kamu dapat Kuas Set Hello Kitty isi lima!",
+      "prize-saput-mickey": "Yeay! Selamat ya, kamu dapat Saput Mickey isi empat!"
+    },
+    "spokenScripts": {
+      "gp-welcome": "Halo! Yuk main, Bipi Gacha Pop, di booth Bipedia! Sekali tep, langsung pop!",
+      "gp-tap": "Tuasnya diputar! Semoga hoki ya!",
+      "gp-pop": "Kapsulnya keluar... siap siap... pop!",
+      "gp-empty": "Yah, kapsulnya kosong. Coba lagi ya!",
+      "gp-legend": "Waah, hadiah utama! Tepuk tangan dong!",
+      "gp-next": "Pemain berikutnya, silakan!",
+      "gp-crowd-1": "Ayo merapat! Gacha gratis di booth Bipedia, sekali tep langsung dapat hadiah!",
+      "gp-crowd-2": "Siapa mau kuas set karakter? Yuk, antre gacha Bipedia!",
+      "gp-crowd-3": "Market In makin seru bareng Bipedia! Satu tep, satu kapsul, satu hadiah!",
+      "prize-bundling-1": "Luar biasa! Selamat ya, kamu dapat hadiah utama, Produk Bundling Paket Satu!",
+      "prize-bundling-2": "Luar biasa! Selamat ya, kamu dapat hadiah utama, Produk Bundling Paket Dua!",
+      "prize-bundling-3": "Luar biasa! Selamat ya, kamu dapat hadiah utama, Produk Bundling Paket Tiga!",
+      "prize-kuas-doraemon": "Lucu banget! Selamat ya, kamu dapat Kuas Set Doraemon, isi lima!",
+      "prize-kuas-cony": "Gemas! Selamat ya, kamu dapat Kuas Set Koni, isi lima!",
+      "prize-kuas-hello-kitty": "Cantik banget! Selamat ya, kamu dapat Kuas Set Helo Kiti, isi lima!",
+      "prize-saput-mickey": "Yeay! Selamat ya, kamu dapat Saput Miki, isi empat!"
+    },
+    "pitch": {
+      "gp-welcome": "+16Hz",
+      "gp-tap": "+18Hz",
+      "gp-pop": "+20Hz",
+      "gp-empty": "+12Hz",
+      "gp-legend": "+20Hz",
+      "gp-next": "+14Hz",
+      "gp-crowd-1": "+14Hz",
+      "gp-crowd-2": "+16Hz",
+      "gp-crowd-3": "+14Hz",
+      "prize-bundling-1": "+18Hz",
+      "prize-bundling-2": "+18Hz",
+      "prize-bundling-3": "+18Hz",
+      "prize-kuas-doraemon": "+16Hz",
+      "prize-kuas-cony": "+16Hz",
+      "prize-kuas-hello-kitty": "+16Hz",
+      "prize-saput-mickey": "+16Hz"
+    }
+  }
+}

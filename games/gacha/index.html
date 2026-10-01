@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2a0a18">
+  <meta name="description" content="Bipy Gacha Pop: mesin gacha satu tap Bpedia di Market-In 6.0. Tekan GACHA!, kapsul keluar, pop jadi kartu stiker hadiah.">
+  <title>BIPY GACHA POP · Bpedia × Market-In 6.0</title>
+  <link rel="icon" href="/assets/icon.ico">
+  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/game.css?v=1.0.0">
+  <script defer src="/js/audio.js?v=1.0.0"></script>
+  <script defer src="/js/fx.js?v=1.0.0"></script>
+  <script defer src="/js/machine.js?v=1.0.0"></script>
+  <script defer src="/js/game.js?v=1.0.0"></script>
+</head>
+<body data-stage="boot">
+  <div class="backdrop" aria-hidden="true">
+    <div class="backdrop-checker"></div>
+    <div class="backdrop-rays"></div>
+    <div class="backdrop-stickers">
+      <img class="float-sticker s1" src="/assets/stickers/flower-yellow.svg" alt="">
+      <img class="float-sticker s2" src="/assets/stickers/star-chrome.svg" alt="">
+      <img class="float-sticker s3" src="/assets/stickers/heart.svg" alt="">
+      <img class="float-sticker s4" src="/assets/stickers/butterfly.svg" alt="">
+      <img class="float-sticker s5" src="/assets/stickers/flower-pink.svg" alt="">
+      <img class="float-sticker s6" src="/assets/stickers/sparkle.svg" alt="">
+      <img class="float-sticker s7" src="/assets/stickers/smile.svg" alt="">
+      <img class="float-sticker s8" src="/assets/stickers/flower-red.svg" alt="">
+    </div>
+    <div class="backdrop-vignette"></div>
+  </div>
+  <canvas id="fxCanvas" class="fx-canvas" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <img class="brand-logo" src="/assets/brand/bpedia-logo-reverse.png" alt="Bpedia">
+    <div class="event-chip">
+      <img src="/assets/brand/market-in-6.webp" alt="Market-In 6.0">
+      <span><b>Urban Forest Cipete</b><small>3–4 Okt 2026</small></span>
+    </div>
+    <div class="top-actions">
+      <button id="modeButton" class="mode-pill" type="button" title="Ganti mode demo atau resmi">MODE DEMO</button>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="Ganti tema">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M5 5l1.5 1.5m11 11L19 19M2 12h2m16 0h2M5 19l1.5-1.5m11-11L19 5"/></svg>
+      </button>
+      <button id="soundButton" class="icon-button" type="button" aria-label="Matikan suara" aria-pressed="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="speaker" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+      </button>
+      <a class="admin-entry" href="/admin.html" aria-label="Masuk admin">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5M12 14.5v2.5"/></svg>
+        <span>Admin</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <section class="intro" aria-labelledby="gameTitle">
+      <p class="eyebrow">BOOTH BPEDIA · SEKALI TAP</p>
+      <h1 id="gameTitle" class="title"><span class="title-script">Bipy</span><span class="title-pop">Gacha<em>Pop!</em></span></h1>
+      <p class="tagline">Belanja Bikin Bahagia</p>
+      <ol class="steps" aria-label="Cara main">
+        <li><b>1</b><span>Tekan <strong>GACHA!</strong></span></li>
+        <li><b>2</b><span>Kapsul keluar &amp; <strong>pop!</strong></span></li>
+        <li><b>3</b><span>Tunjukkan kode <strong>GP-</strong> ke petugas</span></li>
+      </ol>
+      <section class="pulls" aria-labelledby="pullsTitle">
+        <h2 id="pullsTitle">Baru saja keluar</h2>
+        <ul id="pullsList" class="pulls-list" aria-live="polite"></ul>
+      </section>
+    </section>
+
+    <section class="machine-zone" id="machineZone" aria-label="Mesin gacha">
+      <div class="machine-wrap" id="machineWrap">
+        <div class="speech" id="speech" role="status"><span id="speechText">Sekali tap, langsung pop!</span></div>
+        <img class="side-bipy" id="sideBipy" src="/assets/brand/rt-bipy-wave.png" alt="Bipy menyapa">
+        <div class="machine" id="machine" aria-hidden="true">
+          <svg class="machine-back" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <radialGradient id="gpGlassBack" cx="50%" cy="38%" r="62%">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".22"/>
+                <stop offset=".72" stop-color="#ffd6e4" stop-opacity=".12"/>
+                <stop offset="1" stop-color="#45122b" stop-opacity=".42"/>
+              </radialGradient>
+            </defs>
+            <ellipse cx="200" cy="590" rx="170" ry="12" fill="#12040a" opacity=".38"/>
+            <circle cx="200" cy="178" r="146" fill="url(#gpGlassBack)"/>
+            <ellipse cx="200" cy="292" rx="104" ry="18" fill="#2a0a18" opacity=".28"/>
+          </svg>
+          <canvas id="domeCanvas" class="dome-canvas"></canvas>
+          <svg class="machine-front" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="gpChrome" x1="0" x2="1">
+                <stop offset="0" stop-color="#8d8592"/><stop offset=".18" stop-color="#f6f2f7"/><stop offset=".42" stop-color="#b8b0bd"/>
+                <stop offset=".62" stop-color="#ffffff"/><stop offset=".84" stop-color="#9c94a1"/><stop offset="1" stop-color="#e8e2ea"/>
+              </linearGradient>
+              <linearGradient id="gpChromeV" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#bdb5c2"/><stop offset="1" stop-color="#7d7582"/>
+              </linearGradient>
+              <linearGradient id="gpBody" x1="0" x2="1">
+                <stop offset="0" stop-color="#a3123f"/><stop offset=".12" stop-color="#e62b5e"/><stop offset=".34" stop-color="#ff6e99"/>
+                <stop offset=".6" stop-color="#e62b5e"/><stop offset=".9" stop-color="#b3164b"/><stop offset="1" stop-color="#8a0f37"/>
+              </linearGradient>
+              <linearGradient id="gpBodyShine" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".38"/><stop offset=".3" stop-color="#ffffff" stop-opacity="0"/>
+              </linearGradient>
+              <pattern id="gpChecker" width="22" height="22" patternUnits="userSpaceOnUse">
+                <rect width="22" height="22" fill="#ffd2e1"/><rect width="11" height="11" fill="#ffffff"/><rect x="11" y="11" width="11" height="11" fill="#ffffff"/>
+              </pattern>
+              <radialGradient id="gpKnobFill" cx="40%" cy="34%" r="70%">
+                <stop offset="0" stop-color="#ffe7a3"/><stop offset=".55" stop-color="#f5b83d"/><stop offset="1" stop-color="#c88a12"/>
+              </radialGradient>
+              <linearGradient id="gpGlare" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="gpChute" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#12040a"/><stop offset="1" stop-color="#45122b"/>
+              </linearGradient>
+              <clipPath id="gpBodyClip"><path d="M46 352Q46 330 70 330H330Q354 330 354 352V540Q354 562 330 562H70Q46 562 46 540Z"/></clipPath>
+            </defs>
+            <circle cx="200" cy="178" r="150" fill="none" stroke="url(#gpChrome)" stroke-width="11"/>
+            <circle cx="200" cy="178" r="150" fill="none" stroke="#45122b" stroke-opacity=".55" stroke-width="2.5"/>
+            <circle cx="200" cy="178" r="144" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="2"/>
+            <path d="M92 108A126 126 0 0 1 196 46" stroke="url(#gpGlare)" stroke-width="16" stroke-linecap="round" fill="none"/>
+            <path d="M82 152A126 126 0 0 1 86 132" stroke="#ffffff" stroke-opacity=".7" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <ellipse cx="282" cy="104" rx="14" ry="7" fill="#ffffff" opacity=".55" transform="rotate(40 282 104)"/>
+            <path d="M300 250A126 126 0 0 1 252 290" stroke="#ffffff" stroke-opacity=".28" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <ellipse cx="200" cy="30" rx="48" ry="13" fill="url(#gpChromeV)" stroke="#45122b" stroke-width="2.5"/>
+            <rect x="86" y="300" width="228" height="38" rx="14" fill="url(#gpChrome)" stroke="#45122b" stroke-width="3"/>
+            <path d="M98 312H302" stroke="#ffffff" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>
+            <path d="M46 352Q46 330 70 330H330Q354 330 354 352V540Q354 562 330 562H70Q46 562 46 540Z" fill="url(#gpBody)"/>
+            <g clip-path="url(#gpBodyClip)">
+              <rect x="40" y="346" width="320" height="30" fill="url(#gpChecker)"/>
+              <path d="M40 346H360M40 376H360" stroke="#45122b" stroke-width="3"/>
+              <rect x="40" y="330" width="320" height="120" fill="url(#gpBodyShine)"/>
+              <path d="M70 392V540" stroke="#ffffff" stroke-opacity=".35" stroke-width="10" stroke-linecap="round"/>
+            </g>
+            <path d="M46 352Q46 330 70 330H330Q354 330 354 352V540Q354 562 330 562H70Q46 562 46 540Z" fill="none" stroke="#45122b" stroke-width="4"/>
+            <rect x="104" y="388" width="192" height="42" rx="21" fill="#ffffff" stroke="#45122b" stroke-width="3"/>
+            <text x="200" y="417" text-anchor="middle" class="plate-text">GACHA POP</text>
+            <path d="M120 409l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1z" fill="#f5b83d"/>
+            <path d="M280 409l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1z" fill="#f5b83d"/>
+            <circle cx="140" cy="494" r="54" fill="url(#gpChrome)" stroke="#45122b" stroke-width="3"/>
+            <g id="knob" class="knob">
+              <circle cx="140" cy="494" r="42" fill="url(#gpKnobFill)" stroke="#45122b" stroke-width="3"/>
+              <circle cx="140" cy="494" r="30" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2" stroke-dasharray="4 7"/>
+              <rect x="98" y="484" width="84" height="20" rx="10" fill="#ffffff" stroke="#45122b" stroke-width="3"/>
+              <circle cx="140" cy="494" r="9" fill="#e62b5e" stroke="#45122b" stroke-width="2.5"/>
+              <path d="M110 490H130" stroke="#f9a2c1" stroke-width="4" stroke-linecap="round"/>
+            </g>
+            <rect x="232" y="448" width="94" height="86" rx="22" fill="url(#gpChromeV)" stroke="#45122b" stroke-width="3"/>
+            <rect x="242" y="458" width="74" height="62" rx="16" fill="url(#gpChute)"/>
+            <path id="chuteFlap" class="chute-flap" d="M242 474Q242 458 258 458H300Q316 458 316 474V492H242Z" fill="#ff8db1" fill-opacity=".72" stroke="#45122b" stroke-width="2"/>
+            <rect x="228" y="520" width="102" height="18" rx="9" fill="url(#gpChrome)" stroke="#45122b" stroke-width="2.5"/>
+            <rect x="76" y="560" width="58" height="20" rx="8" fill="url(#gpChromeV)" stroke="#45122b" stroke-width="2.5"/>
+            <rect x="266" y="560" width="58" height="20" rx="8" fill="url(#gpChromeV)" stroke="#45122b" stroke-width="2.5"/>
+            <image href="/assets/stickers/flower-yellow.svg" x="300" y="292" width="72" height="72"/>
+            <image href="/assets/stickers/star-chrome.svg" x="24" y="372" width="56" height="56"/>
+            <image href="/assets/stickers/heart.svg" x="318" y="530" width="44" height="44"/>
+            <image href="/assets/stickers/butterfly.svg" x="30" y="230" width="58" height="58"/>
+          </svg>
+          <span class="out-capsule" id="outCapsule"><i class="cap-top"></i><i class="cap-bottom"></i></span>
+          <img class="top-bipy" id="topBipy" src="/assets/brand/rt-bipy-peek.png" alt="">
+        </div>
+      </div>
+
+      <div class="controls" id="controls">
+        <button id="gachaButton" class="gacha-button" type="button" aria-describedby="capsuleMeter">
+          <span class="gacha-face"><b>GACHA!</b><small>sekali tap</small></span>
+        </button>
+        <div class="controls-row">
+          <p class="capsule-meter" id="capsuleMeter"><b id="capsuleCount">0</b> <span id="capsuleLabel">kapsul menunggu</span></p>
+          <button id="nameToggle" class="name-toggle" type="button" aria-expanded="false" aria-controls="nameField">+ Nama</button>
+        </div>
+        <label class="name-field" id="nameField" for="playerName" hidden><span>Nama tamu <small>(opsional)</small></span>
+          <input id="playerName" maxlength="24" autocomplete="off" spellcheck="false" placeholder="mis. Rina" enterkeyhint="go">
+        </label>
+        <p class="fair-note">Semua kapsul punya kesempatan sama. Tanpa persentase, murni hoki.</p>
+      </div>
+    </section>
+
+    <aside class="prize-rail" aria-labelledby="railTitle">
+      <header class="rail-head">
+        <h2 id="railTitle">Isi mesin</h2>
+        <p id="railNote">17 hadiah · setiap stok = 1 kapsul</p>
+      </header>
+      <div id="railGroups" class="rail-groups"></div>
+    </aside>
+  </main>
+
+  <footer class="ticker" aria-label="Hadiah dan tagar acara">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </footer>
+
+  <div id="revealLayer" class="reveal-layer" role="dialog" aria-modal="true" aria-labelledby="revealTitle" tabindex="-1" hidden>
+    <div class="reveal-rays" aria-hidden="true"></div>
+    <div id="bigCapsule" class="big-capsule" aria-hidden="true"><i class="cap-top"></i><i class="cap-bottom"></i><i class="cap-glow"></i></div>
+    <div class="reveal-content" id="revealContent">
+      <article class="sticker-card" id="stickerCard">
+        <header class="card-ribbon"><span id="cardRarity"></span><span id="cardStars" class="card-stars"></span></header>
+        <div class="card-art"><img id="cardImage" src="/assets/products/bundling-1.webp" alt=""><i class="holo" aria-hidden="true"></i></div>
+        <h3 class="card-name" id="cardName"></h3>
+        <p class="card-sub" id="cardSub"></p>
+        <footer class="card-foot"><span id="cardSerial"></span><span>MARKET-IN 6.0 · 03–04.10.26</span></footer>
+      </article>
+      <section class="reveal-info">
+        <p class="eyebrow" id="revealEyebrow"></p>
+        <h2 id="revealTitle"></h2>
+        <p class="reveal-lead" id="revealLead"></p>
+        <div class="claim-box" id="claimBox"><small>Kode klaim untuk petugas</small><b id="claimCode"></b><span id="claimPlayer"></span></div>
+        <p class="reveal-terms" id="revealTerms"></p>
+        <p class="demo-note" id="demoNote" hidden>SIMULASI DEMO · hadiah fisik hanya di booth, stok tidak berkurang</p>
+        <button id="closeReveal" class="next-button" type="button">
+          <svg class="next-ring" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><circle id="nextRing" class="ring-progress" cx="20" cy="20" r="17"/></svg>
+          <span id="nextLabel">Lanjut · pemain berikutnya</span>
+        </button>
+      </section>
+    </div>
+  </div>
+
+  <div id="pauseBanner" class="pause-banner" role="status" hidden>Permainan sedang dijeda petugas</div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

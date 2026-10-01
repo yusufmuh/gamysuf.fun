@@ -1,6 +1,6 @@
 'use strict';
 
-// Isolated local regression tour for the shared 1.3.0 gamebar. No game rounds.
+// Isolated local regression tour for the shared gamebar (1.4.0). No game rounds.
 const fs=require('node:fs');
 const os=require('node:os');
 const path=require('node:path');
@@ -11,13 +11,14 @@ catch{playwright=require('playwright');}
 process.env.GAMYSUF_AUTOSTART='0';
 const {createHub}=require('../hub/server.cjs');
 
-const out=path.join(root,'artifacts','gamebar-1.3.0');
+const out=path.join(root,'artifacts','gamebar-1.4.0');
 const profile={nickname:'QA Bipy',avatar:'heart'};
 const matrix=[
  ['chromium','spin',390,844],['chromium','nyapit',390,844],['chromium','drop',390,844],
  ['chromium','spin',1366,768],['chromium','nyapit',1366,768],['chromium','drop',1366,768],
  ['firefox','spin',390,844],['firefox','nyapit',390,844],['firefox','drop',390,844],
- ['webkit','spin',390,844],['webkit','nyapit',390,844],['webkit','drop',390,844]
+ ['webkit','spin',390,844],['webkit','nyapit',390,844],['webkit','drop',390,844],
+ ['chromium','gacha',390,844],['chromium','gacha',1366,768],['firefox','gacha',390,844],['webkit','gacha',390,844]
 ].filter(([engine,game])=>{
  const engineOnly=process.argv.find(value=>value.startsWith('--engine='))?.split('=')[1];
  const gameOnly=process.argv.find(value=>value.startsWith('--game='))?.split('=')[1];
@@ -175,6 +176,7 @@ async function visit(browser,engine,game,width,height,origin){
     await page.locator('#close-arena').click();
     await page.waitForFunction(()=>document.querySelector('#gmyGamebar')?.parentElement===document.body);
    }
+   if(game==='gacha'&&engine==='chromium'&&width===390&&theme==='dark')await checkCapture(page,`${prefix} machine`);
    await page.screenshot({path:path.join(out,`${engine}-${game}-${width}-${theme}.png`),fullPage:false});
   }
   const previousPage=page;
@@ -223,7 +225,7 @@ async function run(){
   for(const browser of browsers.values())await browser.close();
   await hub?.close();
   fs.rmSync(dataDir,{recursive:true,force:true});
-  const report={version:'1.3.0',checks:checks.length,passed:checks.length-failures.length,failures,cases:checks};
+  const report={version:'1.4.0',checks:checks.length,passed:checks.length-failures.length,failures,cases:checks};
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
   console.log(JSON.stringify({version:report.version,checks:report.checks,passed:report.passed,failures:report.failures},null,2));
  }

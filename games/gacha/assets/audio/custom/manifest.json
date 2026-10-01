@@ -1,0 +1,4 @@
+{
+  "note": "Daftar rekaman suara asli yang menimpa TTS bawaan. Isi 'overrides' dengan nama berkas, contoh: [\"gp-welcome.mp3\"]. Lihat README.md di folder ini.",
+  "overrides": []
+}

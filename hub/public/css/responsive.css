@@ -152,3 +152,7 @@ html[data-background="true"] *{animation-play-state:paused!important}
  .hero{min-height:0;padding-top:28px}.mobile-nav{padding-block:3px}.mobile-nav a{min-height:44px;flex-direction:row;font-size:.7rem;gap:5px}.mobile-nav svg{width:18px;height:18px}
 }
 @media (hover:none){.game-card:hover,.btn:hover,.cabinet:hover{transform:none}.glow{animation:none;filter:blur(50px)}}
+
+/* Empat arena bawaan: 2×2 di tablet/laptop, satu baris di layar sangat lebar. */
+@media (min-width:760px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1640px){.game-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

@@ -98,7 +98,7 @@ async function hubFlow(page, base, browserName, sizeId) {
   await onboarding.waitFor({state:'hidden'});
   check((await page.locator('#chipName').textContent()).includes('QA Lokal'),`${log.stem} onboarding saved`);
   await page.screenshot({path:path.join(out,`${log.stem}-after-onboard.png`),fullPage:false});
-  for(const slug of ['spin','nyapit','drop']) {
+  for(const slug of ['spin','nyapit','drop','gacha']) {
     await page.locator(`[data-howto="${slug}"]`).first().click();
     check(await page.locator('#gameModal').isVisible(),`${log.stem} ${slug} guide visible`);
     await page.locator('#gameModalPlay').click({trial:true,timeout:3000});
@@ -155,7 +155,7 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
       await page.locator('#result').waitFor({state:'hidden'});
       check(true,`${log.stem} nyapit result close`);
     }
-  } else {
+  } else if(slug==='drop') {
     await page.locator('body.ready').waitFor({timeout:20000});
     await page.locator('#startDrop').click();
     await page.locator('#dropView:visible').waitFor();
@@ -180,6 +180,26 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
       await page.locator('#closeReveal').click();
       await page.locator('#revealLayer').waitFor({state:'hidden'});
       check(!(await page.locator('#dropButton').isDisabled()),`${log.stem} drop replay ready`);
+    }
+  } else {
+    await page.locator('body[data-stage="ready"]').waitFor({timeout:20000});
+    const control=await target(page,'#gachaButton');
+    check(control.visible && control.inViewport && control.width>=180 && control.height>=56,`${log.stem} gacha touch target`,JSON.stringify(control));
+    await pillClear(page,'#gachaButton',log.stem);
+    const fit=await page.evaluate(()=>{const button=document.getElementById('gachaButton').getBoundingClientRect();const bar=document.querySelector('.gmy-gamebar')?.getBoundingClientRect();return {bottom:Math.round(button.bottom),barTop:bar?Math.round(bar.top):innerHeight,innerHeight};});
+    check(fit.bottom<=fit.barTop,`${log.stem} gacha button above game bar`,JSON.stringify(fit));
+    const dome=await page.locator('#domeCanvas').evaluate(node=>({width:node.width,box:node.getBoundingClientRect().width}));
+    check(dome.width>0&&dome.box>0,`${log.stem} dome canvas sized`,JSON.stringify(dome));
+    if(play) {
+      await page.locator('#gachaButton').click();
+      await page.locator('#revealLayer.popped').waitFor({timeout:30000});
+      check(await page.locator('#demoNote').isVisible(),`${log.stem} gacha demo reveal`);
+      const close=await target(page,'#closeReveal');
+      check(close.visible&&close.inViewport,`${log.stem} gacha next button visible`,JSON.stringify(close));
+      await page.locator('#closeReveal').click();
+      await page.locator('#revealLayer').waitFor({state:'hidden'});
+      await page.locator('#gachaButton:not([disabled])').waitFor({timeout:10000});
+      check(true,`${log.stem} gacha replay ready`);
     }
   }
   const layout=await geometry(page);
@@ -207,7 +227,7 @@ async function main() {
           try {
             try {await hubFlow(page,base,browserName,sizeId);}
             catch(error) {check(false,`${browserName}-${sizeId} hub flow`,error.stack||error.message);}
-            for(const slug of ['spin','nyapit','drop'].filter(name=>!gameFilter||name===gameFilter)) {
+            for(const slug of ['spin','nyapit','drop','gacha'].filter(name=>!gameFilter||name===gameFilter)) {
               try {await gameFlow(page,base,slug,browserName,sizeId,
                 browserName==='chromium' && sizeId==='phone-390');}
               catch(error) {

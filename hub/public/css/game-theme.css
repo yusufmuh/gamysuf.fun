@@ -1,4 +1,4 @@
-/* Shared dashboard theme on the three hosted games. Loaded after each game's CSS. */
+/* Shared dashboard theme on the hosted games. Loaded after each game's CSS. */
 html[data-gamysuf-game] {
   color-scheme: dark;
 }

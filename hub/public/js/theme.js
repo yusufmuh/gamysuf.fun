@@ -1,6 +1,6 @@
 'use strict';
 
-// Runs before the first paint in the hub and the three hosted games.
+// Runs before the first paint in the hub and every hosted game.
 (() => {
  const root=document.documentElement;
  const game=document.currentScript?.dataset.game;

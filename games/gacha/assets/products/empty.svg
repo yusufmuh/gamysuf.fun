@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f6e9ee"/></radialGradient>
+  <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".9"/><stop offset="1" stop-color="#f9a2c1" stop-opacity=".55"/></linearGradient>
+</defs>
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <ellipse cx="400" cy="610" rx="220" ry="26" fill="#2a0a18" opacity=".1"/>
+  <g transform="translate(400 470) rotate(-18)">
+    <path d="M-170 0A170 170 0 0 1 170 0Z" fill="url(#shell)" stroke="#e62b5e" stroke-width="8" transform="translate(0 -40)"/>
+    <path d="M-170 0A170 170 0 0 0 170 0Z" fill="#fde7ec" stroke="#e62b5e" stroke-width="8" transform="translate(0 40)"/>
+    <path d="M-120 -90A140 140 0 0 1 20 -190" stroke="#fff" stroke-width="18" stroke-linecap="round" fill="none" opacity=".8"/>
+  </g>
+  <g fill="#f5b83d">
+    <path d="M400 190c4 22 14 32 36 36-22 4-32 14-36 36-4-22-14-32-36-36 22-4 32-14 36-36Z"/>
+    <path d="M560 280c3 14 9 20 23 23-14 3-20 9-23 23-3-14-9-20-23-23 14-3 20-9 23-23Z" opacity=".7"/>
+    <path d="M240 300c3 14 9 20 23 23-14 3-20 9-23 23-3-14-9-20-23-23 14-3 20-9 23-23Z" opacity=".7"/>
+  </g>
+</svg>

@@ -1,7 +1,7 @@
 'use strict';
 
-/* Menyalin berkas runtime tiga game dari folder proyek aslinya ke games/<slug>.
-   Sumber kebenaran kode game tetap di folder masing-masing (01, 02, 03);
+/* Menyalin berkas runtime game dari folder proyek aslinya ke games/<slug>.
+   Sumber kebenaran kode game tetap di folder masing-masing (01, 02, 03, 04);
    folder games/ di sini hanya salinan agar repo hub bisa di-deploy sendirian.
    Jalankan ulang setiap kali game asli diperbarui: npm run sync */
 const fs=require('node:fs');
@@ -12,7 +12,8 @@ const parent=path.join(root,'..');
 const SOURCES={
  spin:'01 spenweels',
  nyapit:'02 nyapit',
- drop:'03 bipy-beauty-drop'
+ drop:'03 bipy-beauty-drop',
+ gacha:'04 bipy-gacha-pop'
 };
 const ENTRIES=['server.cjs','index.html','admin.html','core','js','css','assets','maskot.png','logo.png','rancangan maskot.png'];
 const SKIP=[
@@ -21,6 +22,7 @@ const SKIP=[
  /^assets\/brand\/08 /,
  /^assets\/brand\/bipy-(?:full|ngintip|tas|wajah)[^/]*\.png$/,
  /^assets\/images\/cosplayer-brickhall-hero\.png$/,
+ /^assets\/products\/src\//,
  /\.(?:psd|ai|xcf|mp4|mov)$/i
 ];
 

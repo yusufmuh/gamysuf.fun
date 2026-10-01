@@ -13,7 +13,7 @@ const {Players,validNickname,levelFor}=require('../hub/players.cjs');
 
 const HOST='gamysuf.fun';
 const ORIGIN=`https://${HOST}`;
-const CLIENT={spin:'spin-studio',nyapit:'nyapit',drop:'beautydrop'};
+const CLIENT={spin:'spin-studio',nyapit:'nyapit',drop:'beautydrop',gacha:'gachapop'};
 const vid=char=>char.repeat(32);
 
 async function hubFor(t,options={}){
@@ -57,9 +57,9 @@ test('rewrite memberi awalan pada URL absolut dan melepasnya lagi dari body',()=
  assert.equal(rewriteCookie('s=1; HttpOnly; SameSite=Strict; Path=/api/','/g/drop',true),'s=1; HttpOnly; SameSite=Strict; Path=/g/drop/api/; Secure');
 });
 
-test('tiga game tampil lewat gateway dengan URL berawalan dan tombol Gamysuf',async t=>{
+test('empat game tampil lewat gateway dengan URL berawalan dan tombol Gamysuf',async t=>{
  const hub=await hubFor(t);
- for(const slug of ['spin','nyapit','drop']){
+ for(const slug of ['spin','nyapit','drop','gacha']){
   const page=await call(hub,`/g/${slug}/`);
   assert.equal(page.status,200,slug);
   assert.ok(page.text.includes('/hub/js/inject.js'),`${slug}: inject`);
@@ -181,7 +181,7 @@ test('Studio: login PIN, CSRF, dan slot game tambahan (tautan & ZIP aman)',async
  assert.equal(login.status,200);
  const cookie=login.headers['set-cookie'].find(item=>item.startsWith('gamysuf_admin=')).split(';')[0];
  const admin=(route,body)=>call(hub,route,{method:body?'POST':'GET',body,cookie});
- assert.equal((await admin('/hub-api/admin/state')).json.games.length,3);
+ assert.equal((await admin('/hub-api/admin/state')).json.games.length,4);
 
  assert.equal((await admin('/hub-api/admin/game',{slug:'drop',title:'Bentrok',type:'link',url:'https://x.test'})).status,400,'slug bawaan tidak boleh dipakai');
  const link=await admin('/hub-api/admin/game',{slug:'kuis-bpedia',title:'Kuis Bpedia',type:'link',url:'https://example.com/kuis',published:true,howTo:['Jawab pertanyaan'],tags:['kuis']});
@@ -228,7 +228,7 @@ test('halaman hub dan aset statis tersaji dengan CSP',async t=>{
 test('CSP juga ditanam sebagai meta karena CDN hosting mengganti header CSP',async t=>{
  const hub=await hubFor(t);
  const meta=/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/;
- for(const route of ['/','/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/drop/admin.html']){
+ for(const route of ['/','/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/drop/admin.html','/g/gacha/','/g/gacha/admin.html']){
   const page=await call(hub,route);
   const match=page.text.match(meta);
   assert.ok(match,`${route}: meta CSP hilang`);
@@ -236,4 +236,24 @@ test('CSP juga ditanam sebagai meta karena CDN hosting mengganti header CSP',asy
   assert.doesNotMatch(match[1],/frame-ancestors/,route);
   assert.equal(page.text.match(/http-equiv="Content-Security-Policy"/g).length,1,`${route}: meta ganda`);
  }
+});
+
+test('Gacha Pop lewat gateway: satu tap jadi kartu album & XP, stok booth tidak tersentuh',async t=>{
+ const hub=await hubFor(t);
+ const played=await call(hub,'/g/gacha/api/play',{method:'POST',body:{requestId:'gacha-hub-0001'}});
+ assert.equal(played.status,200,played.text);
+ assert.equal(played.json.demo,true);
+ assert.match(played.json.id,/^GP-[0-9A-F]{8}$/);
+ assert.ok(played.json.prize.image.startsWith('/g/gacha/assets/products/'));
+ const me=(await call(hub,'/hub-api/me')).json;
+ assert.ok(me.cards.some(card=>card.key===`gacha:${played.json.prize.id}`),'kartu hasil tercatat di profil');
+ assert.ok(me.xp>0);
+ const album=(await call(hub,'/hub-api/album')).json;
+ const gacha=album.games.find(game=>game.slug==='gacha');
+ assert.equal(gacha.cards.length,17);
+ assert.deepEqual([...new Set(gacha.cards.map(card=>card.rarity))].sort(),['common','epic','legendary']);
+ assert.equal(album.total,74);
+ assert.equal(hub.mounts.get('gacha').app.engine.state.history.length,0);
+ assert.equal((await call(hub,'/g/gacha/api/result',{method:'POST',body:{id:played.json.id}})).status,200);
+ assert.equal((await call(hub,'/g/gacha/api/mode',{method:'POST',body:{mode:'live'}})).status,403);
 });

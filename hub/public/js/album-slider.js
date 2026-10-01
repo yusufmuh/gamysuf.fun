@@ -100,7 +100,7 @@
 
   function setup(root) {
     root.innerHTML = `<div class="gmy-album-slider-head">
-      <div><span class="gmy-album-slider-kicker">DARI TIGA ARENA</span><h3>Kartu yang menunggumu</h3></div>
+      <div><span class="gmy-album-slider-kicker">DARI SEMUA ARENA</span><h3>Kartu yang menunggumu</h3></div>
       <div class="gmy-album-slider-actions" aria-label="Kontrol album">
         <span class="gmy-album-slider-status" aria-live="off"></span>
         <button type="button" data-album-action="prev" aria-label="Kartu sebelumnya">‹</button>

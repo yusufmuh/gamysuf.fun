@@ -27,11 +27,11 @@ async function main(){
  if(catalog.version!==pkg.version)throw new Error(`Expected ${pkg.version}, received ${catalog.version}`);
  const page=(await read('/')).toString();
  if(!page.includes('Navigasi cepat')||!page.includes(`/hub/css/responsive.css?v=${pkg.version}`)||!page.includes('Pilih Bipy versimu.'))throw new Error('Dashboard release markup not present.');
- for(const route of ['/studio','/g/spin/','/g/nyapit/','/g/drop/']){
+ for(const route of ['/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/gacha/','/g/gacha/admin.html']){
   const html=(await read(route)).toString();
   if(!html.includes('Content-Security-Policy'))throw new Error(`${route}: CSP meta not present.`);
  }
- const assets=['css/responsive.css','css/avatars.css','css/theme.css','css/album-slider.css','css/game-theme.css','css/gamebar.css','js/hub.js','js/inject.js','js/theme.js','js/album-slider.js','vendor/html2canvas-1.4.1.min.js',...['gamysuf-3d-dark','gamysuf-3d-light','bpedia-pink','bpedia-white'].map(name=>`assets/brand/${name}.png`),...['wave','stand','explorer','star','collector','champion'].map(name=>`assets/avatars/character-${name}.png`),'assets/covers/spin.jpg','assets/covers/nyapit.jpg','assets/covers/drop.jpg'];
+ const assets=['css/responsive.css','css/avatars.css','css/theme.css','css/album-slider.css','css/game-theme.css','css/gamebar.css','js/hub.js','js/inject.js','js/theme.js','js/album-slider.js','vendor/html2canvas-1.4.1.min.js',...['gamysuf-3d-dark','gamysuf-3d-light','bpedia-pink','bpedia-white'].map(name=>`assets/brand/${name}.png`),...['wave','stand','explorer','star','collector','champion'].map(name=>`assets/avatars/character-${name}.png`),'assets/covers/spin.jpg','assets/covers/nyapit.jpg','assets/covers/drop.jpg','assets/covers/gacha.jpg'];
  for(const file of assets){
   // Compare the committed bytes that Linux deploys, regardless of Windows checkout line endings.
   const expected=execFileSync('git',['show',`HEAD:hub/public/${file}`],{cwd:root,maxBuffer:10*1024*1024});
@@ -53,7 +53,7 @@ async function main(){
   }
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
  }
- for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css']})){
+ for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css']})){
   for(const file of files){
    const committed=execFileSync('git',['show',`HEAD:games/${slug}/${file}`],{cwd:root,maxBuffer:10*1024*1024});
    const expected=Buffer.from(rewriteOutgoing(committed.toString(),`/g/${slug}`));

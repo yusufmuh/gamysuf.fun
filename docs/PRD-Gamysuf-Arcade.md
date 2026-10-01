@@ -1,4 +1,4 @@
-# PRD — GAMYSUF ARCADE (hub 3 game Bpedia)
+# PRD — GAMYSUF ARCADE (hub 4 game Bpedia)
 
 > Sumber kebenaran + catatan serah-terima. AI mana pun yang melanjutkan: baca sampai habis,
 > lanjutkan dari **§10 Status**, dan perbarui §10–§11 sebelum berhenti (termasuk karena limit).
@@ -6,7 +6,7 @@
 ## 1. Ringkasan
 | Item | Isi |
 |---|---|
-| Produk | Dashboard/arcade web yang menyatukan 3 game booth Bpedia + slot game tambahan |
+| Produk | Dashboard/arcade web yang menyatukan 4 game booth Bpedia + slot game tambahan |
 | Domain | **gamysuf.fun** (Hostinger, akun pemilik) |
 | Folder | `C:\Users\Yusuf\coding\00 game\00 gamysuf-arcade` |
 | Repo | GitHub `yusufmuh/gamysuf.fun` — lihat §10 |
@@ -21,9 +21,10 @@ Permintaan pengguna: "buat 3 game menjadi 1 dashboard interaktif yang bisa menga
 | `spin` | `../01 spenweels` (v2.6.0) | Roda + Mystery Beauty Box | Pesta Folka 2026 |
 | `nyapit` | `../02 nyapit` (v1.4.0) | Mesin capit + maskot B! | Cozzone UP 2026 |
 | `drop` | `../03 bipy-beauty-drop` (v1.0.0) | Papan pin + kapsul mekar + gacha fanservice | TAKEOVER X 2026 |
+| `gacha` | `../04 bipy-gacha-pop` (v1.0.0) | Mesin gacha satu tap + kapsul pop + kartu stiker (PRD sendiri: `docs/PRD-Bipy-Gacha-Pop.md` di folder sumber) | Market-In 6.0 (3–4 Okt 2026) |
 
 `games/<slug>/` hanyalah **salinan** berkas runtime (`npm run sync`). Ubah game di folder aslinya, lalu sync.
-Ketiga game diberi opsi `cloud` di `server.cjs` masing-masing (commit di repo lokal game 01/02/03, perilaku desktop/.exe tidak berubah).
+Keempat game memiliki opsi `cloud` di `server.cjs` masing-masing (commit di repo lokal game 01/02/03, perilaku desktop/.exe tidak berubah).
 
 ## 3. Arsitektur
 ```
@@ -34,7 +35,7 @@ hub/registry.cjs      metadata & panduan game bawaan + adapter hasil → kartu/X
 hub/players.cjs       profil, XP, level, streak, misi, lencana, album, peringkat (JSON di data dir)
 hub/custom-games.cjs  slot game tambahan (ZIP HTML5 / tautan), sampul, pengaturan arcade
 hub/public/           index.html (arcade), studio.html, css/, js/hub.js, js/studio.js, js/inject.js, assets/
-games/{spin,nyapit,drop}/  salinan runtime game
+games/{spin,nyapit,drop,gacha}/  salinan runtime game
 scripts/              sync-games.cjs, capture(-electron).cjs, package-hostinger.cjs
 tests/*.test.cjs      13 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP, hosting)
 ```
@@ -59,7 +60,7 @@ tests/*.test.cjs      13 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keam
 - XP: main +10, belum beruntung +5, kartu baru +25, legendaris pertama +50, bonus harian +20, misi +30/+40/+50, lencana +30. Batas 60 permainan ber-XP per hari.
 - Level: level n butuh 100 + 50(n−1) XP.
 - Streak harian (WIB), 3 misi harian (main 3×, 2 game berbeda, 1 kartu baru), 11 lencana.
-- Album 57 kartu (16 Spin + 18 Nyapit + 23 Drop termasuk 5 fanservice), rarity Legendaris/Epik/Langka/Umum.
+- Album 74 kartu (16 Spin + 18 Nyapit + 23 Drop termasuk 5 fanservice + 17 Gacha Pop), rarity Legendaris/Epik/Langka/Umum. Gacha Pop: bundling = legendaris, kolab karakter = epik, produk = umum.
 - Peringkat mingguan (reset Senin 00.00 WIB) & sepanjang masa; kode pemulihan untuk pindah perangkat.
 - Panduan: cara kerja 4 langkah, aturan main adil, tabel XP, FAQ, modal "Cara main" per game (langkah, kontrol, tips).
 - Kejujuran: online selalu demo; hadiah fisik hanya di booth. Beauty Drop menampilkan teks "simulasi demo" pada hasil demo.
@@ -98,6 +99,8 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
+**Rilis web 1.4.0 (Claude Opus 5.5, 2026-10-01):** game ke-4 **Bipy Gacha Pop** (Market-In 6.0, Urban Forest Cipete 3–4 Okt 2026) di `/g/gacha/`: mesin gashapon satu tap, kapsul fisika 2D, kartu stiker die-cut, 17 hadiah (Bundling Paket 1–3, Kuas Set Doraemon/Cony/Hello Kitty, Saput Mickey, 10 produk PINKFLASH/FOCALLURE), suara MC & BGM merek, dashboard petugas. Hub: registry, sync, gamebar, album 74 kartu, lencana Semua Arena, grid arena 2×2 / 4 kolom, sampul gameplay `covers/gacha.jpg`. Detail uji pada `docs/RELEASE-1.4.0.md`.
+
 **Rilis web 1.3.0 (Codex, 2026-09-27):** menindaklanjuti logo 3D dan identitas pink/putih, musik otomatis semua game, maskot resmi Spin, game bar dengan avatar/profil, dua tema lintas game, kapsul Nyapit mobile lebih sedikit dan chute eksternal, dock misi Drop, event mobile, Masuk admin, serta istilah cosplayer. Screenshot lokal memakai html2canvas yang dibundel; clone arena dan CSP Firefox ditangani tanpa mengubah kebijakan halaman asli. Detail uji dan batas browser pada `docs/RELEASE-1.3.0.md`; bukti publikasi versi/commit/aset di `artifacts/deployment-1.3.0.json`. Sumber game 01/02/03 diperbarui lalu disinkronkan ke `games/`.
 
 **Rilis web 1.2.0 (Codex, 2026-09-27):** menindaklanjuti komentar browser pemilik: maskot sambutan tidak lagi terpotong; galeri enam karakter full body dengan pratinjau dan pilihan tersimpan; logo tulip Gamysuf Arcade; tema terang/gelap; album bergerak yang menampilkan sedikit kartu pada HP. Validasi profil atomik diperbaiki. Avatar 332/332, tema 40/40, interaksi 24/24, tes hub 13/13; tur Electron 16 tangkapan tanpa error konsol. Catatan lengkap di `docs/RELEASE-1.2.0.md`; bukti publikasi akhir di `artifacts/deployment-1.2.0.json`. Sumber game 01/02/03 tidak berubah pada rilis ini.
@@ -128,6 +131,7 @@ Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.3.0**, tujuan https://
 - Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
 
 ## 11. Log serah-terima
+- **2026-10-01 (Claude Opus 5.5, web 1.4.0)**: membuat game ke-4 di folder sumber `../04 bipy-gacha-pop` (PRD, engine, server lokal/hosting/cloud, front-end, dashboard, aset, audio, 22 tes, QA 104×4), integrasi hub `gacha`, tes gateway Gacha Pop, QA responsif semua game, rilis lewat branch main → Hostinger.
 - **2026-09-27 (Codex, web 1.3.0)**: menerapkan komentar browser lanjutan pada branding, suara, kontrol, profil, Spin/Nyapit/Drop. Wordmark master Bpedia disalin utuh; logo Gamysuf 3D memiliki dua varian. QA memakai profil dan stok lokal sementara; probe produksi hanya baca. Sumber game tetap berada di folder saudara. Deployment melalui main dan Hostinger seperti rilis sebelumnya; jangan menyatakan live sebelum memeriksa `artifacts/deployment-1.3.0.json` dan status build.
 - **2026-09-27 (Codex, web 1.2.0)**: perbaikan empat komentar UI pemilik (avatar full body, logo, tema, slider album). Asset master Bpedia tetap utuh; prompt/provenance varian baru tercatat. Cek galeri/avatar/tema memakai data lokal terisolasi; deployment tetap melalui main ke Hostinger.
 - **2026-09-27 (Codex, web 1.1.0)**: perbaikan dashboard dan tiga game lintas layar; QA browser dengan data sementara yang terpisah dari produksi; paket Hostinger dan skrip regresi responsif. Detail hasil akhir pada catatan rilis 1.1.0.

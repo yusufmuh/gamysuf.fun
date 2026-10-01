@@ -27,7 +27,7 @@ const MISSIONS=[
 ];
 const BADGES=[
  {id:'first-play',name:'Langkah Pertama',detail:'Main untuk pertama kali.'},
- {id:'tri-arena',name:'Tiga Arena',detail:'Mainkan ketiga game Bpedia.'},
+ {id:'tri-arena',name:'Semua Arena',detail:'Mainkan semua game Bpedia di arcade.'},
  {id:'collector-5',name:'Kolektor Pemula',detail:'Kumpulkan 5 kartu berbeda.'},
  {id:'collector-15',name:'Kolektor Sejati',detail:'Kumpulkan 15 kartu berbeda.'},
  {id:'collector-all',name:'Kolektor Legendaris',detail:'Lengkapi seluruh album kartu.'},

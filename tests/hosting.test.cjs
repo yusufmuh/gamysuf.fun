@@ -62,7 +62,7 @@ require(${JSON.stringify(HUB)});
  const home=await get(port,'/');
  assert.equal(home.status,200);
  assert.match(home.text,/Gamysuf Arcade/);
- for(const slug of ['spin','nyapit','drop']){
+ for(const slug of ['spin','nyapit','drop','gacha']){
   const page=await get(port,`/g/${slug}/`);
   assert.equal(page.status,200,slug);
   const state=await get(port,`/g/${slug}/api/state`);

@@ -36,11 +36,13 @@ app.whenReady().then(async()=>{
   const routes={
    spin:{ready:`document.getElementById('spin-button')&&!document.getElementById('spin-button').disabled`,open:`document.getElementById('spin-button').click()`,shown:`document.getElementById('stage-dialog')?.open&&document.querySelectorAll('#wheel-items .wheel-item').length>=12&&[...document.querySelectorAll('#wheel-items img')].every(image=>image.complete&&image.naturalWidth>0)`},
    nyapit:{ready:`document.getElementById('startFestival')&&!document.getElementById('startFestival').disabled`,open:`document.getElementById('startFestival').click()`,shown:`document.body.dataset.stage==='aim'`},
-   drop:{ready:`document.body.classList.contains('ready')`,open:`document.getElementById('startDrop').click()`,shown:`document.body.dataset.stage==='drop'&&document.getElementById('boardCanvas')?.width>0`}
+   drop:{ready:`document.body.classList.contains('ready')`,open:`document.getElementById('startDrop').click()`,shown:`document.body.dataset.stage==='drop'&&document.getElementById('boardCanvas')?.width>0`},
+   gacha:{ready:`document.body.dataset.stage==='ready'`,open:`document.getElementById('gachaButton').click()`,shown:`document.body.dataset.stage==='playing'&&document.getElementById('domeCanvas')?.width>0`}
   };
+  const only=String(process.env.CAPTURE_COVERS_ONLY||'').split(',').filter(Boolean);
   fs.mkdirSync(candidates,{recursive:true});
   const report=[];
-  for(const [slug,route] of Object.entries(routes)){
+  for(const [slug,route] of Object.entries(routes).filter(([slug])=>!only.length||only.includes(slug))){
    const errorStart=errors.length;
    await browser.loadURL(`${hub.origin}/g/${slug}/`);
    await until(route.ready);
@@ -50,7 +52,8 @@ app.whenReady().then(async()=>{
     await until(`!document.getElementById('dropButton').disabled`);
     await js(`document.getElementById('dropButton').click()`);
     await wait(1850);
-   }else await wait(1200);
+   }else if(slug==='gacha')await wait(1950);
+   else await wait(1200);
    const image=(await browser.webContents.capturePage()).resize({width:1200,height:675,quality:'best'});
    const jpeg=image.toJPEG(89);
    if(errors.length>errorStart)throw new Error(`${slug}: ${errors.slice(errorStart).join('; ')}`);
@@ -62,7 +65,7 @@ app.whenReady().then(async()=>{
    fs.mkdirSync(covers,{recursive:true});
    for(const {slug} of report)fs.copyFileSync(path.join(candidates,`${slug}.jpg`),path.join(covers,`${slug}.jpg`));
   }
-  console.log(`Tiga sampul gameplay 1200×675 tersimpan di ${process.env.CAPTURE_COVERS_PUBLISH==='1'?'hub/public/assets/covers':'artifacts/cover-candidates'}.`);
+  console.log(`${report.length} sampul gameplay 1200×675 tersimpan di ${process.env.CAPTURE_COVERS_PUBLISH==='1'?'hub/public/assets/covers':'artifacts/cover-candidates'}.`);
  }catch(error){console.error(error);process.exitCode=1;}
  finally{
   await hub?.close().catch(()=>{});
