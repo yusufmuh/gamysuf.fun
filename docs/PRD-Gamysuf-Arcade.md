@@ -93,12 +93,14 @@ npm run package:hostinger
 Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 
 ## 9. Keputusan terkunci
-- Satu proses Node untuk hub + 3 game (satu web app Hostinger, satu domain).
+- Satu proses Node untuk hub + 4 game (satu web app Hostinger, satu domain).
 - Awalan jalur `/g/<slug>/` + penulisan ulang otomatis, bukan menulis ulang kode front-end game.
 - Pengunjung online = mesin demo pribadi; mode resmi hanya perangkat booth yang login.
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
+**Rilis web 1.4.1 (Codex, 2026-10-01):** Gacha Pop 1.0.1 lebih tahan gangguan koneksi dan tombol USB yang ditahan; hasil klaim dipertahankan sampai server mengonfirmasi; nama pemain dibersihkan untuk antrean berikutnya. Dashboard memiliki pintasan Market-In 6.0 langsung ke game keempat. Validasi keempat game: 844 pemeriksaan responsif tanpa kegagalan, 39 pemeriksaan pemulihan Gacha Pop, tes sumber 83/54/29/22 dan tes hub 14. Rincian pada `docs/RELEASE-1.4.1.md`. Bukti publikasi aktual disimpan pada `artifacts/deployment-1.4.1.json` (endpoint dan hash) serta `artifacts/live-ui-1.4.1/report.json`; baca hasil tersebut sebelum mengklaim status live. Deploy hanya aplikasi **gamysuf.fun** yang terhubung ke branch `main`, bukan website placeholder `gamysuf-fun-912185.hostingersite.com`.
+
 **Rilis web 1.4.0 (Claude Opus 5.5, 2026-10-01):** game ke-4 **Bipy Gacha Pop** (Market-In 6.0, Urban Forest Cipete 3–4 Okt 2026) di `/g/gacha/`: mesin gashapon satu tap, kapsul fisika 2D, kartu stiker die-cut, 17 hadiah (Bundling Paket 1–3, Kuas Set Doraemon/Cony/Hello Kitty, Saput Mickey, 10 produk PINKFLASH/FOCALLURE), suara MC & BGM merek, dashboard petugas. Hub: registry, sync, gamebar, album 74 kartu, lencana Semua Arena, grid arena 2×2 / 4 kolom, sampul gameplay `covers/gacha.jpg`. Detail uji pada `docs/RELEASE-1.4.0.md`. **Live terverifikasi 2026-10-01 10:31 WIB**: commit `fa4d62c` di main, Hostinger menyajikan v1.4.0 (4 game), `scripts/verify-deployment.cjs` 47 endpoint publik + hash kode keempat game + bukti gambar CDN (`artifacts/live-image-verification/report-1.4.0.json`, SSIM sampul gacha 0,988); probe UI live read-only Chromium & WebKit 390/1366 px tanpa error konsol/HTTP (`artifacts/live-ui-1.4.0/report.json`).
 
 **Rilis web 1.3.0 (Codex, 2026-09-27):** menindaklanjuti logo 3D dan identitas pink/putih, musik otomatis semua game, maskot resmi Spin, game bar dengan avatar/profil, dua tema lintas game, kapsul Nyapit mobile lebih sedikit dan chute eksternal, dock misi Drop, event mobile, Masuk admin, serta istilah cosplayer. Screenshot lokal memakai html2canvas yang dibundel; clone arena dan CSP Firefox ditangani tanpa mengubah kebijakan halaman asli. Detail uji dan batas browser pada `docs/RELEASE-1.3.0.md`; bukti publikasi versi/commit/aset di `artifacts/deployment-1.3.0.json`. Sumber game 01/02/03 diperbarui lalu disinkronkan ke `games/`.
@@ -131,6 +133,7 @@ Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.3.0**, tujuan https://
 - Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
 
 ## 11. Log serah-terima
+- **2026-10-01 (Codex, web 1.4.1)**: melanjutkan PRD Gacha Pop; memperbaiki pemulihan koneksi dan hasil tertunda, keyboard booth dan pergantian nama; pintasan game 4 di beranda; regresi semua game; versi laporan QA mengikuti package.json dan verifikasi CDN tetap mengikat kedua hash. Sumber di folder 04, disinkronkan via `npm run sync`. Detail di catatan rilis 1.4.1.
 - **2026-10-01 (Claude Opus 5.5, web 1.4.0)**: membuat game ke-4 di folder sumber `../04 bipy-gacha-pop` (PRD, engine, server lokal/hosting/cloud, front-end, dashboard, aset, audio, 22 tes, QA 104×4), integrasi hub `gacha`, tes gateway Gacha Pop, QA responsif semua game, rilis lewat branch main → Hostinger.
 - **2026-09-27 (Codex, web 1.3.0)**: menerapkan komentar browser lanjutan pada branding, suara, kontrol, profil, Spin/Nyapit/Drop. Wordmark master Bpedia disalin utuh; logo Gamysuf 3D memiliki dua varian. QA memakai profil dan stok lokal sementara; probe produksi hanya baca. Sumber game tetap berada di folder saudara. Deployment melalui main dan Hostinger seperti rilis sebelumnya; jangan menyatakan live sebelum memeriksa `artifacts/deployment-1.3.0.json` dan status build.
 - **2026-09-27 (Codex, web 1.2.0)**: perbaikan empat komentar UI pemilik (avatar full body, logo, tema, slider album). Asset master Bpedia tetap utuh; prompt/provenance varian baru tercatat. Cek galeri/avatar/tema memakai data lokal terisolasi; deployment tetap melalui main ke Hostinger.

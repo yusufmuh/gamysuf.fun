@@ -34,18 +34,31 @@
  const audio=window.BoothAudio?new window.BoothAudio():null;
  const ui={
   stage:'boot',busy:false,result:null,popped:false,muted:store.get('gpop-muted')==='1',audioUnlocked:false,welcomed:false,
-  lastInput:Date.now(),lastAttract:Date.now(),lastBubble:0,holdTimer:0,holdUntil:0,pulls:[],plays:0
+  lastInput:Date.now(),lastAttract:Date.now(),lastBubble:0,holdTimer:0,holdUntil:0,pulls:[],plays:0,
+  request:null,closing:false,connected:false,refreshing:false
  };
  let state=null,machine=null,toastTimer=0,returnFocus=null,fitFrame=0;
 
  async function api(route,body){
   const options={headers:{'Content-Type':'application/json','x-bpedia-client':'gachapop'}};
   if(body!==undefined){options.method='POST';options.body=JSON.stringify(body);}
-  const response=await fetch(route,options);
-  let output;
-  try{output=await response.json();}catch{output={error:'Respons server tidak dapat dibaca.'};}
-  if(!response.ok){const error=new Error(output.error||'Permintaan gagal.');error.status=response.status;throw error;}
-  return output;
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),12000);
+  try{
+   const response=await fetch(route,{...options,signal:controller.signal});
+   const output=await response.json();
+   if(!response.ok)throw Object.assign(new Error(output.error||'Permintaan gagal.'),{status:response.status});
+   return output;
+  }catch(error){
+   if(error.status)throw error;
+   throw new Error(error.name==='AbortError'?'Server belum merespons. Sambungkan internet lalu coba lagi.':'Koneksi terputus. Hasil yang sudah keluar tetap tersimpan di server.');
+  }finally{clearTimeout(timeout);}
+ }
+
+ function connection(connected){
+  ui.connected=connected;
+  $('connectionNotice').hidden=connected;
+  if(!connected&&!ui.busy)setStage('blocked');
  }
 
  function uid(){
@@ -107,7 +120,7 @@
 
  function readyStage(){
   if(!state)return 'boot';
-  if(state.settings.paused||!state.capsules.prize)return 'blocked';
+  if(!ui.connected||state.settings.paused||!state.capsules.prize)return 'blocked';
   return 'ready';
  }
 
@@ -219,6 +232,7 @@
 
  async function play(){
   if(ui.busy||!state)return;
+  if(!ui.connected){await refreshState();return;}
   ui.lastInput=Date.now();
   if(state.settings.paused){toast('Permainan sedang dijeda petugas.','error');return;}
   if(!state.capsules.prize){toast('Kapsul hadiah habis. Hubungi petugas untuk isi ulang.','error');return;}
@@ -239,13 +253,17 @@
   bubble('spin');bipy('spin');
   window.GPFx?.sprinkle(button.getBoundingClientRect().left+button.offsetWidth/2,button.getBoundingClientRect().top);
   let result;
+  ui.request||={requestId:uid(),username:$('playerName').value.trim()};
   try{
-   result=await api('/api/play',{requestId:uid(),username:$('playerName').value.trim()});
+   result=await api('/api/play',ui.request);
+   ui.request=null;
   }catch(error){
    toast(error.message,'error');
+   if(error.status&&error.status<500)ui.request=null;
+   if(!error.status||error.status>=500)connection(false);
    ui.busy=false;
-   await refreshState();
    bipy('idle');bubble('idle');
+   await refreshState();
    return;
   }
   ui.result=result;
@@ -284,7 +302,7 @@
   $('cardRarity').textContent=tier.ribbon;
   $('cardStars').textContent=tier.stars;
   $('cardImage').src=prize.image;
-  $('cardImage').alt=empty?'Kapsul kosong':`Foto ${prize.fullName}`;
+  $('cardImage').alt=empty?'Kapsul kosong':`${prize.imageChecked?'Foto':'Ilustrasi'} ${prize.fullName}`;
   $('cardName').textContent=prize.name;
   $('cardSub').textContent=[prize.brand,prize.variant].filter(Boolean).join(' · ')||prize.fullName;
   $('cardSerial').textContent=`#${result.id}`;
@@ -369,12 +387,26 @@
  }
 
  async function closeReveal(){
-  if(!ui.popped||!ui.result)return;
+  if(!ui.popped||!ui.result||ui.closing)return;
   clearInterval(ui.holdTimer);
   const result=ui.result;
-  ui.popped=false;
+  ui.closing=true;
+  $('closeReveal').disabled=true;
+  $('nextLabel').textContent='Menyiapkan pemain berikutnya…';
   try{state=await api('/api/result',{id:result.id});}
-  catch(error){if(error.status!==404)toast(error.message,'error');await refreshState();}
+  catch(error){
+   if(error.status!==404){
+    connection(false);
+    toast(error.message,'error');
+    $('nextLabel').textContent='Coba tutup lagi';
+    return;
+   }
+  }finally{
+   ui.closing=false;
+   $('closeReveal').disabled=false;
+  }
+  connection(true);
+  ui.popped=false;
   ui.result=null;
   const layer=$('revealLayer');
   layer.hidden=true;
@@ -387,6 +419,8 @@
   $('outCapsule').getAnimations?.().forEach(animation=>animation.cancel());
   window.GPFx?.clear();
   ui.busy=false;
+  $('playerName').value='';
+  toggleName(false);
   machine?.setComposition(state.capsules.byTier);
   renderAll();
   bipy('idle');bubble('idle');
@@ -397,13 +431,28 @@
  }
 
  async function refreshState(){
+  if(ui.refreshing||ui.closing)return;
+  ui.refreshing=true;
+  $('retryConnection').disabled=true;
   try{
    const next=await api('/api/state');
    const compositionChanged=JSON.stringify(next.capsules.byTier)!==JSON.stringify(state?.capsules.byTier);
    state=next;
+   connection(true);
    if(!ui.busy){renderAll();if(compositionChanged)machine?.setComposition(state.capsules.byTier);}
    syncSound();
-  }catch(error){if(!state)toast(`Mesin belum siap: ${error.message}`,'error');}
+   if(!ui.busy&&state.pending){
+    ui.busy=true;ui.result=state.pending;ui.request=null;
+    capsuleVars($('bigCapsule'),window.GPMachine.paletteFor(state.pending.prize.tier));
+    await reveal(state.pending,1,{instant:true});
+   }
+  }catch(error){
+   connection(false);
+   if(!state)toast(`Mesin belum siap: ${error.message}`,'error');
+  }finally{
+   ui.refreshing=false;
+   $('retryConnection').disabled=false;
+  }
  }
 
  async function toggleMode(){
@@ -473,8 +522,14 @@
  $('modeButton').addEventListener('click',toggleMode);
  $('themeToggle').addEventListener('click',toggleTheme);
  $('nameToggle').addEventListener('click',()=>toggleName());
+ $('retryConnection').addEventListener('click',()=>{if(ui.popped)closeReveal();else refreshState();});
  $('playerName').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();play();}});
 
+ document.addEventListener('keydown',event=>{
+  if(event.repeat&&[' ','Enter'].includes(event.key)&&!event.target.matches?.('input,textarea,select')){
+   event.preventDefault();event.stopImmediatePropagation();
+  }
+ },true);
  document.addEventListener('keydown',event=>{
   ui.lastInput=Date.now();
   if(!$('revealLayer').hidden){
@@ -484,7 +539,7 @@
   }
   const typing=event.target.matches?.('input,textarea,select');
   if(typing)return;
-  if((event.key===' '||event.key==='Enter')&&!event.target.closest?.('button,a')){event.preventDefault();play();}
+  if((event.key===' '||event.key==='Enter')&&(!event.target.closest?.('button,a')||event.target.closest?.('#gachaButton'))){event.preventDefault();play();}
   else if(event.key==='n'||event.key==='N')toggleName(true);
   else if(event.key==='m'||event.key==='M')setMuted(soundOn());
   else if(event.key==='f'||event.key==='F')fullscreen();
@@ -498,6 +553,8 @@
  window.addEventListener('gamysuf:audio',event=>setMuted(Boolean(event.detail?.muted)));
  window.addEventListener('gamysuf:audio-query',syncSound);
  window.addEventListener('resize',scheduleFit);
+ window.addEventListener('online',()=>{if(!ui.busy)refreshState();});
+ window.addEventListener('offline',()=>connection(false));
  window.visualViewport?.addEventListener('resize',scheduleFit);
  window.addEventListener('orientationchange',()=>setTimeout(scheduleFit,250));
 
@@ -508,22 +565,17 @@
   paintTheme();
   fit();
   machine=window.GPMachine?new window.GPMachine($('domeCanvas'),{reducedMotion:reduced.matches,onClack:level=>audio?.tumble(.12,level)}):null;
+  setInterval(idleTick,1000);
+  setInterval(()=>{if(!ui.busy&&!document.hidden)refreshState();},STATE_POLL_MS);
   await refreshState();
   if(!state){setStage('blocked');return;}
   machine?.setComposition(state.capsules.byTier);
   renderAll();
-  bubble('idle');
+  if(!ui.busy)bubble('idle');
   if(document.fonts?.ready)document.fonts.ready.then(scheduleFit);
   setTimeout(scheduleFit,300);
-  if(state.pending){
-   ui.busy=true;ui.result=state.pending;
-   capsuleVars($('bigCapsule'),window.GPMachine.paletteFor(state.pending.prize.tier));
-   await reveal(state.pending,1,{instant:true});
-  }
   /* Musik dicoba langsung; browser yang menahan autoplay menyalakannya
      pada sentuhan pertama (lihat pointerdown di atas). */
   unlockAudio();
-  setInterval(idleTick,1000);
-  setInterval(()=>{if(!ui.busy&&!document.hidden)refreshState();},STATE_POLL_MS);
  })();
 })();

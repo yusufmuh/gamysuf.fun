@@ -11,7 +11,8 @@ catch{playwright=require('playwright');}
 process.env.GAMYSUF_AUTOSTART='0';
 const {createHub}=require('../hub/server.cjs');
 
-const out=path.join(root,'artifacts','gamebar-1.4.0');
+const version=require('../package.json').version;
+const out=path.join(root,'artifacts',`gamebar-${version}`);
 const profile={nickname:'QA Bipy',avatar:'heart'};
 const matrix=[
  ['chromium','spin',390,844],['chromium','nyapit',390,844],['chromium','drop',390,844],
@@ -225,7 +226,7 @@ async function run(){
   for(const browser of browsers.values())await browser.close();
   await hub?.close();
   fs.rmSync(dataDir,{recursive:true,force:true});
-  const report={version:'1.4.0',checks:checks.length,passed:checks.length-failures.length,failures,cases:checks};
+  const report={version,checks:checks.length,passed:checks.length-failures.length,failures,cases:checks};
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
   console.log(JSON.stringify({version:report.version,checks:report.checks,passed:report.passed,failures:report.failures},null,2));
  }

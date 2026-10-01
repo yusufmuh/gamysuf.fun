@@ -19,7 +19,6 @@ const randomUnit=rng=>{
  if(!Number.isFinite(roll)||roll<0||roll>=1)throw fail('Angka acak tidak valid.');
  return roll;
 };
-const defaultRng=()=>randomInt(1000000)/1000000;
 
 /* Mesin kapsul: setiap unit stok adalah satu kapsul, hadiah tak terbatas
    diwakili `openCapsules` kapsul, dan kapsul kosong berjumlah tetap
@@ -36,10 +35,10 @@ function capsules(state){
  return {rows,prize,empty,total:prize+empty,byTier};
 }
 
-function choose(state,rng=defaultRng){
+function choose(state,rng){
  const pool=capsules(state);
  if(pool.prize<=0)throw fail('Kapsul hadiah sudah habis. Hubungi petugas untuk isi ulang.',409);
- let ticket=Math.floor(randomUnit(rng)*pool.total);
+ let ticket=rng?Math.floor(randomUnit(rng)*pool.total):randomInt(pool.total);
  if(ticket>=pool.prize)return clone(EMPTY);
  for(const row of pool.rows){
   if(ticket<row.count)return clone(state.prizes.find(prize=>prize.id===row.id));
@@ -125,7 +124,7 @@ function recentWins(history,limit=8){
 class Engine{
  constructor(store,{rng,now=()=>Date.now()}={}){
   this.store=store;
-  this.rng=rng||defaultRng;
+  this.rng=rng;
   this.now=now;
   this.demoPending=null;
   this.demoRequests=new Map();

@@ -154,5 +154,10 @@ html[data-background="true"] *{animation-play-state:paused!important}
 @media (hover:none){.game-card:hover,.btn:hover,.cabinet:hover{transform:none}.glow{animation:none;filter:blur(50px)}}
 
 /* Empat arena bawaan: 2×2 di tablet/laptop, satu baris di layar sangat lebar. */
+.new-arena{display:flex;align-items:center;gap:12px;max-width:480px;min-height:76px;margin-top:20px;padding:12px 16px;border:2px solid #45122b;border-radius:18px;background:#f6cfce;color:#45122b;text-decoration:none;box-shadow:4px 4px 0 #f5b83d;transition:transform .2s}
+.new-arena[hidden]{display:none}.new-arena:hover{transform:translateY(-2px)}
+.new-arena>img{flex:none;width:42px;height:42px}.new-arena>span:nth-child(2){min-width:0}
+.new-arena small{display:block;font-size:.6rem;letter-spacing:.1em;font-weight:800}.new-arena b{display:block;margin-top:3px;font-size:.85rem;line-height:1.5}.new-arena-arrow{margin-left:auto;font-size:1.65rem;font-weight:700}
+@media(max-width:359px){.new-arena{gap:9px;padding:10px}.new-arena>img{width:32px;height:32px}.new-arena b{font-size:.74rem}.new-arena small{font-size:.53rem}}
 @media (min-width:760px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1640px){.game-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

@@ -1,6 +1,6 @@
 {
   "name": "gamysuf-arcade",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Gamysuf Arcade: satu dashboard untuk empat game booth Bpedia (Spin Wheels, Nyapit, Bipy Beauty Drop, Bipy Gacha Pop) plus slot game tambahan, berjalan di cloud (Hostinger Node.js).",
   "author": "Muhammad Yusuf",
   "private": true,

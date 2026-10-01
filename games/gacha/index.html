@@ -9,11 +9,11 @@
   <link rel="icon" href="/assets/icon.ico">
   <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/game.css?v=1.0.0">
-  <script defer src="/js/audio.js?v=1.0.0"></script>
-  <script defer src="/js/fx.js?v=1.0.0"></script>
-  <script defer src="/js/machine.js?v=1.0.0"></script>
-  <script defer src="/js/game.js?v=1.0.0"></script>
+  <link rel="stylesheet" href="/css/game.css?v=1.0.1">
+  <script defer src="/js/audio.js?v=1.0.1"></script>
+  <script defer src="/js/fx.js?v=1.0.1"></script>
+  <script defer src="/js/machine.js?v=1.0.1"></script>
+  <script defer src="/js/game.js?v=1.0.1"></script>
 </head>
 <body data-stage="boot">
   <div class="backdrop" aria-hidden="true">
@@ -219,6 +219,7 @@
   </div>
 
   <div id="pauseBanner" class="pause-banner" role="status" hidden>Permainan sedang dijeda petugas</div>
+  <div id="connectionNotice" class="connection-notice" role="status" hidden><span>Koneksi terputus. Sambungkan internet untuk melanjutkan.</span><button id="retryConnection" type="button">Coba lagi</button></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

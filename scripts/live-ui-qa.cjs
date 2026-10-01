@@ -93,6 +93,8 @@ async function main(){
 
   // Skip writes only to this isolated browser's localStorage; no profile is submitted.
   await deskPage.locator('#onboardSkip').click();
+  check(await deskPage.locator('#newArena').isVisible()&&await deskPage.locator('#newArena').getAttribute('href')==='/g/gacha/',
+    'Gacha Pop shortcut is visible on dashboard');
   await deskPage.locator('#themeToggle').click();
   await deskPage.waitForFunction(()=>document.documentElement.dataset.theme==='light');
   await deskPage.locator('#topnav').scrollIntoViewIfNeeded();
@@ -130,7 +132,7 @@ async function main(){
     JSON.stringify(await visibleBrokenImages(mobilePage)));
   await mobilePage.screenshot({path:path.join(out,'03-mobile-album-390x844.png')});
   await mobile.close();
-  for(const game of ['spin','nyapit','drop']){
+  for(const game of ['spin','nyapit','drop','gacha']){
    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
    const page=await context.newPage();watch(page,game);
    await page.goto(`${base}/g/${game}/`,{waitUntil:'domcontentloaded'});
@@ -146,6 +148,15 @@ async function main(){
     check(logos.length&&logos.every(image=>image.loaded&&image.src.includes(theme==='light'?'bpedia-pink.png':'bpedia-white.png')),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
     check(!(await visibleBrokenImages(page)).length,`${game} ${theme} visible assets loaded`);
     await page.screenshot({path:path.join(out,`${game}-mobile-${theme}-390x844.png`)});
+   }
+   if(game==='gacha'){
+    await page.setViewportSize({width:1449,height:851});
+    await page.locator('[data-gmy-theme]').click();
+    await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
+    await waitVisibleImages(page);
+    const fit=await layout(page);
+    check(fit.scrollWidth<=fit.viewport+2,'gacha desktop horizontal fit',JSON.stringify(fit));
+    await page.screenshot({path:path.join(out,'gacha-desktop-dark-1449x851.png')});
    }
    await context.close();
   }

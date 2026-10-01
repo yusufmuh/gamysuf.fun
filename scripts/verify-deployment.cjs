@@ -11,7 +11,10 @@ const pkg=require('../package.json');
 const base=process.argv[2]||'https://gamysuf.fun';
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const releaseImageEvidence=path.join(root,'artifacts','live-image-verification',`report-${pkg.version}.json`);
-const imageEvidencePath=fs.existsSync(releaseImageEvidence)?releaseImageEvidence:path.join(root,'artifacts','live-image-verification','report.json');
+const evidenceDir=path.dirname(releaseImageEvidence);
+// Unchanged images may reuse older evidence only when BOTH byte hashes still match.
+const previousEvidence=fs.existsSync(evidenceDir)?fs.readdirSync(evidenceDir).filter(file=>/^report-\d+\.\d+\.\d+\.json$/.test(file)).sort((a,b)=>b.localeCompare(a,undefined,{numeric:true}))[0]:null;
+const imageEvidencePath=fs.existsSync(releaseImageEvidence)?releaseImageEvidence:path.join(evidenceDir,previousEvidence||'report.json');
 const imageEvidence=fs.existsSync(imageEvidencePath)?JSON.parse(fs.readFileSync(imageEvidencePath,'utf8')):null;
 
 async function main(){
