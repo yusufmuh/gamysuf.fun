@@ -119,7 +119,7 @@ async function main(){
   }
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
  }
- for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/journey.js','css/voyage.css','css/journey.css','js/game.js','js/audio.js','js/admin.js','js/cards.js','js/export.js','js/fx.js','css/game.css','css/admin.css']})){
+ for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/journey.js','css/voyage.css','css/presentation.css','css/journey.css','js/game.js','js/audio.js','js/admin.js','js/cards.js','js/export.js','js/fx.js','css/game.css','css/admin.css']})){
   const committedIndex=execFileSync('git',['show',`HEAD:games/${slug}/index.html`],{cwd:root,encoding:'utf8'});
   const cacheQueries=new Map([...committedIndex.matchAll(/(?:src|href)="\/([^"?#]+)\?([^"]+)"/g)].map(match=>[match[1],match[2]]));
   for(const file of files){
