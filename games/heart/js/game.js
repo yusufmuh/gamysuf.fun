@@ -4,7 +4,7 @@
  const $=id=>document.getElementById(id),clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const storage={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{/* mode privat */}},session(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v);}catch{return null;}return null;}};
  const audio=new window.HeartAudio(),fx=new window.HeartFX($('fxCanvas')),reducedQuery=matchMedia('(prefers-reduced-motion: reduce)');
- const ui={state:null,host:'zoro',mode:'gacha',pick:'',preview:'',stage:'home',busy:false,result:null,request:null,lastFocus:null,collection:[],toastTimer:0,anims:new Set(),timers:new Set(),run:0,tear:null,view:'card',posterStamped:false,userToggled:false,flipping:false,keys:{},previewTimer:0,staffMode:null,modeBusy:false};
+ const ui={state:null,host:'zoro',mode:'gacha',pick:'',preview:'',stage:'home',busy:false,result:null,request:null,lastFocus:null,collection:[],toastTimer:0,anims:new Set(),timers:new Set(),run:0,tear:null,view:'card',posterStamped:false,userToggled:false,flipping:false,keys:{},previewTimer:0,staffMode:null,modeBusy:false,hostChosen:false,dealing:false,dealtSlot:null};
  const SERVICE_ORDER=['cinderella','twirl','whisper','offering','vow','hug','pat'];
  document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
  try{const saved=JSON.parse(storage.get('heart-collection')||'[]');if(Array.isArray(saved))ui.collection=saved.filter(k=>typeof k==='string');}catch{/* koleksi lama rusak diabaikan */}
@@ -91,16 +91,17 @@
   return canPlay;
  }
  function renderMode(canPlay){
-  const s=ui.state,h=host(),locked=!s.settings.allowPick,home=ui.stage==='home',idle=!ui.busy&&!ui.modeBusy&&home;
+  const s=ui.state,h=host(),locked=!s.settings.allowPick,home=ui.stage==='home',idle=!ui.busy&&!ui.modeBusy&&!ui.dealing&&home;
   document.body.dataset.mode=ui.mode;
   $('gachaMode').setAttribute('aria-pressed',String(ui.mode==='gacha'));$('pickMode').setAttribute('aria-pressed',String(ui.mode==='pick'));
   $('gachaMode').disabled=!idle;$('pickMode').disabled=!idle;$('pickMode').setAttribute('aria-disabled',String(locked));$('pickMode').classList.toggle('locked',locked);
   const lockKey=String(locked);if(ui.keys.lock!==lockKey){ui.keys.lock=lockKey;$('pickModeIcon').innerHTML=icon(locked?'lock':'cards');}
-  $('pickModeNote').textContent=locked?'Dikunci petugas · pakai Gacha Booster':'Tentukan kartu favoritmu';
+  $('pickModeNote').textContent=locked?'Sedang dikunci petugas':'Belanja Rp150.000 · pilih momenmu';
   const pickCard=ui.pick?cardOf(ui.host,ui.pick):null;
-  $('startButton').disabled=!canPlay||!idle;
-  $('startLabel').textContent=ui.request?'Lanjutkan putaran':ui.mode==='gacha'?'Buka booster':pickCard?`Mainkan ${shortName(pickCard)}`:'Pilih satu kartu dulu';
-  $('deckHint').textContent=ui.request?'Putaran sebelumnya belum terkonfirmasi. Lanjutkan untuk memulihkannya.':ui.mode==='gacha'?'Bipy memilih satu dari tujuh kartu secara acak untukmu.':pickCard?`${RARITY[pickCard.rarity]||pickCard.rarity} · ketuk kartunya lagi atau tekan Mainkan.`:'Geser atau arahkan ke kartu, lalu ketuk kartu favoritmu.';
+  $('startButton').disabled=!canPlay||!idle||ui.dealing||!ui.hostChosen;
+  $('startLabel').textContent=ui.request?'Lanjutkan putaran':ui.mode==='gacha'?'Kocok tujuh kartu':pickCard?`Dapatkan ${shortName(pickCard)}`:'Pilih satu kartu dulu';
+  $('deckHint').textContent=ui.request?'Putaran sebelumnya belum terkonfirmasi. Lanjutkan untuk memulihkannya.':ui.mode==='gacha'?'Kenali tujuh momen di bawah. Bipy akan mengocoknya, lalu Babes memilih satu kartu tertutup.':pickCard?`${shortName(pickCard)} pilihanmu. Kartu ini langsung dibuka tanpa pengacakan.`:'Lihat cuplikannya dan pilih momen favoritmu.';
+  $('purchaseCheck').hidden=demo();$('purchaseTierHint').textContent=ui.mode==='gacha'?'Gacha mulai Rp100.000':'Pilihan langsung mulai Rp150.000';$('purchaseAmount').min=ui.mode==='gacha'?'100000':'150000';
   const boosterKey=h?`${h.id}:${h.image}`:'';
   if(h&&ui.keys.booster!==boosterKey){ui.keys.booster=boosterKey;$('boosterPreview').innerHTML=booster(h);}
   $('boosterButton').disabled=!canPlay||!idle||ui.mode!=='gacha';$('boosterButton').setAttribute('aria-label',`Buka Gacha Booster ${h?.name||''}`.trim());
@@ -113,13 +114,13 @@
    const hostChanged=ui.keys.deckHost&&ui.keys.deckHost!==h.id;ui.keys.deck=key;ui.keys.deckHost=h.id;
    $('deckHostName').textContent=h.name;
    const ordered=[...s.services].sort((a,b)=>SERVICE_ORDER.indexOf(a.id)-SERVICE_ORDER.indexOf(b.id)),mid=(ordered.length-1)/2;
-   $('momentGrid').innerHTML=ordered.map((v,i)=>{const c=cardOf(h.id,v.id);if(!c)return '';const o=i-mid;return `<article class="deck-card${v.enabled?'':' unavailable'}" data-service="${esc(v.id)}" style="--i:${i};--o:${o};--o2:${o*o}">${cardFace(c,{size:'mini',hostName:h.name})}${v.enabled?'':'<span class="deck-off">Sedang tidak tersedia</span>'}<button type="button" class="card-choice" data-service="${esc(v.id)}" aria-pressed="false" aria-label="${esc(v.name)} bersama ${esc(h.name)}, ${esc(RARITY[c.rarity]||c.rarity)}${v.enabled?'':', sedang tidak tersedia'}"${v.enabled?'':' disabled'}></button></article>`;}).join('');
+   $('momentGrid').innerHTML=ordered.map((v,i)=>{const c=cardOf(h.id,v.id);if(!c)return '';const o=i-mid;return `<article class="deck-card${v.enabled?'':' unavailable'}" data-service="${esc(v.id)}" style="--i:${i};--o:${o};--o2:${o*o}">${cardFace(c,{size:'mini',hostName:h.name,video:true})}${v.enabled?'':'<span class="deck-off">Sedang tidak tersedia</span>'}<div class="moment-caption"><h3>${esc(v.name)}</h3><p>${esc(v.detail)}</p><button type="button" class="peek-video secondary" data-service="${esc(v.id)}">${icon('play')} Lihat momen</button><button type="button" class="card-choice" data-service="${esc(v.id)}" aria-pressed="false" aria-label="${esc(v.name)} bersama ${esc(h.name)}, ${esc(RARITY[c.rarity]||c.rarity)}${v.enabled?'':', sedang tidak tersedia'}"${v.enabled?'':' disabled'}>Pilih kartu ini</button></div></article>`;}).join('');
    if(hostChanged&&!motion()){const fan=$('momentGrid');fan.classList.remove('deal');void fan.offsetWidth;fan.classList.add('deal');}
   }
   updateDeck();
  }
  function updateDeck(){
-  const idle=!ui.busy&&!ui.modeBusy&&ui.stage==='home';
+  const idle=!ui.busy&&!ui.modeBusy&&!ui.dealing&&ui.stage==='home';
   $('momentGrid').querySelectorAll('.deck-card').forEach(el=>{
    const id=el.dataset.service,v=serviceOf(id),chosen=ui.mode==='pick'&&ui.pick===id,button=el.querySelector('.card-choice');
    el.classList.toggle('chosen',chosen);el.classList.toggle('previewing',ui.preview===id&&!chosen);
@@ -163,6 +164,7 @@
   document.body.dataset.host=ui.host;
   const canPlay=renderSession();renderLeaders();renderMode(canPlay);renderDeck();renderPoster();renderParade();renderBinder();
   document.body.dataset.ready='1';
+  window.HeartJourney?.update();
  }
  async function refresh(){
   if(ui.modeBusy)return false;
@@ -229,12 +231,14 @@
  /* ---------- Undian langsung ---------- */
  function prepare(){
   if(!ui.state||ui.busy||ui.modeBusy||ui.stage!=='home')return;audio.unlock();
+  if(!ui.hostChosen){toast('Pilih Zoro atau Sanji terlebih dahulu.');$('leaders').scrollIntoView({behavior:motion()?'auto':'smooth',block:'center'});return;}
   if(ui.request){draw(ui.request);return;}
   const h=host();if(!h)return;
   if(ui.mode==='pick'&&!ui.pick){const first=$('momentGrid').querySelector('.card-choice:not(:disabled)');first?.closest('.deck-card')?.scrollIntoView({behavior:motion()?'auto':'smooth',block:'nearest',inline:'center'});first?.focus({preventScroll:true});toast('Pilih satu kartu favoritmu dulu.');return;}
   audio.tick();
   const request={requestId:crypto.randomUUID(),host:ui.host,comfort:'no-touch',recording:false,consent:false};
-  if(!demo())request.verified=true;
+  if(!demo()){request.verified=true;request.purchaseAmount=Number($('purchaseAmount').value);const minimum=ui.mode==='gacha'?100000:150000;if(!Number.isSafeInteger(request.purchaseAmount)||request.purchaseAmount<minimum){toast(`Belanja minimal ${money(minimum)} untuk ${ui.mode==='gacha'?'gacha':'memilih fanservice'}.`);$('purchaseAmount').focus();return;}}
+  if(ui.mode==='gacha'&&ui.dealtSlot===null){window.HeartJourney?.deal();return;}
   if(ui.mode==='pick')request.pick=ui.pick;
   draw(request);
  }
@@ -276,8 +280,8 @@
   const card=resultCard(r),h=hostFor(r),rarity=card.rarity||'R';
   shell.dataset.host=r.host.id;shell.dataset.rarity=rarity.toLowerCase();
   faces.back.innerHTML=`<div class="spinner">${cardBack()}${cardBack({variant:'rear'})}</div>`;
-  faces.card.innerHTML=cardFace(card,{size:'full',imgId:'resultHost',lazy:false,video:true,hostName:r.host.name});
-  faces.poster.innerHTML=poster(card,{hostName:r.host.name,stamped:false,lazy:false});
+  faces.card.innerHTML=cardFace(card,{size:'full',imgId:'resultHost',lazy:false,video:true,hostName:r.host.name,sealed:true});
+  faces.poster.innerHTML=poster(card,{hostName:r.host.name,stamped:false,lazy:false,sealed:true});
   $('boosterStage').innerHTML=booster(h,{tearable:true});$('boosterStage').setAttribute('aria-label',`Sobek booster ${r.host.name}`);
   const video=faces.card.querySelector('video');if(video)video.addEventListener('error',()=>video.remove(),{once:true});
   $('resultRarity').textContent=rarity;$('resultRarity').dataset.rarity=rarity.toLowerCase();$('resultRarity').title=RARITY[rarity]||rarity;
@@ -298,7 +302,7 @@
  function decodeAll(root){return Promise.race([Promise.all([...root.querySelectorAll('img')].map(img=>img.decode?img.decode().catch(()=>{}):null)),sleep(1600)]);}
  function openResult(r,{recovered=false}={}){
   stopAnims();clearTimers();ui.run++;
-  ui.result=r;ui.host=r.host.id;ui.stage='drawing';ui.view='card';ui.userToggled=false;ui.posterStamped=false;ui.flipping=false;
+  ui.result=r;ui.host=r.host.id;ui.hostChosen=true;document.body.dataset.journey='table';ui.stage='drawing';ui.view='card';ui.userToggled=false;ui.posterStamped=false;ui.flipping=false;
   document.body.dataset.host=ui.host;fillResult(r);
   shell.dataset.phase='reveal';shell.dataset.method=r.method==='pick'?'pick':'gacha';shell.classList.remove('rays-on');showcase.dataset.view='card';
   $('viewCard').setAttribute('aria-pressed','true');$('viewPoster').setAttribute('aria-pressed','false');
@@ -311,7 +315,7 @@
  async function runReveal(r,run){
   const alive=()=>run===ui.run&&ui.stage==='drawing',D=clamp(Number(r.duration)||4200,1000,8000),started=performance.now(),card=resultCard(r);
   try{
-   status(r.method==='pick'?'Kartu pilihanmu dikocok…':'Booster BP06 sedang mendarat…');
+   status(r.method==='pick'?'Momen pilihanmu sedang dibuka…':'Kartu pilihan Babes sedang dibuka…');
    await decodeAll($('playStage'));if(!alive())return;
    if(r.method==='pick')await pickSequence(D*.6,alive,card);else await gachaSequence(D,alive,card);
    if(!alive())return;
@@ -340,6 +344,7 @@
   status(`${RARITY[card.rarity]||card.rarity} · ${shortName(card)}`);
  }
  async function gachaSequence(D,alive,card){
+  if(ui.dealtSlot!==null){showFace('back');audio.whoosh();await anim(faces.back,[{transform:`translateX(${(ui.dealtSlot-3)*5}%) scale(.72) rotate(-6deg)`,opacity:0},{transform:'none',opacity:1}],{duration:520});if(!alive())throw new Error('cancelled');await revealFace(card);return;}
   const pack=$('boosterStage'),top=pack.querySelector('.pack-top'),body=pack.querySelector('.pack-body');
   pack.classList.add('on');audio.whoosh();
   await anim(pack,[{transform:'translate3d(0,-120vh,0) rotate(-16deg)'},{transform:'translate3d(0,3%,0) rotate(2.5deg)',offset:.78},{transform:'translate3d(0,0,0) rotate(0deg)'}],{duration:clamp(D*.13,320,700),easing:'cubic-bezier(.2,.9,.25,1)'});
@@ -361,8 +366,8 @@
   await revealFace(card);
  }
  async function pickSequence(D,alive,card){
-  showFace('back');audio.whoosh();audio.shuffle();
-  await anim(faces.back,[{transform:'scale(.35) rotateY(0deg)',opacity:0},{opacity:1,offset:.15},{transform:'scale(1) rotateY(720deg)',opacity:1}],{duration:clamp(D*.42,500,1100),easing:'cubic-bezier(.25,.8,.3,1)'});
+  showFace('back');audio.whoosh();
+  await anim(faces.back,[{transform:'translateY(12%) scale(.84)',opacity:0},{transform:'none',opacity:1}],{duration:clamp(D*.3,350,650),easing:'cubic-bezier(.25,.8,.3,1)'});
   if(!alive())throw new Error('cancelled');
   await revealFace(card);
  }
@@ -385,7 +390,8 @@
   if(wasDrawing&&motion())audio.chime(card.rarity);
   status(`${RARITY[card.rarity]||card.rarity} · ${shortName(card)} · ${r.host.name}`);
   resetResultScroll();$('resultTitle').focus({preventScroll:true});
-  if(wasDrawing)timer(()=>{if(!ui.userToggled&&ui.stage==='result'&&ui.view==='card')showView('poster');},motion()?2600:1800);
+  for(const seal of $('playStage').querySelectorAll('.bipy-seal'))seal.classList.add('is-stamped');
+  if(!quiet){timer(()=>{audio.thump();audio.jingle();},motion()?0:420);}
  }
  function skip(){if(ui.stage==='drawing'){ui.tear?.();finishReveal();}}
  async function showView(view,{user=false}={}){
@@ -409,16 +415,16 @@
  }
  function stampPoster(){
   ui.posterStamped=true;const p=faces.poster.querySelector('.poster');if(!p)return;
-  if(motion()){p.classList.add('is-stamped');audio.thump();audio.jingle();status('GRATIS untuk pelanggan Bpedia');return;}
+  if(motion()){p.classList.add('is-stamped');audio.thump();status('GRATIS untuk pelanggan Bpedia');return;}
   p.classList.remove('is-stamped');void p.offsetWidth;p.classList.add('stamping');
-  timer(()=>{audio.thump();audio.jingle();status('GRATIS untuk pelanggan Bpedia');},900);
+  timer(()=>{audio.thump();status('GRATIS untuk pelanggan Bpedia');},900);
  }
  async function acknowledge(){
   if(ui.busy||!ui.result)return;ui.busy=true;$('finishButton').disabled=true;
   try{
    ui.state=await api('/api/result',{id:ui.result.id});clearRequest();
    ui.run++;stopAnims();clearTimers();fx.stop();
-   $('resultDialog').close();ui.result=null;ui.stage='home';ui.flipping=false;showFace(null);syncResultMedia();
+   $('resultDialog').close();ui.result=null;ui.stage='home';ui.dealtSlot=null;ui.flipping=false;showFace(null);syncResultMedia();
    $('connection').hidden=true;
    ui.busy=false;render();$('startButton').focus({preventScroll:true});$('deck').scrollIntoView({behavior:'auto',block:'start'});
   }catch(error){$('resultError').textContent='Kartu belum ditutup. '+error.message;$('resultError').hidden=false;}
@@ -450,9 +456,9 @@
  $('gachaMode').addEventListener('click',()=>setMode('gacha'));$('pickMode').addEventListener('click',()=>setMode('pick'));
  $('leaders').addEventListener('click',event=>{
   const button=event.target.closest('.host-card');if(!button||button.disabled||ui.busy||ui.stage!=='home')return;
-  if(ui.host===button.dataset.host)return;ui.host=button.dataset.host;audio.unlock();audio.tick();audio.shuffle();render();
+  ui.host=button.dataset.host;ui.hostChosen=true;document.body.dataset.journey='table';audio.unlock();audio.tick();render();window.scrollTo({top:0,behavior:motion()?'auto':'smooth'});
  });
- $('momentGrid').addEventListener('click',event=>{const button=event.target.closest('.card-choice');if(button&&!button.disabled)selectCard(button.dataset.service,{open:true});});
+ $('momentGrid').addEventListener('click',event=>{const preview=event.target.closest('.peek-video');if(preview){window.HeartJourney?.preview(preview.dataset.service);return;}const button=event.target.closest('.card-choice');if(button&&!button.disabled){if(ui.mode==='gacha')window.HeartJourney?.preview(button.dataset.service);else selectCard(button.dataset.service);}});
  const setPreview=id=>{clearTimeout(ui.previewTimer);ui.previewTimer=setTimeout(()=>{if(ui.stage!=='home'||ui.preview===id)return;ui.preview=id;updateDeck();renderPoster();},110);};
  $('momentGrid').addEventListener('pointerover',event=>{const card=event.target.closest('.deck-card');if(card&&event.pointerType==='mouse')setPreview(card.dataset.service);});
  $('momentGrid').addEventListener('focusin',event=>{const card=event.target.closest('.deck-card');if(card)setPreview(card.dataset.service);});
@@ -499,6 +505,7 @@
  const unlockOnce=()=>audio.unlock();document.addEventListener('click',unlockOnce,{once:true,capture:true});document.addEventListener('keydown',unlockOnce,{once:true,capture:true});
  window.addEventListener('gamysuf:audio',event=>{audio.setMuted(Boolean(event.detail?.muted));soundState();});window.addEventListener('gamysuf:audio-query',soundState);
  window.addEventListener('online',()=>{if(!ui.busy&&ui.stage==='home'&&!ui.request)refresh();});window.addEventListener('offline',()=>connection('Koneksi terputus. Kartu yang sudah terbuka tetap tersimpan.'));
+ window.HeartGame={context:()=>({state:ui.state,host:ui.host,mode:ui.mode,pick:ui.pick,busy:ui.busy||ui.modeBusy,stage:ui.stage,dealing:ui.dealing,reduced:motion(),demo:demo()}),setMode,selectCard,card:serviceId=>cardOf(ui.host,serviceId),setDealing:value=>{ui.dealing=Boolean(value);render();},chooseDeal:slot=>{if(!Number.isInteger(slot)||slot<0||slot>6)return;ui.dealing=false;ui.dealtSlot=slot;render();prepare();},backHome:()=>{if(ui.busy||ui.stage!=='home'||ui.dealing)return;ui.hostChosen=false;ui.dealtSlot=null;document.body.dataset.journey='home';render();window.scrollTo({top:0,behavior:'smooth'});},music:()=>{audio.setMuted(false);audio.unlock();soundState();},audioStatus:()=>({muted:audio.muted,paused:audio.bgm.paused,time:audio.bgm.currentTime}),unlock:()=>audio.unlock(),shuffle:()=>audio.shuffle(),tick:()=>audio.tick(),notify:toast};
  soundState();themeState();renderStaffMode();refresh();
  setInterval(()=>{if(!document.hidden&&!ui.busy&&ui.stage==='home'&&!document.querySelector('dialog[open]')&&!ui.request)refresh();},20000);
 })();

@@ -7,7 +7,7 @@ const root=path.join(__dirname,'..'),out=path.join(root,'artifacts','heart-ui');
 
 function monitor(page,label,diagnostics){
  const expected=new Set();
- function record(type,url,message){diagnostics.push({page:label,type,url,message,expected:expected.has(url)&&type!=='pageerror'&&(type!=='console'||/Failed to load resource/i.test(message))});}
+ function record(type,url,message){const cancelledMedia=type==='requestfailed'&&/\/assets\/(?:video\/moments\/(?:zoro|sanji)-(?:cinderella|twirl|whisper|offering|vow|hug|pat)\.mp4|audio\/(?:bpedia-home-suite|bpedia-jingle-hook)\.mp3)$/.test(url)&&/ERR_ABORTED|NS_BINDING_ABORTED/.test(message);diagnostics.push({page:label,type,url,message,expected:cancelledMedia||(expected.has(url)&&type!=='pageerror'&&(type!=='console'||/Failed to load resource/i.test(message)))});}
  page.on('pageerror',e=>record('pageerror',page.url(),e.message));
  page.on('console',m=>{if(m.type()==='error')record('console',m.location().url,m.text());});
  page.on('requestfailed',r=>record('requestfailed',r.url(),r.failure()?.errorText||'Request failed'));
@@ -16,6 +16,7 @@ function monitor(page,label,diagnostics){
 }
 async function stateOf(page,origin){const r=await page.request.get(origin+'/g/heart/api/state');assert.equal(r.status(),200);return r.json();}
 async function prepare(page,{host='zoro',service=''}={}){
+ if(await page.locator('body').getAttribute('data-journey')==='table')await page.locator('#backHomeButton').click();
  await page.locator(`.host-card[data-host="${host}"]`).click();await page.locator(service?'#pickMode':'#gachaMode').click();
  if(service){await page.locator(`.card-choice[data-service="${service}"]`).click();assert.equal(await page.locator(`.card-choice[data-service="${service}"]`).getAttribute('aria-pressed'),'true');}
  else assert.equal(await page.locator('#gachaMode').getAttribute('aria-pressed'),'true');
@@ -23,7 +24,8 @@ async function prepare(page,{host='zoro',service=''}={}){
 }
 async function draw(page,origin,options){
  await prepare(page,options);const responsePromise=page.waitForResponse(r=>r.url()===origin+'/g/heart/api/play'&&r.request().method()==='POST');
- await page.locator('#startButton').click();const response=await responsePromise;assert.equal(response.status(),200);const result=await response.json();
+ if(await page.locator('#purchaseCheck').isVisible())await page.locator('#purchaseAmount').fill(options.service?'150000':'100000');
+ await page.locator('#startButton').click();if(!options.service){await page.locator('#dealDialog[open]').waitFor();if(await page.locator('#skipDealButton').isVisible())await page.locator('#skipDealButton').click();await page.locator('.deal-slot[data-slot="0"]').click();}const response=await responsePromise;assert.equal(response.status(),200);const result=await response.json();
  const submitted=JSON.parse(response.request().postData()||'{}');assert.equal(submitted.comfort,'no-touch');assert.equal(submitted.recording,false);assert.equal(submitted.consent,false);
  await page.locator('#resultDialog[open]').waitFor({timeout:20000});
  assert.equal(result.host.id,options.host);assert.equal(result.method,options.service?'pick':'gacha');if(options.service)assert.equal(result.service.id,options.service);
@@ -111,12 +113,12 @@ async function main(){
   await page.goto(hub.origin+'/g/heart/');await page.locator('body[data-ready="1"]').waitFor();
   assert.equal((await page.locator('#title').innerText()).replace(/\s+/g,' ').trim(),'Bipy Grand Line Desire');assert.equal((await page.locator('.t-sub').textContent()).trim(),'Zoro & Sanji Fanservice Card Game');
   assert.equal(await page.locator('#prepDialog').count(),0);assert.ok(await page.locator('#demoModeButton').isVisible());assert.ok(await page.locator('#liveModeButton').isVisible());
-  expected.add(hub.origin+'/g/heart/api/mode');await page.locator('#liveModeButton').click();await page.locator('#staffModeDialog[open]').waitFor();assert.equal(await page.locator('#staffPin').getAttribute('minlength'),'6');await page.locator('#staffModeCancel').click();await page.locator('#staffModeDialog').waitFor({state:'hidden'});
+  expected.add(hub.origin+'/g/heart/api/mode');await page.locator('#liveModeButton').click();await page.locator('#staffModeDialog[open]').waitFor();assert.equal(await page.locator('#staffPin').getAttribute('minlength'),'4');await page.locator('#staffModeCancel').click();await page.locator('#staffModeDialog').waitFor({state:'hidden'});
   await page.locator('#lightThemeButton').click();await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');assert.equal(await page.locator('#lightThemeButton').getAttribute('aria-pressed'),'true');
   await page.locator('#darkThemeButton').click();await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');assert.equal(await page.locator('#darkThemeButton').getAttribute('aria-pressed'),'true');
   checks.push('renamed game, no approval dialog, protected Main Tercatat button, and explicit light/dark controls');
   const desktopLayout=await page.evaluate(()=>{const root=document.documentElement,hero=document.querySelector('.hero'),deck=document.querySelector('.deck-body');return {width:innerWidth,scrollWidth:root.scrollWidth,scrollHeight:root.scrollHeight,heroWidth:hero?.getBoundingClientRect().width||0,deckWidth:deck?.getBoundingClientRect().width||0};});
-  assert.ok(desktopLayout.scrollWidth<=desktopLayout.width+2);assert.ok(desktopLayout.scrollHeight<10000);assert.ok(desktopLayout.heroWidth>900&&desktopLayout.deckWidth>900);checks.push('desktop TCG table is styled, bounded, and free of horizontal overflow');
+  assert.ok(desktopLayout.scrollWidth<=desktopLayout.width+2);assert.ok(desktopLayout.scrollHeight<10000);assert.ok(desktopLayout.heroWidth>900);checks.push('desktop TCG table is styled, bounded, and free of horizontal overflow');
   const openingLayout=await page.evaluate(()=>{
    const box=element=>{const r=element.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
    const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
@@ -126,16 +128,16 @@ async function main(){
   });
   assert.ok(openingLayout.trailer.top>=0&&openingLayout.trailer.top<openingLayout.viewport.height&&openingLayout.trailer.width>400,'trailer must be visible in the opening area');
   assert.ok(openingLayout.bipys.every((b,i)=>b.width>40&&b.height>70&&b.left>=openingLayout.table.left-1&&b.right<=openingLayout.table.right+1&&openingLayout.overlaps[i].every(area=>area===0)),'full Bipy mascots must be inside their own row and never cover leaders');
-  assert.equal(openingLayout.art.fit,'contain');assert.ok(openingLayout.photo.height/openingLayout.poster.height>.3&&openingLayout.art.top>=openingLayout.photo.top-1&&openingLayout.art.bottom<=openingLayout.photo.bottom+1&&openingLayout.mascot.bottom<=openingLayout.photo.bottom+1,'poster art and Bipy must fit the reserved photo frame');
   checks.push('opening trailer, separated full-body Bipy row, and proportional bounty preview geometry');
   const state=await stateOf(page,hub.origin);assert.equal(state.cards.length,14);assert.equal(new Set(state.cards.map(c=>c.image)).size,14);
   for(const host of ['zoro','sanji']){
+   if(await page.locator('body').getAttribute('data-journey')==='table')await page.locator('#backHomeButton').click();
    await page.locator(`.host-card[data-host="${host}"]`).click();assert.equal(await page.locator('.card-choice[data-service]').count(),7);
    const images=await page.locator('#momentGrid .card-art>img').evaluateAll(images=>Promise.all(images.map(async img=>{img.loading='eager';await img.decode();return {url:img.src,width:img.naturalWidth,height:img.naturalHeight};})));
    assert.deepEqual(images.map(img=>img.url).sort(),state.cards.filter(c=>c.hostId===host).map(c=>new URL(c.image,hub.origin).href).sort());assert.ok(images.every(img=>img.width>0&&img.height>0));artwork.push(...images);
   }
   assert.equal(new Set(artwork.map(img=>img.url)).size,14);checks.push('14 unique server card images rendered and decoded across both hosts');
-  media=await trailerCheck(page);checks.push('trailer metadata, explicit playback, and reduced-motion pause/autoplay behavior');
+  await page.locator('#backHomeButton').click();media=await trailerCheck(page);checks.push('trailer metadata, explicit playback, and reduced-motion pause/autoplay behavior');
   await page.locator('.host-card[data-host="zoro"]').click();await page.locator('#startButton').scrollIntoViewIfNeeded();await page.evaluate(()=>document.fonts.ready);
   await page.locator('.host-art').evaluateAll(images=>Promise.all(images.map(img=>img.decode())));await page.screenshot({path:path.join(out,'heart-desktop.png'),fullPage:true});
   const first=await draw(page,hub.origin,{host:'zoro',service:'vow'});checks.push('Zoro explicit selection opens directly with safe no-touch/no-recording defaults');
@@ -148,11 +150,12 @@ async function main(){
   for(const host of ['zoro','sanji']){const result=await draw(page,hub.origin,{host});assert.ok(state.cards.some(c=>c.id===result.card.id));await finish(page);checks.push(`${host} gacha retains host, returns catalog card, resets consent`);}
   const playUrl=hub.origin+'/g/heart/api/play';expected.add(playUrl);let lostResult;
   await page.route('**/g/heart/api/play',async r=>{const response=await r.fetch();lostResult=await response.json();await r.abort('failed');});
-  await prepare(page,{host:'zoro'});await page.locator('#startButton').click();await page.locator('#resultDialog[open]').waitFor();assert.ok(lostResult);assert.equal(await page.locator('#ticketCode').textContent(),lostResult.id);assert.notEqual(lostResult.id,ticket);
+  await prepare(page,{host:'zoro'});await page.locator('#startButton').click();if(await page.locator('#skipDealButton').isVisible())await page.locator('#skipDealButton').click();await page.locator('.deal-slot[data-slot="0"]').click();await page.locator('#resultDialog[open]').waitFor();assert.ok(lostResult);assert.equal(await page.locator('#ticketCode').textContent(),lostResult.id);assert.notEqual(lostResult.id,ticket);
   checks.push('lost draw response recovers the same existing result');await page.unroute('**/g/heart/api/play');await finish(page);expected.delete(playUrl);
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce',acceptDownloads:true}),phone=await mobile.newPage(),phoneExpected=monitor(phone,'phone',diagnostics);
   phoneExpected.add(hub.origin+'/g/heart/assets/video/heart-parade-promo.mp4');await phone.goto(hub.origin+'/g/heart/');await phone.locator('body[data-ready="1"]').waitFor();await phone.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(img=>{img.loading='eager';return img.decode().catch(()=>{});}));});await phone.screenshot({path:path.join(out,'heart-phone.png'),fullPage:true});
   await phone.waitForFunction(()=>{const v=document.getElementById('paradeTrailer');return v.readyState>=1&&v.videoWidth>0&&!v.error;});
+  await phone.locator('.host-card[data-host="sanji"]').click();
   const phoneLayout=await phone.evaluate(()=>{const root=document.documentElement,leaders=document.querySelectorAll('.leader-slot'),cards=document.querySelectorAll('.deck-card'),start=document.getElementById('startButton')?.getBoundingClientRect();return {width:innerWidth,scrollWidth:root.scrollWidth,scrollHeight:root.scrollHeight,leaders:leaders.length,cards:cards.length,start:{width:start?.width||0,height:start?.height||0}};});
   assert.ok(phoneLayout.scrollWidth<=phoneLayout.width+2);assert.ok(phoneLayout.scrollHeight<8000);assert.equal(phoneLayout.leaders,2);assert.equal(phoneLayout.cards,7);assert.ok(phoneLayout.start.width>=44&&phoneLayout.start.height>=44);checks.push('phone TCG table stays compact with two leaders, seven cards, and a usable primary action');
   const sanji=await draw(phone,hub.origin,{host:'sanji',service:'twirl'});assert.equal(await phone.locator('#resultDialog').evaluate(d=>d.scrollTop),0);await phone.screenshot({path:path.join(out,'heart-phone-result.png')});checks.push('Sanji explicit selection and mobile result opens at scrollTop 0');

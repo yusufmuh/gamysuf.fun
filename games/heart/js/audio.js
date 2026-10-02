@@ -1,5 +1,5 @@
 'use strict';
-/* BGM + SFX sintesis Web Audio. Tidak ada suara sebelum gestur pengguna;
+/* Musik Bpedia milik pemilik + SFX sintesis Web Audio. Tidak ada suara sebelum gestur pengguna;
    jingle "Hanya di Bpedia" diputar saat stempel GRATIS mendarat sambil
    menurunkan BGM sementara. */
 (()=>{
@@ -7,10 +7,13 @@
  const BGM_VOLUME=.22,DUCKED=.05;
  class HeartAudio{
   constructor(){
-   this.muted=pref.get('heart-muted')==='1';this.unlocked=false;this.ctx=null;this.out=null;this.noiseBuffer=null;this.duckFrame=0;
-   this.bgm=new Audio('/assets/audio/heart-parade-bgm.mp3');this.bgm.loop=true;this.bgm.preload='none';this.bgm.volume=BGM_VOLUME;
+   this.muted=pref.get('heart-muted')==='1';this.unlocked=false;this.ctx=null;this.out=null;this.noiseBuffer=null;this.duckFrame=0;this.sources=new Set();this.hookTurn=0;
+   this.bgm=new Audio('/assets/audio/bpedia-home-suite.mp3');this.bgm.loop=true;this.bgm.preload='none';this.bgm.volume=BGM_VOLUME;
+   this.bgm.addEventListener('seeked',()=>{if(this.bgm.loop&&this.bgm.paused&&this.bgm.currentTime<.5&&this.unlocked&&!this.muted&&!document.hidden)this.bgm.play().catch(()=>{});});
    this.hook=new Audio('/assets/audio/bpedia-jingle-hook.mp3');this.hook.preload='none';this.hook.volume=.95;
-   this.hook.addEventListener('ended',()=>this.duck(false));this.hook.addEventListener('pause',()=>this.duck(false));
+   this.hook.addEventListener('ended',()=>{if(this.hook.ended)this.duck(false);});
+   this.hook.addEventListener('pause',()=>{if(this.hook.paused)this.duck(false);});
+   for(const event of ['error','abort'])this.hook.addEventListener(event,()=>this.duck(false));
    document.addEventListener('visibilitychange',()=>this.visibility());
   }
   context(){
@@ -27,10 +30,11 @@
   }
   setMuted(value){
    this.muted=Boolean(value);pref.set('heart-muted',this.muted?'1':'0');
-   if(this.muted){this.bgm.pause();this.hook.pause();}else this.unlock();
+   if(this.out)this.out.gain.setValueAtTime(this.muted?0:.85,this.ctx.currentTime);
+   if(this.muted){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();}else this.unlock();
   }
   visibility(){
-   if(document.hidden){this.bgm.pause();this.hook.pause();if(this.ctx?.state==='running')this.ctx.suspend().catch(()=>{});}
+   if(document.hidden){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();if(this.ctx?.state==='running')this.ctx.suspend().catch(()=>{});}
    else if(this.unlocked&&!this.muted){this.ctx?.resume().catch(()=>{});this.bgm.play().catch(()=>{});}
   }
   duck(on){
@@ -39,6 +43,8 @@
    this.duckFrame=requestAnimationFrame(step);
   }
   ready(){return !this.muted&&this.unlocked&&!document.hidden&&this.ctx&&this.ctx.state==='running';}
+  track(source){this.sources.add(source);source.addEventListener('ended',()=>{this.sources.delete(source);source.disconnect();},{once:true});}
+  clearSfx(){for(const source of this.sources){try{source.stop();source.disconnect();}catch{/* sumber telah berhenti */}}this.sources.clear();}
   noise(){
    if(this.noiseBuffer)return this.noiseBuffer;const ctx=this.ctx,len=ctx.sampleRate;const buf=ctx.createBuffer(1,len,ctx.sampleRate),data=buf.getChannelData(0);
    for(let i=0;i<len;i++)data[i]=Math.random()*2-1;return this.noiseBuffer=buf;
@@ -47,13 +53,13 @@
    const ctx=this.ctx,t=ctx.currentTime+at,o=ctx.createOscillator(),g=ctx.createGain();
    o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);o.detune.value=detune;
    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(gain,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
-   o.connect(g);g.connect(this.out);o.start(t);o.stop(t+dur+.05);
+   o.connect(g);g.connect(this.out);this.track(o);o.start(t);o.stop(t+dur+.05);
   }
   hiss({at=0,dur=.2,gain=.15,type='bandpass',f=1200,to=null,q=1,attack=.004}){
    const ctx=this.ctx,t=ctx.currentTime+at,src=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),g=ctx.createGain();
    src.buffer=this.noise();src.loop=true;filter.type=type;filter.Q.value=q;filter.frequency.setValueAtTime(f,t);if(to)filter.frequency.exponentialRampToValueAtTime(to,t+dur);
    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(gain,t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
-   src.connect(filter);filter.connect(g);g.connect(this.out);src.start(t,Math.random()*.5);src.stop(t+dur+.05);
+   src.connect(filter);filter.connect(g);g.connect(this.out);this.track(src);src.start(t,Math.random()*.5);src.stop(t+dur+.05);
   }
   tick(){if(!this.ready())return;this.tone({f:1560,to:980,type:'triangle',dur:.07,gain:.05});this.hiss({dur:.03,gain:.04,type:'highpass',f:4000});}
   shuffle(){if(!this.ready())return;for(let i=0;i<9;i++)this.hiss({at:i*.045+Math.random()*.01,dur:.05,gain:.05+Math.random()*.05,f:2600+Math.random()*1800,q:1.4});}
@@ -70,10 +76,20 @@
    else if(r==='SR')this.tone({f:146.83,dur:1.1,gain:.05});
   }
   thump(){if(!this.ready())return;this.tone({f:150,to:42,type:'sine',dur:.34,gain:.32,attack:.003});this.hiss({dur:.12,gain:.2,type:'lowpass',f:700,q:.6});this.hiss({at:.01,dur:.05,gain:.06,type:'highpass',f:3000});}
-  jingle(){
+  rewind(media){
+   return new Promise(resolve=>{
+    let timer=0;const finish=()=>{clearTimeout(timer);media.removeEventListener('seeked',finish);resolve();};
+    media.addEventListener('seeked',finish,{once:true});
+    try{media.currentTime=0;}catch{finish();return;}
+    if(!media.seeking){finish();return;}
+    timer=setTimeout(finish,1200);
+   });
+  }
+  async jingle(){
    if(this.muted||!this.unlocked||document.hidden)return;
-   this.duck(true);try{this.hook.currentTime=0;}catch{/* belum dimuat */}
-   this.hook.play().catch(()=>this.duck(false));
+   const turn=++this.hookTurn;this.hook.pause();await this.rewind(this.hook);
+   if(turn!==this.hookTurn||this.muted||document.hidden)return;
+   this.duck(true);this.hook.play().catch(()=>{if(turn===this.hookTurn)this.duck(false);});
   }
  }
  window.HeartAudio=HeartAudio;

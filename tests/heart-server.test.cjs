@@ -1,13 +1,12 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');
-// Menguji salinan games/heart hasil `npm run sync`; sumber tes ada di ../05 bipy-heart-parade/tests.
 const ROOT=path.join(__dirname,'..','games','heart');
 const {createApp,TYPES}=require(path.join(ROOT,'server.cjs'));
 const {CARDS,SCHEDULE}=require(path.join(ROOT,'core/catalog.cjs'));
 async function setup(t,opts={}){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'heart-server-'));const app=await createApp({dataDir:dir,...opts});t.after(async()=>{await app.close();assert.ok(path.resolve(dir).startsWith(path.resolve(os.tmpdir())+path.sep));fs.rmSync(dir,{recursive:true,force:true});});return app;}
 async function call(app,route,body,cookie='',extra={}){const res=await fetch(app.origin+route,{method:body===undefined?'GET':'POST',headers:{origin:app.origin,'content-type':'application/json','x-bpedia-client':'heartparade',cookie,...extra},...(body===undefined?{}:{body:JSON.stringify(body)})});const text=await res.text();let json;try{json=JSON.parse(text);}catch{}return {status:res.status,json,text,cookie:res.headers.get('set-cookie'),headers:res.headers};}
 async function staff(t,opts={}){const app=await setup(t,{hosted:true,adminPin:'246810',...opts});const login=await call(app,'/api/login',{pin:'246810'});assert.equal(login.status,200);return {app,cookie:login.cookie.split(';')[0]};}
-const draw={requestId:'server-draw-001',host:'sanji',comfort:'no-touch',recording:false,consent:true};
+const draw={requestId:'server-draw-001',host:'sanji',comfort:'no-touch',recording:false,consent:true,purchaseAmount:150000};
 
 test('direct player draw keeps consent false and rejects touch or recording without consent',async t=>{
  const app=await setup(t),request={...draw,consent:false};
@@ -28,6 +27,22 @@ test('player mode switching requires a staff session and cannot discard an open 
 });
 
 test('public player flow, exact retry and pending recovery',async t=>{const app=await setup(t),p=await call(app,'/api/play',draw);assert.equal(p.status,200);assert.equal(p.json.demo,true);assert.equal((await call(app,'/api/state')).json.pending.id,p.json.id);assert.equal((await call(app,'/api/play',draw)).json.id,p.json.id);assert.equal((await call(app,'/api/result',{id:p.json.id})).status,200);});
+test('official API requires staff purchase confirmation at each method threshold',async t=>{
+ const {app,cookie}=await staff(t);await call(app,'/api/mode',{mode:'live'},cookie);
+ const state=(await call(app,'/api/state',undefined,cookie)).json;
+ assert.deepEqual(state.purchaseThresholds,{gacha:100000,pick:150000});
+ assert.equal((await call(app,'/api/play',{...draw,verified:true,purchaseAmount:undefined},cookie)).status,400);
+ assert.equal((await call(app,'/api/play',{...draw,verified:false},cookie)).status,409);
+ for(const [method,pick,minimum] of [['gacha',undefined,100000],['pick','vow',150000]]){
+  const request={...draw,requestId:`server-purchase-${method}`,pick,verified:true,purchaseAmount:minimum};
+  assert.equal((await call(app,'/api/play',{...request,purchaseAmount:minimum-1},cookie)).status,409);
+  const r=await call(app,'/api/play',request,cookie);assert.equal(r.status,200);assert.equal(r.json.demo,false);
+  assert.equal(r.json.purchaseAmount,minimum);assert.equal(r.json.purchaseMinimum,minimum);assert.equal(r.json.verified,true);
+  assert.equal((await call(app,'/api/play',{...request,purchaseAmount:0,verified:false},cookie)).json.id,r.json.id);
+  await call(app,'/api/result',{id:r.json.id},cookie);
+ }
+ assert.equal(app.engine.state.history.length,2);assert.equal(app.engine.state.dailyCounters[Object.keys(app.engine.state.dailyCounters)[0]],2);
+});
 test('public catalog and recovered pending expose canonical card metadata',async t=>{
  const app=await setup(t),state=await call(app,'/api/state');assert.deepEqual(state.json.cards,CARDS);
  assert.equal(state.json.settings.schedule,SCHEDULE);
@@ -94,8 +109,9 @@ test('online cloud visitors get a private demo engine while staff keep the booth
  const app=await setup(t,{hosted:true,adminPin:'246810',cloud});
  const cookie=(await call(app,'/api/login',{pin:'246810'})).cookie.split(';')[0];
  assert.equal((await call(app,'/api/admin/settings',{mode:'live'},cookie)).status,200);
- const visitor=await call(app,'/api/play',{...draw,verified:true},'',{'x-visitor':'a'});
+ const visitor=await call(app,'/api/play',{...draw,verified:true,purchaseAmount:0},'',{'x-visitor':'a'});
  assert.equal(visitor.status,200);assert.equal(visitor.json.demo,true);assert.match(visitor.json.id,/^DEMO-/);
+ assert.equal('purchaseAmount' in visitor.json,false);assert.equal('verified' in visitor.json,false);
  assert.equal((await call(app,'/api/state',undefined,'',{'x-visitor':'b'})).json.pending,null);
  const booth=await call(app,'/api/play',{...draw,requestId:'server-booth-001',verified:true},cookie);
  assert.equal(booth.json.demo,false);assert.equal(app.engine.state.history.filter(r=>r.demo).length,0);
@@ -119,8 +135,10 @@ test('staff dashboard is wired to the current contract without inline code',()=>
  assert.ok(js.includes(`'${SCHEDULE}'`),'teks jadwal Market-In di dashboard harus sama dengan SCHEDULE katalog');
  assert.match(js,/'\/api\/admin\/service',\{id,patch:\{price:value\}\}/);assert.match(js,/'\/api\/admin\/service',\{id:s\.id,patch:\{enabled:!s\.enabled\}\}/);
  assert.doesNotMatch(js,/\beval\s*\(|new Function|innerHTML\s*=\s*[^`'"]*\+\s*state/);
- for(const id of ['loginForm','pin','logout','mode','schedule','fillSchedule','queueLimit','duration','sessionOpen','paused','allowPick','hostControls','serviceControls','queueList','historyList','hostFilter','hostQueues','refreshQueue','stats','statusLine','themeToggle','adminError','adminNotice'])assert.match(html,new RegExp(`id="${id}"`),id);
+ for(const id of ['loginForm','pin','logout','mode','schedule','fillSchedule','queueLimit','duration','sessionOpen','paused','allowPick','hostControls','serviceControls','queueList','historyList','hostFilter','hostQueues','refreshQueue','stats','statusLine','themeToggle','adminError','adminNotice','purchaseSection','purchaseRules','purchaseSummaryNote','purchaseByHost','purchaseByService'])assert.match(html,new RegExp(`id="${id}"`),id);
  assert.match(html,/href="\/api\/admin\/export"/);assert.match(html,/href="\/api\/admin\/backup"/);
+ assert.match(html,/href="\/studio"/);assert.match(html,/href="\/"/);
+ assert.match(js,/state\.purchaseThresholds/);assert.match(js,/BigInt\(r\.purchaseAmount\)/);
  assert.doesNotMatch(html,/css\/game\.css/);assert.doesNotMatch(css,/@import|https?:\/\//);
  assert.match(css,/prefers-reduced-motion/);assert.match(css,/safe-area-inset-bottom/);
 });

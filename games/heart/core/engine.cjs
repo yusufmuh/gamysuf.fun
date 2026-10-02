@@ -6,6 +6,8 @@ const fail=(message,status=400)=>Object.assign(new Error(message),{status});
 const dateKey=now=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(now));
 const obj=v=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
 const validPrice=v=>Number.isInteger(v)&&v>=0&&v<=PRICE_LIMIT;
+const PURCHASE_MINIMUM=Object.freeze({gacha:100000,pick:150000});
+const validPurchase=v=>Number.isSafeInteger(v)&&v>=0;
 function hydrateResult(result){
  if(!result)return null;
  const hydrated=clone(result),card=cardFor(result.host?.id,result.service?.id);
@@ -37,6 +39,10 @@ function validateState(s){
  if(!Array.isArray(s.services)||s.services.length!==SERVICES.length||new Set(s.services.map(v=>v.id)).size!==SERVICES.length||s.services.some(v=>!SERVICES.some(f=>f.id===v.id)||typeof v.enabled!=='boolean'||!validPrice(v.price)))throw fail('Menu fanservice tidak valid.');
  for(const r of [...s.history,...(s.pending?[s.pending]:[])]){
   if(!obj(r)||typeof r.id!=='string'||typeof r.requestId!=='string'||typeof r.demo!=='boolean'||!['waiting','served','cancelled','demo'].includes(r.status)||!HOSTS.some(h=>h.id===r.host?.id)||!SERVICES.some(v=>v.id===r.service?.id)||!['touch','no-touch'].includes(r.comfort)||typeof r.recording!=='boolean'||!['gacha','pick'].includes(r.method))throw fail('Data tiket tidak valid.');
+  // Older mission tickets have no purchase snapshot and remain valid unchanged.
+  if('purchaseAmount' in r||'purchaseMinimum' in r){
+   if(r.demo||r.verified!==true||!validPurchase(r.purchaseAmount)||r.purchaseMinimum!==PURCHASE_MINIMUM[r.method]||r.purchaseAmount<r.purchaseMinimum)throw fail('Verifikasi belanja tiket tidak valid.');
+  }
  }
  return s;
 }
@@ -49,7 +55,7 @@ class Engine{
  view(admin=false){
   const s=this.state;
   const prices=Object.fromEntries(s.services.map(v=>[v.id,v.price]));
-  const view={settings:clone(s.settings),hosts:s.hosts.map(h=>({...clone(h),remaining:Math.max(0,h.quota-this.used(h.id))})),services:clone(s.services),cards:CARDS.map(card=>({...clone(card),price:prices[card.serviceId]??card.price})),pending:hydrateResult(s.pending),revision:s.revision,queue:{waiting:this.waiting().length,byHost:Object.fromEntries(s.hosts.map(h=>[h.id,this.waiting(h.id).length]))}};
+  const view={settings:clone(s.settings),purchaseThresholds:clone(PURCHASE_MINIMUM),hosts:s.hosts.map(h=>({...clone(h),remaining:Math.max(0,h.quota-this.used(h.id))})),services:clone(s.services),cards:CARDS.map(card=>({...clone(card),price:prices[card.serviceId]??card.price})),pending:hydrateResult(s.pending),revision:s.revision,queue:{waiting:this.waiting().length,byHost:Object.fromEntries(s.hosts.map(h=>[h.id,this.waiting(h.id).length]))}};
   if(admin){view.history=s.history.map(hydrateResult);view.audit=clone(s.audit);view.stats={issued:s.history.filter(r=>!r.demo).length,served:s.history.filter(r=>r.status==='served').length,cancelled:s.history.filter(r=>r.status==='cancelled').length};}
   return view;
  }
@@ -64,9 +70,11 @@ class Engine{
   if(!host)throw fail('Pilih cosplayer yang sedang tersedia.');
   if(!['touch','no-touch'].includes(options.comfort)||typeof options.consent!=='boolean'||typeof options.recording!=='boolean')throw fail('Pilihan kenyamanan dan persetujuan tidak valid.');
   if((options.comfort==='touch'||options.recording)&&options.consent!==true)throw fail('Sentuhan atau dokumentasi memerlukan persetujuan eksplisit.');
-  const demo=s.settings.mode==='demo';
+  const demo=s.settings.mode==='demo',purchaseMinimum=PURCHASE_MINIMUM[options.pick?'pick':'gacha'];
   if(!demo){
-   if(options.verified!==true)throw fail('Petugas perlu memeriksa misi booth terlebih dahulu.',409);
+   if(options.verified!==true)throw fail('Petugas perlu memeriksa belanja pelanggan terlebih dahulu.',409);
+   if(!validPurchase(options.purchaseAmount))throw fail('Nominal belanja terverifikasi harus angka rupiah bulat dan tidak negatif.');
+   if(options.purchaseAmount<purchaseMinimum)throw fail(`Belanja minimal Rp${purchaseMinimum.toLocaleString('id-ID')} untuk ${options.pick?'pilih fanservice':'gacha fanservice'}.`,409);
    if(this.waiting().length>=s.settings.queueLimit)throw fail('Antrean penuh. Tunggu beberapa tiket selesai dilayani.',409);
    if(this.used(host.id)>=host.quota)throw fail('Kuota cosplayer hari ini habis.',409);
   }
@@ -88,6 +96,7 @@ class Engine{
   const queueNumber=demo?null:(next.dailyCounters[day]||0)+1;
   if(!demo)next.dailyCounters[day]=queueNumber;
   const result={id:(demo?'DEMO-':'HP-')+randomUUID().slice(0,8).toUpperCase(),requestId,at:new Date(this.now()).toISOString(),username,game:'heart',demo,host:{id:host.id,name:host.name,image:host.image,mascot:host.mascot},service:clone(service),method,comfort:options.comfort,recording:options.recording,consent:options.consent,queueNumber,status:demo?'demo':'waiting',estimatedSeconds:demo?0:this.waiting(host.id).reduce((n,r)=>n+r.service.seconds+20,0),duration:s.settings.duration};
+  if(!demo)Object.assign(result,{verified:true,purchaseAmount:options.purchaseAmount,purchaseMinimum});
   result.card={...clone(cardFor(host.id,service.id)),price:service.price};
   next.pending=result;
   // Demo memory is bounded; real tickets remain available for audit and daily quotas.
@@ -133,4 +142,4 @@ class Engine{
   return this.commit(next,'ticket',{id,action});
  }
 }
-module.exports={Engine,validateState,validateSettings,migrateState,dateKey,fail,hydrateResult};
+module.exports={Engine,validateState,validateSettings,migrateState,dateKey,fail,hydrateResult,PURCHASE_MINIMUM};

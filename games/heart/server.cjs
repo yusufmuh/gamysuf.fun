@@ -12,7 +12,8 @@ async function checkPin(pin,record){if(typeof pin!=='string'||pin.length>32||!re
 async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host='127.0.0.1',hosted=false,adminPin=null,allowedHosts=null,rng,now=()=>Date.now(),cloud=null}={}){
  const store=new Store(dataDir),engine=new Engine(store,{rng,now}),authFile=path.join(dataDir,'auth.json');
  let auth=fs.existsSync(authFile)?JSON.parse(fs.readFileSync(authFile,'utf8')):null;
- if(hosted){auth=typeof adminPin==='string'&&/^\d{6,12}$/.test(adminPin)?await pinRecord(adminPin):null;}
+ if(hosted){auth=typeof adminPin==='string'&&/^\d{4,12}$/.test(adminPin)?await pinRecord(adminPin):null;}
+ else if(typeof adminPin==='string'&&/^\d{4,12}$/.test(adminPin)){auth=await pinRecord(adminPin);}
  else if(!auth&&!cloud){auth=await pinRecord('123456');fs.writeFileSync(authFile,JSON.stringify(auth),{mode:0o600});}
  const sessions=new Map(),allow=new Set(String(allowedHosts||'').split(',').map(s=>s.trim()).filter(Boolean));
  let attempts=0,lockUntil=0,origin='';
@@ -89,5 +90,5 @@ async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host
  origin=`http://127.0.0.1:${app.address()?.port||port||4340}`;
  return {server:app,engine,dataDir,origin,close:()=>new Promise(resolve=>app.close(resolve))};
 }
-if(require.main===module){const local=process.argv.includes('--local');createApp({hosted:!local,port:Number(process.env.PORT)||(local?4340:3000),host:local?'127.0.0.1':'0.0.0.0',adminPin:process.env.BPEDIA_ADMIN_PIN||null,allowedHosts:process.env.BPEDIA_ALLOWED_HOSTS||null,dataDir:process.env.BPEDIA_DATA_DIR||(local?undefined:path.join(os.homedir(),'bipy-heart-parade-data'))}).then(app=>console.log(`Bipy Grand Line Desire: ${app.origin}`)).catch(error=>{console.error(error.message);process.exitCode=1;});}
+if(require.main===module){const local=process.argv.includes('--local');createApp({hosted:!local,port:Number(process.env.PORT)||(local?4340:3000),host:local?'127.0.0.1':'0.0.0.0',adminPin:process.env.BPEDIA_ADMIN_PIN||(local?'1234':null),allowedHosts:process.env.BPEDIA_ALLOWED_HOSTS||null,dataDir:process.env.BPEDIA_DATA_DIR||(local?undefined:path.join(os.homedir(),'bipy-heart-parade-data'))}).then(app=>console.log(`Bipy Grand Line Desire: ${app.origin}`)).catch(error=>{console.error(error.message);process.exitCode=1;});}
 module.exports={createApp,TYPES};

@@ -110,7 +110,7 @@
  }
  $('jingle').addEventListener('click',async()=>{
   if(!jingle){
-   jingle=new Audio('/hub/assets/audio/bpedia-jingle.mp3?v=1.6.1');
+   jingle=new Audio('/hub/assets/audio/bpedia-jingle.mp3?v=1.7.0');
    jingle.preload='auto';
    jingle.addEventListener('ended',()=>{jingle.currentTime=0;setJingle(false);});
    jingle.addEventListener('pause',()=>setJingle(false));

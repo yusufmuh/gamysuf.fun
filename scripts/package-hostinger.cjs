@@ -29,7 +29,8 @@ const readme=`# Gamysuf Arcade ${pkg.version} · paket Hostinger
 5. Deploy, lalu buka https://gamysuf.fun (arcade) dan https://gamysuf.fun/studio (Studio pemilik).
 
 ## Login
-- Studio & dashboard Nyapit/Beauty Drop/Gacha Pop/Grand Line Desire: PIN = ADMIN_PIN.
+- Studio & dashboard Nyapit/Beauty Drop/Gacha Pop: PIN = ADMIN_PIN.
+- Grand Line Desire: kode booth 1234 sesuai permintaan pemilik; hanya berlaku untuk Game 5. Opsional HEART_BOOTH_PIN mengganti kode ini.
 - Dashboard Spin Wheels: username \`johan123\`, password = ADMIN_PIN.
 - Ganti PIN: ubah ADMIN_PIN di Environment variables lalu simpan (otomatis redeploy).
 `;

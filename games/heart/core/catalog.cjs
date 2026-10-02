@@ -58,10 +58,11 @@ const CARDS=freezeCatalog(HOSTS.flatMap((host,hostIndex)=>SERVICES.map((service,
   cost:moment.cost,power:moment.power[host.id],counter:moment.counter,attribute:host.attribute,cardColor:host.cardColor,
   crew:host.crew,effect:moment.effect,bountyName:host.fullName,
   image:`/assets/moments/${host.id}-${service.id}.webp`,imageAlt:`Ilustrasi ${host.name} dalam momen ${service.name}`,
+  povImage:host.id==='sanji'?`/assets/pov/sanji-${service.id}.webp`:`/assets/moments/zoro-${service.id}.webp`,povAlt:`${host.name} dalam pose ${service.name}`,
   mascot:`/assets/bipy-variants/bipy-${service.id}.webp`,bipyName:moment.bipyName,bipyAlt:moment.bipyAlt,
   romanticLine:moment.lines[host.id],animationMotif:moment.animationMotif,
   price:service.price,currency:'IDR',priceLabel:'Harga normal fanservice',
-  customerOffer:{...CUSTOMER_OFFER},video:null};
+  customerOffer:{...CUSTOMER_OFFER},video:`/assets/video/moments/${host.id}-${service.id}.mp4`};
 })));
 function cardFor(hostId,serviceId){return CARDS.find(card=>card.hostId===hostId&&card.serviceId===serviceId)||null;}
 function defaultState(){return {

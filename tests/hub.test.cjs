@@ -281,9 +281,21 @@ test('Grand Line Desire: isolated demo, idempotent XP and fourteen collectible m
  const login=await call(hub,'/g/heart/api/login',{method:'POST',body:{pin:'246810'}});
  const cookie=login.headers['set-cookie'].map(s=>s.split(';')[0]).join('; ');
  assert.equal((await call(hub,'/g/heart/api/admin/settings',{method:'POST',cookie,body:{mode:'live'}})).status,200);
- const booth=await call(hub,'/g/heart/api/play',{method:'POST',cookie,body:{...draw,requestId:'heart-booth-002',verified:true}});
+ const booth=await call(hub,'/g/heart/api/play',{method:'POST',cookie,body:{...draw,requestId:'heart-booth-002',verified:true,purchaseAmount:100000}});
  assert.equal(booth.json.demo,false);assert.match(booth.json.id,/^HP-/);
  assert.equal((await call(hub,'/g/heart/api/state',{visitor:vid('b')})).json.settings.mode,'demo');
+});
+
+test('Game 5 booth PIN is scoped to its dashboard and cannot open Studio or other games',async t=>{
+ const hub=await hubFor(t,{heartPin:'1234'});
+ const heartLogin=await call(hub,'/g/heart/api/login',{method:'POST',body:{pin:'1234'}});
+ assert.equal(heartLogin.status,200);
+ const cookie=heartLogin.headers['set-cookie'].map(s=>s.split(';')[0]).join('; ');
+ assert.equal((await call(hub,'/g/heart/api/admin/state',{cookie})).status,200);
+ assert.equal((await call(hub,'/g/gacha/api/login',{method:'POST',body:{pin:'1234'}})).status,401);
+ assert.equal((await call(hub,'/hub-api/admin/login',{method:'POST',body:{pin:'1234'}})).status,401);
+ assert.equal((await call(hub,'/g/heart/api/login',{method:'POST',body:{pin:'246810'}})).status,401);
+ assert.equal((await call(hub,'/g/gacha/api/login',{method:'POST',body:{pin:'246810'}})).status,200);
 });
 
 test('Market-In 6.0: dua game berbeda dikelompokkan lewat data katalog dan punya halaman event',async t=>{
@@ -305,7 +317,8 @@ test('Market-In 6.0: dua game berbeda dikelompokkan lewat data katalog dan punya
   assert.equal(new URL(game.cover,'https://gamysuf.fun').searchParams.get('v'),catalog.version);
  }
  assert.equal(heart.title,'Bipy Grand Line Desire');
- assert.match(heart.mechanic,/gacha booster atau pilih kartu/);
+ assert.match(heart.mechanic,/gacha atau pilih momen/);
+ assert.ok(heart.quickStart.some(step=>step.includes('Rp100.000')&&step.includes('Rp150.000')));
  assert.match(gacha.description,/voucher/i);
  assert.ok(['spin','nyapit','drop'].every(slug=>!catalog.games.find(game=>game.slug===slug).eventGroup),'game lain tetap tile sendiri');
 

@@ -33,7 +33,7 @@ const EVENTS={
   summary:'Gacha Pop untuk hadiah beauty dan voucher belanja, Grand Line Desire untuk kartu fanservice bersama Zoro & Sanji. Dua game berbeda, satu profil dan satu album koleksi.',
   cosplay:'Zoro & Sanji hadir 3–4 Okt — dua hari di booth Bpedia',
   teaser:'Gacha Pop & Grand Line Desire di satu booth. Zoro & Sanji hadir dua hari.',
-  logo:'/hub/assets/market-in/market-in-6.webp?v=1.6.1',
+  logo:'/hub/assets/market-in/market-in-6.webp?v=1.7.0',
   schedule:[
    {date:'2026-10-03',day:'Sabtu',label:'Sabtu, 3 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari pertama di booth Bpedia. Jam sesi foto dan fanservice diumumkan petugas.'},
    {date:'2026-10-04',day:'Minggu',label:'Minggu, 4 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari kedua di booth Bpedia. Datang lagi untuk melengkapi kartumu.'}
@@ -142,7 +142,7 @@ const GAMES=[
   eventGroup:'market-in-6',
   mechanic:'Mesin gacha satu tap · kapsul pop · kartu stiker',
   accent:'#39A7E5',
-  cover:'/hub/assets/covers/gacha.jpg?v=1.6.1',
+  cover:'/hub/assets/covers/gacha.jpg?v=1.7.0',
   tagline:'Sekali tap: tuas berputar, kapsul keluar, lalu pop jadi kartu stiker hadiah.',
   description:'Mesin kapsul gashapon bergaya Y2K Market-In 6.0. Cukup satu tap, tanpa isian apa pun: kapsul menggelinding dari corong lalu pop menjadi kartu stiker. Isinya Bundling Paket 1–3, kuas set kolab karakter, Saput Mickey, voucher belanja Bpedia, serta produk PINKFLASH & FOCALLURE.',
   howTo:[
@@ -166,14 +166,14 @@ const GAMES=[
  },
  {
   slug:'heart',title:'Bipy Grand Line Desire',brandTitle:'BIPY GRAND LINE DESIRE',event:'Market-In 6.0',eventGroup:'market-in-6',
-  mechanic:'Zoro & Sanji fanservice · gacha booster atau pilih kartu · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.6.1',
+  mechanic:'Zoro & Sanji fanservice · atraksi gacha atau pilih momen · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.7.0',
   tagline:'Kartu fanservice Zoro & Sanji bergaya poster bounty. Harga normal dicoret, gratis untuk pelanggan Bpedia.',
-  description:'Trading card fanservice bersama cosplayer Zoro dan Sanji. Buka Gacha Booster dan biarkan Bipy memilihkan kartu, atau Pilih Kartu untuk momen favoritmu. Setiap kartu tampil sebagai poster bounty: harga normal fanservice dicoret, GRATIS untuk pelanggan Bpedia. Lengkapi 14 kartu di album.',
-  howTo:['Pilih Zoro atau Sanji, lalu pilih Gacha Booster atau Pilih Kartu.','Kartu langsung dibuka dengan setelan aman tanpa sentuhan dan tanpa dokumentasi.','Kartu terbuka sebagai poster bounty: harga normal dicoret, GRATIS untuk pelanggan Bpedia.','Gunakan Main tercatat bersama petugas untuk tiket HP-. Demo online tidak berlaku untuk klaim booth.'],
-  quickStart:['Pilih Zoro atau Sanji.','Gacha Booster, atau pilih sendiri kartunya.','Poster bounty terbuka: GRATIS untuk pelanggan Bpedia.'],
-  tips:['Gacha Booster diacak server dan setiap momen berpeluang sama. Pilih Kartu memastikan momen yang kamu mau.','Setiap momen punya alternatif tanpa sentuhan. Tamu dan cosplayer boleh berhenti kapan saja.'],
+  description:'Belanja Rp100.000 di booth untuk Gacha Fanservice, atau Rp150.000 untuk memilih fanservice favoritmu. Pilih Zoro dengan dek hijau atau Sanji dengan dek kuning. Kenali tujuh cuplikannya, lihat atraksi Bipy, lalu buka kartu dengan stempel pink dan poster bounty GRATIS.',
+  howTo:['Pilih Zoro atau Sanji terlebih dahulu.','Belanja Rp100.000: kenali kartu, lihat Bipy mengocok, lalu pilih satu kartu tertutup.','Belanja Rp150.000: lihat cuplikan dan pilih sendiri fanservice favoritmu.','Main tercatat bersama petugas menghasilkan tiket booth. Demo online gratis untuk mencoba.'],
+  quickStart:['Pilih Zoro atau Sanji.','Gacha Rp100.000 atau pilih momen Rp150.000.','Buka kartu, cuplikan Bipy, dan poster bounty.'],
+  tips:['Kenali ketujuh momen lewat cuplikan sebelum membuka kartu.','Setiap momen punya alternatif tanpa sentuhan. Tamu dan cosplayer boleh berhenti kapan saja.'],
   controls:[['Sentuh / klik','Pilih karakter, mode, dan kartu'],['Tab / Enter','Pindah dan pilih kartu dengan keyboard'],['M','Senyap'],['Esc','Tutup pilihan atau selesaikan kartu']],
-  admin:{path:'admin.html',login:'PIN = ADMIN_PIN'},loginRoutes:['/api/login'],resultRoutes:['/api/play'],
+  admin:{path:'admin.html',login:'PIN booth Game 5: 1234'},loginRoutes:['/api/login'],resultRoutes:['/api/play'],
   extract(_route,json){return heartMomentCard(json?.host,json?.service);},
   cards(state){
    const named=(list,id)=>({id,name:list?.find(item=>item.id===id)?.name});

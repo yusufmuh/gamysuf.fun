@@ -45,7 +45,8 @@
   return esc(text).replace(/\[([^\]]{1,24})\]/g,'<span class="kw">$1</span>').replace(/Saat dimainkan:/g,'<span class="kw kw-play">Saat dimainkan</span>');
  }
  function scene(){return '<span class="tcg-scene" aria-hidden="true"></span>';}
- function cardFace(card,{size='full',imgId='',lazy=true,video=false,hostName=''}={}){
+ function bipySeal(){return '<span class="bipy-seal" aria-label="Stempel Bipy pink"><span class="seal-face"><img src="/assets/brand/bipy-pink.webp" alt="" width="640" height="1166"></span><b>BPEDIA BABES</b><small>MOMEN ISTIMEWA</small></span>';}
+ function cardFace(card,{size='full',imgId='',lazy=true,video=false,hostName='',sealed=false}={}){
   if(!card)return '';
   const host=card.hostId==='sanji'?'sanji':'zoro',rarity=['R','SR','SEC'].includes(card.rarity)?card.rarity:'R';
   const name=String(card.name||'').split(' · ')[0];
@@ -60,7 +61,7 @@
 <span class="tcg-bottom">${size==='full'?`<span class="tcg-effect">${effectHtml(card.effect)}</span>`:''}
 <span class="tcg-plate"><small>FANSERVICE · ${esc(hostName||(host==='zoro'?'Zoro':'Sanji'))}</small><b class="tcg-name">${esc(name)}</b><span class="tcg-type">${esc(card.crew)}</span></span>
 <span class="tcg-foot"><img src="/assets/brand/bpedia-white.webp" alt="" width="60" height="22" decoding="async"${lazy?' loading="lazy"':''}><span>${esc(rarity)} · ${esc(card.cardNo)}</span></span></span>
-<span class="tcg-frame" aria-hidden="true"></span></div></div>`;
+<span class="tcg-frame" aria-hidden="true"></span>${sealed?bipySeal():''}</div></div>`;
  }
  function leaderCard(host,{lazy=false}={}){
   const id=host.id==='sanji'?'sanji':'zoro';
@@ -82,12 +83,12 @@
 <img class="back-bipy" src="/assets/brand/bipy-pink.webp" alt="" width="110" height="200" decoding="async">
 <img class="back-mark" src="/assets/brand/bpedia-white.webp" alt="" width="120" height="44" decoding="async"></div></div>`;
  }
- function poster(card,{hostName='',stamped=true,lazy=true,imgId=''}={}){
+ function poster(card,{hostName='',stamped=true,lazy=true,imgId='',sealed=false}={}){
   if(!card)return '';
   const host=card.hostId==='sanji'?'sanji':'zoro',name=String(card.name||'').split(' · ')[0];
   const offer=card.customerOffer||{label:'GRATIS',description:'untuk pelanggan Bpedia'};
   return `<div class="poster host-${host}${stamped?' is-stamped':''}" data-card="${esc(card.id)}">
-<span class="poster-paper" aria-hidden="true"></span>
+<span class="poster-paper" aria-hidden="true"></span>${sealed?bipySeal():''}
 <div class="poster-in"><b class="poster-wanted" aria-hidden="true">WANTED</b>
 <span class="poster-photo">${scene()}<img${imgId?` id="${esc(imgId)}"`:''} src="${esc(card.image)}" alt="${esc(card.imageAlt)}" width="960" height="1440" decoding="async"${lazy?' loading="lazy"':''}><img class="poster-bipy" src="${esc(card.mascot)}" alt="${esc(card.bipyAlt)}" width="640" height="1166" decoding="async" loading="lazy"></span>
 <span class="poster-dead">DICARI PARA PENGGEMAR</span>

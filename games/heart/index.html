@@ -8,11 +8,12 @@
  <link rel="icon" href="/assets/icons/heart.svg" type="image/svg+xml">
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="/css/game.css?v=2.1.0">
- <script defer src="/js/audio.js?v=2.1.0"></script><script defer src="/js/cards.js?v=2.1.0"></script><script defer src="/js/fx.js?v=2.1.0"></script><script defer src="/js/export.js?v=2.1.0"></script><script defer src="/js/game.js?v=2.1.0"></script>
+ <link rel="stylesheet" href="/css/game.css?v=2.2.0">
+ <link rel="stylesheet" href="/css/journey.css?v=2.2.0">
+ <script defer src="/js/audio.js?v=2.2.0"></script><script defer src="/js/cards.js?v=2.2.0"></script><script defer src="/js/fx.js?v=2.2.0"></script><script defer src="/js/export.js?v=2.2.0"></script><script defer src="/js/game.js?v=2.2.0"></script><script defer src="/js/journey.js?v=2.2.0"></script>
 </head>
-<body data-ready="0" data-host="zoro" data-mode="gacha">
- <a class="skip" href="#deck">Langsung ke meja kartu</a>
+<body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
+ <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
  <div class="table-grain" aria-hidden="true"></div>
  <header class="topbar">
   <a class="brand" href="/" aria-label="Bipy Grand Line Desire, beranda"><img class="logo-dark" src="/assets/brand/bpedia-white.webp" alt="Bpedia" width="108" height="39"><img class="logo-light" src="/assets/brand/bpedia-pink.webp" alt="" width="108" height="39"><span>presents</span></a>
@@ -22,6 +23,7 @@
    <span class="mode-tag" id="modeBadge">MEMUAT SESI</span>
    <button id="soundButton" class="icon-button" type="button" aria-label="Matikan suara" title="Suara (M)"></button>
    <button id="motionButton" class="icon-button" type="button" aria-pressed="false" aria-label="Kurangi animasi" title="Kurangi animasi"></button>
+   <button id="fullscreenButton" class="icon-button" type="button" aria-label="Layar penuh" title="Layar penuh">⛶</button>
    <a href="/admin.html" class="admin-link">Petugas</a>
   </div>
  </header>
@@ -35,7 +37,13 @@
      <div class="trailer-screen"><video id="paradeTrailer" muted loop playsinline preload="metadata" poster="/assets/video/grand-line-promo-poster.webp" aria-label="Cuplikan animasi Bipy Grand Line Desire tanpa suara"><source src="/assets/video/heart-parade-promo.mp4" type="video/mp4"></video><button type="button" id="videoPlayButton" class="trailer-toggle" aria-pressed="false" aria-label="Putar cuplikan"><span data-icon="play"></span><span id="videoPlayLabel">Putar cuplikan</span></button></div>
      <div class="trailer-copy"><p class="eyebrow">TRAILER</p><h2 id="trailerTitle">Satu tebasan giok, <em>satu mawar emas.</em></h2></div>
     </section>
-    <p class="hero-lead">Pilih leader-mu, buka booster, dan temukan satu dari 14 kartu fanservice Zoro &amp; Sanji. Harga normalnya dicoret di poster bounty: <b>gratis untuk pelanggan Bpedia.</b></p>
+    <p class="hero-lead">Babes, momen favoritmu dimulai di sini. Kenali tujuh fanservice, pilih Zoro atau Sanji, lalu buka kartu momenmu.</p>
+    <div class="home-music"><button type="button" id="homeMusicButton" class="secondary">♫ Putar musik Bpedia</button><p id="homeMusicStatus" role="status">Musik Bpedia · Zoro &amp; Sanji menyapa bergantian</p></div>
+    <div class="purchase-guide" aria-label="Cara mendapatkan fanservice di booth">
+     <article><span class="tier-number">01</span><div><small>BELANJA MINIMAL</small><b>Rp100.000</b><h2>Gacha Fanservice</h2><p>Bipy mengocok tujuh kartu. Pilih satu kartu tertutup dan temukan kejutanmu.</p></div></article>
+     <article><span class="tier-number">02</span><div><small>BELANJA MINIMAL</small><b>Rp150.000</b><h2>Pilih Fanservice</h2><p>Kenali momennya, lihat cuplikannya, lalu pilih sendiri kartu favoritmu.</p></div></article>
+    </div>
+    <p class="home-invitation"><span>↓</span> Pilih siapa yang akan menemanimu.</p>
     <div class="ribbon" role="note"><span class="ribbon-ico" data-icon="calendar"></span><p><small>JADWAL COSPLAYER</small><span id="scheduleText">Zoro &amp; Sanji hadir 3–4 Okt 2026, dua hari penuh di booth Bpedia.</span></p></div>
     <p class="session-note" id="sessionNote" role="status">Menyiapkan meja kartu…</p>
    </div>
@@ -51,19 +59,21 @@
   </section>
 
   <section class="deck" id="deck" aria-labelledby="deckTitle">
+   <div class="journey-toolbar"><button type="button" id="backHomeButton" class="secondary">← Ganti cosplayer</button><p id="journeyHostLabel">MEJA ZORO · HIJAU GIOK</p><span>01 PILIH COSPLAYER <b>02 KENALI KARTU</b> 03 MOMENMU</span></div>
    <header class="deck-head">
     <div><p class="eyebrow">DEK BP06 · 7 KARTU PER LEADER</p><h2 id="deckTitle">Tujuh kartu bersama <em id="deckHostName">Zoro</em></h2></div>
     <div class="mode-switch" role="group" aria-label="Cara mendapatkan kartu">
-     <button type="button" id="gachaMode" class="mode-button" aria-pressed="true"><span data-icon="shuffle"></span><span><b>Gacha Booster</b><small>Bipy memilihkan satu kartu acak</small></span></button>
-     <button type="button" id="pickMode" class="mode-button" aria-pressed="false"><span data-icon="cards" id="pickModeIcon"></span><span><b>Pilih Kartu</b><small id="pickModeNote">Tentukan kartu favoritmu</small></span></button>
+     <button type="button" id="gachaMode" class="mode-button" aria-pressed="true"><span data-icon="shuffle"></span><span><b>Gacha Fanservice</b><small>Belanja Rp100.000 · pilih kartu tertutup</small></span></button>
+     <button type="button" id="pickMode" class="mode-button" aria-pressed="false"><span data-icon="cards" id="pickModeIcon"></span><span><b>Pilih Fanservice</b><small id="pickModeNote">Belanja Rp150.000 · pilih momenmu</small></span></button>
     </div>
    </header>
+   <div class="purchase-check" id="purchaseCheck" hidden><label for="purchaseAmount">Nominal belanja yang sudah diperiksa petugas</label><div><span>Rp</span><input id="purchaseAmount" type="number" min="100000" max="1000000000" step="1000" inputmode="numeric" value="100000"><span id="purchaseTierHint">Gacha mulai Rp100.000</span></div></div>
    <div class="deck-body">
     <div class="deck-stage" id="deckStage">
      <button type="button" class="booster-button" id="boosterButton" aria-label="Buka Gacha Booster"><span id="boosterPreview"></span><span class="booster-hint">Ketuk untuk membuka</span></button>
      <div class="fan" id="momentGrid" role="group" aria-label="Kartu dalam dek"></div>
      <div class="deck-cta">
-      <button type="button" class="primary" id="startButton" disabled><span data-icon="sparkle"></span><span id="startLabel">Buka booster</span></button>
+      <button type="button" class="primary" id="startButton" disabled><span data-icon="sparkle"></span><span id="startLabel">Kocok tujuh kartu</span></button>
       <p class="deck-hint" id="deckHint" aria-live="polite">Bipy memilih satu dari tujuh kartu secara acak.</p>
      </div>
     </div>
@@ -88,15 +98,26 @@
 
   <aside class="comfort-note booth-comfort"><span data-icon="flower"></span><p><b>Momen terbaik adalah momen yang sama-sama nyaman.</b> Tamu dan cosplayer boleh menolak, memilih alternatif, atau berhenti kapan saja. Dokumentasi hanya dengan izin. Tiket demo online tidak bisa ditukar di booth.</p></aside>
  </main>
+ <dialog id="dealDialog" class="deal-dialog" aria-labelledby="dealTitle">
+  <div class="deal-shell" id="dealShell" data-phase="preview">
+   <header><div><p class="eyebrow">ATRAKSI KARTU · BPEDIA</p><h2 id="dealTitle">Tujuh momen. <em>Satu kejutan.</em></h2></div><button type="button" id="cancelDealButton" class="ghost">Kembali</button></header>
+   <p id="dealStatus" role="status" aria-live="polite">Bipy menyiapkan seluruh kartu fanservice…</p>
+   <div class="dealer-stage"><div id="dealCards" class="deal-cards"></div><img id="dealerBipy" class="dealer-bipy" src="/assets/brand/bipy-jade.webp" alt="Bipy Zoro mengocok kartu" width="929" height="1693"><span class="dealer-orbit" aria-hidden="true"></span></div>
+   <button type="button" id="skipDealButton" class="secondary">Langsung pilih kartu tertutup</button>
+  </div>
+ </dialog>
+ <dialog id="momentPreviewDialog" class="moment-preview-dialog" aria-labelledby="momentPreviewTitle">
+  <div class="moment-preview-shell"><button type="button" id="closeMomentPreview" class="ghost">Tutup ×</button><div id="momentPreviewArt"></div><div class="moment-preview-copy"><p class="eyebrow" id="momentPreviewHost"></p><h2 id="momentPreviewTitle"></h2><p id="momentPreviewDetail"></p><figure class="pov-preview"><img id="momentPreviewPov" alt="" width="1122" height="1402"><figcaption>Sudut pandang Babes</figcaption></figure><button type="button" id="choosePreviewCard" class="primary">Pilih momen ini</button></div></div>
+ </dialog>
  <footer class="footer"><span>BIPY GRAND LINE DESIRE · <i>Zoro &amp; Sanji Fanservice Card Game</i></span><span>Ilustrasi fan-art karakter dewasa · bukan produk resmi</span><a href="/admin.html">Dashboard petugas</a></footer>
 
  <dialog id="staffModeDialog" class="staff-mode-dialog" aria-labelledby="staffModeTitle" aria-describedby="staffModeDescription">
   <form id="staffModeForm" class="staff-mode-form">
    <p class="eyebrow">MODE MAIN · BOOTH BPEDIA</p>
    <h2 id="staffModeTitle">Masukkan PIN petugas</h2>
-   <p id="staffModeDescription">Petugas membuka sesi Main setelah memeriksa misi booth pelanggan.</p>
+   <p id="staffModeDescription">Petugas memeriksa belanja pelanggan sebelum menerbitkan tiket. PIN booth Game 5: <b>1234</b>.</p>
    <label for="staffPin">PIN petugas</label>
-   <input id="staffPin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{6,12}" minlength="6" maxlength="12" autocomplete="off" required aria-describedby="staffModeError">
+   <input id="staffPin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{4,12}" minlength="4" maxlength="12" autocomplete="off" required aria-describedby="staffModeError">
    <p id="staffModeError" class="form-error" role="alert" hidden></p>
    <div class="staff-mode-actions"><button type="button" id="staffModeCancel" class="secondary">Batal</button><button type="submit" class="primary">Aktifkan Main</button></div>
   </form>

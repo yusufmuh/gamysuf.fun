@@ -158,12 +158,14 @@
   const record=r.recording?'<span class="tag">Dokumentasi: tanya ulang</span>':'<span class="tag tag-safe">Tanpa dokumentasi</span>';
   const status=r.status==='served'?'Sudah dilayani':r.status==='cancelled'?'Dibatalkan':'Menunggu';
   const id=esc(r.id);
+  const purchase=r.verified===true&&Number.isSafeInteger(r.purchaseAmount)&&Number.isSafeInteger(r.purchaseMinimum)?`Belanja terverifikasi ${rupiah(r.purchaseAmount)} · minimum ${rupiah(r.purchaseMinimum)}`:'Tiket misi lama · nominal belanja tidak tercatat';
   return `<article class="ticket queue-ticket ${active?'':'is-closed'}" style="--host:${hostColor(state.hosts.find(h=>h.id===r.host.id)?.color)}">
    <p class="ticket-no"><small>No.</small>${pad(r.queueNumber)}</p>
    <div class="ticket-body">
     <h3>${esc(r.username)} <span>· ${esc(r.host.name)} / ${esc(r.service.name)}</span></h3>
     <p class="ticket-meta"><code>${id}</code> · ${esc(clock(r.at))} · ${r.method==='pick'?'pilih langsung':'gacha'}</p>
     <p class="ticket-meta">${meta}</p>
+    <p class="ticket-purchase">${esc(purchase)}</p>
     <p class="tags">${comfort}${record}${active?'':`<span class="tag tag-status">${status}</span>`}</p>
     <p class="ticket-detail">${esc(r.comfort==='no-touch'?r.service.alternative:r.service.detail)}</p>
    </div>
@@ -172,7 +174,23 @@
  }
  function renderTickets(){
   const st=state.stats;
-  $('stats').innerHTML=[['Menunggu',state.queue.waiting],['Tiket terbit',st.issued],['Sudah dilayani',st.served],['Dibatalkan',st.cancelled]].map(([name,n])=>`<div class="stat"><span>${name}</span><strong>${groupDigits(n)}</strong></div>`).join('');
+  const issued=state.history.filter(r=>!r.demo),gacha=issued.filter(r=>r.method==='gacha').length,pick=issued.filter(r=>r.method==='pick').length;
+  const verified=issued.filter(r=>r.verified===true&&Number.isSafeInteger(r.purchaseAmount)&&r.purchaseAmount>=0&&Number.isSafeInteger(r.purchaseMinimum)&&r.purchaseAmount>=r.purchaseMinimum);
+  const total=verified.reduce((sum,r)=>sum+BigInt(r.purchaseAmount),0n);
+  const stats=[['Menunggu',groupDigits(state.queue.waiting)],['Tiket terbit',groupDigits(st.issued)],['Sudah dilayani',groupDigits(st.served)],['Dibatalkan',groupDigits(st.cancelled)],['Klaim gacha',groupDigits(gacha)],['Klaim pilih langsung',groupDigits(pick)],['Belanja pada tiket','Rp '+total.toLocaleString('id-ID')]];
+  $('stats').innerHTML=stats.map(([name,value])=>`<div class="stat"><span>${esc(name)}</span><strong>${esc(value)}</strong></div>`).join('');
+  const thresholds=state.purchaseThresholds;
+  $('purchaseRules').textContent=thresholds?`Gacha: belanja minimal ${rupiah(thresholds.gacha)}. Pilih langsung: minimal ${rupiah(thresholds.pick)}. Demo online tetap gratis.`:'Batas belanja belum tersedia. Segarkan data sebelum menerbitkan tiket.';
+  $('purchaseSummaryNote').textContent=`Ringkasan semua tiket resmi terbit, termasuk yang dibatalkan. ${groupDigits(verified.length)} tiket mempunyai nominal belanja; ${groupDigits(issued.length-verified.length)} tiket lama tanpa nominal. Jumlah ini berasal dari catatan per tiket, bukan omzet atau jumlah struk unik. Demo tidak dihitung.`;
+  function breakdown(items,key,label){
+   return `<table class="report-table"><caption>${esc(label)}</caption><thead><tr><th scope="col">${esc(label)}</th><th scope="col">Gacha</th><th scope="col">Pilih</th><th scope="col">Total</th><th scope="col">Belanja (Rp)</th></tr></thead><tbody>${items.map(item=>{
+    const rows=issued.filter(r=>r[key]?.id===item.id);
+    const amount=verified.filter(r=>r[key]?.id===item.id).reduce((sum,r)=>sum+BigInt(r.purchaseAmount),0n);
+    return `<tr><th scope="row">${esc(item.name)}</th><td>${groupDigits(rows.filter(r=>r.method==='gacha').length)}</td><td>${groupDigits(rows.filter(r=>r.method==='pick').length)}</td><td>${groupDigits(rows.length)}</td><td>${amount.toLocaleString('id-ID')}</td></tr>`;
+   }).join('')}</tbody></table>`;
+  }
+  $('purchaseByHost').innerHTML=breakdown(state.hosts,'host','Cosplayer');
+  $('purchaseByService').innerHTML=breakdown(state.services,'service','Menu');
   const real=state.history.filter(r=>!r.demo&&(!filter||r.host.id===filter));
   const waiting=real.filter(r=>r.status==='waiting').sort((a,b)=>(a.queueNumber??0)-(b.queueNumber??0));
   $('queueList').innerHTML=waiting.length?waiting.map(r=>ticketHtml(r,true)).join(''):`<p class="empty">${state.settings.mode==='live'?'Belum ada tiket menunggu untuk filter ini.':'Perangkat masih mode demo. Tiket resmi muncul setelah mode booth resmi aktif.'}</p>`;
@@ -203,7 +221,7 @@
  $('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();if(busy)return;
   const pin=$('pin').value.trim();
-  if(!/^\d{6,12}$/.test(pin)){$('pin').setAttribute('aria-invalid','true');error(new Error('PIN berisi 6–12 digit angka.'));$('pin').focus();return;}
+  if(!/^\d{4,12}$/.test(pin)){$('pin').setAttribute('aria-invalid','true');error(new Error('PIN berisi 4–12 digit angka.'));$('pin').focus();return;}
   $('pin').removeAttribute('aria-invalid');busy=true;const btn=e.submitter||e.target.querySelector('button');btn.disabled=true;
   try{await api('/api/login',{pin});$('pin').value='';$('adminError').hidden=true;busy=false;await load({settings:true});if(state)$('adminMain').focus();}
   catch(err){error(err);}finally{busy=false;btn.disabled=false;}

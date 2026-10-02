@@ -6,7 +6,7 @@
 ## 1. Ringkasan
 | Item | Isi |
 |---|---|
-| Produk | Gamysuf Arcade 1.6.0: dashboard 5 game booth Bpedia + slot game tambahan |
+| Produk | Gamysuf Arcade 1.7.0: dashboard 5 game booth Bpedia + slot game tambahan |
 | Domain | **gamysuf.fun** (Hostinger, akun pemilik) |
 | Folder | `C:\Users\Yusuf\coding\00 game\00 gamysuf-arcade` |
 | Repo | GitHub `yusufmuh/gamysuf.fun` — lihat §10 |
@@ -22,7 +22,7 @@ Permintaan pengguna: "buat 3 game menjadi 1 dashboard interaktif yang bisa menga
 | `nyapit` | `../02 nyapit` (v1.4.0) | Mesin capit + maskot B! | Cozzone UP 2026 |
 | `drop` | `../03 bipy-beauty-drop` (v1.0.0) | Papan pin + kapsul mekar + gacha fanservice | TAKEOVER X 2026 |
 | `gacha` · Game 4 | `../04 bipy-gacha-pop` (v1.0.1, katalog v2) | Gacha satu tap, 20 hadiah / 497 kapsul awal, kartu stiker | Market-In 6.0 (3–4 Okt 2026) |
-| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.0.0) | Gacha Booster / Pilih Kartu, 7 menu × Zoro/Sanji, 14 kartu BP06 | Market-In 6.0 (3–4 Okt 2026) |
+| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.2.0) | Gacha Rp100.000 / Pilih Rp150.000, 7 menu × Zoro/Sanji, 14 kartu BP06 | Market-In 6.0 (3–4 Okt 2026) |
 
 `games/<slug>/` hanyalah **salinan** berkas runtime (`npm run sync`). Ubah game di folder aslinya, lalu sync.
 Kelima game memiliki opsi `cloud` di `server.cjs` masing-masing (commit di repo lokal game 01/02/03, perilaku desktop/.exe tidak berubah).
@@ -35,7 +35,9 @@ Game 4 memakai katalog final 20 hadiah/497 kapsul awal, termasuk voucher 25%, 50
 
 Game 5 menyediakan 14 kartu BP06-001–014 dari tujuh menu: Cinderella's Fit, Princess Twirl, Blossom Whisper, Sweet Offering, Knight's Vow, Warm Hug, dan Pat on Head, masing-masing bersama Zoro dan Sanji. Gacha Booster memilih menu aktif di server; Pilih Kartu tersedia bila diizinkan petugas. Setiap momen memakai artwork, motif animasi, dan varian Bipy; Bipy Original/Jade/Golden Chef menjadi karakter utama. Poster bounty mencoret harga normal FS dalam Rupiah, lalu menampilkan **GRATIS untuk pelanggan Bpedia**. Harga bawaan adalah nilai referensi awal yang perlu dikonfirmasi tim booth, dapat diubah petugas, dan disimpan sebagai snapshot pada kartu. Nilai BERRY fiktif rilis sebelumnya telah dihapus; tidak ada pembayaran di game.
 
-Trailer berasal dari Gemini; audio trailer diolah menjadi BGM loop, sedangkan jingle Bpedia berasal dari rekaman pemilik. Tanpa sentuhan adalah pilihan default; persetujuan interaksi wajib, izin dokumentasi terpisah, dan kedua pihak dapat berhenti atau memilih alternatif tanpa sentuhan. Demo online bukan tiket klaim booth.
+Home memperkenalkan karakter dan syarat belanja: Rp100.000 untuk gacha, Rp150.000 untuk memilih fanservice. Pilihan Zoro/Sanji wajib sebelum masuk meja; kartu gacha ditumpuk dan dikocok Bipy dealer, lalu pelanggan memilih satu kartu tertutup. Pemilihan langsung tidak diacak. Mode resmi memeriksa nominal belanja di server dan mencatat snapshot per tiket. Setiap hasil memiliki stempel bulat Bipy pink yang ikut diekspor.
+
+Trailer berasal dari Gemini. Musik utama Bpedia disusun menjadi suite berulang 350,140 detik dengan dialog Jepang sintetis Zoro dan Sanji, serta jingle Bpedia dari berkas pemilik. Pemutaran menunggu ketukan pengguna. Tombol bisu menghentikan musik, jingle dan efek suara yang dijadwalkan. Keempat belas video momen mencakup 13 animasi ilustrasi dan satu video aksi yang tersedia; provenance dicatat di manifest. Tanpa sentuhan adalah default digital; persetujuan interaksi nyata dan izin dokumentasi dikonfirmasi petugas di booth. Demo online bukan tiket klaim booth.
 
 ## 3. Arsitektur
 ```
@@ -59,7 +61,7 @@ tests/*.test.cjs      tes gateway, isolasi pengunjung, PIN, XP, Studio, aset, mi
 4. Respons hasil (`/api/play`, `/api/spin`, `/api/bonus`) dengan `demo:true` dicatat `players.record()` → XP/kartu/misi/lencana (anti-curang karena dibaca di server, idempoten per requestId).
 
 ### Keamanan
-- `ADMIN_PIN` (6–12 digit) ditulis ulang ke `auth.json` setiap game saat start → PIN/password bawaan di kode game (1234 / johan123:yusuf123) **tidak pernah berlaku** di cloud. Tanpa ADMIN_PIN: semua login terkunci (503), game tetap bisa dimainkan.
+- `ADMIN_PIN` (6–12 digit) ditulis ke autentikasi Studio serta game 1–4 saat start. Game 5 memakai kode booth 1234 yang ditampilkan sesuai permintaan pemilik, terisolasi dari Studio/game lain; opsional `HEART_BOOTH_PIN` dapat menggantinya. Tanpa ADMIN_PIN: semua login terkunci (503), demo tetap bisa dimainkan.
 - Ganti PIN/password dari dashboard game dimatikan di cloud (409) — PIN hanya dari env.
 - Studio: sesi cookie `gamysuf_admin` (HttpOnly, SameSite=Strict, 8 jam), kunci 60 dtk setelah 5 PIN salah, POST wajib Origin + header `x-gamysuf-client: hub`.
 - ZIP game tambahan: tolak path traversal/absolut, whitelist ekstensi, ≤4000 berkas, ≤200 MB; disajikan di `/play/<slug>/` dengan CSP longgar khusus game (hanya pemilik yang bisa unggah).
@@ -114,6 +116,8 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
+**2 Oktober 2026 · kandidat 1.7.0:** Game 5 2.2.0 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Server memeriksa nominal, demo tetap terpisah, stempel bulat Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia disusun menjadi suite 350,140 detik dengan dialog Jepang sintetis. Sumber 47/47, UI 21/21, audio 29/29 dan 42/42 pemutaran media lulus. Matriks lintas browser, paket dan produksi diperiksa sebelum publikasi; bukti aktual dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah adalah riwayat, bukan bukti rilis baru.
+
 **2 Oktober 2026 · 1.6.1 live:** Game 5 menjadi Bipy Grand Line Desire, kartu dibuka langsung, trailer masuk pembuka, Bipy terpisah dari leader, poster proporsional, dan tombol tema serta Demo/Main Tercatat eksplisit. Sumber 40/40 + check, hub 67/67, UI 21/21, responsif Game 5 4.140/4.140, animasi penuh 14 kartu lulus, dan paket 601 berkas lulus smoke test terisolasi. Produksi: 93/93 endpoint/hash/aset, 106/106 UI dan 107/107 gameplay demo. hPanel melaporkan main/49bdd502 selesai pukul 17:19 WIB. Lihat [RELEASE-1.6.1.md](RELEASE-1.6.1.md). Bukti 1.6.0 berikut adalah riwayat.
 
 **2 Oktober 2026 · Gamysuf Arcade 1.6.0 sudah live di [gamysuf.fun](https://gamysuf.fun).** Lima game terdaftar; Game 4 dan Game 5 dikelompokkan pada halaman Market-In. Sumber game sudah disinkronkan, matriks lintas browser sudah lulus, paket Hostinger sudah diuji terisolasi, dan rilis produksi telah diverifikasi. Catatan rilis: [RELEASE-1.6.0.md](RELEASE-1.6.0.md).
@@ -144,6 +148,8 @@ Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memili
 - Push ke branch produksi dapat memicu deployment. Bukti lokal, commit, paket, dan produksi harus dicatat sesuai tahapnya.
 
 ## 11. Log serah-terima
+
+- **2026-10-02 (Codex, kandidat 1.7.0)**: menerapkan alur pembelian/karakter/dealer/kartu sesuai brief terbaru, suite musik Bpedia dan dialog Jepang, 14 video momen, POV Sanji, stempel Bipy, laporan nominal per tiket, tema, kontrol sentuh dan PIN Game 5 terpisah. PRD Game 5 serta provenance media diperbarui; verifikasi produksi dicatat setelah deployment.
 
 - **2026-10-02 (Codex, produksi 1.6.1)**: menyelesaikan delapan komentar browser Game 5 dan bug tambahan pada ukuran ilustrasi, poster, lifecycle flip/video, serta cache. Commit implementasi `d53c5cab`, cache `49bdd502`, produksi 1.6.1 terverifikasi dengan 93 pemeriksaan berkas/aset, 106 UI, dan 107 gameplay demo. Game tetap `/g/heart/`, ID BP06 dan data resmi dipertahankan.
 

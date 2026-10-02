@@ -27,6 +27,15 @@
  function cover(g,img,x,y,w,h,ay=.5){if(!img)return;const s=Math.max(w/img.naturalWidth,h/img.naturalHeight),iw=img.naturalWidth*s,ih=img.naturalHeight*s;g.drawImage(img,x+(w-iw)/2,y+(h-ih)*ay,iw,ih);}
  function contain(g,img,x,y,w,h,ax=.5,ay=.5){if(!img)return;const s=Math.min(w/img.naturalWidth,h/img.naturalHeight),iw=img.naturalWidth*s,ih=img.naturalHeight*s;g.drawImage(img,x+(w-iw)*ax,y+(h-ih)*ay,iw,ih);}
  function spacing(g,px){if('letterSpacing' in g)g.letterSpacing=px+'px';}
+ async function bipySeal(g,x,y,r){
+  const art=await load('/assets/brand/bipy-pink.webp');
+  const stamp=document.createElement('canvas');stamp.width=320;stamp.height=320;const s=stamp.getContext('2d');
+  s.strokeStyle='#e62b5e';s.fillStyle='#e62b5e';s.lineWidth=9;s.beginPath();s.arc(160,160,145,0,Math.PI*2);s.stroke();s.lineWidth=3;s.beginPath();s.arc(160,160,132,0,Math.PI*2);s.stroke();
+  if(art){s.save();s.filter='grayscale(1) sepia(1) saturate(3) hue-rotate(295deg)';s.drawImage(art,0,0,art.naturalWidth,Math.min(art.naturalHeight,art.naturalWidth),90,47,140,140);s.restore();}
+  s.textAlign='center';s.font='800 29px Poppins';s.fillText('BPEDIA BABES',160,230);s.font='600 17px Poppins';s.fillText('MOMEN ISTIMEWA',160,260);
+  s.globalCompositeOperation='destination-out';for(let i=0;i<190;i++){s.beginPath();s.arc((i*47)%320,(i*83)%320,1.1+(i%4)*.3,0,Math.PI*2);s.fill();}
+  g.save();g.translate(x,y);g.rotate(-.22);g.globalAlpha=.93;g.drawImage(stamp,-r,-r,r*2,r*2);g.restore();
+ }
  function fit(g,text,maxWidth,make,start,min){let size=start;g.font=make(size);while(size>min&&g.measureText(text).width>maxWidth){size-=2;g.font=make(size);}return size;}
  function gradient(g,x0,y0,x1,y1,stops){const grad=g.createLinearGradient(x0,y0,x1,y1);stops.forEach((c,i)=>grad.addColorStop(i/(stops.length-1),c));return grad;}
  function iconPath(g,name,x,y,size,color,width=2){const p=new Path2D(PATHS[name]||PATHS.heart);g.save();g.translate(x-size/2,y-size/2);g.scale(size/24,size/24);g.strokeStyle=color;g.lineWidth=width;g.lineCap='round';g.lineJoin='round';g.stroke(p);g.restore();}
@@ -89,6 +98,7 @@
   if(mark){const mh=34,mw=mh*mark.naturalWidth/mark.naturalHeight;g.drawImage(mark,ix+46,footY-mh+6,mw,mh);}
   g.textAlign='right';g.font='700 26px Poppins';g.fillStyle='rgba(255,255,255,.92)';g.fillText(`${card.rarity} · ${card.cardNo}`,ix+iw-46,footY);
   g.restore();
+  await bipySeal(g,W-180,H*.65,110);
   return canvas;
  }
  function strike(g,x0,x1,y,width,color,seed){g.save();g.strokeStyle=color;g.lineCap='round';g.lineJoin='round';g.lineWidth=width;g.beginPath();g.moveTo(x0,y+10);g.bezierCurveTo(x0+(x1-x0)*.3,y-4+seed,x0+(x1-x0)*.62,y+8-seed,x1,y-22);g.stroke();g.restore();}
@@ -128,6 +138,7 @@
   g.font='500 27px Poppins';g.fillStyle='#4a2e14';g.fillText('Harga normal fanservice · gratis di booth Bpedia',W/2,1404,W-160);g.fillText('Market-In 6.0, 3–4 Okt',W/2,1440,W-160);
   g.textAlign='left';g.font='700 22px Poppins';g.fillStyle=ink;g.fillText(`${String(card.name||'').split(' · ')[0]} · ${hostName||''} · ${card.cardNo}`,74,1478,W-330);
   if(logo){const lh=40,lw=lh*logo.naturalWidth/logo.naturalHeight;g.drawImage(logo,W-74-lw,1478-lh+6,lw,lh);}
+  await bipySeal(g,W-190,870,105);
   return canvas;
  }
  function toBlob(canvas){return new Promise((resolve,reject)=>{try{canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG gagal dibuat.')),'image/png');}catch(error){reject(error);}});}

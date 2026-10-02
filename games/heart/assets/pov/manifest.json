@@ -1,0 +1,541 @@
+{
+  "scope": "Supplied PNG selection and WebP conversion only. Original files and existing moments unchanged.",
+  "zoroSelectionLimitation": "The 20 ChatGPT PNGs in zoro fanservice are chibi Zoro with Bipy; no complete adult POV alternatives exist in that folder. Named zoro_01 through zoro_07 were used without reconstructing or removing collage fragments.",
+  "conversion": {
+    "format": "WEBP",
+    "quality": 92,
+    "method": 6,
+    "lossless": false,
+    "pov": "Native dimensions; no upscaling, cropping, background editing or repainting.",
+    "dealers": "Proportional LANCZOS downscale to maximum edge1000; transparent RGBA retained."
+  },
+  "assets": [
+    {
+      "host": "zoro",
+      "service": "cinderella",
+      "source": "zoro fanservice/zoro_01_cinderellas_fit.png",
+      "sourceDimensions": [
+        384,
+        560
+      ],
+      "sourceBytes": 381930,
+      "sourceSHA256": "2e6a65dd4c79677e5e389b7712249cd2590b4f1768458a0444f86d7973ab7e02",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-cinderella.webp",
+      "outputDimensions": [
+        384,
+        560
+      ],
+      "outputBytes": 67584,
+      "outputSHA256": "76b765deebc6b200194d645ca193d0242db450e08f198786463765dbfc444fa8",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult crouches beside a viewer leg and fastens a silver shoe.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-cinderella.webp"
+    },
+    {
+      "host": "zoro",
+      "service": "twirl",
+      "source": "zoro fanservice/zoro_02_princess_twirl.png",
+      "sourceDimensions": [
+        384,
+        560
+      ],
+      "sourceBytes": 364982,
+      "sourceSHA256": "5b510926d6cb6ef7b735ea5d52cfea9ed3ad5284a513caccf1222083b2fd463e",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-twirl.webp",
+      "outputDimensions": [
+        384,
+        560
+      ],
+      "outputBytes": 63312,
+      "outputSHA256": "eb6856adfe630211b5153c4df1830b7429d8e0af3181426c73c95655792f7f9d",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult holds the viewer hand and extends his other arm for a dance.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-twirl.webp"
+    },
+    {
+      "host": "zoro",
+      "service": "whisper",
+      "source": "zoro fanservice/zoro_03_blossom_whisper.png",
+      "sourceDimensions": [
+        384,
+        560
+      ],
+      "sourceBytes": 377697,
+      "sourceSHA256": "1b41cb94f7b4bceb22fbd99e06fba57ebde7aa4cd4c07bcbeb1c2c82615da973",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-whisper.webp",
+      "outputDimensions": [
+        384,
+        560
+      ],
+      "outputBytes": 65606,
+      "outputSHA256": "736113e637f07228ca5d4b3b48721769853089a107df08bf8734486eadd49c53",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult holds a white flower near the viewer ear/hair.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-whisper.webp"
+    },
+    {
+      "host": "zoro",
+      "service": "offering",
+      "source": "zoro fanservice/zoro_04_sweet_offering.png",
+      "sourceDimensions": [
+        384,
+        560
+      ],
+      "sourceBytes": 366203,
+      "sourceSHA256": "09696523c15fa90f22f26fd6a73d30f36330f5fed7f89377434c9f330c366d72",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-offering.webp",
+      "outputDimensions": [
+        384,
+        560
+      ],
+      "outputBytes": 63570,
+      "outputSHA256": "082e08ae598691137125ec67da8f2b02b38514135fa10891d82e08929c2f27f3",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult extends a white lily toward the viewer.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-offering.webp"
+    },
+    {
+      "host": "zoro",
+      "service": "vow",
+      "source": "zoro fanservice/zoro_05_knights_vow.png",
+      "sourceDimensions": [
+        520,
+        524
+      ],
+      "sourceBytes": 445184,
+      "sourceSHA256": "e3d017a320e7c6fce83dff267c160d009db4605d707f076d7f329c2619e31fc1",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-vow.webp",
+      "outputDimensions": [
+        520,
+        524
+      ],
+      "outputBytes": 74808,
+      "outputSHA256": "bea980ca5e8f34f39b78f3e16fec9863f95bff24fc632776b69ab31432645121",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult bows and kisses the back of the viewer hand.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-vow.webp"
+    },
+    {
+      "host": "zoro",
+      "service": "hug",
+      "source": "zoro fanservice/zoro_06_warm_hug.png",
+      "sourceDimensions": [
+        550,
+        524
+      ],
+      "sourceBytes": 452723,
+      "sourceSHA256": "e0d12169afd137da008a874a2220c2985e967bd273e432b6e0d3a00170449aaa",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-hug.webp",
+      "outputDimensions": [
+        550,
+        524
+      ],
+      "outputBytes": 72392,
+      "outputSHA256": "37a14571d002d138f7fa0cd93d70e3861f44e3271febe55b28f5fbe255aabe53",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult wraps his arms around the viewer, whose brown-haired head is visible.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-hug.webp"
+    },
+    {
+      "host": "zoro",
+      "service": "pat",
+      "source": "zoro fanservice/zoro_07_pat_on_head.png",
+      "sourceDimensions": [
+        516,
+        524
+      ],
+      "sourceBytes": 420203,
+      "sourceSHA256": "d033d6d22a72d907642628784fc89878cdb23ddb4d689ce3a51de6f6fbaed819",
+      "sourceAlphaExtrema": [
+        0,
+        254
+      ],
+      "output": "assets/pov/zoro-pat.webp",
+      "outputDimensions": [
+        516,
+        524
+      ],
+      "outputBytes": 68498,
+      "outputSHA256": "8172c9ad91d202f15fd3145d255d9ea549301513c70acb676e9dfdf2fa43122a",
+      "outputAlphaExtrema": [
+        0,
+        254
+      ],
+      "description": "Zoro adult rests his hand on the viewer brown-haired head.",
+      "limitations": [
+        "Low-resolution cropped collage source; neighboring image fragments retained; no cropping or repainting applied.",
+        "Background and original partial alpha are retained."
+      ],
+      "runtimeUse": "archive-only",
+      "runtimeFallback": "assets/moments/zoro-pat.webp"
+    },
+    {
+      "host": "sanji",
+      "service": "cinderella",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_11 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 1678116,
+      "sourceSHA256": "8feb637fca97fff2e32d9798c22242583909cadefff388d122841fd1b6ac41dc",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-cinderella.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 269240,
+      "outputSHA256": "9871e2388802a21155c8933a084cdc3fe65d9a93dfcf388fd1d3129a16c764f7",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult kneels and supports a viewer foot while fitting a glass-like shoe.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": "twirl",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_15 PM-4.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 1380491,
+      "sourceSHA256": "29f62f2f102ded276485863c5ff53a0723b8704ce402831b3621218d552f1d3b",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-twirl.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 248402,
+      "outputSHA256": "0e8f0626df14696f820fa41ed25d496fb747d9abb8dc35dbe44de604ce8af412",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult holds the viewer hand and extends his other arm for a dance.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": "whisper",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_14 PM-3.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 2014590,
+      "sourceSHA256": "613ff8d5bd8ce13dc487089c104f7d70c1e0a167830599fcbe5f5a1b7cfa3b2c",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-whisper.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 300756,
+      "outputSHA256": "d76400b98f7bab0fdfbccbd31811376cb694b50870f304d79befd3b85e83c08b",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult places a white flower beside the viewer ear/hair.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": "offering",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_13 PM-2.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 1452493,
+      "sourceSHA256": "1bbc82f7ef4c5991f67fda281ee494a7dc3115034342d90cf5bb4298790356cc",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-offering.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 249712,
+      "outputSHA256": "6de4f1b129d0dd72963582b390cd148482081574beaf9603bd150498362dc0e2",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult offers a red rose toward the viewer.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": "vow",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_17 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 2038320,
+      "sourceSHA256": "e9d463f66fca7b6955e0f495a0763cedc480c2d5bb67bd02c15a92a18d045280",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-vow.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 321256,
+      "outputSHA256": "ebd5ae7fdf62f033a3754cbdb75d1d677cf5618f1c2f38964fc9077ecd80bf60",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult lifts and kisses the back of the viewer hand.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": "hug",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_18 PM-7.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 2033502,
+      "sourceSHA256": "c90f5b4f7e622217ed37255fa4802acf3c13d186ac418cd37d84706198e8cd36",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-hug.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 279192,
+      "outputSHA256": "3374b8e614fea1d9c8c1b99bc6ea826d6ed7c492b6ed7c25fee4892fc9d36677",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult reaches around the viewer in a close front embrace.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": "pat",
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_49_16 PM-5.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 1952754,
+      "sourceSHA256": "5bbeb68c28694c42a04fa788a0ae52edf4b1e8bef4360b2edba3ab8063f57473",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/pov/sanji-pat.webp",
+      "outputDimensions": [
+        1122,
+        1402
+      ],
+      "outputBytes": 277962,
+      "outputSHA256": "c81914d59f40d667e000c7e55e11eb3b471452c8bc4daf13c7bdb51dc210071e",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Sanji adult gently rests his palm on the viewer brown-haired head.",
+      "limitations": [
+        "Original composition has close POV edge clipping in some poses.",
+        "Sanji cigarette depicted in supplied artwork is retained."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "zoro",
+      "service": null,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_10 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 1170643,
+      "sourceSHA256": "e0f2a00c589c0635331f1e286f6c426dbf5390143dd02fe89d379721fb6d4307",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/dealers/zoro.webp",
+      "outputDimensions": [
+        800,
+        1000
+      ],
+      "outputBytes": 102060,
+      "outputSHA256": "108a2ef9c0c8a359404e749dc6e3df4f257570a937995c6afa0c9c92f9603813",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Full-body green-costume Bipy standing with one hand at the waist; clear B mark, green shoes and three sheathed swords.",
+      "limitations": [
+        "Source alpha-edge specks retained; no background removal or repainting."
+      ],
+      "runtimeUse": "selected"
+    },
+    {
+      "host": "sanji",
+      "service": null,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_15 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceBytes": 1144512,
+      "sourceSHA256": "63304faa347bfe03721ea7e2ec0d18b449cef907d58ab9d878394979b41fa474",
+      "sourceAlphaExtrema": [
+        0,
+        255
+      ],
+      "output": "assets/dealers/sanji.webp",
+      "outputDimensions": [
+        800,
+        1000
+      ],
+      "outputBytes": 96384,
+      "outputSHA256": "35efa8e67f3f8b732b627ae26d20dccaa630f995c92beb0d0ea079eabdd7dc59",
+      "outputAlphaExtrema": [
+        0,
+        255
+      ],
+      "description": "Full-body yellow-hood Bipy waving, black double-breasted suit with B mark, both black shoes visible.",
+      "limitations": [
+        "Source alpha-edge specks retained; no background removal or repainting."
+      ],
+      "runtimeUse": "selected"
+    }
+  ],
+  "totals": {
+    "count": 16,
+    "sourceBytes": 17674343,
+    "outputBytes": 2620734,
+    "decoded": 16,
+    "alphaChannelsVerified": 16,
+    "originalsUnchanged": 16,
+    "existingMomentsUnchanged": 14
+  },
+  "zoroRuntimeRecommendation": "Do not use the imperfect Zoro POV crops in runtime. Use the clean existing assets/moments/zoro-<service>.webp for full Zoro view fallback."
+}

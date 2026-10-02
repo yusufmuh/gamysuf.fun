@@ -1,6 +1,6 @@
 # Aset Bipy Grand Line Desire
 
-Tanggal: 2 Oktober 2026 · Grand Line Desire 2.1.0 / Gamysuf Arcade 1.6.1. Aset runtime ada di `assets/` (disalin ke `games/heart/assets` oleh `npm run sync`); arsip master PNG/audio/video ada di folder sumber `05 bipy-heart-parade/docs/art-originals`, yang tidak ikut disalin ke hub.
+Tanggal: 2 Oktober 2026 · Grand Line Desire 2.2.0 / Gamysuf Arcade 1.7.0. Rilis ini menambah perjalanan kartu, video momen, dealer Bipy, POV Sanji, cap Bipy, dan rangkaian musik dengan narasi Jepang. Aset runtime ada di `assets/` (disalin ke `games/heart/assets` oleh `npm run sync`); arsip master PNG/audio/video ada di folder sumber `05 bipy-heart-parade/docs/art-originals`, yang tidak ikut disalin ke hub. Musik utama baru berasal dari master pemilik di `H:/My Drive/Bpedia/02_Brand Guidline/10_music/3 menit.mp4`.
 
 | Aset | Asal dan perlakuan |
 |---|---|
@@ -26,16 +26,18 @@ Ukuran dalam byte; hash SHA-256 dihitung dari berkas di folder sumber pada 2 Okt
 
 | Berkas | Asal dan perlakuan | Format | Byte | SHA-256 |
 |---|---|---|---:|---|
-| `docs/art-originals/audio/bpedia-jingle-2026-10-02.mpeg` | Voice note WhatsApp pemilik, 2 Oktober 2026. Disimpan utuh sebagai arsip asli, tidak disajikan ke pemain. | MP3 192 kbps, 44,1 kHz stereo, 32,00 detik | 768.050 | `e63b442774323f099232cb0eea54d8da06783b7d27b4ef1fa8f5ff7823cac5b5` |
+| `H:/My Drive/Bpedia/02_Brand Guidline/10_music/3 menit.mp4` | Master musik utama dari pemilik; identik dengan kiriman WhatsApp `16.47.15.mp4`. Berkas sumber dipertahankan, tidak disajikan sebagai audio runtime. | MP4 berisi AAC, 44,1 kHz stereo, 180,070748 detik | 5.795.800 | `deab2da6f472bb91558d22c57251bd4d1cb23905ced8cd25504de7a4ad6d03ae` |
+| `assets/audio/bpedia-main-bgm.mp3` | Basis musik Bpedia; rangkaian aktif 2.2.0 tercatat di bawah, diturunkan dari master pemilik di atas. `loudnorm I=-18:TP=-1.5:LRA=11`, fade masuk 0,2 detik dan fade keluar 0,65 detik. | MP3 128 kbps, 44,1 kHz stereo, 180,070748 detik | 2.882.416 | `473c767a8df149d5ae04b9a52a92ea87e8bf43bca712144f3b7b1acd0142642e` |
+| `docs/art-originals/audio/bpedia-jingle-2026-10-02.mpeg` | Voice note WhatsApp pemilik, 2 Oktober 2026; sumber cocok dengan kiriman `17.35.07.mpeg`. Disimpan utuh sebagai arsip asli, tidak disajikan ke pemain. | MP3 192 kbps, 44,1 kHz stereo, 32,00 detik | 768.050 | `e63b442774323f099232cb0eea54d8da06783b7d27b4ef1fa8f5ff7823cac5b5` |
 | `assets/audio/bpedia-jingle.mp3` | Jingle penuh dari voice note di atas, dienkode ulang untuk runtime. | MP3 128 kbps, 44,1 kHz stereo, ±32,0 detik | 512.878 | `3fdbf36536fc36aea0d9838f6e338c696b7e47d3b5277a6ca03eb4a58e398674` |
 | `assets/audio/bpedia-jingle-hook.mp3` | Potongan 6,8 detik pertama jingle (hook). | MP3 128 kbps, 44,1 kHz stereo, ±6,8 detik | 109.966 | `a8dcac2770bff10d6281343a735c1845123b33468a96c6e7481da87b7ec41117` |
-| `assets/audio/heart-parade-bgm.mp3` | Audio asli trailer Gemini, diolah menjadi loop 28 detik dengan dua crossfade satu detik. | MP3 128 kbps, 48 kHz stereo, ±28,1 detik | 449.427 | `168196f778557aa4a32af1043867148b428adb983e7e028c080d8c3e131b2a66` |
-| `assets/audio/garden-bgm.mp3` | BGM `bpedia-bgm.wav` Beauty Drop, dikompresi MP3 112 kbps. Bukan komposisi baru. Saat dokumen ini ditulis tidak dirujuk oleh `js/audio.js` (BGM aktif: `heart-parade-bgm.mp3`). | MP3 | 672.957 | `e7dd2c9484f1efdc0894762a66fd5037cae681e0d590d0a3223d4af508e44645` |
+| `assets/audio/heart-parade-bgm.mp3` | Legacy, tidak aktif. Audio asli trailer Gemini, diolah menjadi loop 28 detik dengan dua crossfade satu detik; digantikan oleh `bpedia-main-bgm.mp3`. | MP3 128 kbps, 48 kHz stereo, ±28,1 detik | 449.427 | `168196f778557aa4a32af1043867148b428adb983e7e028c080d8c3e131b2a66` |
+| `assets/audio/garden-bgm.mp3` | Legacy, tidak aktif. BGM `bpedia-bgm.wav` Beauty Drop, dikompresi MP3 112 kbps. Bukan komposisi baru dan tidak dirujuk oleh `js/audio.js`. | MP3 | 672.957 | `e7dd2c9484f1efdc0894762a66fd5037cae681e0d590d0a3223d4af508e44645` |
 | `docs/art-originals/gemini/heart-parade-promo-master.mp4` | Master trailer Gemini dari dua scene kartu, akun Google pemilik. Arsip, tidak disajikan. | H.264 1280×720 + AAC 48 kHz, 10,005 detik | 5.571.616 | `50cec86a97016c292edb942bd81db1d9be476e9c2bd064207fadad8841652356` |
 | `assets/video/heart-parade-promo.mp4` | Trailer runtime, dioptimalkan dari master. | H.264 1280×720 24 fps + AAC, 10,01 detik | 2.483.844 | `52f474f2b7c35c7ae26ced3fe9b2b56ced3d468168753d02ca83872073f8c5d8` |
 | `assets/video/grand-line-promo-poster.webp` | Frame lanskap dari trailer runtime pada 9,5 detik, menjaga komposisi Zoro, Sanji, dan Bipy pada layar pembuka. | WebP 960×540 | 32.102 | `bad8b8bc02ee30246ce95700d80a0b9570c631eda2755d67b72df7c842ff18ce` |
 
-Jingle tidak diklaim sebagai komposisi baru dari tim pengembang; asalnya adalah rekaman yang dikirim pemilik. Prompt trailer Gemini tercatat di `IMAGEGEN-PROMPTS-Heart-Parade.md`. Pemutaran audio menunggu interaksi pengguna dan mengikuti tombol bisu.
+Musik utama dan jingle berasal dari berkas yang dikirim pemilik; tidak diklaim sebagai komposisi baru dari tim pengembang. Jingle penuh dan hook tetap memakai aset sebelumnya. Prompt trailer Gemini tercatat di `IMAGEGEN-PROMPTS-Heart-Parade.md`. Pemutaran audio menunggu interaksi pengguna dan mengikuti tombol bisu. Saat dibisukan atau tab tersembunyi, runtime menjeda musik/hook dan menghentikan SFX yang masih berjalan maupun tertunda. Volume BGM yang diturunkan untuk hook dipulihkan bila hook gagal atau dibatalkan.
 
 ## Katalog kartu BP06
 
@@ -53,6 +55,24 @@ Katalog server menyimpan 14 kartu kanonis di `core/catalog.cjs`. ID tetap `zoro-
 
 Harga normal FS adalah nilai bawaan yang perlu dikonfirmasi tim booth dan dapat diubah petugas (Rp 0–10.000.000). Poster bounty mencoret harga tersebut dan menampilkan **GRATIS untuk pelanggan Bpedia**. Nilai fiktif BERRY dari rilis 1.5.x tidak lagi dipakai. Statistik cost/power/counter per kartu tercantum di PRD bagian 4.2.
 
-Status lokal 2 Oktober 2026: 14 ilustrasi berhasil didekode, trailer dan kontrol pemutaran lulus, ekspor kartu 1080×1508 serta poster 1080×1528 mempertahankan ilustrasi, proporsi, Bipy, logo, dan harga. UI terarah lulus 21/21. Matriks responsif Game 5 lulus 4.140/4.140 pada Chromium, Firefox, dan WebKit dengan 12 ukuran layar. Ini bukti browser/viewport emulasi; status produksi dicatat terpisah pada catatan rilis hub.
+**Bukti historis lokal 2.1.0 / hub 1.6.1, 2 Oktober 2026:** 14 ilustrasi berhasil didekode, trailer dan kontrol pemutaran lulus, ekspor kartu 1080×1508 serta poster 1080×1528 mempertahankan ilustrasi, proporsi, Bipy, logo, dan harga. UI terarah lulus 21/21. Matriks responsif Game 5 lulus 4.140/4.140 pada Chromium, Firefox, dan WebKit dengan 12 ukuran layar. Ini bukti browser/viewport emulasi; matriks tersebut belum dijalankan ulang untuk musik baru 2.1.1.
 
-Produksi 1.6.1 pada `https://gamysuf.fun`: 93/93 pemeriksaan endpoint/hash/aset lulus, mencakup 14 artwork unik, varian Bipy, video, poster pembuka baru, dan kode renderer/ekspor. UI live 106/106 dan gameplay demo 107/107 lulus; unduhan poster nyata 1080×1528 terverifikasi. Bukti rinci berada pada catatan rilis dan folder `artifacts` hub.
+**Bukti historis produksi 1.6.1** pada `https://gamysuf.fun`: 93/93 pemeriksaan endpoint/hash/aset lulus, mencakup 14 artwork unik, varian Bipy, video, poster pembuka baru, dan kode renderer/ekspor. UI live 106/106 dan gameplay demo 107/107 lulus; unduhan poster nyata 1080×1528 terverifikasi. Bukti rinci berada pada `docs/RELEASE-1.6.1.md` dan folder `artifacts` hub; hasil ini tidak dianggap sebagai QA audio baru.
+
+## Tambahan 2.2.0
+
+Pemetaan PNG pemilik ke tujuh POV Sanji dan dua dealer terdapat pada assets/pov/manifest.json, beserta dimensi dan hash. Tujuh Zoro POV merupakan potongan kolase rendah resolusi dan diarsipkan, tidak dipakai runtime UI. Ilustrasi Zoro yang utuh menjadi fallback. Sumber asli tidak ditimpa.
+
+Empat belas cuplikan ada di assets/video/moments/manifest.json: 13 animasi ilustrasi dan satu video aksi Zoro Knight's Vow yang dipangkas dari master Gemini yang benar. Semua H264/yuv420p,720×900,24fps,lima detik,tanpa audio,total4.340.172byte,faststart. Full decode14/14 dan browser playback42/42. WebKit dapat melaporkan758×947 sesudah playback; rasio tetap proporsional dan tidak teramati pemotongan.
+
+Audio aktif beserta hash ada pada assets/audio/manifest.json. Rangkaian Bpedia memakai dua narasi Jepang orisinal, bukan suara aktor/voice clone. Sumber sintesis: https://github.com/rany2/edge-tts. Master musik/jingle pemilik tetap utuh.
+
+| Audio | Detik | Byte | SHA-256 |
+|---|---:|---:|---|
+| `assets/audio/bpedia-main-bgm.mp3` | 180.071 | 2882416 | `473c767a8df149d5ae04b9a52a92ea87e8bf43bca712144f3b7b1acd0142642e` |
+| `assets/audio/bpedia-home-suite.mp3` | 350.140 | 5603330 | `1bfeba19dd65cea446e5abf90bc16317a0a0bbedf173e92d85a34e87c576da5d` |
+| `assets/audio/zoro-welcome-ja.mp3` | 17.544 | 105264 | `68d6ff1816b6759745e24899aba2e79f19f0e8768591c272adcc059311e880b5` |
+| `assets/audio/sanji-welcome-ja.mp3` | 16.944 | 101664 | `af4f2d61e91a70a98b4ebf548bc3abc2099db1021af48ddd0c935968e68aba3b` |
+| `assets/audio/bpedia-jingle-hook.mp3` | 6.800 | 109966 | `a8dcac2770bff10d6281343a735c1845123b33468a96c6e7481da87b7ec41117` |
+
+QA audio baru: Chromium10,Firefox10,WebKit9pemeriksaan; seluruhnya lulus. UI terarah21/21. Status rilis dan bukti responsif/produksi ada di dokumen RELEASE-1.7.0.md hub.

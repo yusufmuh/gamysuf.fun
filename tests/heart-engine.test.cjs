@@ -1,11 +1,10 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),{createHash}=require('node:crypto');
-// Menguji salinan games/heart hasil `npm run sync`; sumber tes ada di ../05 bipy-heart-parade/tests.
 const ROOT=path.join(__dirname,'..','games','heart');
 const {Engine,validateState,migrateState,hydrateResult}=require(path.join(ROOT,'core/engine.cjs'));
 const {defaultState,SERVICES,HOSTS,CARDS,PRICE_LIMIT,SCHEDULE,LEGACY_SCHEDULES,cardFor}=require(path.join(ROOT,'core/catalog.cjs'));
 const {Store}=require(path.join(ROOT,'core/store.cjs')),{historyCsv,HEADER}=require(path.join(ROOT,'core/report.cjs'));
-const options={host:'zoro',comfort:'no-touch',consent:true,recording:false,verified:true};
+const options={host:'zoro',comfort:'no-touch',consent:true,recording:false,verified:true,purchaseAmount:150000};
 const DEFAULT_PRICES={cinderella:65000,twirl:50000,whisper:45000,offering:40000,vow:75000,hug:55000,pat:35000};
 const NOW=Date.parse('2026-10-03T05:00:00Z');
 function memoryStore(state=defaultState()){return {state,commit(next){this.state=structuredClone(next);}};}
@@ -207,7 +206,67 @@ test('touch and recording require explicit consent before any draw',()=>{
 test('each active menu reachable; disabled services and hosts cannot be drawn',()=>{for(let i=0;i<7;i++){const e=engine({rng:()=>i/7});assert.equal(e.play('request-'+i,options).service.id,SERVICES[i].id);}const e=engine();e.updateService('whisper',false);assert.notEqual(e.play('request-disabled',options).service.id,'whisper');e.acknowledge(e.state.pending.id);e.updateHost('zoro',{enabled:false});assert.throws(()=>e.play('request-host',options),/tersedia/);});
 test('direct selection obeys allowPick and active services',()=>{const e=engine();assert.equal(e.play('request-pick',{...options,pick:'vow'}).method,'pick');e.acknowledge(e.state.pending.id);e.updateSettings({allowPick:false});assert.throws(()=>e.play('request-pick2',{...options,pick:'vow'}),/belum dibuka/);const f=engine();f.updateService('vow',{enabled:false});assert.throws(()=>f.play('request-pick3',{...options,pick:'vow'}),/tidak tersedia/);});
 test('pause, closed session and no active services reject new draws',()=>{for(const patch of [{paused:true},{sessionOpen:false}]){const e=engine();e.updateSettings(patch);assert.throws(()=>e.play('request-paused',options),/istirahat/);}const e=engine();e.state.services.forEach(s=>s.enabled=false);assert.throws(()=>e.play('request-empty',options),/menu aktif/);});
-test('live requires verified mission, respects queue and daily quota, ack does not serve',()=>{const e=engine();e.updateSettings({mode:'live',queueLimit:1});assert.throws(()=>e.play('request-unverified',{...options,verified:false}),/memeriksa/);const r=e.play('request-live',options);assert.match(r.id,/^HP-/);assert.equal(r.queueNumber,1);e.acknowledge(r.id);assert.equal(e.waiting().length,1);assert.throws(()=>e.play('request-full',options),/Antrean penuh/);e.resolve(r.id,'served');assert.equal(e.waiting().length,0);e.updateHost('zoro',{quota:1});assert.throws(()=>e.play('request-quota',options),/Kuota/);});
+test('live requires staff-verified purchase, respects queue and daily quota, ack does not serve',()=>{const e=engine();e.updateSettings({mode:'live',queueLimit:1});assert.throws(()=>e.play('request-unverified',{...options,verified:false}),/memeriksa/);const r=e.play('request-live',options);assert.match(r.id,/^HP-/);assert.equal(r.queueNumber,1);e.acknowledge(r.id);assert.equal(e.waiting().length,1);assert.throws(()=>e.play('request-full',options),/Antrean penuh/);e.resolve(r.id,'served');assert.equal(e.waiting().length,0);e.updateHost('zoro',{quota:1});assert.throws(()=>e.play('request-quota',options),/Kuota/);});
+
+test('official purchase boundaries distinguish gacha and pick and snapshot the staff verification',()=>{
+ for(const [method,minimum,pick] of [['gacha',100000,undefined],['pick',150000,'hug']]){
+  const e=engine();e.updateSettings({mode:'live'});
+  const before=structuredClone(e.state);
+  assert.throws(()=>e.play(`purchase-low-${method}`,{...options,pick,purchaseAmount:minimum-1}),err=>err.status===409&&/Belanja minimal/.test(err.message));
+  assert.deepEqual(e.state,before,'rejected amount must not consume quota, queue or a revision');
+  const r=e.play(`purchase-exact-${method}`,{...options,pick,purchaseAmount:minimum});
+  assert.equal(r.method,method);assert.equal(r.purchaseAmount,minimum);assert.equal(r.purchaseMinimum,minimum);assert.equal(r.verified,true);
+  assert.equal(e.state.pending.purchaseAmount,minimum);assert.equal(e.state.history[0].purchaseAmount,minimum);
+  e.acknowledge(r.id);
+  assert.deepEqual(e.play(`purchase-exact-${method}`,{...options,pick,purchaseAmount:0,verified:false}),r);
+  assert.equal(e.state.history.length,1);assert.equal(e.used('zoro'),1);assert.equal(e.state.dailyCounters['2026-10-03'],1);
+ }
+ const e=engine(),view=e.view();assert.deepEqual(view.purchaseThresholds,{gacha:100000,pick:150000});
+ view.purchaseThresholds.pick=0;assert.equal(e.view(true).purchaseThresholds.pick,150000);
+});
+
+test('official draws reject missing, coerced or unsafe purchase amounts without consuming RNG or state',()=>{
+ let calls=0;const e=engine({rng:()=>{calls++;return .4;}});e.updateSettings({mode:'live'});
+ const before=structuredClone(e.state);
+ for(const purchaseAmount of [undefined,null,'150000',150000.5,-1,NaN,Infinity,Number.MAX_SAFE_INTEGER+1]){
+  assert.throws(()=>e.play('purchase-invalid',{...options,purchaseAmount}),err=>err.status===400&&/Nominal belanja/.test(err.message));
+ }
+ for(const verified of [undefined,false,'true',1])assert.throws(()=>e.play('purchase-unverified',{...options,verified}),/memeriksa/);
+ assert.throws(()=>e.play('purchase-no-host',{...options,host:undefined}),/Pilih cosplayer/);
+ assert.equal(calls,0);assert.deepEqual(e.state,before);
+ const r=e.play('purchase-large',{...options,purchaseAmount:Number.MAX_SAFE_INTEGER});assert.equal(r.purchaseAmount,Number.MAX_SAFE_INTEGER);
+});
+
+test('public demo ignores purchase verification fields and remains free for gacha and pick',()=>{
+ for(const pick of [undefined,'hug'])for(const purchaseAmount of [undefined,0,99999,'invalid']){
+  const e=engine(),r=e.play('purchase-demo',{...options,pick,purchaseAmount,verified:false,consent:false});
+  assert.equal(r.demo,true);assert.equal(r.status,'demo');assert.equal(r.queueNumber,null);
+  for(const key of ['verified','purchaseAmount','purchaseMinimum'])assert.equal(key in r,false);
+  assert.equal(e.used('zoro'),0);assert.equal(e.waiting().length,0);assert.deepEqual(e.state.dailyCounters,{});
+ }
+});
+
+test('legacy mission tickets retain their purchase-free schema, pending recovery and idempotent retries',()=>{
+ const legacy=legacyState();legacy.history.forEach(r=>r.verified=true);legacy.pending=structuredClone(legacy.history[2]);
+ const migrated=migrateState(legacy),before=structuredClone(migrated),e=new Engine(memoryStore(migrated),{now:()=>NOW});
+ for(const r of [...e.state.history,e.state.pending]){
+  assert.equal('purchaseAmount' in r,false);assert.equal('purchaseMinimum' in r,false);
+ }
+ assert.deepEqual(e.state,before);assert.equal(e.view().pending.id,'HP-LEGACY3');
+ assert.equal(e.play('legacy-request-3',{}).id,'HP-LEGACY3');assert.equal(e.play('legacy-request-1',{purchaseAmount:0}).id,'HP-LEGACY1');
+ assert.deepEqual(e.state,before);e.acknowledge('HP-LEGACY3');
+ assert.throws(()=>e.play('purchase-new-legacy',{...options,purchaseAmount:undefined}),/Nominal belanja/);
+ const r=e.play('purchase-new-valid',{...options,purchaseAmount:100000});assert.equal(r.queueNumber,4);assert.equal(e.used('zoro'),3);
+ assert.deepEqual(e.state.history.slice(0,3),before.history);
+});
+
+test('purchase snapshots are validated while old mission records need no invented amounts',()=>{
+ const e=engine();e.updateSettings({mode:'live'});e.play('purchase-schema',options);
+ for(const patch of [{purchaseAmount:99999},{purchaseAmount:'150000'},{purchaseMinimum:150000},{verified:false},{demo:true},{purchaseAmount:undefined}]){
+  const state=structuredClone(e.state);Object.assign(state.history[0],patch);assert.throws(()=>validateState(state),/Verifikasi belanja/);
+ }
+ assert.doesNotThrow(()=>validateState(migrateState(legacyState())));
+});
 test('queue counts are tracked per host',()=>{const e=engine();e.updateSettings({mode:'live'});const a=e.play('request-q-a',options);e.acknowledge(a.id);const b=e.play('request-q-b',{...options,host:'sanji'});e.acknowledge(b.id);const c=e.play('request-q-c',{...options,host:'sanji'});assert.deepEqual(e.view().queue,{waiting:3,byHost:{zoro:1,sanji:2}});assert.ok(c.estimatedSeconds>0);assert.equal(e.waiting('sanji').length,2);});
 test('no-touch substitution preserves the ticket and cannot revive completed tickets',()=>{const e=engine();e.updateSettings({mode:'live'});const r=e.play('request-touch',{...options,comfort:'touch'});e.resolve(r.id,'no-touch');assert.equal(e.state.pending.comfort,'no-touch');e.resolve(r.id,'served');assert.equal(e.state.pending.status,'served');e.resolve(r.id,'served');assert.throws(()=>e.resolve(r.id,'cancelled'),/sudah ditutup/);});
 test('cancelled ticket releases quota but never reuses its queue number',()=>{const e=engine();e.updateSettings({mode:'live'});e.updateHost('zoro',{quota:1});const a=e.play('request-cancel',options);e.acknowledge(a.id);e.resolve(a.id,'cancelled');const b=e.play('request-next',options);assert.equal(b.queueNumber,2);});
@@ -226,15 +285,31 @@ test('CSV adds card number and snapshot FS price, excludes demos and neutralizes
  const d=e.play('request-report-4',{...options,username:'+cmd',pick:'twirl'});
  const csv=historyCsv(e.state.history),lines=csv.replace(/^\uFEFF/,'').split('\r\n');
  assert.ok(csv.startsWith('\uFEFF'));
- assert.deepEqual(HEADER,['Kode','Waktu','Antrean','Nama','Cosplayer','Menu','No. kartu','Harga normal FS (Rp)','Metode','Kenyamanan','Izin dokumentasi','Status']);
+ assert.deepEqual(HEADER,['Kode','Waktu','Antrean','Nama','Cosplayer','Menu','No. kartu','Harga normal FS (Rp)','Metode','Kenyamanan','Izin dokumentasi','Status','Belanja terverifikasi (Rp)','Minimum belanja (Rp)','Verifikasi belanja']);
  assert.equal(lines[0],HEADER.map(h=>`"${h}"`).join(','));
  assert.equal(lines.length,5);
  assert.match(lines[1],/^"HP-[^"]+",".+","1","'=1\+1","Zoro","Cinderella's Fit","BP06-001","65000","pick"/);
  assert.match(lines[2],/"'@SUM\(A1\)","Sanji","Cinderella's Fit","BP06-008","99000"/);
  assert.match(lines[3],/"'-2\+3","Zoro","Pat on Head","BP06-007","35000"/);
  assert.match(lines[4],new RegExp(`^"${d.id}".*"'\\+cmd".*"BP06-002","50000"`));
+ for(const line of lines.slice(1))assert.match(line,/,"150000","150000","Diperiksa petugas"$/);
  assert.doesNotMatch(historyCsv(engine().state.history),/DEMO-/);
  const demo=engine();demo.play('request-demo-csv',options);assert.equal(historyCsv(demo.state.history).split('\r\n').length,1);
  const legacyCsv=historyCsv(legacyState().history).split('\r\n');
  assert.match(legacyCsv[1],/"BP06-006","55000"/);assert.match(legacyCsv[3],/"BP06-007","35000"/);
+ for(const line of legacyCsv.slice(1))assert.match(line,/,"","","Misi lama; nominal tidak tercatat"$/);
+});
+
+test('CSV keeps purchase snapshots for gacha and cancelled picks and escapes formula-like text in every column',()=>{
+ const e=engine();e.updateSettings({mode:'live'});
+ const a=e.play('purchase-csv-gacha',{...options,purchaseAmount:100000});e.acknowledge(a.id);
+ const b=e.play('purchase-csv-pick',{...options,pick:'hug',purchaseAmount:175000});e.acknowledge(b.id);e.resolve(b.id,'cancelled');
+ e.updateSettings({mode:'demo'});e.play('purchase-csv-demo',{...options,purchaseAmount:999999});
+ const lines=historyCsv(e.state.history).split('\r\n');assert.equal(lines.length,3);
+ assert.match(lines[1],/,"waiting","100000","100000","Diperiksa petugas"$/);
+ assert.match(lines[2],/,"cancelled","175000","150000","Diperiksa petugas"$/);
+ assert.doesNotMatch(lines.join('\n'),/999999|DEMO-/);
+ const record=structuredClone(a);record.username='  =SUM(A1)';record.host.name='+cmd';record.service.name='@formula';record.id='-code';record.at='\tdate';record.method='\n=method';record.status='=status';
+ const csv=historyCsv([record]);
+ for(const value of ["'-code","'  =SUM(A1)","'+cmd","'@formula","'\tdate","'\n=method","'=status"])assert.ok(csv.includes(value),value);
 });

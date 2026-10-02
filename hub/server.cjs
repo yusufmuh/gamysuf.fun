@@ -79,7 +79,7 @@ async function seedGameAuth(slug,dataDir,pin){
  fs.writeFileSync(path.join(dataDir,'auth.json'),JSON.stringify(record),{mode:0o600});
 }
 
-async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=false,allowedHosts=null,now=()=>Date.now(),rng}={}){
+async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,heartPin=null,local=false,allowedHosts=null,now=()=>Date.now(),rng}={}){
  if(!dataDir)throw new Error('dataDir wajib diisi.');
  fs.mkdirSync(dataDir,{recursive:true});
  const pinValid=typeof adminPin==='string'&&/^\d{6,12}$/.test(adminPin);
@@ -96,7 +96,9 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
    const gameDir=path.join(ROOT,'games',game.slug);
    const gameData=path.join(dataDir,'games',game.slug);
    fs.mkdirSync(gameData,{recursive:true});
-   await seedGameAuth(game.slug,gameData,pinValid?adminPin:null);
+   // Public booth code is scoped to Game 5; Studio and other games keep their configured credential.
+   const gamePin=game.slug==='heart'&&typeof heartPin==='string'&&/^\d{4,12}$/.test(heartPin)?heartPin:adminPin;
+   await seedGameAuth(game.slug,gameData,pinValid?gamePin:null);
    const {createApp}=require(path.join(gameDir,'server.cjs'));
    const {Engine}=require(path.join(gameDir,'core','engine.cjs'));
    const visitors=createVisitorEngines({Engine,options:real=>game.engineOptions?.(real)||{},now});
@@ -484,6 +486,7 @@ if(shouldAutostart()){
   host:local?'127.0.0.1':(process.env.HOST||'0.0.0.0'),
   dataDir:process.env.GAMYSUF_DATA_DIR||(local?path.join(ROOT,'.local-data'):path.join(os.homedir(),'gamysuf-data')),
   adminPin,
+  heartPin:process.env.HEART_BOOTH_PIN||'1234',
   allowedHosts:process.env.ALLOWED_HOSTS||null
  }).then(hub=>{
   const address=hub.server.address();

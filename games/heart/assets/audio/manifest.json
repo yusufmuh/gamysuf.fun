@@ -1,0 +1,45 @@
+{
+  "version": "2.2.0",
+  "musicSource": "Owner supplied 3 menit.mp4; identical WhatsApp Audio 2026-09-30 at 16.47.15.mp4",
+  "voiceSource": "Original Japanese booth narration synthesized using ja-JP-KeitaNeural; not an actor recording or voice clone",
+  "suite": {
+    "durationSeconds": 350.14,
+    "cyclicCrossfadeSeconds": 5,
+    "voiceStartsSeconds": {
+      "zoro": 159,
+      "sanji": 330
+    }
+  },
+  "files": [
+    {
+      "file": "assets/audio/bpedia-main-bgm.mp3",
+      "durationSeconds": 180.070748,
+      "bytes": 2882416,
+      "sha256": "473c767a8df149d5ae04b9a52a92ea87e8bf43bca712144f3b7b1acd0142642e"
+    },
+    {
+      "file": "assets/audio/bpedia-home-suite.mp3",
+      "durationSeconds": 350.14,
+      "bytes": 5603330,
+      "sha256": "1bfeba19dd65cea446e5abf90bc16317a0a0bbedf173e92d85a34e87c576da5d"
+    },
+    {
+      "file": "assets/audio/zoro-welcome-ja.mp3",
+      "durationSeconds": 17.544,
+      "bytes": 105264,
+      "sha256": "68d6ff1816b6759745e24899aba2e79f19f0e8768591c272adcc059311e880b5"
+    },
+    {
+      "file": "assets/audio/sanji-welcome-ja.mp3",
+      "durationSeconds": 16.944,
+      "bytes": 101664,
+      "sha256": "af4f2d61e91a70a98b4ebf548bc3abc2099db1021af48ddd0c935968e68aba3b"
+    },
+    {
+      "file": "assets/audio/bpedia-jingle-hook.mp3",
+      "durationSeconds": 6.8,
+      "bytes": 109966,
+      "sha256": "a8dcac2770bff10d6281343a735c1845123b33468a96c6e7481da87b7ec41117"
+    }
+  ]
+}

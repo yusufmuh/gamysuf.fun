@@ -15,8 +15,8 @@
   <h1 id="loginTitle">Masuk <em>petugas</em></h1>
   <p class="lead">Gunakan PIN acara. Pengunjung online tetap bermain di mode demo pribadi, jadi tiket resmi hanya terbit dari perangkat yang sudah masuk di sini.</p>
   <form id="loginForm" novalidate>
-   <label class="field" for="pin"><span>PIN petugas</span><input type="password" id="pin" inputmode="numeric" minlength="6" maxlength="12" autocomplete="current-password" required aria-describedby="loginHint"></label>
-   <p id="loginHint" class="hint">6–12 digit angka.</p>
+   <label class="field" for="pin"><span>PIN petugas</span><input type="password" id="pin" inputmode="numeric" minlength="4" maxlength="12" autocomplete="current-password" required aria-describedby="loginHint"></label>
+   <p id="loginHint" class="hint">PIN booth Game 5: <b>1234</b>.</p>
    <button class="btn primary wide" type="submit">Masuk</button>
   </form>
  </section>
@@ -36,10 +36,18 @@
   </div>
 
   <nav class="section-nav" aria-label="Bagian dashboard">
-   <a href="#queueSection">Antrean</a><a href="#sessionSection">Sesi</a><a href="#hostSection">Cosplayer</a><a href="#menuSection">Menu &amp; harga</a>
+   <a href="#queueSection">Antrean</a><a href="#purchaseSection">Belanja &amp; klaim</a><a href="#sessionSection">Sesi</a><a href="#hostSection">Cosplayer</a><a href="#menuSection">Menu &amp; harga</a><a href="/studio">Studio</a><a href="/">Semua permainan</a>
   </nav>
 
   <section class="stats" id="stats" aria-label="Ringkasan tiket resmi"></section>
+
+  <section id="purchaseSection" class="panel" aria-labelledby="purchaseTitle">
+   <div class="panel-head"><div><p class="eyebrow">Verifikasi pelanggan</p><h2 id="purchaseTitle">Belanja &amp; klaim fanservice</h2></div><a class="btn ghost" href="/index.html">Terbitkan tiket dari permainan</a></div>
+   <p id="purchaseRules" class="guidance"></p>
+   <p class="guidance">Pilih cosplayer lebih dulu, periksa struk, lalu masukkan nominal belanja dan konfirmasi petugas di halaman permainan. Nominal pada tiket yang sudah terbit menjadi catatan tetap.</p>
+   <p id="purchaseSummaryNote" class="fine-print"></p>
+   <div class="purchase-breakdowns"><div><h3>Per cosplayer</h3><div id="purchaseByHost" class="report-table-wrap"></div></div><div><h3>Per menu</h3><div id="purchaseByService" class="report-table-wrap"></div></div></div>
+  </section>
 
   <section id="queueSection" class="panel" aria-labelledby="queueTitle">
    <div class="panel-head">
@@ -69,10 +77,10 @@
      </div>
      <label class="switch-row"><input id="sessionOpen" type="checkbox" role="switch"><span class="switch-ui" aria-hidden="true"></span><span>Sesi cosplayer dibuka</span></label>
      <label class="switch-row"><input id="paused" type="checkbox" role="switch"><span class="switch-ui" aria-hidden="true"></span><span>Jeda semua putaran booth</span></label>
-     <label class="switch-row"><input id="allowPick" type="checkbox" role="switch"><span class="switch-ui" aria-hidden="true"></span><span>Izinkan pilih kartu langsung setelah verifikasi misi</span></label>
+     <label class="switch-row"><input id="allowPick" type="checkbox" role="switch"><span class="switch-ui" aria-hidden="true"></span><span>Izinkan pilih kartu langsung setelah verifikasi belanja Rp150.000</span></label>
      <div class="form-actions"><button class="btn primary" type="submit">Simpan sesi</button><span id="settingsDirty" class="dirty-note" hidden>Ada perubahan yang belum disimpan.</span></div>
     </form>
-    <p class="fine-print">Mode booth resmi hanya berlaku untuk browser yang sudah masuk petugas. Konfirmasi misi dan persetujuan tamu sebelum menerbitkan tiket.</p>
+    <p class="fine-print">Mode booth resmi hanya berlaku untuk browser yang sudah masuk petugas. Gacha memerlukan belanja Rp100.000; pilih langsung Rp150.000. Sentuhan atau dokumentasi memerlukan persetujuan tamu.</p>
    </section>
 
    <section id="hostSection" class="panel" aria-labelledby="hostTitle">

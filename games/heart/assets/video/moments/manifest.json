@@ -1,0 +1,1040 @@
+{
+  "scope": "14 actual MP4 service scenes.13 are animated still illustrations, one is a trimmed existing correct Zoro vow master. No new Veo/body-articulation claim.",
+  "encoding": {
+    "dimensions": [
+      720,
+      900
+    ],
+    "durationSeconds": 5,
+    "framesPerSecond": 24,
+    "codec": "H264/libx264",
+    "pixelFormat": "yuv420p",
+    "audio": "none",
+    "crf": 22,
+    "preset": "medium",
+    "faststart": true,
+    "maxParallelEncoders": 2,
+    "threadsPerEncoder": 2
+  },
+  "assets": [
+    {
+      "host": "zoro",
+      "service": "cinderella",
+      "file": "assets/video/moments/zoro-cinderella.mp4",
+      "source": "assets/moments/zoro-cinderella.webp",
+      "sourceSHA256": "e70ce28e0373e9b191215c73089836f0e75f3f1ba01814a540500c9d9df08cd2",
+      "sourceBytes": 289378,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x123e32",
+      "motif": "shoe and sparkles",
+      "outputSHA256": "9a9b1b45d5b2bab5c1b310fe96a238bd160ebe77bc01f888fdc6ad9ae56d06a5",
+      "outputBytes": 292868,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "292868"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 13.7352
+    },
+    {
+      "host": "zoro",
+      "service": "twirl",
+      "file": "assets/video/moments/zoro-twirl.mp4",
+      "source": "assets/moments/zoro-twirl.webp",
+      "sourceSHA256": "0b63dd84c6e52fceef508e59d6f0e28e91399de3bcc7f143e99d5e26bc5a8cc1",
+      "sourceBytes": 270386,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x123e32",
+      "motif": "pink petals and sparkles",
+      "outputSHA256": "4706aa93af570fc620fed21e29828f363be4bab1438f8de39835de04fe304791",
+      "outputBytes": 323036,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "323036"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 15.0891
+    },
+    {
+      "host": "zoro",
+      "service": "whisper",
+      "file": "assets/video/moments/zoro-whisper.mp4",
+      "source": "assets/moments/zoro-whisper.webp",
+      "sourceSHA256": "82791e832ff593fedc6a7f592e30d012c013c99195ca196952677b2a3034d931",
+      "sourceBytes": 254002,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x123e32",
+      "motif": "five-petal flower",
+      "outputSHA256": "98e1801c5e4535986dcd1c5153fc6ff079454746ac6c875a8fe51124f561052e",
+      "outputBytes": 332004,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "332004"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 16.7388
+    },
+    {
+      "host": "zoro",
+      "service": "offering",
+      "file": "assets/video/moments/zoro-offering.mp4",
+      "source": "assets/moments/zoro-offering.webp",
+      "sourceSHA256": "892268f9a6f8a1cbf6518ba89bc8b0ba7af61c746626c990b8541cdbbb5d12f8",
+      "sourceBytes": 266582,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x123e32",
+      "motif": "rose-like flower and stem",
+      "outputSHA256": "61e0cc5d13afe5c417e1bb8e85f5ed89c833263ff93cac022c1bd6ad91f92dd4",
+      "outputBytes": 302247,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "302247"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 17.6359
+    },
+    {
+      "host": "zoro",
+      "service": "vow",
+      "file": "assets/video/moments/zoro-vow.mp4",
+      "source": "docs/art-originals/gemini/card-zoro-vow-master.mp4",
+      "sourceSHA256": "fb44bfdb585c9e232531f21e97c3f1dd8014e4ce6b6e33d4c68f9c751f1f66a1",
+      "sourceBytes": 4399692,
+      "sourceProbe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 1280,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "240"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "avg_frame_rate": "0/0",
+            "nb_frames": "470"
+          }
+        ],
+        "format": {
+          "duration": "10.005000",
+          "size": "4399692"
+        }
+      },
+      "kind": "existing-generated-motion-video",
+      "motion": "Trimmed correct Zoro Knight's Vow master0.5–5.5sec, proportionally contained and padded. Source has actual character/scenic motion; no new Veo generation.",
+      "background": "0x123e32",
+      "motif": "Existing green ribbons, petals and sparkles in source master",
+      "outputSHA256": "ef7b8465bbaf68ece64e83462d921fb9e751761c572e81a9b1a149bcdacd9bd6",
+      "outputBytes": 799746,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "799746"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 22.7528
+    },
+    {
+      "host": "zoro",
+      "service": "hug",
+      "file": "assets/video/moments/zoro-hug.mp4",
+      "source": "assets/moments/zoro-hug.webp",
+      "sourceSHA256": "7bf7d5585dc0b36c43fa8fbe7abf23d4823e9549d3231deee1717bb622d7b7e3",
+      "sourceBytes": 241792,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x123e32",
+      "motif": "heart",
+      "outputSHA256": "4b7c1f1bbc7d487048d2b5b3d1dca24ad3e395d15ef8e96d03fbaaa1735dcc97",
+      "outputBytes": 277931,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "277931"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 18.4958
+    },
+    {
+      "host": "zoro",
+      "service": "pat",
+      "file": "assets/video/moments/zoro-pat.mp4",
+      "source": "assets/moments/zoro-pat.webp",
+      "sourceSHA256": "3ff7c38a50656d43d1802b132be1434f034999bed86b636f0c9ac66e4b6d7477",
+      "sourceBytes": 248928,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x123e32",
+      "motif": "gentle hand and sparkle",
+      "outputSHA256": "309cbf6d48770b2fd7f374dfd9bba99ea0269373c6dbd56efdcf04bb57f288d0",
+      "outputBytes": 297486,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "297486"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 19.0678
+    },
+    {
+      "host": "sanji",
+      "service": "cinderella",
+      "file": "assets/video/moments/sanji-cinderella.mp4",
+      "source": "assets/moments/sanji-cinderella.webp",
+      "sourceSHA256": "f3762394ca87492455cde2dda93e6f28099bebcf5b4972bc3401e8dcf44a96b0",
+      "sourceBytes": 278510,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "shoe and sparkles",
+      "outputSHA256": "21ba681025d864ffb0aef34af160a371f8e0e25305771ac33e740a00ff9a7de3",
+      "outputBytes": 328279,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "328279"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 15.9273
+    },
+    {
+      "host": "sanji",
+      "service": "twirl",
+      "file": "assets/video/moments/sanji-twirl.mp4",
+      "source": "assets/moments/sanji-twirl.webp",
+      "sourceSHA256": "cbb0479e5b225c5c6ba6f763c8721f064ecc741036c43d15e3ccff65e8c58780",
+      "sourceBytes": 406000,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "pink petals and sparkles",
+      "outputSHA256": "d720b25fb0e53b6ca32915c3a387de1430213b03195bd36273942323976a6650",
+      "outputBytes": 272960,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "272960"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 20.202
+    },
+    {
+      "host": "sanji",
+      "service": "whisper",
+      "file": "assets/video/moments/sanji-whisper.mp4",
+      "source": "assets/moments/sanji-whisper.webp",
+      "sourceSHA256": "d37f903ebd310e082f4d6433065e12b445fd314b9312ec8cb39e418597a17567",
+      "sourceBytes": 227206,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "five-petal flower",
+      "outputSHA256": "a84f0e6b948d102a15e58cd9b64c3f30b33487db575ac390d4222ee20776f902",
+      "outputBytes": 229454,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "229454"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 16.166
+    },
+    {
+      "host": "sanji",
+      "service": "offering",
+      "file": "assets/video/moments/sanji-offering.mp4",
+      "source": "assets/moments/sanji-offering.webp",
+      "sourceSHA256": "ba1ad38e2b915ba155ee84d32650288b37bd4adafcc3869a4d9d88e6fad0efca",
+      "sourceBytes": 239938,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "rose-like flower and stem",
+      "outputSHA256": "9965de489f55889e6d5692062ae92ac497e3493f26f5768c7c4100e55b863fcf",
+      "outputBytes": 270387,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "270387"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 17.315
+    },
+    {
+      "host": "sanji",
+      "service": "vow",
+      "file": "assets/video/moments/sanji-vow.mp4",
+      "source": "assets/moments/sanji-vow.webp",
+      "sourceSHA256": "e9c55e944a7a55352fe823c97bcaee8efb2f056aaec753722f1c19c71b1b5be5",
+      "sourceBytes": 229248,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "crown and sparkles",
+      "outputSHA256": "38ac468ff99fe8783460141d15cc897e81116374fb1f01887d5e4bd08a43f9fa",
+      "outputBytes": 184402,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "184402"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 15.7652
+    },
+    {
+      "host": "sanji",
+      "service": "hug",
+      "file": "assets/video/moments/sanji-hug.mp4",
+      "source": "assets/moments/sanji-hug.webp",
+      "sourceSHA256": "f249716d65b773eeaf72ebf1b2c3eab7028ab8d01bd749efdd1582378ecb5b1b",
+      "sourceBytes": 173230,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "heart",
+      "outputSHA256": "a9ab03246dc65adcfa3d00e35710d49dc3514f30b71864b72b7b5b9ffd078ebe",
+      "outputBytes": 188974,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "188974"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 15.492
+    },
+    {
+      "host": "sanji",
+      "service": "pat",
+      "file": "assets/video/moments/sanji-pat.mp4",
+      "source": "assets/moments/sanji-pat.webp",
+      "sourceSHA256": "9bb510923313b3461b92a633149c03da10fe52c711b025ba12dbca43e148706f",
+      "sourceBytes": 210986,
+      "sourceProbe": {
+        "dimensions": [
+          960,
+          1440
+        ]
+      },
+      "kind": "illustration-motion",
+      "motion": "Full still-art canvas contained; gentle2.5percent zoom and8px/5px pan on host-coordinated background, plus three low-opacity service-motif overlays. No body articulation or new Veo generation.",
+      "background": "0x5b4018",
+      "motif": "gentle hand and sparkle",
+      "outputSHA256": "20a94a1812627756a64d8e3b3d7883594fd4d8062194ef6d662faf665dd64d3a",
+      "outputBytes": 240398,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 900,
+            "pix_fmt": "yuv420p",
+            "avg_frame_rate": "24/1",
+            "nb_frames": "120"
+          }
+        ],
+        "format": {
+          "duration": "5.000000",
+          "size": "240398"
+        }
+      },
+      "fullDecodePassed": true,
+      "muted": true,
+      "fit": "contain; no source crop",
+      "sampledFrameDimensions": [
+        720,
+        900
+      ],
+      "sampledSeconds": [
+        0.25,
+        2.5,
+        4.75
+      ],
+      "meanAbsolutePixelChangeFirstMiddle": 16.8447
+    }
+  ],
+  "totals": {
+    "count": 14,
+    "illustrationMotionCount": 13,
+    "existingGeneratedMotionCount": 1,
+    "outputBytes": 4340172,
+    "fullDecodePassed": 14,
+    "sourcesUnchanged": 15
+  },
+  "inspectionDirectory": "C:\\Users\\Yusuf\\AppData\\Local\\Temp\\heart-service-video-lg35uojl",
+  "qualityInspection": {
+    "sampledFrames": 42,
+    "sampledSeconds": [
+      0.25,
+      2.5,
+      4.75
+    ],
+    "checks": [
+      {
+        "file": "assets/video/moments/zoro-cinderella.mp4",
+        "motion": 13.7352
+      },
+      {
+        "file": "assets/video/moments/zoro-twirl.mp4",
+        "motion": 15.0891
+      },
+      {
+        "file": "assets/video/moments/zoro-whisper.mp4",
+        "motion": 16.7388
+      },
+      {
+        "file": "assets/video/moments/zoro-offering.mp4",
+        "motion": 17.6359
+      },
+      {
+        "file": "assets/video/moments/zoro-vow.mp4",
+        "motion": 22.7528
+      },
+      {
+        "file": "assets/video/moments/zoro-hug.mp4",
+        "motion": 18.4958
+      },
+      {
+        "file": "assets/video/moments/zoro-pat.mp4",
+        "motion": 19.0678
+      },
+      {
+        "file": "assets/video/moments/sanji-cinderella.mp4",
+        "motion": 15.9273
+      },
+      {
+        "file": "assets/video/moments/sanji-twirl.mp4",
+        "motion": 20.202
+      },
+      {
+        "file": "assets/video/moments/sanji-whisper.mp4",
+        "motion": 16.166
+      },
+      {
+        "file": "assets/video/moments/sanji-offering.mp4",
+        "motion": 17.315
+      },
+      {
+        "file": "assets/video/moments/sanji-vow.mp4",
+        "motion": 15.7652
+      },
+      {
+        "file": "assets/video/moments/sanji-hug.mp4",
+        "motion": 15.492
+      },
+      {
+        "file": "assets/video/moments/sanji-pat.mp4",
+        "motion": 16.8447
+      }
+    ],
+    "visualReview": "42 start/middle/end frames viewed; full character canvas contained, faces and shoes visible, coordinated green/gold backgrounds, low-opacity motifs. Correct existing Zoro vow master confirmed.",
+    "browserPlayback": {
+      "checks": 42,
+      "counts": {
+        "chromium": 14,
+        "firefox": 14,
+        "webkit": 14
+      },
+      "errors": [],
+      "webkitResults": [
+        {
+          "file": "assets/video/moments/zoro-cinderella.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1636801,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/zoro-twirl.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1237168,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/zoro-whisper.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1118636,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/zoro-offering.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1130225,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/zoro-vow.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1556535,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/zoro-hug.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1566648,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/zoro-pat.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.0678508,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-cinderella.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1105447,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-twirl.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.0956123,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-whisper.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1478287,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-offering.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1016865,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-vow.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.146595,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-hug.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1502942,
+          "paused": false
+        },
+        {
+          "file": "assets/video/moments/sanji-pat.mp4",
+          "initial": {
+            "width": 720,
+            "height": 900
+          },
+          "width": 758,
+          "height": 947,
+          "duration": 5,
+          "time": 0.1145199,
+          "paused": false
+        }
+      ],
+      "webkitDimensionQuirk": "Some WebKit playing videos report758x947 although initial metadata and encoded MP4 are720x900. Display aspect remains within0.003 of0.8; no cropping was observed."
+    }
+  }
+}
