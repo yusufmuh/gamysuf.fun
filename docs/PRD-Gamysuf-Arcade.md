@@ -6,7 +6,7 @@
 ## 1. Ringkasan
 | Item | Isi |
 |---|---|
-| Produk | Dashboard/arcade web yang menyatukan 5 game booth Bpedia + slot game tambahan |
+| Produk | Gamysuf Arcade 1.6.0: dashboard 5 game booth Bpedia + slot game tambahan |
 | Domain | **gamysuf.fun** (Hostinger, akun pemilik) |
 | Folder | `C:\Users\Yusuf\coding\00 game\00 gamysuf-arcade` |
 | Repo | GitHub `yusufmuh/gamysuf.fun` — lihat §10 |
@@ -21,11 +21,21 @@ Permintaan pengguna: "buat 3 game menjadi 1 dashboard interaktif yang bisa menga
 | `spin` | `../01 spenweels` (v2.6.0) | Roda + Mystery Beauty Box | Pesta Folka 2026 |
 | `nyapit` | `../02 nyapit` (v1.4.0) | Mesin capit + maskot B! | Cozzone UP 2026 |
 | `drop` | `../03 bipy-beauty-drop` (v1.0.0) | Papan pin + kapsul mekar + gacha fanservice | TAKEOVER X 2026 |
-| `gacha` | `../04 bipy-gacha-pop` (v1.0.0) | Mesin gacha satu tap + kapsul pop + kartu stiker (PRD sendiri: `docs/PRD-Bipy-Gacha-Pop.md` di folder sumber) | Market-In 6.0 (3–4 Okt 2026) |
-| `heart` | `../05 bipy-heart-parade` (v1.0.0) | Kapsul hati, 7 fanservice, 14 kartu | Market-In 6.0 |
+| `gacha` · Game 4 | `../04 bipy-gacha-pop` (v1.0.1, katalog v2) | Gacha satu tap, 20 hadiah / 497 kapsul awal, kartu stiker | Market-In 6.0 (3–4 Okt 2026) |
+| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.0.0) | Gacha Booster / Pilih Kartu, 7 menu × Zoro/Sanji, 14 kartu BP06 | Market-In 6.0 (3–4 Okt 2026) |
 
 `games/<slug>/` hanyalah **salinan** berkas runtime (`npm run sync`). Ubah game di folder aslinya, lalu sync.
 Kelima game memiliki opsi `cloud` di `server.cjs` masing-masing (commit di repo lokal game 01/02/03, perilaku desktop/.exe tidak berubah).
+
+### Market-In 6.0: dua game dalam satu acara
+
+Halaman `/market-in` mengelompokkan Game 4 `/g/gacha/` dan Game 5 `/g/heart/` melalui `eventGroup: market-in-6`. Pengelompokan ini berada di beranda dan halaman acara; kedua game tetap memiliki mekanik, hasil, dashboard petugas, serta data operasional sendiri. Lokasi: Urban Forest Cipete, Jakarta; tanggal 3–4 Oktober 2026. Zoro dan Sanji dijadwalkan hadir pada kedua hari. Jam sesi foto/fanservice diumumkan petugas, sehingga dokumentasi tidak menetapkan jam tanpa sumber.
+
+Game 4 memakai katalog final 20 hadiah/497 kapsul awal, termasuk voucher 25%, 50%, dan Rp100.000. Migrasi katalog v1→v2 menghitung stok tersisa setelah hadiah resmi keluar, mempertahankan foto/verifikasi, status aktif, pengaturan, hadiah buatan petugas, riwayat, serta pending. Voucher yang sudah diatur petugas dipertahankan. Migrasi idempoten, ditulis atomik dengan cadangan data lama, dan versi asing ditolak tanpa reset. Restore tetap mengikuti pengamanan demo + jeda. Stok awal katalog tidak membuktikan stok fisik booth saat ini.
+
+Game 5 menyediakan 14 kartu BP06-001–014 dari tujuh menu: Cinderella's Fit, Princess Twirl, Blossom Whisper, Sweet Offering, Knight's Vow, Warm Hug, dan Pat on Head, masing-masing bersama Zoro dan Sanji. Gacha Booster memilih menu aktif di server; Pilih Kartu tersedia bila diizinkan petugas. Setiap momen memakai artwork, motif animasi, dan varian Bipy; Bipy Original/Jade/Golden Chef menjadi karakter utama. Poster bounty mencoret harga normal FS dalam Rupiah, lalu menampilkan **GRATIS untuk pelanggan Bpedia**. Harga bawaan adalah nilai referensi awal yang perlu dikonfirmasi tim booth, dapat diubah petugas, dan disimpan sebagai snapshot pada kartu. Nilai BERRY fiktif rilis sebelumnya telah dihapus; tidak ada pembayaran di game.
+
+Trailer berasal dari Gemini; audio trailer diolah menjadi BGM loop, sedangkan jingle Bpedia berasal dari rekaman pemilik. Tanpa sentuhan adalah pilihan default; persetujuan interaksi wajib, izin dokumentasi terpisah, dan kedua pihak dapat berhenti atau memilih alternatif tanpa sentuhan. Demo online bukan tiket klaim booth.
 
 ## 3. Arsitektur
 ```
@@ -33,12 +43,13 @@ hub/server.cjs        gateway + API hub + Studio + penyaji game tambahan (create
 hub/rewrite.cjs       awalan URL /g/<slug> (keluar) & pelepasan awalan (body JSON masuk), cookie Path
 hub/visitors.cjs      mesin demo per pengunjung (Engine asli game di atas MemoryStore)
 hub/registry.cjs      metadata & panduan game bawaan + adapter hasil → kartu/XP
+hub/public/market-in.html + js/market-in.js  halaman acara dua game, hadiah, kartu, dan jadwal
 hub/players.cjs       profil, XP, level, streak, misi, lencana, album, peringkat (JSON di data dir)
 hub/custom-games.cjs  slot game tambahan (ZIP HTML5 / tautan), sampul, pengaturan arcade
 hub/public/           index.html (arcade), studio.html, css/, js/hub.js, js/studio.js, js/inject.js, assets/
 games/{spin,nyapit,drop,gacha,heart}/  salinan runtime game
 scripts/              sync-games.cjs, capture(-electron).cjs, package-hostinger.cjs
-tests/*.test.cjs      35 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keamanan ZIP, hosting)
+tests/*.test.cjs      tes gateway, isolasi pengunjung, PIN, XP, Studio, aset, migrasi, dan hosting
 ```
 
 ### Alur permintaan
@@ -61,7 +72,7 @@ tests/*.test.cjs      35 tes (gateway, isolasi pengunjung, PIN, XP, Studio, keam
 - XP: main +10, belum beruntung +5, kartu baru +25, legendaris pertama +50, bonus harian +20, misi +30/+40/+50, lencana +30. Batas 60 permainan ber-XP per hari.
 - Level: level n butuh 100 + 50(n−1) XP.
 - Streak harian (WIB), 3 misi harian (main 3×, 2 game berbeda, 1 kartu baru), 11 lencana.
-- Album 88 kartu (16 Spin + 18 Nyapit + 23 Drop termasuk 5 fanservice + 17 Gacha Pop + 14 Heart Parade), rarity Legendaris/Epik/Langka/Umum. Gacha Pop: bundling = legendaris, kolab karakter = epik, produk = umum.
+- Album 91 kartu (16 Spin + 18 Nyapit + 23 Drop termasuk 5 fanservice + 20 Gacha Pop + 14 Heart Parade), rarity Legendaris/Epik/Langka/Umum. Gacha Pop: bundling = legendaris, kolab karakter = epik, voucher = langka, produk = umum. ID kartu Heart Parade lama tetap dipakai; pergantian artwork tidak mereset koleksi/XP.
 - Peringkat mingguan (reset Senin 00.00 WIB) & sepanjang masa; kode pemulihan untuk pindah perangkat.
 - Panduan: cara kerja 4 langkah, aturan main adil, tabel XP, FAQ, modal "Cara main" per game (langkah, kontrol, tips).
 - Kejujuran: online selalu demo; hadiah fisik hanya di booth. Beauty Drop menampilkan teks "simulasi demo" pada hasil demo.
@@ -83,7 +94,7 @@ Statistik (pemain, aktif hari ini, main hari ini, total), daftar game bawaan + t
 ## 8. Menjalankan & verifikasi
 ```bash
 npm install && npm run dev      # 127.0.0.1:4400, PIN lokal 123456
-npm test                        # 35 tes hub dan hosting
+npm test                        # tes hub dan hosting; hasil v1.6.0 pada §10
 npm run qa                      # 18 tangkapan layar + daftar error konsol (artifacts/qa/1600x900)
 npm run qa -- 1366x768
 npm run qa:responsive           # Chromium/Firefox/WebKit + gameplay; perlu Playwright beserta browsernya
@@ -93,6 +104,8 @@ npm run package:hostinger
 ```
 Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 
+Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×882, 717×512, 884×1104; tablet 768–1366; laptop 1280–1440; desktop 1920. Uji Chromium, Firefox, dan WebKit, dua tema, kontrol sentuh/mouse/keyboard, fokus dialog, reduced motion, audio, pemulihan koneksi, kartu hasil, serta dashboard petugas. Kontrol penting harus terlihat di atas game bar, tanpa overflow horizontal; target sentuh dashboard minimal 44 px. Emulasi viewport bukan bukti uji seluruh perangkat fisik.
+
 ## 9. Keputusan terkunci
 - Satu proses Node untuk hub + 5 game (satu web app Hostinger, satu domain).
 - Awalan jalur `/g/<slug>/` + penulisan ulang otomatis, bukan menulis ulang kode front-end game.
@@ -100,51 +113,35 @@ Tes game asli: `npm test` di folder 01 (83), 02 (54), 03 (29).
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
-**Rilis web 1.5.0 (1 Oktober 2026):** game 05 Heart Parade, tiga Bipy, karakter full body, tujuh menu, pilihan kenyamanan, antrean dan kartu PNG. PRD khusus `docs/PRD-Bipy-Heart-Parade.md`. Sumber di folder 05; runtime hub disinkronkan. Tes repo 35/35, QA responsif seluruh arcade 1082/1082, tur Electron 18 tangkapan tanpa error konsol. Status akhir dicatat pada `docs/RELEASE-1.5.0.md` dan bukti publikasi wajib dibaca di `artifacts/deployment-1.5.0.json`.
 
-**Rilis web 1.4.1 (Codex, 2026-10-01):** Gacha Pop 1.0.1 lebih tahan gangguan koneksi dan tombol USB yang ditahan; hasil klaim dipertahankan sampai server mengonfirmasi; nama pemain dibersihkan untuk antrean berikutnya. Dashboard memiliki pintasan Market-In 6.0 langsung ke game keempat. Validasi keempat game: 844 pemeriksaan responsif tanpa kegagalan, 39 pemeriksaan pemulihan Gacha Pop, tes sumber 83/54/29/22 dan tes hub 14. Rincian pada `docs/RELEASE-1.4.1.md`. Bukti publikasi aktual disimpan pada `artifacts/deployment-1.4.1.json` (endpoint dan hash) serta `artifacts/live-ui-1.4.1/report.json`; baca hasil tersebut sebelum mengklaim status live. Deploy hanya aplikasi **gamysuf.fun** yang terhubung ke branch `main`, bukan website placeholder `gamysuf-fun-912185.hostingersite.com`.
+**2 Oktober 2026 · kandidat rilis lokal Gamysuf Arcade 1.6.0 siap dipublikasikan.** Lima game terdaftar; Game 4 dan Game 5 dikelompokkan pada halaman Market-In. Sumber game sudah disinkronkan, matriks lintas browser sudah lulus, dan paket Hostinger sudah diuji terisolasi. Catatan rilis: [RELEASE-1.6.0.md](RELEASE-1.6.0.md). Status ini belum mengonfirmasi produksi v1.6.0.
 
-**Rilis web 1.4.0 (Claude Opus 5.5, 2026-10-01):** game ke-4 **Bipy Gacha Pop** (Market-In 6.0, Urban Forest Cipete 3–4 Okt 2026) di `/g/gacha/`: mesin gashapon satu tap, kapsul fisika 2D, kartu stiker die-cut, 17 hadiah (Bundling Paket 1–3, Kuas Set Doraemon/Cony/Hello Kitty, Saput Mickey, 10 produk PINKFLASH/FOCALLURE), suara MC & BGM merek, dashboard petugas. Hub: registry, sync, gamebar, album 74 kartu, lencana Semua Arena, grid arena 2×2 / 4 kolom, sampul gameplay `covers/gacha.jpg`. Detail uji pada `docs/RELEASE-1.4.0.md`. **Live terverifikasi 2026-10-01 10:31 WIB**: commit `fa4d62c` di main, Hostinger menyajikan v1.4.0 (4 game), `scripts/verify-deployment.cjs` 47 endpoint publik + hash kode keempat game + bukti gambar CDN (`artifacts/live-image-verification/report-1.4.0.json`, SSIM sampul gacha 0,988); probe UI live read-only Chromium & WebKit 390/1366 px tanpa error konsol/HTTP (`artifacts/live-ui-1.4.0/report.json`).
-
-**Rilis web 1.3.0 (Codex, 2026-09-27):** menindaklanjuti logo 3D dan identitas pink/putih, musik otomatis semua game, maskot resmi Spin, game bar dengan avatar/profil, dua tema lintas game, kapsul Nyapit mobile lebih sedikit dan chute eksternal, dock misi Drop, event mobile, Masuk admin, serta istilah cosplayer. Screenshot lokal memakai html2canvas yang dibundel; clone arena dan CSP Firefox ditangani tanpa mengubah kebijakan halaman asli. Detail uji dan batas browser pada `docs/RELEASE-1.3.0.md`; bukti publikasi versi/commit/aset di `artifacts/deployment-1.3.0.json`. Sumber game 01/02/03 diperbarui lalu disinkronkan ke `games/`.
-
-**Rilis web 1.2.0 (Codex, 2026-09-27):** menindaklanjuti komentar browser pemilik: maskot sambutan tidak lagi terpotong; galeri enam karakter full body dengan pratinjau dan pilihan tersimpan; logo tulip Gamysuf Arcade; tema terang/gelap; album bergerak yang menampilkan sedikit kartu pada HP. Validasi profil atomik diperbaiki. Avatar 332/332, tema 40/40, interaksi 24/24, tes hub 13/13; tur Electron 16 tangkapan tanpa error konsol. Catatan lengkap di `docs/RELEASE-1.2.0.md`; bukti publikasi akhir di `artifacts/deployment-1.2.0.json`. Sumber game 01/02/03 tidak berubah pada rilis ini.
-
-**Rilis web 1.1.0 (Codex, 2026-09-27):** dashboard memiliki navigasi sentuh, game sebelum misi, pilihan game unggulan yang stabil, pintasan game terakhir, pemulihan koneksi, fokus dialog, kontrol animasi, dan Studio responsif. Spin/Nyapit memperbaiki musik, arena, overflow, dan siklus audio. Drop menempatkan seluruh papan dan tombol dalam layar potret, menjaga animasi saat resize, membatasi loop cahaya, mengatur partikel berdasarkan waktu, memperbesar tombol, serta memperbaiki dialog dan pemulihan audio. Logo, maskot, hasil server, stok booth dan mode demo tetap memakai sumber asli.
-
-Validasi rilis dan deployment dicatat di `docs/RELEASE-1.1.0.md`. Paket arsip: `release/Gamysuf-Arcade-1.1.0-Hostinger.zip`. Salinan `games/` berasal dari sumber saudara 01/02/03; perubahan game selanjutnya tetap dilakukan di sumber tersebut.
-
-Pembaruan 2026-09-27 (Codex): ketiga sampul hub di `hub/public/assets/covers/` diganti tangkapan gameplay asli berukuran 1200×675. Spin menampilkan arena roda lengkap, Nyapit menampilkan kabinet capit beserta bola, dan Drop menampilkan kapsul yang sedang memantul di papan pin bersama Bipy. Sumber tangkapan sementara dan `capture.json` ada di `artifacts/cover-candidates/`; skrip reproduksi ada di `scripts/capture-gameplay-covers*.cjs`.
-
-Terakhir diperbarui: 2026-09-27 oleh Codex. **Rilis web 1.3.0**, tujuan https://gamysuf.fun. Bukti publikasi akhir: `artifacts/deployment-1.3.0.json` (versi, status HTTP dan verifikasi aset live).
-
-| Area | Status |
+| Bukti selesai | Hasil dan batas cakupan |
 |---|---|
-| Patch mode cloud di game 01/02/03 (+ fallback origin) | ✅ tes 83 / 54 / 29 lulus, sumber = salinan `games/` (sync tanpa diff) |
-| Hub: gateway (dispatch in-memory), visitors, players, custom games, Studio, API | ✅ tes hub 13/13 (termasuk simulasi loader Hostinger & meta CSP) |
-| Front-end arcade + Studio + inject | ✅ rilis 1.3: 388 pemeriksaan responsif + 355 game bar, Chromium/Firefox/WebKit; QA Electron 16 tangkapan, 0 error konsol; bukti audio aktual Chromium |
-| GitHub | ✅ `github.com/yusufmuh/gamysuf.fun` (**publik** — pertimbangkan jadikan privat) |
-| Deploy Hostinger | Node 20, repo `yusufmuh/gamysuf.fun` branch main, entry `hub/server.cjs`; lingkungan dan data produksi dipertahankan. Bukti per rilis: `artifacts/deployment-<versi>.json` |
-| Sisa pembersihan (keputusan pemilik) | ⏳ website kosong `gamysuf-fun-508313` & `gamysuf-fun-912185.hostingersite.com` (halaman default PHP) bisa dihapus |
-| Keamanan | ⚠️ `.git/config` lokal menyimpan token GitHub (ghp_…) di URL remote: cabut token itu dan pakai `gh auth login` |
+| Sumber Game 4 (setelah sinkronisasi final) | 30/30 tes + `npm run check`; QA Game 4 336/336; katalog 20 hadiah/497 kapsul dan migrasi aman |
+| Sumber Game 5 | 37/37 tes + `npm run check`; kontrak engine/server Heart Parade 2.0.0 |
+| Hub setelah sinkronisasi | 64/64 tes |
+| QA Market-In terarah | 110/110 pemeriksaan |
+| Nyapit sumber | 18 pemeriksaan browser + 54 tes |
+| QA Nyapit melalui hub terarah | 124/124 pemeriksaan |
+| QA Heart Parade ponsel terarah (putaran sebelumnya) | 85/85 pemeriksaan |
+| UI Heart Parade setelah sinkronisasi final | 18/18 pemeriksaan UI dan tata letak; ekspor kartu 1080×1508 dan poster 1080×1528 |
+| Suite tambahan sebelumnya | 866/866 pemeriksaan; cakupan tambahan, bukan pengganti matriks penuh setelah perubahan terakhir |
+| Matriks responsif final | 2.331/2.331 pemeriksaan Chromium, Firefox, dan WebKit; ponsel, foldable, tablet, laptop, dan desktop |
+| Paket Hostinger | 600 berkas; 134.124.400 byte; smoke test terisolasi lulus untuk hub, Market-In, Game 4, Game 5, API, video, audio, MIME, dan byte range; SHA-256 `cd0125d4bf5fa92f79b0b01124fbaf11ee15c7819dcafe1210e0dfba3ca52047` |
 
-### Catatan runtime Hostinger (penting untuk AI berikutnya)
-- Loader Node Hostinger membajak `http.Server.prototype.listen` dan tidak selalu menjalankan `hub/server.cjs` sebagai `require.main`.
-- Karena itu: (a) saat membuat server game, `createHub` sementara memakai `net.Server.prototype.listen` asli; (b) gateway memanggil handler game **in-memory** (`dispatchInMemory`), bukan lewat TCP; (c) `shouldAutostart()` menyalakan server kecuali di-require dari `tests/`, `scripts/`, `artifacts/` (paksa dengan `GAMYSUF_AUTOSTART=1/0`).
-- Tes `tests/hosting.test.cjs` meniru tiga kondisi ini; jalankan sebelum push karena push ke `main` = deploy produksi.
-- CDN Hostinger (hcdn) **mengganti header Content-Security-Policy** menjadi `upgrade-insecure-requests`. Karena itu `withMetaCsp()` menanam kebijakan yang sama sebagai `<meta http-equiv>` di semua HTML (hub, game via gateway, game tambahan). Header lain (X-Frame-Options, nosniff, Referrer-Policy) tetap lolos.
-- Hub tidak pernah autostart di dalam Electron (alat QA); `scripts/capture-electron.cjs` juga memaksa `GAMYSUF_AUTOSTART=0`.
+Angka di atas merupakan bukti selesai pada tahap lokal ini. Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memiliki perilaku vendor yang berbeda. Bukti versi lama hanya berlaku pada rilis yang disebutkan di berkasnya.
+
+**Gerbang rilis yang masih wajib dipenuhi:** setelah publikasi yang diotorisasi, verifikasi build/versi/commit, endpoint, hash kode dan aset, serta UI produksi; simpan bukti `artifacts/deployment-1.6.0.json` dan laporan UI live. Berkas bukti tersebut adalah keluaran yang diwajibkan, bukan hasil yang sudah tersedia.
+
+### Catatan runtime Hostinger
+- Data produksi berada di luar direktori build (`~/gamysuf-data`); jangan hapus atau reset saat deployment.
+- Loader Hostinger dapat membajak `http.Server.prototype.listen`; `createHub` memakai `net.Server.prototype.listen` asli saat membuat game, kemudian gateway memanggil handler game melalui `dispatchInMemory`.
+- `shouldAutostart()` menangani entry loader dan pengecualian alat/test; `tests/hosting.test.cjs` memeriksa perilakunya. Hub tidak autostart dalam Electron QA.
+- CDN dapat mengganti header CSP; kebijakan juga ditanam melalui meta CSP. Pemeriksaan produksi harus menguji respons yang benar-benar disajikan CDN.
+- Push ke branch produksi dapat memicu deployment. Bukti lokal, commit, paket, dan produksi harus dicatat sesuai tahapnya.
 
 ## 11. Log serah-terima
-- **2026-10-01 (Codex, web 1.5.0)**: game kelima dari referensi game 03 dan proposal Market-In; registry, album 88 kartu, panduan, pintasan dan grid lima arena; tes ulang sumber kelima game, gateway, pemulihan kartu dan matriks browser.
 
-- **2026-10-01 (Codex, web 1.4.1)**: melanjutkan PRD Gacha Pop; memperbaiki pemulihan koneksi dan hasil tertunda, keyboard booth dan pergantian nama; pintasan game 4 di beranda; regresi semua game; versi laporan QA mengikuti package.json dan verifikasi CDN tetap mengikat kedua hash. Sumber di folder 04, disinkronkan via `npm run sync`. Detail di catatan rilis 1.4.1.
-- **2026-10-01 (Claude Opus 5.5, web 1.4.0)**: membuat game ke-4 di folder sumber `../04 bipy-gacha-pop` (PRD, engine, server lokal/hosting/cloud, front-end, dashboard, aset, audio, 22 tes, QA 104×4), integrasi hub `gacha`, tes gateway Gacha Pop, QA responsif semua game, rilis lewat branch main → Hostinger.
-- **2026-09-27 (Codex, web 1.3.0)**: menerapkan komentar browser lanjutan pada branding, suara, kontrol, profil, Spin/Nyapit/Drop. Wordmark master Bpedia disalin utuh; logo Gamysuf 3D memiliki dua varian. QA memakai profil dan stok lokal sementara; probe produksi hanya baca. Sumber game tetap berada di folder saudara. Deployment melalui main dan Hostinger seperti rilis sebelumnya; jangan menyatakan live sebelum memeriksa `artifacts/deployment-1.3.0.json` dan status build.
-- **2026-09-27 (Codex, web 1.2.0)**: perbaikan empat komentar UI pemilik (avatar full body, logo, tema, slider album). Asset master Bpedia tetap utuh; prompt/provenance varian baru tercatat. Cek galeri/avatar/tema memakai data lokal terisolasi; deployment tetap melalui main ke Hostinger.
-- **2026-09-27 (Codex, web 1.1.0)**: perbaikan dashboard dan tiga game lintas layar; QA browser dengan data sementara yang terpisah dari produksi; paket Hostinger dan skrip regresi responsif. Detail hasil akhir pada catatan rilis 1.1.0.
-- **2026-09-27 (Claude)**: membangun hub dari nol, patch mode cloud di 3 game, sampul via Electron, QA, tes, paket Hostinger, PRD ini.
-- **2026-09-27 (agen lain, identitas git pemilik)**: 4 commit perbaikan Hostinger (entry guard, isolasi listen, dispatch in-memory, fallback origin), membuat repo `yusufmuh/gamysuf.fun`, deploy ke gamysuf.fun.
-- **2026-09-27 (Claude)**: memindahkan fallback origin ke sumber game 01/02/03, entry guard yang tidak menyalakan server saat di-require alat lokal, alamat socket loader aman, label demo jujur di Beauty Drop, `tests/hosting.test.cjs` (3 skenario loader), QA ulang, PRD.
-- **2026-09-27 (Claude)**: CSP ditanam sebagai meta karena CDN mengganti header; hub tidak autostart di Electron.
-- **2026-09-27 (Codex)**: menangkap ulang ketiga sampul dari layar gameplay sebenarnya melalui Electron/gateway lokal, meninjau komposisi 16:9, menyimpan JPEG 1200×675 dan skrip reproduksi tanpa mengubah artwork game.
+- **2026-10-02 (Codex, persiapan 1.6.0)**: menyelaraskan dokumentasi lima game, halaman Market-In 3–4 Oktober, katalog Game 4 dan migrasi, kartu BP06/mode/kenyamanan Game 5, serta album 91 kartu. Hasil lokal yang selesai dan gerbang rilis tersisa dicatat pada §10 dan `RELEASE-1.6.0.md`. Catatan persiapan `RELEASE-1.5.1.md` digantikan oleh catatan 1.6.0 agar versi tidak ambigu.
+- **Riwayat 1.5.0–1.1.0**: lihat masing-masing `docs/RELEASE-<versi>.md` dan berkas bukti dengan versi yang sama. Hasil lama tidak dijadikan bukti kelulusan rilis 1.6.0.

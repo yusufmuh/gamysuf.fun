@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Gamysuf Arcade · Main game Bpedia, koleksi kartu, naik level</title>
-  <meta name="description" content="Arcade online berisi lima game booth Bpedia: Spin Wheels, Nyapit Bareng Bpedia, Bipy Beauty Drop, Bipy Gacha Pop, dan Bipy Heart Parade. Main gratis, kumpulkan kartu hadiah, selesaikan misi harian, dan naik ke papan peringkat.">
+  <meta name="description" content="Arcade online berisi lima game booth Bpedia: Spin Wheels, Nyapit Bareng Bpedia, Bipy Beauty Drop, serta Bipy Gacha Pop dan Bipy Heart Parade dari Market-In 6.0. Main gratis, kumpulkan kartu hadiah, selesaikan misi harian, dan naik ke papan peringkat.">
   <meta name="theme-color" content="#12050c">
   <meta property="og:title" content="Gamysuf Arcade">
   <meta property="og:description" content="Lima game Bpedia dalam satu arcade. Main, koleksi kartu, naik level.">
@@ -13,14 +13,16 @@
   <link rel="apple-touch-icon" href="/hub/assets/brand/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preload" href="/hub/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
-  <script src="/hub/js/theme.js?v=1.5.0"></script>
-  <link rel="stylesheet" href="/hub/css/hub.css?v=1.5.0">
-  <link rel="stylesheet" href="/hub/css/responsive.css?v=1.5.0">
-  <link rel="stylesheet" href="/hub/css/avatars.css?v=1.5.0">
-  <link rel="stylesheet" href="/hub/css/album-slider.css?v=1.5.0">
-  <link rel="stylesheet" href="/hub/css/theme.css?v=1.5.0">
-  <script defer src="/hub/js/album-slider.js?v=1.5.0"></script>
-  <script defer src="/hub/js/hub.js?v=1.5.0"></script>
+  <script src="/hub/js/theme.js?v=1.6.0"></script>
+  <link rel="stylesheet" href="/hub/css/hub.css?v=1.6.0">
+  <link rel="stylesheet" href="/hub/css/responsive.css?v=1.6.0">
+  <link rel="stylesheet" href="/hub/css/avatars.css?v=1.6.0">
+  <link rel="stylesheet" href="/hub/css/album-slider.css?v=1.6.0">
+  <link rel="stylesheet" href="/hub/css/event-hub.css?v=1.6.0">
+  <link rel="stylesheet" href="/hub/css/theme.css?v=1.6.0">
+  <script defer src="/hub/js/album-slider.js?v=1.6.0"></script>
+  <script defer src="/hub/js/event-utils.js?v=1.6.0"></script>
+  <script defer src="/hub/js/hub.js?v=1.6.0"></script>
 </head>
 <body data-ready="0">
   <div class="backdrop" aria-hidden="true"><div class="glow glow-a"></div><div class="glow glow-b"></div><div class="glow glow-c"></div><div class="grid-floor"></div><div class="grain"></div></div>
@@ -28,14 +30,14 @@
 
   <header class="topnav" id="topnav">
     <a class="brand" href="/" aria-label="Gamysuf Arcade, beranda">
-      <img class="arcade-wordmark" data-brand="gamysuf" src="/hub/assets/brand/gamysuf-3d-dark.png?v=1.5.0" alt="Gamysuf.fun Arcade" width="200" height="64">
+      <img class="arcade-wordmark" data-brand="gamysuf" src="/hub/assets/brand/gamysuf-3d-dark.png?v=1.6.0" alt="Gamysuf.fun Arcade" width="200" height="64">
     </a>
     <nav class="nav-links" aria-label="Navigasi utama">
-      <a href="#games">Game</a><a href="#daily">Misi</a><a href="#album">Koleksi</a><a href="#ranking">Peringkat</a><a href="#guide">Panduan</a>
+      <a href="#market-in">Market-In</a><a href="#games">Game</a><a href="#daily">Misi</a><a href="#album">Koleksi</a><a href="#ranking">Peringkat</a><a href="#guide">Panduan</a>
     </nav>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Aktifkan tema terang" title="Aktifkan tema terang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><span class="theme-label">Terang</span></button>
     <button class="player-chip" id="playerChip" type="button" aria-label="Buka profil pemain">
-      <img id="chipAvatar" src="/hub/assets/avatars/character-wave.png?v=1.5.0" alt="" width="36" height="36">
+      <img id="chipAvatar" src="/hub/assets/avatars/character-wave.png?v=1.6.0" alt="" width="36" height="36">
       <span class="chip-id"><b id="chipName">Tamu</b><small id="chipLevel">Level 1</small></span>
       <span class="chip-xp" aria-hidden="true"><i id="chipXpBar"></i></span>
       <span class="chip-streak" id="chipStreak" title="Streak harian"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c4.2 0 7-2.8 7-6.8 0-3.4-2.1-5.6-3.9-7.6-.4 1.9-1.4 3-2.6 3.4.5-3.2-.9-6.3-3.8-8-.1 3.1-1.7 5-3.2 6.8C4.1 11.5 5 13.4 5 15.2 5 19.2 7.8 22 12 22z"/></svg><b id="chipStreakCount">0</b></span>
@@ -48,13 +50,13 @@
   <main>
     <section class="hero" aria-labelledby="heroTitle">
       <div class="hero-copy">
-        <p class="eyebrow"><span id="heroGameCount">5</span> GAME BPEDIA · 1 PROFIL · <span id="heroCardCount">88</span> KARTU KOLEKSI</p>
+        <p class="eyebrow"><span id="heroGameCount">5</span> GAME BPEDIA · 1 PROFIL · <span id="heroCardCount">91</span> KARTU KOLEKSI</p>
         <h1 id="heroTitle">Arcade Bpedia,<br><em>di genggamanmu.</em></h1>
         <p class="lead">Satu putaran lagi? Temani Bipy berburu kartu, coba keberuntunganmu, dan isi album dengan temuan baru.</p>
-        <a class="new-arena" id="newArena" href="/g/heart/" hidden>
-          <img src="/g/heart/assets/icons/heart.svg" alt="" width="48" height="48">
-          <span><small>GAME 05 · MARKET-IN 6.0</small><b>Heart Parade. Pilih pesona, temukan momen.</b></span>
-          <span class="new-arena-arrow" aria-hidden="true">↗</span>
+        <a class="new-arena" id="newArena" href="#market-in" hidden>
+          <img src="/hub/assets/market-in/market-in-6.webp?v=1.6.0" alt="" width="600" height="226">
+          <span><small id="newArenaKicker">MARKET-IN 6.0 · 3–4 OKT 2026</small><b id="newArenaText">Gacha Pop &amp; Heart Parade di satu booth.</b></span>
+          <svg class="new-arena-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
         </a>
         <div class="hero-actions">
           <a class="btn btn-primary" id="heroPlay" href="/g/drop/"><span>Main sekarang</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
@@ -64,7 +66,7 @@
         <a class="resume-link" id="resumeGame" href="/g/drop/" hidden></a>
         <dl class="hero-stats">
           <div><dt>Game aktif</dt><dd id="statGames">5</dd></div>
-          <div><dt>Kartu koleksi</dt><dd id="statCards">88</dd></div>
+          <div><dt>Kartu koleksi</dt><dd id="statCards">91</dd></div>
           <div><dt>Pemain</dt><dd id="statPlayers">0</dd></div>
         </dl>
       </div>
@@ -83,8 +85,10 @@
       </div>
     </section>
 
+    <section class="event-hub" id="market-in" aria-labelledby="eventHubTitle" hidden></section>
+
     <section class="games" id="games" aria-labelledby="gamesTitle">
-      <header class="section-head"><p class="eyebrow">PILIH ARENA</p><h2 id="gamesTitle">Mau main yang mana?</h2><p>Putar, capit, drop, pop, atau buka kapsul hati. Semua hadiah online menjadi kartu digital untuk album milikmu.</p></header>
+      <header class="section-head"><p class="eyebrow">PILIH ARENA</p><h2 id="gamesTitle">Mau main yang mana?</h2><p>Putar, capit, drop, pop kapsul, atau buka booster kartu. Semua hadiah online menjadi kartu digital untuk album milikmu.</p></header>
       <div class="game-grid" id="gameGrid" aria-busy="true"></div>
     </section>
 
@@ -123,7 +127,7 @@
         <div><p class="eyebrow">ALBUM KOLEKSI</p><h2 id="albumTitle">Kumpulkan semua kartu</h2><p class="album-intro">Setiap hadiah yang kamu dapat masuk album sebagai kartu digital. Lengkapi album untuk lencana <b>Kolektor Legendaris</b>.</p></div>
         <button class="btn btn-ghost" id="openAlbum" type="button">Buka album lengkap</button>
       </header>
-      <div class="album-progress"><div class="album-count"><b id="albumOwned">0</b><span>/ <span id="albumTotal">88</span> kartu</span></div><div class="bar big"><i id="albumBar"></i></div>
+      <div class="album-progress"><div class="album-count"><b id="albumOwned">0</b><span>/ <span id="albumTotal">91</span> kartu</span></div><div class="bar big"><i id="albumBar"></i></div>
         <ul class="rarity-legend"><li class="legendary">Legendaris</li><li class="epic">Epik</li><li class="rare">Langka</li><li class="common">Umum</li></ul></div>
       <div class="album-rows" id="albumRows"></div>
     </section>
@@ -150,7 +154,7 @@
     <section class="guide" id="guide" aria-labelledby="guideTitle">
       <header class="section-head"><p class="eyebrow">PANDUAN</p><h2 id="guideTitle">Cara kerja Gamysuf Arcade</h2></header>
       <ol class="steps">
-        <li><span>1</span><h3>Pilih arena</h3><p>Empat game booth Bpedia siap dimainkan langsung di browser, tanpa unduh dan tanpa bayar.</p></li>
+        <li><span>1</span><h3>Pilih arena</h3><p>Semua game booth Bpedia siap dimainkan langsung di browser, tanpa unduh dan tanpa bayar.</p></li>
         <li><span>2</span><h3>Main &amp; kumpulkan</h3><p>Setiap permainan memberi XP. Hadiah yang keluar tersimpan sebagai kartu di album koleksimu.</p></li>
         <li><span>3</span><h3>Naik level</h3><p>Selesaikan misi harian, jaga streak, dan buka lencana untuk naik di papan peringkat.</p></li>
         <li><span>4</span><h3>Datang ke booth</h3><p>Hadiah fisik hanya diberikan di booth Bpedia saat event, bersama petugas dan mode resmi.</p></li>
@@ -186,6 +190,7 @@
         <details><summary>Bisa main di HP, tablet, atau laptop?</summary><p>Bisa. Tata letak mengikuti ukuran layar, termasuk ketika HP diputar atau layar lipat dibuka. Gunakan tombol sentuh di HP dan tablet, atau mouse dan keyboard di laptop. Progres pindah perangkat memakai kode pemulihan di profil.</p></details>
         <details><summary>Bagaimana mengatur suara dan animasi?</summary><p>Suara mulai setelah kamu menyentuh tombol permainan. Tombol suara tersedia di setiap game. Animasi mengikuti pengaturan kurangi gerakan di perangkatmu.</p><button class="btn btn-small btn-ghost" id="motionToggle" type="button" aria-pressed="false">Kurangi animasi dashboard</button></details>
         <details><summary>Bagaimana streak dihitung?</summary><p>Main minimal sekali setiap hari (WIB). Melewatkan satu hari membuat streak kembali ke 1 saat kamu main lagi. Rekor terbaik tetap tersimpan.</p></details>
+        <details><summary>Saya di booth Market-In 6.0. Bagaimana cara main dengan hadiah asli?</summary><p>Misi booth diumumkan langsung oleh petugas Bpedia. Setelah misimu selesai, petugas membuka Gacha Pop atau Heart Parade di perangkat booth. Hasilnya berupa kode GP- atau HP- untuk ditunjukkan saat klaim. Info lengkap di <a href="/market-in">halaman Market-In 6.0</a>.</p></details>
         <details><summary>Saya petugas booth. Bagaimana mengaktifkan mode resmi?</summary><p>Buka dashboard game di perangkat booth dan masuk dengan PIN petugas. Hanya perangkat yang sudah masuk yang memakai stok asli dan mode resmi; pengunjung online tetap di mode demo.</p></details>
         <details><summary>Akan ada game baru?</summary><p>Ya. Arcade ini punya slot untuk game berikutnya. Saat game baru rilis, kartunya akan muncul di bagian Pilih Arena.</p></details>
       </div>
@@ -193,10 +198,10 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-brand"><img class="footer-gamysuf" data-brand="gamysuf" src="/hub/assets/brand/gamysuf-3d-dark.png?v=1.5.0" alt="Gamysuf.fun Arcade" width="190" height="64"><p>Rumah game booth Bpedia.<br>Main sebentar, koleksi selamanya.</p></div>
+    <div class="footer-brand"><img class="footer-gamysuf" data-brand="gamysuf" src="/hub/assets/brand/gamysuf-3d-dark.png?v=1.6.0" alt="Gamysuf.fun Arcade" width="190" height="64"><p>Rumah game booth Bpedia.<br>Main sebentar, koleksi selamanya.</p></div>
     <div class="footer-links"><a href="#games">Game</a><a href="#guide">Panduan</a><a href="https://beautypediaofc.com" rel="noopener" target="_blank">Beautypedia</a><a href="/studio">Studio</a></div>
-    <img class="footer-bpedia" data-brand="bpedia" src="/hub/assets/brand/bpedia-white.png?v=1.5.0" alt="Bpedia" width="140">
-    <p class="footer-note">Hadiah fisik hanya berlaku di booth Bpedia saat event resmi. © 2026 Gamysuf · <span id="versionTag">v1.3.0</span></p>
+    <img class="footer-bpedia" data-brand="bpedia" src="/hub/assets/brand/bpedia-white.png?v=1.6.0" alt="Bpedia" width="140">
+    <p class="footer-note">Hadiah fisik hanya berlaku di booth Bpedia saat event resmi. © 2026 Gamysuf · <span id="versionTag">v1.6.0</span></p>
   </footer>
 
   <nav class="mobile-nav" aria-label="Navigasi cepat">

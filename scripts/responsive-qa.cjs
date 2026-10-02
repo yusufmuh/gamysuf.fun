@@ -22,9 +22,9 @@ const sizeFilter = process.argv.find(arg=>arg.startsWith('--size='))?.split('=')
 const gameFilter = process.argv.find(arg=>arg.startsWith('--game='))?.split('=')[1];
 const out = path.join(root, 'artifacts', 'qa-responsive');
 const sizes = [
-  ['small-320',320,640], ['phone-360',360,740], ['phone-390',390,844],
-  ['foldable-540',540,720], ['tablet-768',768,1024], ['tablet-1024',1024,1366], ['landscape-844',844,390],
-  ['desktop-1366',1366,768], ['desktop-1920',1920,1080]
+  ['fold-cover-280',280,653], ['small-320',320,640], ['phone-360',360,740], ['phone-390',390,844],
+  ['foldable-540',540,720], ['fold-open-717',717,512], ['tablet-768',768,1024], ['tablet-1024',1024,1366], ['landscape-844',844,390],
+  ['laptop-1280',1280,800], ['desktop-1366',1366,768], ['desktop-1920',1920,1080]
 ];
 const cases = (quick ? sizes.filter(([id]) => ['small-320','phone-390','landscape-844','desktop-1366'].includes(id)) : sizes)
   .filter(([id])=>!sizeFilter||id===sizeFilter);
@@ -77,7 +77,7 @@ async function visit(page, base, route, browserName, sizeId) {
   page.on('response', response => {if(response.status()>=400 && new URL(response.url()).origin===base) badResponses.push(`${response.status()} ${response.url()}`);});
   await page.goto(base+route,{waitUntil:'domcontentloaded'});
   await page.waitForTimeout(1200);
-  const stem=`${browserName}-${sizeId}-${route==='/'?'hub':route.split('/')[2]}`;
+  const stem=`${browserName}-${sizeId}-${route==='/'?'hub':route.startsWith('/g/')?route.split('/')[2]:route.replace(/\W+/g,'')}`;
   const layout=await geometry(page);
   check(layout.scrollWidth<=layout.width+2,`${stem} horizontal overflow`,JSON.stringify(layout));
   const broken=await page.locator('img').evaluateAll(images=>images.filter(image=>{
@@ -87,6 +87,68 @@ async function visit(page, base, route, browserName, sizeId) {
   check(!broken.length,`${stem} images loaded`,JSON.stringify(broken));
   await page.screenshot({path:path.join(out,`${stem}.png`),fullPage:false});
   return {stem,errors,badResponses};
+}
+async function linkResolves(page,base,href,label) {
+  const response=await page.request.get(new URL(href,base).href,{maxRedirects:0});
+  check(response.status()===200,`${label} ${href} resolves`,String(response.status()));
+}
+async function eventChecks(page,base,stem) {
+  const section=page.locator('#market-in');
+  check(await section.isVisible(),`${stem} Market-In section visible`);
+  check(await page.locator('#newArena').getAttribute('href')==='#market-in',`${stem} hero pill targets event section`);
+  const order=await page.evaluate(()=>{const hero=document.querySelector('.hero'),event=document.getElementById('market-in');return hero.nextElementSibling===event;});
+  check(order,`${stem} event section follows hero`);
+  check((await section.textContent()).includes('Zoro & Sanji hadir 3–4 Okt'),`${stem} cosplayer ribbon`);
+  const ctas=await page.locator('#market-in .event-game-actions a.btn-primary').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
+  check(JSON.stringify(ctas)===JSON.stringify(['/g/gacha/','/g/heart/']),`${stem} event CTAs`,JSON.stringify(ctas));
+  for(const href of ctas) await linkResolves(page,base,href,`${stem} event CTA`);
+  for(const selector of ['#market-in .event-game-actions a.btn-primary','#market-in .event-game-actions button','#market-in .event-staff a','.event-tile a.btn-primary']) {
+    await page.locator(selector).first().scrollIntoViewIfNeeded();
+    const control=await target(page,selector);
+    check(control.visible && control.inViewport && control.width>=44 && control.height>=44,`${stem} ${selector} touch target`,JSON.stringify(control));
+  }
+  const staff=await page.locator('#market-in .event-staff a').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
+  check(JSON.stringify(staff)===JSON.stringify(['/g/gacha/admin.html','/g/heart/admin.html']),`${stem} staff links`,JSON.stringify(staff));
+  for(const href of staff) await linkResolves(page,base,href,`${stem} staff`);
+  const tile=await page.locator('#gameGrid > .event-tile a.btn-primary').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
+  check(JSON.stringify(tile)===JSON.stringify(['/g/gacha/','/g/heart/']),`${stem} Market-In double tile keeps two play buttons`,JSON.stringify(tile));
+  const singles=await page.locator('#gameGrid > .game-card:not(.event-tile) a.btn-primary').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
+  check(['/g/spin/','/g/nyapit/','/g/drop/'].every(href=>singles.includes(href)),`${stem} other games keep own tiles`,JSON.stringify(singles));
+  const layout=await geometry(page);
+  check(layout.scrollWidth<=layout.width+2,`${stem} event section overflow`,JSON.stringify(layout));
+  await section.scrollIntoViewIfNeeded();
+  await page.screenshot({path:path.join(out,`${stem}-event.png`),fullPage:false});
+}
+async function marketInFlow(page, base, browserName, sizeId) {
+  const log=await visit(page,base,'/market-in',browserName,sizeId);
+  await page.locator('body[data-ready="1"]').waitFor({timeout:20000});
+  for(const href of ['/g/gacha/','/g/heart/']) {
+    const selector=`.mi-actions a[href="${href}"]`;
+    const control=await target(page,selector);
+    check(control.visible && control.width>=44 && control.height>=44,`${log.stem} hero CTA ${href}`,JSON.stringify(control));
+    await linkResolves(page,base,href,`${log.stem} hero CTA`);
+  }
+  const games=await page.locator('#miGames a.btn-primary').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
+  check(JSON.stringify(games)===JSON.stringify(['/g/gacha/','/g/heart/']),`${log.stem} game cards`,JSON.stringify(games));
+  check(await page.locator('#miDays .mi-day').count()===2,`${log.stem} two cosplayer days`);
+  await page.locator('#heartCards[aria-busy="false"],#heartFallback:not([hidden])').first().waitFor({timeout:15000});
+  check(await page.locator('#heartCards .mi-card').count()===14,`${log.stem} fourteen Heart Parade cards`);
+  await page.locator('#gachaTiers[aria-busy="false"],#gachaFallback:not([hidden])').first().waitFor({timeout:15000});
+  const tiers=await page.locator('#gachaTiers .mi-tier').count();
+  check(tiers>=3,`${log.stem} Gacha Pop prize classes`,String(tiers));
+  check(!/\bstok\s*\d|×\d/i.test(await page.locator('#gachaTiers').textContent()),`${log.stem} no stock numbers`);
+  const jingle=await target(page,'#jingle');
+  check(jingle.visible && jingle.height>=44,`${log.stem} jingle touch target`,JSON.stringify(jingle));
+  check(await page.locator('#jingle').getAttribute('aria-pressed')==='false',`${log.stem} jingle waits for tap`);
+  for(const selector of ['#jadwal','#kartu','#hadiah']) {
+    await page.locator(selector).scrollIntoViewIfNeeded();
+    const layout=await geometry(page);
+    check(layout.scrollWidth<=layout.width+2,`${log.stem} ${selector} overflow`,JSON.stringify(layout));
+  }
+  await page.locator('#kartu').scrollIntoViewIfNeeded();
+  await page.screenshot({path:path.join(out,`${log.stem}-cards.png`),fullPage:false});
+  check(!log.errors.length,`${log.stem} console errors`,JSON.stringify(log.errors));
+  check(!log.badResponses.length,`${log.stem} HTTP errors`,JSON.stringify(log.badResponses));
 }
 async function hubFlow(page, base, browserName, sizeId) {
   const log=await visit(page,base,'/',browserName,sizeId);
@@ -98,6 +160,7 @@ async function hubFlow(page, base, browserName, sizeId) {
   await onboarding.waitFor({state:'hidden'});
   check((await page.locator('#chipName').textContent()).includes('QA Lokal'),`${log.stem} onboarding saved`);
   await page.screenshot({path:path.join(out,`${log.stem}-after-onboard.png`),fullPage:false});
+  await eventChecks(page,base,log.stem);
   for(const slug of ['spin','nyapit','drop','gacha','heart']) {
     await page.locator(`[data-howto="${slug}"]`).first().click();
     check(await page.locator('#gameModal').isVisible(),`${log.stem} ${slug} guide visible`);
@@ -207,21 +270,57 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
     const titleFit=await page.locator('#title').evaluate(n=>({width:n.clientWidth,content:n.scrollWidth}));
     check(titleFit.content<=titleFit.width+2,`${log.stem} complete title visible`,JSON.stringify(titleFit));
     await page.locator('[data-host="sanji"].host-card').click();
+    await page.locator('#pickMode').click();
+    check(await page.locator('.card-choice[data-service]').count()===7,`${log.stem} seven visible card choices`);
+    const sanjiArt=await page.locator('#momentGrid .card-art>img').evaluateAll(images=>Promise.all(images.map(async image=>{
+      image.loading='eager';await image.decode();return image.src;
+    })));
+    const choice=await target(page,'.card-choice[data-service="twirl"]');
+    check(choice.visible&&choice.width>=44&&choice.height>=44,`${log.stem} card choice touch target`);
+    await page.locator('.card-choice[data-service="twirl"]').click();
+    check(await page.locator('#pickMode').getAttribute('aria-pressed')==='true',`${log.stem} explicit selection mode`);
     const control=await target(page,'#startButton');
     check(control.visible&&control.width>=44&&control.height>=44,`${log.stem} heart touch target`);
-    await page.locator('#startButton').click();
+    if(!await page.locator('#prepDialog').isVisible())await page.locator('#startButton').click();
+    check(await page.locator('#pickService').inputValue()==='twirl',`${log.stem} visible choice retains hidden service`);
+    check(!await page.locator('#pickService').isVisible(),`${log.stem} service select stays hidden`);
     check(await page.locator('[name="comfort"][value="no-touch"]').isChecked(),`${log.stem} no-touch default`);
     check(!await page.locator('#recordingConsent').isChecked(),`${log.stem} recording opt-in`);
+    await page.locator('#recordingConsent').check();
     await page.locator('#consentCheck').check();
     await page.locator('#drawButton').click();
     await page.locator('#resultDialog[open]').waitFor({timeout:20000});
+    await page.waitForFunction(()=>document.querySelector('#resultDialog')?.scrollTop===0,null,{timeout:1000});
+    check(await page.locator('#resultDialog').evaluate(dialog=>dialog.scrollTop)===0,`${log.stem} result initially scrolls from top`);
     check((await page.locator('#resultHostName').textContent())==='Sanji',`${log.stem} chosen host retained`);
+    check((await page.locator('#resultTitle').textContent())==='Princess Twirl',`${log.stem} explicit card retained`);
     check((await page.locator('#ticketLabel').textContent()).includes('DEMO'),`${log.stem} demo label`);
     const resultLayout=await geometry(page);
     check(resultLayout.scrollWidth<=resultLayout.width+2,`${log.stem} heart result overflow`,JSON.stringify(resultLayout));
     await page.screenshot({path:path.join(out,`${log.stem}-result.png`)});
     await page.locator('#finishButton').click();
     await page.locator('#resultDialog').waitFor({state:'hidden'});
+    check(!await page.locator('#recordingConsent').isChecked(),`${log.stem} recording reset after result`);
+    await page.locator('[data-host="zoro"].host-card').click();
+    await page.locator('#gachaMode').click();
+    check(await page.locator('#gachaMode').getAttribute('aria-pressed')==='true',`${log.stem} gacha selection mode`);
+    const zoroArt=await page.locator('#momentGrid .card-art>img').evaluateAll(images=>Promise.all(images.map(async image=>{
+      image.loading='eager';await image.decode();return image.src;
+    })));
+    check(new Set([...sanjiArt,...zoroArt]).size===14,`${log.stem} fourteen unique decoded artwork URLs`);
+    await page.locator('#startButton').click();
+    check(await page.locator('#pickService').inputValue()==='',`${log.stem} gacha clears explicit service`);
+    check(await page.locator('[name="comfort"][value="no-touch"]').isChecked(),`${log.stem} no-touch reset on replay`);
+    check(!await page.locator('#recordingConsent').isChecked(),`${log.stem} recording remains opt-in on replay`);
+    check(!await page.locator('#consentCheck').isChecked(),`${log.stem} consent reset on replay`);
+    await page.locator('#consentCheck').check();await page.locator('#drawButton').click();
+    await page.locator('#resultDialog[open]').waitFor({timeout:20000});
+    await page.waitForFunction(()=>document.querySelector('#resultDialog')?.scrollTop===0,null,{timeout:1000});
+    check(await page.locator('#resultDialog').evaluate(dialog=>dialog.scrollTop)===0,`${log.stem} replay result scroll resets`);
+    check((await page.locator('#resultHostName').textContent())==='Zoro',`${log.stem} gacha host retained`);
+    await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});
+    const reduced=await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
+    check(await page.locator('html').getAttribute('data-motion')===(reduced?'reduce':'full'),`${log.stem} motion preference retained`);
     check(!await page.locator('#startButton').isDisabled(),`${log.stem} heart replay ready`);
   }
   const layout=await geometry(page);
@@ -249,6 +348,8 @@ async function main() {
           try {
             try {await hubFlow(page,base,browserName,sizeId);}
             catch(error) {check(false,`${browserName}-${sizeId} hub flow`,error.stack||error.message);}
+            try {await marketInFlow(page,base,browserName,sizeId);}
+            catch(error) {check(false,`${browserName}-${sizeId} market-in flow`,error.stack||error.message);}
             for(const slug of ['spin','nyapit','drop','gacha','heart'].filter(name=>!gameFilter||name===gameFilter)) {
               try {await gameFlow(page,base,slug,browserName,sizeId,
                 browserName==='chromium' && sizeId==='phone-390');}

@@ -7,6 +7,7 @@
    memungkinkan pemain memindahkan profil ke perangkat lain. */
 const fs=require('node:fs');
 const path=require('node:path');
+const {heartMomentImage}=require('./registry.cjs');
 
 const DAY_FORMAT=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'});
 const dayKey=ms=>DAY_FORMAT.format(new Date(ms));
@@ -67,8 +68,17 @@ class Players{
    catch{fs.copyFileSync(file,`${file}.corrupt-${Date.now()}`);data={players:{}};}
   }
   this.players=data.players||{};
+  let refreshed=false;
+  for(const player of Object.values(this.players)){
+   for(const [key,card] of Object.entries(player.cards||{})){
+    const match=key.match(/^heart:(zoro|sanji)-([a-z]+)$/);
+    const image=match&&heartMomentImage(match[1],match[2]);
+    if(image&&card.image!==`/g/heart${image}`){card.image=`/g/heart${image}`;refreshed=true;}
+   }
+  }
   const stale=this.now()-120*24*3600*1000;
   for(const [id,player] of Object.entries(this.players))if(player.lastSeen<stale&&player.xp<100)delete this.players[id];
+  if(refreshed)this.save();
  }
 
  save(){

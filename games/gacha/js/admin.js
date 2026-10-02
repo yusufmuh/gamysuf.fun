@@ -4,6 +4,7 @@ const $=id=>document.getElementById(id);
 const tierMeta={
  bundling:{label:'Bundling utama',color:'#d4a12e'},
  collab:{label:'Kolab karakter',color:'#2f8fd6'},
+ voucher:{label:'Voucher belanja',color:'#14745d'},
  product:{label:'Produk gratis',color:'#f7729a'},
  empty:{label:'Kapsul kosong',color:'#9c7e8a'}
 };

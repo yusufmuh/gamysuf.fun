@@ -6,7 +6,7 @@ const {Engine,fail}=require('./core/engine.cjs');
 const {historyCsv}=require('./core/report.cjs');
 const scrypt=promisify(crypto.scrypt);
 const CSP="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'";
-const TYPES={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.wav':'audio/wav','.mp3':'audio/mpeg','.json':'application/json; charset=utf-8'};
+const TYPES={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.wav':'audio/wav','.mp3':'audio/mpeg','.mp4':'video/mp4','.webm':'video/webm','.json':'application/json; charset=utf-8'};
 async function pinRecord(pin){const salt=crypto.randomBytes(24).toString('hex');return {salt,hash:(await scrypt(pin,salt,64)).toString('hex')};}
 async function checkPin(pin,record){if(typeof pin!=='string'||pin.length>32||!record)return false;const hash=await scrypt(pin,record.salt,64),stored=Buffer.from(record.hash,'hex');return stored.length===hash.length&&crypto.timingSafeEqual(stored,hash);}
 async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host='127.0.0.1',hosted=false,adminPin=null,allowedHosts=null,rng,now=()=>Date.now(),cloud=null}={}){
@@ -55,7 +55,7 @@ async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host
     if(route==='/api/admin/state')return send(200,engine.view(true));
     if(route==='/api/admin/settings'){requirePost();return send(200,engine.updateSettings(body));}
     if(route==='/api/admin/host'){requirePost();return send(200,engine.updateHost(body.id,body.patch));}
-    if(route==='/api/admin/service'){requirePost();return send(200,engine.updateService(body.id,body.enabled));}
+    if(route==='/api/admin/service'){requirePost();return send(200,engine.updateService(body.id,'patch' in body?body.patch:{enabled:body.enabled}));}
     if(route==='/api/admin/ticket'){requirePost();return send(200,engine.resolve(body.id,body.action));}
     if(route==='/api/admin/export')return send(200,historyCsv(engine.state.history),{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="heart-parade-antrean.csv"'});
     if(route==='/api/admin/backup')return send(200,JSON.stringify(engine.state,null,2),{'Content-Disposition':'attachment; filename="heart-parade-backup.json"'});
@@ -69,7 +69,19 @@ async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host
    if(!['index.html','admin.html'].includes(rel)&&!/^(assets|css|js)\/[a-zA-Z0-9_./-]+$/.test(rel))throw fail('Berkas tidak ditemukan.',404);
    const file=path.join(__dirname,rel),type=TYPES[path.extname(file)];
    if(!type||!fs.existsSync(file)||!fs.statSync(file).isFile())throw fail('Berkas tidak ditemukan.',404);
-   res.writeHead(200,{'Content-Type':type,'Cache-Control':/\.(html|css|js)$/.test(file)?'no-cache':'public, max-age=3600'});
+   const stat=fs.statSync(file),media=/^(?:audio|video)\//.test(type),cache=/\.(html|css|js)$/.test(file)?'no-cache':'public, max-age=3600';
+   if(media&&req.headers.range){
+    const match=String(req.headers.range).match(/^bytes=(\d*)-(\d*)$/);
+    let start,end;
+    if(match&&match[1]){start=Number(match[1]);end=match[2]?Math.min(Number(match[2]),stat.size-1):stat.size-1;}
+    else if(match&&match[2]){const suffix=Number(match[2]);start=Math.max(0,stat.size-suffix);end=stat.size-1;}
+    if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||start>=stat.size||end<start){res.writeHead(416,{'Content-Range':`bytes */${stat.size}`,'Accept-Ranges':'bytes'});return res.end();}
+    const length=end-start+1;
+    res.writeHead(206,{'Content-Type':type,'Cache-Control':cache,'Accept-Ranges':'bytes','Content-Range':`bytes ${start}-${end}/${stat.size}`,'Content-Length':String(length)});
+    if(req.method==='HEAD')res.end();else fs.createReadStream(file,{start,end}).pipe(res);
+    return;
+   }
+   res.writeHead(200,{'Content-Type':type,'Cache-Control':cache,'Content-Length':String(stat.size),...(media?{'Accept-Ranges':'bytes'}:{})});
    if(req.method==='HEAD')res.end();else fs.createReadStream(file).pipe(res);
   }catch(error){if(!res.headersSent)send(error.status||500,{error:error.status?error.message:'Server belum bisa memproses. Coba lagi.'});else res.end();}
  });
@@ -78,4 +90,4 @@ async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host
  return {server:app,engine,dataDir,origin,close:()=>new Promise(resolve=>app.close(resolve))};
 }
 if(require.main===module){const local=process.argv.includes('--local');createApp({hosted:!local,port:Number(process.env.PORT)||(local?4340:3000),host:local?'127.0.0.1':'0.0.0.0',adminPin:process.env.BPEDIA_ADMIN_PIN||null,allowedHosts:process.env.BPEDIA_ALLOWED_HOSTS||null,dataDir:process.env.BPEDIA_DATA_DIR||(local?undefined:path.join(os.homedir(),'bipy-heart-parade-data'))}).then(app=>console.log(`Bipy Heart Parade: ${app.origin}`)).catch(error=>{console.error(error.message);process.exitCode=1;});}
-module.exports={createApp};
+module.exports={createApp,TYPES};

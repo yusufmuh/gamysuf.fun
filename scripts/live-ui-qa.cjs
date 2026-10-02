@@ -145,7 +145,8 @@ async function main(){
     const fit=await layout(page);
     check(fit.scrollWidth<=fit.viewport+2,`${game} ${theme} mobile horizontal fit`,JSON.stringify(fit));
     const logos=await page.locator('img[data-brand="bpedia"]').evaluateAll(images=>images.map(image=>({src:image.src,loaded:image.complete&&image.naturalWidth>0})));
-    check(logos.length&&logos.every(image=>image.loaded&&image.src.includes(theme==='light'?'bpedia-pink.png':'bpedia-white.png')),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
+    const brandName=theme==='light'?'bpedia-pink':'bpedia-white';
+    check(logos.length&&logos.every(image=>image.loaded&&new URL(image.src).pathname.match(new RegExp(`${brandName}\\.(?:png|webp)$`))),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
     check(!(await visibleBrokenImages(page)).length,`${game} ${theme} visible assets loaded`);
     await page.screenshot({path:path.join(out,`${game}-mobile-${theme}-390x844.png`)});
    }

@@ -4,7 +4,7 @@ const {leaderboard,capsules}=require('./engine.cjs');
 const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'');
 const jakartaParts=value=>Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date(value)).filter(part=>part.type!=='literal').map(part=>[part.type,part.value]));
 const col=n=>{let s='';n++;while(n>0){const r=(n-1)%26;s=String.fromCharCode(65+r)+s;n=(n-r-1)/26;}return s;};
-const tierName={bundling:'Bundling utama',collab:'Kolab karakter',product:'Produk gratis',empty:'Kapsul kosong'};
+const tierName={bundling:'Bundling utama',collab:'Kolab karakter',product:'Produk gratis',voucher:'Voucher belanja',empty:'Kapsul kosong'};
 const BOM=String.fromCharCode(0xfeff);
 const statusName=item=>item.status==='empty'?'Kapsul kosong':item.status==='claimed'?'Sudah diserahkan':'Belum diserahkan';
 

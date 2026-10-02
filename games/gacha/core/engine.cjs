@@ -2,11 +2,11 @@
 
 const {randomInt,randomUUID}=require('node:crypto');
 const {isDeepStrictEqual}=require('node:util');
-const {EMPTY,EVENT,HASHTAGS,TIER_POINTS}=require('./catalog.cjs');
+const {EMPTY,EVENT,HASHTAGS,TIER_POINTS,CATALOG_VERSION,migrateState}=require('./catalog.cjs');
 
 const clone=structuredClone;
 const fail=(message,status=400)=>Object.assign(new Error(message),{status});
-const tiers=['bundling','collab','product','empty'];
+const tiers=['bundling','collab','product','voucher','empty'];
 const prizeTiers=tiers.slice(0,-1);
 const scoreFor=tier=>TIER_POINTS[tier]??0;
 const usernamePattern=/^[\p{L}\p{N} ._]+$/u;
@@ -84,7 +84,7 @@ function validateHistory(item){
 }
 
 function validateState(state){
- if(!state||state.schema!==1||!Number.isInteger(state.revision)||state.revision<0||!Array.isArray(state.prizes)||!state.prizes.length||!Array.isArray(state.history)||!Array.isArray(state.audit)||!state.dailyCounters||typeof state.dailyCounters!=='object')throw fail('Format data tidak valid.');
+ if(!state||state.schema!==1||(Object.hasOwn(state,'catalogVersion')&&state.catalogVersion!==1&&state.catalogVersion!==CATALOG_VERSION)||!Number.isInteger(state.revision)||state.revision<0||!Array.isArray(state.prizes)||!state.prizes.length||!Array.isArray(state.history)||!Array.isArray(state.audit)||!state.dailyCounters||typeof state.dailyCounters!=='object')throw fail('Format data tidak valid.');
  validateSettings(state.settings);
  const prizeIds=new Set();
  for(const prize of state.prizes)validatePrize(prize,prizeIds);
@@ -322,6 +322,7 @@ class Engine{
  restore(restored){
   this.ensureMutable();
   const next=clone(validateState(restored));
+  migrateState(next);
   next.pending=null;
   next.settings.mode='demo';
   next.settings.paused=true;

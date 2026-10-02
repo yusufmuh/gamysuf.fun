@@ -23,10 +23,10 @@
 
  const rand=(min,max)=>min+Math.random()*(max-min);
 
- function confetti(x,y,count,power){
+ function confetti(x,y,count,power,colors=COLORS){
   for(let i=0;i<count;i++){
    const angle=rand(0,Math.PI*2),speed=rand(260,820)*power;
-   particles.push({kind:Math.random()<.35?'dot':'strip',x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-rand(120,420),size:rand(6,13),rot:rand(0,6.28),vr:rand(-12,12),color:COLORS[i%COLORS.length],life:rand(1.6,2.6),age:0,drag:.986,gravity:900});
+   particles.push({kind:Math.random()<.35?'dot':'strip',x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-rand(120,420),size:rand(6,13),rot:rand(0,6.28),vr:rand(-12,12),color:colors[i%colors.length],life:rand(1.6,2.6),age:0,drag:.986,gravity:900});
   }
  }
 
@@ -68,8 +68,9 @@
  window.GPFx={
   burst(x,y,{tier='product'}={}){
    const scale=reduced.matches?.25:1;
-   const big=tier==='bundling',mid=tier==='collab';
-   confetti(x,y,Math.round((big?150:mid?110:80)*scale),big?1.2:1);
+   const big=tier==='bundling',mid=tier==='collab',voucher=tier==='voucher';
+   const colors=voucher?['#14745d','#51bd95','#baf3cc','#ffd23f','#ffffff']:COLORS;
+   confetti(x,y,Math.round((big?150:mid?110:voucher?96:80)*scale),big?1.2:1,colors);
    stickers(x,y,Math.round((big?16:mid?12:8)*scale),big?1.15:1);
    if(big&&!reduced.matches){setTimeout(()=>streamers(70),260);setTimeout(()=>confetti(x,y-60,90,.9),520);}
    start();

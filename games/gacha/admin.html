@@ -123,7 +123,7 @@
       </section>
 
       <section id="tab-ranking" class="tab-pane" role="tabpanel" hidden>
-        <div class="section-heading"><div><p class="eyebrow">LUCKY BEAUTIES</p><h2>Peringkat Gacha Pop</h2><p>Urut berdasarkan poin (bundling 500, kolab 200, produk 80), jumlah hadiah, lalu jumlah putaran.</p></div><div class="section-actions"><a href="/api/admin/leaderboard.csv" class="success-button">⇩ Ekspor CSV</a><button id="exportRanking" class="secondary-button" type="button">Salin tabel</button></div></div>
+        <div class="section-heading"><div><p class="eyebrow">LUCKY BEAUTIES</p><h2>Peringkat Gacha Pop</h2><p>Urut berdasarkan poin (bundling 500, kolab 200, voucher 120, produk 80), jumlah hadiah, lalu jumlah putaran.</p></div><div class="section-actions"><a href="/api/admin/leaderboard.csv" class="success-button">⇩ Ekspor CSV</a><button id="exportRanking" class="secondary-button" type="button">Salin tabel</button></div></div>
         <div id="adminLeaderboard" class="leaderboard-admin"></div>
       </section>
 
@@ -218,7 +218,7 @@
       <div class="inventory-editor">
         <div class="form-group"><label for="prizeName">Nama singkat</label><input id="prizeName" maxlength="100" required></div>
         <div class="form-group"><label for="prizeFullName">Nama lengkap</label><input id="prizeFullName" maxlength="180" required></div>
-        <div class="form-group"><label for="prizeTier">Kategori</label><select id="prizeTier"><option value="bundling">Bundling utama · legendaris · 500 poin</option><option value="collab">Kolab karakter · epik · 200 poin</option><option value="product">Produk gratis · 80 poin</option></select><span class="form-help">Poin dihitung otomatis untuk peringkat.</span></div>
+        <div class="form-group"><label for="prizeTier">Kategori</label><select id="prizeTier"><option value="bundling">Bundling utama · legendaris · 500 poin</option><option value="collab">Kolab karakter · epik · 200 poin</option><option value="voucher">Voucher belanja · langka · 120 poin</option><option value="product">Produk gratis · 80 poin</option></select><span class="form-help">Poin dihitung otomatis untuk peringkat.</span></div>
         <div class="form-group"><label for="prizeStock">Stok tersisa (= jumlah kapsul)</label><input id="prizeStock" type="number" min="0" max="10000" step="1"><label class="switch"><input id="prizeUnlimited" type="checkbox"> Tak terbatas</label></div>
         <div class="form-group"><label for="prizeImage">Unggah foto · maks. 4 MB</label><div class="photo-preview"><img id="prizePreview" src="/assets/products/bundling-1.webp" alt="Pratinjau foto hadiah"><span>PNG, JPG, atau WebP</span></div><input id="prizeImage" type="file" accept="image/png,image/jpeg,image/webp"><label class="switch"><input id="prizeImageChecked" type="checkbox"> Foto sudah diverifikasi</label></div>
         <div class="form-group full"><label for="prizeTerms">Ketentuan</label><textarea id="prizeTerms" maxlength="2000"></textarea></div>

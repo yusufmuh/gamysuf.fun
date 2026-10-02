@@ -6,7 +6,7 @@ const path=require('node:path');
 const os=require('node:os');
 const crypto=require('node:crypto');
 const {promisify}=require('node:util');
-const {GAMES}=require('./registry.cjs');
+const {GAMES,EVENTS}=require('./registry.cjs');
 const {createVisitorEngines}=require('./visitors.cjs');
 const {Players}=require('./players.cjs');
 const {CustomGames,MAX_GAMES}=require('./custom-games.cjs');
@@ -128,7 +128,12 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
  function requireAdmin(req){if(!adminToken(req))throw fail('Sesi Studio berakhir. Masukkan PIN kembali.',401);}
 
  function publicGame(game){
-  return {slug:game.slug,title:game.title,brandTitle:game.brandTitle,event:game.event,mechanic:game.mechanic,accent:game.accent,cover:game.cover,tagline:game.tagline,description:game.description,howTo:game.howTo,tips:game.tips,controls:game.controls,url:`/g/${game.slug}/`,builtin:true};
+  const event=game.eventGroup&&EVENTS[game.eventGroup]?{eventGroup:game.eventGroup,quickStart:game.quickStart||game.howTo.slice(0,3),staffUrl:`/g/${game.slug}/${game.admin.path}`}:{};
+  return {slug:game.slug,title:game.title,brandTitle:game.brandTitle,event:game.event,mechanic:game.mechanic,accent:game.accent,cover:game.cover,tagline:game.tagline,description:game.description,howTo:game.howTo,tips:game.tips,controls:game.controls,url:`/g/${game.slug}/`,builtin:true,...event};
+ }
+ // Hanya event yang masih punya game tampil; game tersembunyi tidak membuat grup kosong.
+ function publicEvents(games){
+  return Object.fromEntries(Object.values(EVENTS).map(event=>[event.id,{...event,games:games.filter(game=>game.eventGroup===event.id).map(game=>game.slug)}]).filter(([,event])=>event.games.length));
  }
  function publicCustom(game){
   return {slug:game.id,title:game.title,brandTitle:game.title,event:game.subtitle,mechanic:game.tags.join(' · '),accent:game.color,cover:game.cover,tagline:game.subtitle,description:game.description,howTo:game.howTo,tips:[],controls:[],url:game.type==='link'?game.url:`/play/${game.id}/`,external:game.type==='link',builtin:false};
@@ -316,7 +321,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
 
   if(route==='/hub-api/catalog'){
    const games=GAMES.filter(game=>!settings.hidden.includes(game.slug)).map(game=>({...publicGame(game),cards:cardsOf(mounts.get(game.slug)).length}));
-   return send(ctx,200,{version:VERSION,games,custom:custom.list().map(publicCustom),slots:Math.max(0,MAX_GAMES-custom.list({includeDrafts:true}).length),settings:{announcement:settings.announcement,announcementLink:settings.announcementLink,featured:settings.featured},totals:{cards:totalCards(),players:players.stats().players}});
+   return send(ctx,200,{version:VERSION,games,events:publicEvents(games),custom:custom.list().map(publicCustom),slots:Math.max(0,MAX_GAMES-custom.list({includeDrafts:true}).length),settings:{announcement:settings.announcement,announcementLink:settings.announcementLink,featured:settings.featured},totals:{cards:totalCards(),players:players.stats().players}});
   }
   if(route==='/hub-api/me'&&req.method==='GET'){
    const since=Number(url.searchParams.get('since'))||0;
@@ -394,7 +399,7 @@ async function createHub({dataDir,port=0,host='127.0.0.1',adminPin=null,local=fa
   let relative;
   try{relative=decodeURIComponent(ctx.pathname);}catch{return notFound(ctx);}
   if(relative.includes('..')||relative.includes('\\')||relative.includes('\0'))return notFound(ctx);
-  const pages={'/':'index.html','/index.html':'index.html','/studio':'studio.html','/studio.html':'studio.html','/manifest.webmanifest':'manifest.webmanifest','/favicon.ico':'assets/brand/favicon.ico','/robots.txt':'robots.txt'};
+  const pages={'/':'index.html','/index.html':'index.html','/studio':'studio.html','/studio.html':'studio.html','/manifest.webmanifest':'manifest.webmanifest','/favicon.ico':'assets/brand/favicon.ico','/robots.txt':'robots.txt','/market-in':'market-in.html','/market-in/':'market-in.html'};
   if(pages[relative])return serveFile(ctx,path.join(PUBLIC,pages[relative]));
   if(relative.startsWith('/hub/')&&/^\/hub\/[a-zA-Z0-9_./-]+$/.test(relative))return serveFile(ctx,path.join(PUBLIC,relative.slice(5)));
   return notFound(ctx);

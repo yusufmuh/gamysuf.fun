@@ -320,7 +320,9 @@ html[data-theme="light"] .reveal-layer { background: radial-gradient(circle at 5
 .card-art { position: relative; margin-top: 10px; border-radius: 20px; overflow: hidden; aspect-ratio: 1; background: #fff; border: 2px solid #f3d3dd; }
 .card-art img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .holo { position: absolute; inset: 0; opacity: 0; mix-blend-mode: color-dodge; background: linear-gradient(115deg, transparent 18%, #ff9cc0 32%, #9fd6ff 44%, #fff3a6 54%, #c7a7ff 64%, transparent 80%); background-size: 260% 260%; pointer-events: none; }
-.sticker-card[data-tier="bundling"] .holo, .sticker-card[data-tier="collab"] .holo { opacity: .55; animation: holo 3.2s ease-in-out infinite; }
+.sticker-card[data-tier="bundling"] .holo, .sticker-card[data-tier="collab"] .holo, .sticker-card[data-tier="voucher"] .holo { opacity: .55; animation: holo 3.2s ease-in-out infinite; }
+.sticker-card[data-tier="voucher"] .card-art { border-color: #51bd95; background: #f1fff6; }
+.sticker-card[data-tier="voucher"] .card-stars { color: #d1ffe0; }
 @keyframes holo { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 .card-name { margin: clamp(6px, 1.2vh, 12px) 4px 2px; font-size: clamp(16px, min(2.4vw, 2.8vh), 24px); font-weight: 800; line-height: 1.15; }
 .card-sub { margin: 0 4px; font-size: 12.5px; color: #6e4556; }

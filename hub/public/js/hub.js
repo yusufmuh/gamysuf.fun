@@ -70,6 +70,11 @@
  }
 
  const games=()=>[...(store.catalog?.games||[]),...(store.catalog?.custom||[])];
+ const EV=window.GamysufEvent;
+ const SPARKLE='<path d="M12 2.5c.6 4.6 2.9 6.9 7.5 7.5-4.6.6-6.9 2.9-7.5 7.5-.6-4.6-2.9-6.9-7.5-7.5 4.6-.6 6.9-2.9 7.5-7.5Z"/>';
+ const eventList=()=>Object.values(store.catalog?.events||{}).map(event=>({...event,members:(event.games||[]).map(slug=>games().find(game=>game.slug===slug)).filter(Boolean)})).filter(event=>event.members.length);
+ const primaryEvent=()=>eventList()[0]||null;
+ const linkAttrs=game=>game.external?' target="_blank" rel="noopener"':'';
  const cardsOwnedIn=slug=>(store.me?.cards||[]).filter(card=>card.game===slug).length;
 
  /* ── Hero: kabinet game unggulan ─────────────────── */
@@ -81,9 +86,12 @@
   $('statCards').textContent=number(catalog.totals.cards);
   $('statPlayers').textContent=number(catalog.totals.players);
   $('versionTag').textContent=`v${catalog.version}`;
-  const heart=games().find(game=>game.slug==='heart');
-  $('newArena').hidden=!heart;
-  if(heart)$('newArena').href=heart.url;
+  const event=primaryEvent();
+  $('newArena').hidden=!event;
+  if(event){
+   $('newArenaKicker').textContent=`${event.title} · ${event.dates}`.toUpperCase();
+   $('newArenaText').textContent=event.teaser||event.headline;
+  }
   const list=games().filter(game=>game.cover);
   $('cabinetScreen').innerHTML=list.map((game,index)=>`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" data-index="${index}" loading="${index?'lazy':'eager'}">`).join('');
   $('cabinetDots').innerHTML=list.map((game,index)=>`<button type="button" aria-pressed="false" aria-label="Tampilkan ${esc(game.title)}" data-feature="${index}"></button>`).join('');
@@ -115,6 +123,43 @@
    link.target=game.external?'_blank':'';
    link.rel=game.external?'noopener':'';
   }
+ }
+
+ /* ── Event booth: beberapa game berbeda dalam satu event ── */
+ function renderEvent(){
+  const event=primaryEvent();
+  const section=$('market-in');
+  section.hidden=!event;
+  if(!event){section.innerHTML='';return;}
+  const state=EV.status(event);
+  const panels=event.members.map(game=>`<article class="event-game" style="--accent:${esc(game.accent||'#E62B5E')}">
+   <a class="event-game-cover" href="${esc(game.url)}" tabindex="-1" aria-hidden="true"${linkAttrs(game)}>${game.cover?`<img src="${esc(game.cover)}" alt="" loading="lazy" width="1200" height="675">`:''}</a>
+   <div class="event-game-body">
+    <p class="event-game-kicker">${esc(EV.kicker(game))}</p>
+    <h3>${esc(game.title)}</h3>
+    <p class="event-game-tagline">${esc(game.tagline||game.description||'')}</p>
+    <ol class="event-steps">${(game.quickStart||game.howTo||[]).slice(0,3).map(step=>`<li>${esc(step)}</li>`).join('')}</ol>
+    <div class="event-game-actions"><a class="btn btn-primary" href="${esc(game.url)}"${linkAttrs(game)}>Main ${esc(EV.shortTitle(game.title))}</a><button class="btn btn-ghost" type="button" data-howto="${esc(game.slug)}" aria-label="Cara main ${esc(game.title)}">Cara main</button></div>
+   </div>
+  </article>`).join('');
+  const staff=event.members.filter(game=>game.staffUrl);
+  section.innerHTML=`<div class="event-shell">
+   <div class="event-intro">
+    <div class="event-copy">
+     <p class="event-eyebrow">${state.label?`<span class="event-status" data-phase="${state.phase}">${esc(state.label)}</span>`:''}<span>Event booth Bpedia</span></p>
+     <h2 id="eventHubTitle">${esc(event.title)}. <em>${esc(event.headline)}</em></h2>
+     <p class="event-summary">${esc(event.summary)}</p>
+    </div>
+    ${event.logo?`<img class="event-logo" src="${esc(event.logo)}" alt="Logo ${esc(event.title)}" width="600" height="226" loading="lazy">`:''}
+   </div>
+   <dl class="event-facts"><div><dt>Tanggal</dt><dd>${esc(EV.dayRange(event))}</dd></div><div><dt>Lokasi</dt><dd>${esc([event.place,event.city].filter(Boolean).join(', '))}</dd></div><div><dt>Di booth</dt><dd>${event.members.length} game berbeda · 1 album</dd></div></dl>
+   ${event.cosplay?`<p class="event-ribbon">${svg(SPARKLE)}<span>${esc(event.cosplay)}</span>${svg(SPARKLE)}</p>`:''}
+   <div class="event-games">${panels}</div>
+   <footer class="event-foot">
+    ${event.page?`<a class="event-page-link" href="${esc(event.page)}">Jadwal cosplayer &amp; cara dapat tiket booth<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>`:''}
+    ${staff.length?`<p class="event-staff"><span>Untuk petugas booth</span>${staff.map(game=>`<a href="${esc(game.staffUrl)}">Dashboard ${esc(EV.shortTitle(game.title))}</a>`).join('')}</p>`:''}
+   </footer>
+  </div>`;
  }
 
  /* ── Profil, misi, streak, lencana ───────────────── */
@@ -150,20 +195,38 @@
   $('badgeList').innerHTML=me.badges.map(badge=>`<li class="badge ${badge.unlockedAt?'on':''}" title="${esc(badge.detail)}"><span class="badge-icon">${svg(BADGE_ICONS[badge.id]||BADGE_ICONS.lucky)}</span><b>${esc(badge.name)}</b><small>${esc(badge.detail)}</small></li>`).join('');
  }
 
- /* ── Kartu game + slot ───────────────────────────── */
+ /* ── Kartu game + grup event ─────────────────────── */
+ function progressOf(game){
+  const owned=cardsOwnedIn(game.slug);
+  const plays=store.me?.playsByGame?.[game.slug]||0;
+  return game.builtin?`${owned}/${game.cards} kartu · ${plays}x main`:'Game tambahan';
+ }
+ const gameActions=game=>`<div class="game-actions"><button class="btn btn-ghost btn-small" type="button" data-howto="${esc(game.slug)}" aria-label="Cara main ${esc(game.title)}">Cara main</button><a class="btn btn-primary btn-small" href="${esc(game.url)}" aria-label="Main ${esc(game.title)}"${linkAttrs(game)}>Main sekarang</a></div>`;
+ const gameCover=(game,badge)=>`<div class="game-cover">${game.cover?`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" loading="lazy">`:''}<span class="game-badge">${esc(badge.toUpperCase())}</span><span class="game-progress">${esc(progressOf(game))}</span></div>`;
+ const gameCard=game=>`<article class="game-card" style="--accent:${esc(game.accent||'#E62B5E')}">
+   ${gameCover(game,game.event||'Arena baru')}
+   <div class="game-body"><h3>${esc(game.title)}</h3><p class="game-mech">${esc(game.mechanic||'')}</p><p>${esc(game.description||game.tagline||'')}</p>${gameActions(game)}</div>
+  </article>`;
+ function eventTile(event){
+  const state=EV.status(event);
+  return `<article class="game-card event-tile" aria-labelledby="tile-${esc(event.id)}">
+   <header class="event-tile-head">
+    ${event.logo?`<img src="${esc(event.logo)}" alt="" width="600" height="226" loading="lazy">`:''}
+    <div><p class="event-tile-kicker">${esc([state.label,event.dates].filter(Boolean).join(' · '))}</p><h3 id="tile-${esc(event.id)}">${esc(event.title)}</h3><p>${esc(event.place)} · ${event.members.length} game berbeda, satu booth</p></div>
+    ${event.page?`<a class="btn btn-ghost btn-small" href="${esc(event.page)}">Info event</a>`:''}
+   </header>
+   <div class="event-tile-games">${event.members.map(game=>`<section class="event-tile-game" style="--accent:${esc(game.accent||'#E62B5E')}" aria-label="${esc(game.title)}">
+    ${gameCover(game,EV.kicker(game))}
+    <div class="game-body"><h4>${esc(game.title)}</h4><p class="game-mech">${esc(game.mechanic||'')}</p><p>${esc(game.tagline||game.description||'')}</p>${gameActions(game)}</div>
+   </section>`).join('')}</div>
+  </article>`;
+ }
  function renderGames(){
-  const catalog=store.catalog;
-  const cards=games().map(game=>{
-   const owned=cardsOwnedIn(game.slug);
-   const plays=store.me?.playsByGame?.[game.slug]||0;
-   const progress=game.builtin?`${owned}/${game.cards} kartu · ${plays}x main`:'Game tambahan';
-   return `<article class="game-card" style="--accent:${esc(game.accent||'#E62B5E')}">
-    <div class="game-cover">${game.cover?`<img src="${esc(game.cover)}" alt="Cuplikan ${esc(game.title)}" loading="lazy">`:''}<span class="game-badge">${esc((game.event||'ARENA BARU').toUpperCase())}</span><span class="game-progress">${esc(progress)}</span></div>
-    <div class="game-body"><h3>${esc(game.title)}</h3><p class="game-mech">${esc(game.mechanic||'')}</p><p>${esc(game.description||game.tagline||'')}</p>
-     <div class="game-actions"><button class="btn btn-ghost btn-small" type="button" data-howto="${esc(game.slug)}" aria-label="Cara main ${esc(game.title)}">Cara main</button><a class="btn btn-primary btn-small" href="${esc(game.url)}" aria-label="Main ${esc(game.title)}" ${game.external?'target="_blank" rel="noopener"':''}>Main sekarang</a></div></div>
-   </article>`;
-  });
-  $('gameGrid').innerHTML=cards.join('');
+  // Grup event tampil pertama sebagai satu tile ganda; setiap game di dalamnya tetap punya tombol main sendiri.
+  const groups=eventList().filter(event=>event.members.length>1);
+  const grouped=new Set(groups.flatMap(event=>event.members.map(game=>game.slug)));
+  $('gameGrid').innerHTML=[...groups.map(eventTile),...games().filter(game=>!grouped.has(game.slug)).map(gameCard)].join('');
+  $('gameGrid').classList.toggle('event-offset',groups.length%2===1);
   $('gameGrid').setAttribute('aria-busy','false');
  }
 
@@ -307,7 +370,7 @@
  async function refresh({initial=false}={}){
   const [catalog,me,album]=await Promise.all([initial||!store.catalog?api('/hub-api/catalog'):store.catalog,api('/hub-api/me'),api('/hub-api/album')]);
   store.catalog=catalog;store.me=me;store.album=album;
-  if(initial)renderHero();
+  if(initial){renderHero();renderEvent();}
   renderMe();renderGames();renderAlbum();
   await loadBoard(store.range);
   showFeed();

@@ -220,7 +220,7 @@ test('halaman hub dan aset statis tersaji dengan CSP',async t=>{
  assert.equal(home.status,200);
  assert.match(home.headers['content-security-policy'],/script-src 'self'/);
  assert.match(home.headers['set-cookie']?.[0]||'',/gamysuf_vid=/.test(home.headers['set-cookie']?.[0]||'')?/gamysuf_vid/:/.*/);
- for(const route of ['/studio','/hub/css/hub.css','/hub/js/hub.js','/hub/js/inject.js','/hub/assets/covers/drop.jpg','/manifest.webmanifest','/favicon.ico','/robots.txt'])assert.equal((await call(hub,route)).status,200,route);
+ for(const route of ['/studio','/market-in','/market-in/','/hub/css/hub.css','/hub/css/event-hub.css','/hub/css/market-in.css','/hub/js/event-utils.js','/hub/js/market-in.js','/hub/assets/audio/bpedia-jingle.mp3','/hub/assets/market-in/market-in-6.webp','/hub/assets/market-in/zoro.webp','/hub/assets/market-in/sanji.webp','/hub/js/hub.js','/hub/js/inject.js','/hub/assets/covers/drop.jpg','/manifest.webmanifest','/favicon.ico','/robots.txt'])assert.equal((await call(hub,route)).status,200,route);
  assert.equal((await call(hub,'/hub/../package.json')).status,404);
  assert.equal((await call(hub,'/server.cjs')).status,404);
 });
@@ -228,7 +228,7 @@ test('halaman hub dan aset statis tersaji dengan CSP',async t=>{
 test('CSP juga ditanam sebagai meta karena CDN hosting mengganti header CSP',async t=>{
  const hub=await hubFor(t);
  const meta=/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/;
- for(const route of ['/','/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/drop/admin.html','/g/gacha/','/g/gacha/admin.html','/g/heart/','/g/heart/admin.html']){
+ for(const route of ['/','/studio','/market-in','/g/spin/','/g/nyapit/','/g/drop/','/g/drop/admin.html','/g/gacha/','/g/gacha/admin.html','/g/heart/','/g/heart/admin.html']){
   const page=await call(hub,route);
   const match=page.text.match(meta);
   assert.ok(match,`${route}: meta CSP hilang`);
@@ -250,9 +250,10 @@ test('Gacha Pop lewat gateway: satu tap jadi kartu album & XP, stok booth tidak 
  assert.ok(me.xp>0);
  const album=(await call(hub,'/hub-api/album')).json;
  const gacha=album.games.find(game=>game.slug==='gacha');
- assert.equal(gacha.cards.length,17);
- assert.deepEqual([...new Set(gacha.cards.map(card=>card.rarity))].sort(),['common','epic','legendary']);
- assert.equal(album.total,88);
+ assert.equal(gacha.cards.length,20,'17 hadiah + 3 voucher belanja');
+ assert.deepEqual([...new Set(gacha.cards.map(card=>card.rarity))].sort(),['common','epic','legendary','rare']);
+ assert.ok(gacha.cards.filter(card=>card.rarity==='rare').length>=3,'voucher = kartu langka');
+ assert.equal(album.total,91);
  assert.equal(hub.mounts.get('gacha').app.engine.state.history.length,0);
  assert.equal((await call(hub,'/g/gacha/api/result',{method:'POST',body:{id:played.json.id}})).status,200);
  assert.equal((await call(hub,'/g/gacha/api/mode',{method:'POST',body:{mode:'live'}})).status,403);
@@ -268,10 +269,14 @@ test('Heart Parade: isolated demo, idempotent XP and fourteen collectible moment
  assert.equal(hub.mounts.get('heart').app.engine.state.history.length,0);
  const me=(await call(hub,'/hub-api/me')).json;
  assert.ok(me.cards.some(card=>card.key===`heart:sanji-${first.json.service.id}`));
+ assert.equal(me.cards.find(card=>card.key===`heart:sanji-${first.json.service.id}`).image,`/g/heart/assets/moments/sanji-${first.json.service.id}.webp`);
  assert.equal((await call(hub,'/g/heart/api/play',{method:'POST',body:draw})).json.id,first.json.id);
  assert.equal((await call(hub,'/hub-api/me')).json.xp,me.xp);
  const album=(await call(hub,'/hub-api/album')).json;
- assert.equal(album.games.find(game=>game.slug==='heart').cards.length,14);assert.equal(album.total,88);
+ const heartCards=album.games.find(game=>game.slug==='heart').cards;
+ assert.equal(heartCards.length,14);assert.equal(album.total,91);
+ assert.equal(new Set(heartCards.map(card=>card.image)).size,14);
+ for(const card of heartCards)assert.equal(card.image,`/g/heart/assets/moments/${card.key.slice('heart:'.length)}.webp`);
  assert.equal((await call(hub,'/g/heart/api/result',{method:'POST',body:{id:first.json.id}})).status,200);
  const login=await call(hub,'/g/heart/api/login',{method:'POST',body:{pin:'246810'}});
  const cookie=login.headers['set-cookie'].map(s=>s.split(';')[0]).join('; ');
@@ -279,4 +284,45 @@ test('Heart Parade: isolated demo, idempotent XP and fourteen collectible moment
  const booth=await call(hub,'/g/heart/api/play',{method:'POST',cookie,body:{...draw,requestId:'heart-booth-002',verified:true}});
  assert.equal(booth.json.demo,false);assert.match(booth.json.id,/^HP-/);
  assert.equal((await call(hub,'/g/heart/api/state',{visitor:vid('b')})).json.settings.mode,'demo');
+});
+
+test('Market-In 6.0: dua game berbeda dikelompokkan lewat data katalog dan punya halaman event',async t=>{
+ const hub=await hubFor(t);
+ const catalog=(await call(hub,'/hub-api/catalog')).json;
+ const event=catalog.events['market-in-6'];
+ assert.ok(event,'event tersedia di katalog');
+ assert.deepEqual(event.games,['gacha','heart']);
+ assert.equal(event.page,'/market-in');
+ assert.match(event.cosplay,/Zoro & Sanji hadir 3–4 Okt/);
+ assert.deepEqual(event.schedule.map(day=>day.date),['2026-10-03','2026-10-04']);
+ assert.ok(event.schedule.every(day=>day.hosts.join()==='Zoro,Sanji'),'cosplayer hadir di kedua hari');
+ const gacha=catalog.games.find(game=>game.slug==='gacha'),heart=catalog.games.find(game=>game.slug==='heart');
+ assert.notEqual(gacha.url,heart.url,'tetap dua game berbeda');
+ for(const game of [gacha,heart]){
+  assert.equal(game.eventGroup,'market-in-6');
+  assert.equal(game.quickStart.length,3);
+  assert.equal(game.staffUrl,`/g/${game.slug}/admin.html`);
+  assert.match(game.cover,/\?v=1\.6\.0$/);
+ }
+ assert.equal(heart.title,'Bipy Heart Parade');
+ assert.match(heart.mechanic,/gacha booster atau pilih kartu/);
+ assert.match(gacha.description,/voucher/i);
+ assert.ok(['spin','nyapit','drop'].every(slug=>!catalog.games.find(game=>game.slug===slug).eventGroup),'game lain tetap tile sendiri');
+
+ const page=await call(hub,'/market-in');
+ assert.equal(page.status,200);
+ assert.match(page.headers['content-type'],/text\/html/);
+ assert.match(page.text,/<title>[^<]*Market-In 6\.0/);
+ assert.match(page.text,/property="og:title"/);
+ assert.doesNotMatch(page.text,/<script>|<script(?![^>]*\ssrc=)[^>]*>|\son[a-z]+=/i,'tanpa script inline atau handler inline');
+ for(const href of ['/g/gacha/','/g/heart/'])assert.ok(page.text.includes(`href="${href}"`),href);
+ assert.equal((await call(hub,'/market-in/')).status,200);
+
+ const login=await call(hub,'/hub-api/login',{method:'POST',body:{pin:'246810'}});
+ const cookie=login.headers['set-cookie'].find(item=>item.startsWith('gamysuf_admin=')).split(';')[0];
+ assert.equal((await call(hub,'/hub-api/admin/settings',{method:'POST',cookie,body:{hidden:['heart']}})).status,200);
+ const hidden=(await call(hub,'/hub-api/catalog')).json;
+ assert.deepEqual(hidden.events['market-in-6'].games,['gacha'],'game tersembunyi keluar dari grup');
+ assert.equal((await call(hub,'/hub-api/admin/settings',{method:'POST',cookie,body:{hidden:['heart','gacha']}})).status,200);
+ assert.equal((await call(hub,'/hub-api/catalog')).json.events['market-in-6'],undefined,'grup tanpa game tidak tampil');
 });

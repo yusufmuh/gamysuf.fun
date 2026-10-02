@@ -9,6 +9,7 @@
  const PALETTES={
   bundling:[['#fff0b8','#f5b83d','#b97c0b']],
   collab:[['#c6e8ff','#39a7e5','#16609e'],['#e4dcff','#9c8cff','#5a45c8']],
+  voucher:[['#d1ffe0','#51bd95','#14745d']],
   product:[['#ffc3d5','#e62b5e','#9c1240'],['#ffd8e3','#f7729a','#b8335f'],['#ffd0dc','#ff5d8c','#b3164b']],
   empty:[['#ffffff','#e8dde2','#a8949d']]
  };
@@ -84,7 +85,7 @@
   setComposition(byTier){
    const width=this.canvas.getBoundingClientRect().width;
    this.count=width<190?20:width<260?24:28;
-   const tiers=['bundling','collab','product','empty'];
+   const tiers=['bundling','collab','voucher','product','empty'];
    const total=tiers.reduce((sum,tier)=>sum+(byTier?.[tier]||0),0);
    let want;
    if(total>0){
@@ -93,7 +94,7 @@
     const biggest=tiers.reduce((a,b)=>want[b]>want[a]?b:a,'product');
     while(sum>this.count&&want[biggest]>1){want[biggest]--;sum--;}
     while(sum<this.count){want[biggest]++;sum++;}
-   }else want={bundling:0,collab:0,product:0,empty:6};
+   }else want={bundling:0,collab:0,voucher:0,product:0,empty:6};
    const current=this.balls.filter(ball=>!ball.removing);
    const leaving=this.balls.filter(ball=>ball.removing);
    const kept=[],spare=[];
@@ -138,7 +139,7 @@
    const ball=pool.reduce((a,b)=>b.y>a.y?b:a);
    ball.removing=true;ball.t=0;ball.fromX=ball.x;ball.fromY=ball.y;
    this.wake();
-   return paletteFor(ball.tier,ball.variant);
+   return paletteFor(tier,ball.tier===tier?ball.variant:0);
   }
 
   wake(){

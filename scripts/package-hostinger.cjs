@@ -10,8 +10,8 @@ const {zipSync}=require('fflate');
 const root=path.join(__dirname,'..');
 const pkg=require('../package.json');
 const name=`Gamysuf-Arcade-${pkg.version}-Hostinger.zip`;
-const STORED=/\.(?:png|jpe?g|webp|gif|mp3|woff2?|ico|zip)$/i;
-const SKIP=/(?:^|\/)(?:desktop\.ini|\.DS_Store|Thumbs\.db)$/i;
+const STORED=/\.(?:png|jpe?g|webp|gif|mp3|mp4|webm|woff2?|ico|zip)$/i;
+const SKIP=/(?:^|\/)(?:desktop\.ini|\.DS_Store|Thumbs\.db)$|\.inspect\.ndjson$/i;
 const include=['hub','games','package-lock.json','README.md'];
 
 const webPackage={...pkg,engines:{node:'22.x'},scripts:{start:pkg.scripts.start}};

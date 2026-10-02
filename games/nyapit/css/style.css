@@ -9,7 +9,7 @@
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{min-width:320px;background:#fff7f8}
+html{min-width:0;background:#fff7f8}
 body{margin:0;font-family:Manrope,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(145deg,#fffafb 0%,#fdeff2 52%,#f8dfe3 100%);min-height:100vh}
 button,input,select,textarea{font:inherit}
 button,a{-webkit-tap-highlight-color:transparent}

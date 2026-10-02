@@ -1,44 +1,87 @@
 # PRD — Bipy Heart Parade
 
-**Game 05 · Gamysuf Arcade 1.5.0 · 1 Oktober 2026**
+**Game 05 · Heart Parade 2.0.0 · Gamysuf Arcade 1.6.0 · 2 Oktober 2026**
 
-Pemilik produk: Muhammad Yusuf / Bpedia. Sumber kode: `../05 bipy-heart-parade`. Rute: `https://gamysuf.fun/g/heart/`.
+Pemilik produk: Muhammad Yusuf / Bpedia. Sumber kode: `../05 bipy-heart-parade`. Rute: `https://gamysuf.fun/g/heart/`. Dashboard petugas: `/g/heart/admin.html`.
 
 ## 1. Konsep dan tujuan
 
-Bipy Heart Parade adalah permainan kapsul hati yang mempertemukan pemain dengan satu momen fanservice romantis bersama Zoro atau Sanji. Daya tarik utama berasal dari ilustrasi karakter dewasa full body, ekspresi ramah, kostum elegan, tiga varian Bipy, animasi undangan, dan kartu kenang-kenangan yang dapat disimpan.
+Bipy Heart Parade adalah permainan kartu fanservice romantis untuk booth Bpedia di Market-In 6.0. Pemain membuka satu kartu momen bersama Zoro atau Sanji. Setiap kartu dirancang seperti trading card bergaya One Piece Card Game (OPCG): nomor kartu, kelangkaan, cost, power, counter, atribut, warna, kru, teks efek, dan poster bounty. Daya tarik utama: 14 ilustrasi adegan berbeda, animasi pembukaan per kartu, poster bounty berisi harga normal fanservice yang dicoret lalu ditutup **GRATIS** untuk pelanggan Bpedia, trailer Gemini, serta jingle Bpedia.
 
-Sasaran utama adalah pengunjung dewasa penggemar cosplay, khususnya perempuan, yang ingin pengalaman personal, playful, dan mudah difoto. Permainan online gratis menghasilkan kartu digital; interaksi fisik hanya dilakukan pada sesi booth yang dikelola petugas. Pilihan kenyamanan tersedia sebelum bermain dan dikonfirmasi kembali saat bertemu cosplayer.
+Sasaran utama adalah pengunjung dewasa penggemar cosplay, khususnya perempuan, yang ingin pengalaman personal, playful, dan mudah difoto. Online menghasilkan kartu digital demo; interaksi fisik hanya terjadi di sesi booth yang dikelola petugas. Pilihan kenyamanan tersedia sebelum bermain dan dikonfirmasi ulang saat bertemu cosplayer.
 
-Tujuan operasional: memancing ketertarikan dari luar booth, memperjelas pilihan momen, mengatur antrean per cosplayer, dan membawa pengunjung kembali ke ekosistem Bpedia. Tidak ada pembayaran, persentase peluang, atau nominal belanja baru yang dipaksakan oleh game ini.
+**Cosplayer Zoro dan Sanji hadir di booth Bpedia dua hari penuh, 3 dan 4 Oktober 2026**, Urban Forest Cipete. Teks jadwal bawaan: *Zoro & Sanji hadir 3–4 Okt 2026, dua hari penuh di booth Bpedia · Urban Forest Cipete.*
 
-## 2. Dasar sumber dan hubungan dengan game ketiga
+Tujuan operasional: memancing ketertarikan dari luar booth, memperjelas nilai momen yang didapat, mengatur antrean per cosplayer, dan membawa pengunjung kembali ke ekosistem Bpedia. Game ini tidak memproses pembayaran dan tidak menjual peluang.
 
-- `market 6.0.pdf`: proposal visual 36 halaman. Materi venue yang diperiksa menyebut Urban Forest Cipete, 3–4 Oktober 2026. Angka target/historis dalam proposal bukan hasil aktual acara ini. Jadwal cosplayer, ketentuan transaksi, dan kuota operasional belum ditetapkan dalam bahan yang terverifikasi.
-- JPEG logo Market-In dari pengguna menjadi referensi floral/Y2K. Pola papan catur pada JPEG merupakan piksel gambar; tidak dianggap sebagai transparansi asli. UI menampilkan teks event tanpa mengubah atau menggambar ulang logo tersebut.
-- Game 03, `03 bipy-beauty-drop`: dipelajari alur pemilihan cosplayer, hasil yang ditentukan server, kartu hasil, mode demo/booth, dan pemulihan pending. Game tersebut tetap mempertahankan hadiah serta menu lamanya.
-- Identitas aktual: `02_Brand Guidline/02_Bipy/bipy-full-berdiri.png` dan `03_Warna_Font/bpedia-tokens.css`. Bipy pink dan wordmark Bpedia berasal dari master; varian hijau/kuning adalah kostum tematik.
-- Catatan repo PRD/CLAUDE dan rilis 1.3–1.4.1 menjadi referensi integrasi, responsivitas, hosting, dan isolasi data. Tidak ada klaim bahwa seluruh percakapan privat Claude/Antigravity telah dibaca.
+## 2. Dasar sumber
 
-Game kelima memakai kapsul hati dengan tujuh tiket yang mengorbit, berbeda dari papan pin Beauty Drop. Pengunjung boleh membiarkan kapsul memilih atau memilih menu langsung apabila opsi tersebut dibuka petugas. Hasil acak memilih seragam di antara menu aktif; kecepatan klik dan animasi tidak memengaruhinya.
+- `market 6.0.pdf`: proposal visual 36 halaman. Materi venue menyebut Urban Forest Cipete, 3–4 Oktober 2026. Angka target/historis di proposal bukan hasil aktual acara ini.
+- Kehadiran cosplayer 3–4 Oktober (dua hari) berasal dari arahan pemilik untuk rilis 1.6.0.
+- JPEG logo Market-In dari pengguna menjadi referensi floral/Y2K. Pola papan catur pada JPEG adalah piksel gambar, bukan transparansi.
+- Game 03 `03 bipy-beauty-drop`: referensi alur pilih cosplayer, hasil dari server, mode demo/booth, dan pemulihan pending.
+- Identitas: `02_Brand Guidline/02_Bipy/bipy-full-berdiri.png` dan `03_Warna_Font/bpedia-tokens.css`. Bipy pink dan wordmark Bpedia dari master; varian jade/gold adalah kostum tematik.
+- Konsep karakter merujuk One Piece. Aset tidak dinyatakan sebagai kolaborasi resmi atau bukti izin komersial.
 
-## 3. Lingkup rilis
+## 3. Lingkup rilis 2.0.0
 
-Termasuk: dua host, tujuh menu, tiga Bipy, 14 kombinasi koleksi, musik/SFX, pilihan tanpa sentuhan, kartu PNG 1080×1350, antrean petugas, kuota harian WIB, status layanan, ekspor CSV/backup JSON, panduan, serta integrasi album/XP/dashboard arcade.
+Termasuk: dua host, tujuh menu, 14 kartu BP06, dua cara bermain (gacha booster dan pilih kartu), animasi per kartu, poster bounty dengan harga normal yang dapat diubah petugas, jingle dan BGM, trailer, pilihan tanpa sentuhan, unduhan kartu, antrean per cosplayer, kuota harian WIB, ekspor CSV/backup JSON, migrasi data 1.5.x, serta integrasi album/XP/dashboard arcade.
 
-Di luar rilis: pembayaran online, penjualan peluang gacha, integrasi inventori/transaksi toko, sistem reservasi lintas banyak booth, login pelanggan baru, rekaman kamera otomatis, dan publikasi Steam. Rilis ini adalah game web; paket native, pemeriksaan hak distribusi aset/karakter, dan proses penerimaan marketplace merupakan tahap tersendiri sebelum distribusi di toko tersebut.
+Di luar rilis: pembayaran online, penjualan peluang gacha, integrasi transaksi toko, reservasi lintas booth, login pelanggan, rekaman kamera otomatis, dan publikasi Steam/marketplace. Distribusi di toko aplikasi memerlukan pemeriksaan hak karakter, font, audio, dan materi brand secara terpisah.
 
-## 4. Arah visual dan suara
+## 4. Mekanik kartu
 
-**Zoro — The Jade Swordsman.** Rambut hijau, ciri luka mata, kostum hijau gelap, tiga pedang tersarung. Pose penuh percaya diri dengan tangan mengundang. Kepala sampai sepatu harus terlihat utuh.
+### 4.1 Gacha booster vs pilih kartu
 
-**Sanji — The Golden Gentleman.** Rambut pirang, setelan hitam dengan detail emas, mawar dan hidangan penutup. Gestur hangat dan elegan. Kedua karakter tampil berpakaian lengkap dan jelas dewasa; ilustrasi tidak dipresentasikan sebagai foto cosplayer nyata atau kolaborasi resmi.
+- **Gacha booster**: pemain membuka "booster" dan server memilih satu menu secara seragam di antara menu aktif untuk host yang dipilih. Kelangkaan R/SR/SEC hanya kosmetik; tidak memengaruhi peluang. Kecepatan klik dan animasi tidak memengaruhi hasil.
+- **Pilih kartu**: pemain memilih menu langsung. Hanya tersedia jika petugas mengaktifkan "Izinkan pilih kartu langsung", dan di perangkat booth tetap memerlukan verifikasi misi.
 
-**Bipy Original / Jade / Golden Chef.** Pink memakai master Bipy. Jade mempertahankan hood tulip, proporsi chibi, wajah Bipy, warna hijau, bekas luka mata bergaya kartun, dan pedang properti. Golden Chef berwarna kuning, memakai setelan/apron, membawa wajan dan spatula. Nama Bipy dan identitas Bpedia tetap menjadi jangkar visual.
+Kedua cara menghasilkan kartu dan ID yang sama (`<host>-<menu>`), sehingga album arcade lama tetap kompatibel.
 
-Komposisi editorial dengan panggung lengkung, ruang kosong terarah, motif bunga/kelopak, cream, dusty pink, jade, dan emas. Poppins untuk UI, Fraunces untuk judul romantis; font tersimpan lokal. Tema terang/gelap mengikuti pengaturan arcade. Ikon menu berupa SVG, bukan emoji yang berubah antar OS.
+### 4.2 Kartu bergaya OPCG
 
-BGM taman memakai audio existing Beauty Drop yang dikompresi ke MP3; SFX seleksi, putaran, dan reveal menggunakan Web Audio. Musik mulai setelah interaksi yang diizinkan browser, tombol bisu tersimpan, audio berhenti saat tab tidak terlihat. Tidak memaksa autoplay yang ditolak OS.
+| No. kartu | Menu | Host | Rarity | Cost | Power | Counter |
+|---|---|---|---|---:|---:|---:|
+| BP06-001 | Cinderella's Fit | Zoro | SR | 5 | 6000 | 1000 |
+| BP06-002 | Princess Twirl | Zoro | R | 4 | 5000 | 1000 |
+| BP06-003 | Blossom Whisper | Zoro | R | 3 | 4000 | 2000 |
+| BP06-004 | Sweet Offering | Zoro | R | 2 | 4000 | 2000 |
+| BP06-005 | Knight's Vow | Zoro | SEC | 7 | 9000 | 2000 |
+| BP06-006 | Warm Hug | Zoro | SR | 6 | 7000 | 1000 |
+| BP06-007 | Pat on Head | Zoro | SR | 2 | 5000 | 1000 |
+| BP06-008 | Cinderella's Fit | Sanji | SR | 5 | 6000 | 1000 |
+| BP06-009 | Princess Twirl | Sanji | R | 4 | 5000 | 1000 |
+| BP06-010 | Blossom Whisper | Sanji | R | 3 | 4000 | 2000 |
+| BP06-011 | Sweet Offering | Sanji | R | 2 | 4000 | 2000 |
+| BP06-012 | Knight's Vow | Sanji | SEC | 7 | 9000 | 2000 |
+| BP06-013 | Warm Hug | Sanji | SR | 6 | 7000 | 1000 |
+| BP06-014 | Pat on Head | Sanji | SR | 2 | 5000 | 1000 |
+
+Nomor kartu berurutan host-major (Zoro 001–007, Sanji 008–014). Zoro: atribut **Slash**, warna hijau, kru *Bpedia Heart Crew / Swordsman*, bounty atas nama RORONOA ZORO. Sanji: atribut **Strike**, warna emas, kru *Bpedia Heart Crew / Cook*, bounty atas nama VINSMOKE SANJI. Setiap menu memiliki teks efek `[Fanservice]` dan kalimat romantis khusus per host. Katalog dibekukan (`Object.freeze`) di server.
+
+### 4.3 Animasi per kartu
+
+Setiap menu memiliki motif animasi sendiri: `shoe-sparkles` (Cinderella's Fit), `petal-waltz` (Princess Twirl), `blossom-breeze` (Blossom Whisper), `rose-delivery` (Sweet Offering), `knight-glimmer` (Knight's Vow), `heart-embrace` (Warm Hug), `gentle-stars` (Pat on Head). Animasi memakai transform/opacity, dapat dilewati, dan mengikuti reduced motion dari OS maupun pengaturan game. Status implementasi visual: belum diverifikasi.
+
+### 4.4 Poster bounty dan harga normal fanservice
+
+Poster bounty menampilkan **harga normal fanservice** dalam Rupiah sebagai harga yang dicoret, lalu label **GRATIS untuk pelanggan Bpedia** (`customerOffer.amount = 0`). Harga ini adalah nilai referensi layanan, bukan tagihan; game tidak menerima pembayaran.
+
+Nilai bawaan di bawah adalah **nilai awal yang perlu dikonfirmasi pemilik/tim booth** sebelum acara:
+
+| Menu | Harga normal FS bawaan |
+|---|---:|
+| Cinderella's Fit | Rp 65.000 |
+| Princess Twirl | Rp 50.000 |
+| Blossom Whisper | Rp 45.000 |
+| Sweet Offering | Rp 40.000 |
+| Knight's Vow | Rp 75.000 |
+| Warm Hug | Rp 55.000 |
+| Pat on Head | Rp 35.000 |
+
+Petugas dapat mengubah harga per menu di dashboard (bilangan bulat Rp 0–10.000.000). Harga berlaku sama untuk kartu Zoro dan Sanji pada menu tersebut. Kartu yang sudah terbit menyimpan *snapshot* harga saat diundi; perubahan harga hanya berlaku untuk kartu baru, sehingga poster, riwayat, dan CSV tidak berubah surut.
+
+Nilai fiktif BERRY dari rilis 1.5.x telah dihapus dari katalog.
 
 ## 5. Tujuh menu fanservice
 
@@ -52,61 +95,94 @@ BGM taman memakai audio existing Beauty Drop yang dikompresi ke MP3; SFX seleksi
 | Warm Hug | Pelukan singkat depan atau back hug ringan sesuai pilihan bersama | Pose hati berdampingan | 40 detik |
 | Pat on Head | Usapan kepala singkat setelah persetujuan | Gestur tangan di atas kepala tanpa menyentuh rambut | 35 detik |
 
-Durasi adalah asumsi perencanaan, bukan janji layanan. Tambahan transisi 20 detik per tiket dipakai dalam estimasi antrean. Estimasi menambahkan tiket yang sedang menunggu host yang sama; keterlambatan, pergantian properti, dan istirahat tetap dikelola petugas.
+Durasi adalah asumsi perencanaan, bukan janji layanan. Estimasi antrean menambahkan 20 detik transisi per tiket yang menunggu host yang sama.
 
-## 6. Alur pemain
+## 6. Arah visual dan suara
 
-1. Masuk dari dashboard atau tautan langsung. Lihat dua host full body, pilih Zoro/Sanji, lalu tekan **Buka kapsul hati**.
-2. Dialog menampilkan pilihan **tanpa sentuhan** sebagai default, atau sentuhan ringan. Nama panggung opsional. Persetujuan interaksi wajib; izin dokumentasi terpisah dan tidak tercentang otomatis.
-3. Pilih gacha atau menu langsung jika tersedia. Di perangkat booth, petugas memverifikasi peserta dewasa dan misi booth sebelum penerbitan tiket.
-4. Server menyimpan hasil terlebih dahulu. Animasi 4,2 detik menampilkan karakter dan Bipy; tombol lewati dan reduced motion tersedia.
-5. Kartu menampilkan menu, host, versi interaksi, dokumentasi, kode, serta penanda demo/booth. Pemain dapat mengunduh kartu PNG.
-6. Tombol Selesai mengonfirmasi hasil ke server sebelum mengizinkan putaran berikutnya. Kartu booth tetap menunggu di antrean sampai petugas menandai selesai/batal.
+**Zoro — The Jade Swordsman** dan **Sanji — The Golden Gentleman**: ilustrasi pria dewasa berpakaian lengkap, full body, tidak dipresentasikan sebagai foto cosplayer nyata. **Bipy Original / Jade / Golden Chef** mempertahankan wajah dan proporsi master Bipy.
 
-Online menggunakan kode `DEMO-` dan label tidak berlaku untuk klaim booth. Booth menggunakan `HP-` serta nomor antrean harian. Tidak ada pengambilan foto/video otomatis.
+Komposisi editorial: cream, dusty pink, jade, emas; Poppins untuk UI dan Fraunces untuk judul; font dibundel lokal. Ikon berupa SVG inline, bukan emoji.
 
-## 7. Alur dan SOP petugas
+Audio:
+- **Jingle Bpedia**: berasal dari voice note WhatsApp pemilik tertanggal 2 Oktober 2026. Berkas asli disimpan utuh di `docs/art-originals/audio/bpedia-jingle-2026-10-02.mpeg`. Runtime: `assets/audio/bpedia-jingle.mp3` (versi penuh, ±32 detik) dan `assets/audio/bpedia-jingle-hook.mp3` (6,8 detik pertama). Ukuran dan hash ada di `ASSETS-Heart-Parade.md`.
+- **BGM**: `assets/audio/heart-parade-bgm.mp3`, loop 28 detik yang diolah dari audio trailer Gemini.
+- **Trailer**: video Gemini dari dua scene kartu; master di `docs/art-originals/gemini/`, runtime `assets/video/heart-parade-promo.mp4`.
+- SFX pendek disintesis Web Audio. Musik mulai setelah interaksi yang diizinkan browser, status bisu tersimpan, audio berhenti saat tab tersembunyi.
 
-Dashboard game: `/g/heart/admin.html`. PIN berasal dari konfigurasi hosting yang sudah ada; tidak ditulis pada PRD atau antarmuka publik. Perangkat online tanpa login selalu mendapat mesin demo pribadi, sekalipun petugas membuka mode booth.
+## 7. Alur pemain
 
-Petugas dapat mengatur mode, jeda, sesi buka/tutup, teks jadwal, batas antrean, pilihan menu langsung, durasi reveal, host aktif, kuota harian, dan menu aktif. Nilai awal antrean 12 dan kuota 80 per host adalah nilai konfigurasi, bukan kapasitas acara yang telah disetujui. Kuota dihitung per tanggal WIB; tiket belum selesai tetap terlihat setelah pergantian hari.
+1. Pilih Zoro atau Sanji, lalu pilih **gacha booster** atau **pilih kartu** (jika dibuka petugas).
+2. Dialog kenyamanan: **tanpa sentuhan** sebagai default atau sentuhan ringan. Nama panggung opsional. Persetujuan interaksi wajib; izin dokumentasi terpisah dan tidak tercentang otomatis.
+3. Di perangkat booth, petugas memverifikasi peserta dewasa dan misi booth sebelum tiket terbit.
+4. Server menyimpan hasil lebih dulu, lalu animasi kartu berjalan (durasi reveal diatur petugas). Tombol lewati dan reduced motion tersedia.
+5. Kartu menampilkan nomor BP06, rarity, statistik, efek, poster bounty dengan harga normal dicoret dan GRATIS, versi interaksi, kode, serta penanda demo/booth. Kartu dapat diunduh.
+6. Tombol Selesai mengonfirmasi hasil ke server sebelum putaran berikutnya. Tiket booth tetap di antrean sampai petugas menandai selesai/batal.
 
-Urutan kerja: konfirmasi misi → pilih kenyamanan → terbitkan tiket → panggil nomor sesuai host → konfirmasi ulang interaksi/dokumentasi → lakukan momen → tandai selesai. Petugas dapat mengganti ke versi tanpa sentuhan tanpa membuat tiket baru. Pembatalan melepaskan kuota, tetapi nomor antrean tidak dipakai ulang. Tiket selesai/batal tidak dapat dihidupkan kembali.
+Online memakai kode `DEMO-` dan tidak berlaku untuk klaim booth. Booth memakai `HP-` dan nomor antrean harian.
 
-Ruang foto dan antrean dibuat terpisah dari jalur lalu lintas. Sediakan kursi stabil untuk Cinderella's Fit, ruang putar bebas hambatan, bunga/sepatu properti bersih, serta pedang properti tetap tersarung. Tidak menarik tamu, mengangkat tubuh, atau mendadak melakukan back hug. Kedua pihak boleh menolak, berhenti, atau mengganti menu. Jadwal istirahat dan ketersediaan cosplayer diumumkan sebelum menjanjikan layanan.
+## 8. Dashboard dan SOP petugas
 
-Hubungan funnel: booth mengarahkan pengunjung ke aplikasi/kanal Bpedia melalui misi yang ditetapkan tim; game mencatat penerbitan dan penyelesaian tiket. Data itu belum membuktikan install, pembelian, atau atribusi iklan. Pelaporan konversi harus digabungkan dengan bukti terpisah.
+Dashboard berdiri sendiri (tidak memakai CSS game), mendukung tema terang/gelap mengikuti preferensi arcade (`gamysuf-theme`), dan dirancang untuk ponsel/tablet di booth: target sentuh minimal 44 piksel, navigasi bagian (Antrean · Sesi · Cosplayer · Menu & harga), dan input yang tidak tertimpa saat data diperbarui otomatis setiap 10 detik.
 
-## 8. Ketahanan, privasi, dan arsitektur
+Fitur:
+- Masuk dengan PIN (PIN dari konfigurasi hosting; tidak ditulis di PRD/antarmuka). Keluar.
+- Ringkasan: menunggu, tiket terbit, sudah dilayani, dibatalkan; status mode, sesi, jeda, pilih kartu, jumlah menu aktif.
+- **Antrean per cosplayer**: jumlah menunggu, nomor berikutnya, sisa kuota hari ini; filter Semua/Zoro/Sanji; aksi Sudah dilayani, Ganti tanpa sentuhan, Batalkan (dengan konfirmasi). Setiap tiket menampilkan nomor kartu, rarity, dan harga normal snapshot. Riwayat 100 tiket terakhir.
+- **Sesi**: mode demo/booth resmi, jadwal (tombol **Isi jadwal Market-In (3–4 Okt)**), batas antrean, durasi reveal, sesi buka/tutup, jeda, izinkan pilih kartu.
+- **Cosplayer**: aktif/istirahat dan kuota harian.
+- **Menu & harga**: nomor kartu Zoro/Sanji dan rarity per menu, harga normal FS dengan format Rupiah id-ID (validasi bilangan bulat 0–10.000.000), aktif/nonaktif menu.
+- Ekspor CSV dan cadangan JSON.
 
-Runtime Node.js memakai engine, store atomik, katalog, dan server tersendiri. Tidak menambah dependensi produksi ke hub. Asli berada di folder 05; `npm run sync` memasukkannya ke `games/heart`. Registry hub mengubah hasil menjadi 14 kartu epik, sehingga total album menjadi 88 kartu. XP dibukukan oleh gateway secara idempoten.
+API: `POST /api/admin/service` menerima `{id, patch:{enabled?, price?}}`; bentuk lama `{id, enabled}` tetap diterima.
 
-Setiap putaran mempunyai requestId. Klik ganda/retry menghasilkan kartu sama. Jika respons hilang, UI mengambil pending dari server. Reload membuka kembali hasil yang belum ditutup. Kegagalan acknowledgement mempertahankan kartu dan mencegah putaran baru. Perubahan ukuran saat animasi tidak menghitung ulang hasil. Putaran demo tidak mengurangi kuota/stok booth.
+Nilai awal antrean 12 dan kuota 80 per host adalah konfigurasi, bukan kapasitas acara yang disetujui. Kuota dihitung per tanggal WIB; tiket belum selesai tetap terlihat setelah pergantian hari.
 
-Data tiket: kode, waktu, host, menu, nama panggung opsional, pilihan kenyamanan/dokumentasi, nomor antrean, dan status. Tidak meminta nomor telepon, email, foto, alamat, atau tanggal lahir. Nama dibatasi 24 karakter; ekspor CSV menetralkan formula spreadsheet. Public API tidak mengirim seluruh riwayat. JSON event disimpan di direktori data persisten; backup dapat diunduh petugas.
+Urutan kerja: konfirmasi misi → pilih kenyamanan → terbitkan tiket → panggil nomor sesuai host → konfirmasi ulang interaksi/dokumentasi → lakukan momen → tandai selesai. Pembatalan melepaskan kuota, nomor antrean tidak dipakai ulang, tiket selesai/batal tidak dapat dihidupkan kembali.
 
-Riwayat resmi tidak dihapus otomatis pada rilis ini. Pemilik menentukan retensi operasional dan mengelola backup sesuai kebutuhan acara. Demo tersimpan terbatas dan terpisah per pengunjung. Cookie sesi HttpOnly/SameSite, Origin/header khusus untuk mutasi, PIN scrypt, pembatasan percobaan login, CSP, dan pembatasan akses berkas sumber tetap diberlakukan.
+Ruang foto dan antrean terpisah dari jalur lalu lintas. Sediakan kursi stabil untuk Cinderella's Fit, ruang putar bebas hambatan, properti bersih, dan pedang properti tetap tersarung. Tidak menarik tamu, mengangkat tubuh, atau mendadak melakukan back hug. Kedua pihak boleh menolak, berhenti, atau mengganti menu.
 
-## 9. Responsif dan aksesibilitas
+Funnel: game mencatat penerbitan dan penyelesaian tiket. Data ini tidak membuktikan install, pembelian, atau atribusi iklan.
 
-Tampilan fluid 320–1920 piksel, landscape, tablet, serta simulasi buka/tutup foldable. Tidak mendeteksi merek perangkat; mengikuti ruang viewport yang benar-benar tersedia. Host tetap utuh dengan `object-fit: contain`, menu dua kolom di ponsel, dialog dapat digulir, dan tombol utama minimal sekitar 44 piksel.
+## 9. Ketahanan, privasi, dan arsitektur
 
-Kontrol sentuh/mouse/keyboard, fokus dialog native, Escape, tombol suara, reduced motion dari OS dan aplikasi, teks status/alert, label gambar, serta penyimpanan preferensi yang tahan kegagalan localStorage. Tidak ada informasi penting yang bergantung pada suara. Browser modern Windows/macOS/Android/iOS ditargetkan melalui Chromium/Firefox/WebKit; emulasi browser tidak menggantikan pengujian perangkat fisik.
+Runtime Node.js: `core/catalog.cjs`, `core/engine.cjs`, `core/store.cjs` (penulisan atomik + `.bak`), `core/report.cjs`, `server.cjs`. Sumber di folder 05; `npm run sync` di hub menyalinnya ke `games/heart`.
 
-Anggaran runtime game baru sekitar 2 MB sebelum kompresi HTTP: WebP transparan, font lokal, MP3 0,67 MB, SVG, serta JavaScript/CSS ringan. PNG master tetap di arsip sumber untuk penyuntingan. Tidak memuat layanan font atau script eksternal saat bermain.
+Setiap putaran memiliki requestId; retry menghasilkan kartu yang sama. Pending dipulihkan setelah reload. Demo online selalu memakai mesin demo pribadi dan tidak mengurangi kuota booth.
 
-## 10. Kriteria penerimaan dan pengukuran
+**Migrasi data 1.5.x** (`migrateState`, dijalankan Store saat memuat `event.json`): mengisi harga menu yang belum ada dengan nilai bawaan, menyegarkan detail host dari katalog (fullName, atribut, warna, kru) sambil mempertahankan status aktif dan kuota, serta mengganti teks jadwal lama dengan jadwal Market-In. Riwayat, antrean, pending, audit, penghitung harian, dan revision tidak diubah. Migrasi idempoten. Kartu riwayat lama tanpa snapshot harga diturunkan dari katalog saat dibaca (`hydrateResult`: snapshot kartu → snapshot menu → nilai bawaan katalog). Skema data tetap 1.
 
-- Ketujuh nama menu dan dua host benar; seluruh menu aktif dapat diperoleh; menonaktifkan menu/host mencegah hasil baru terkait.
-- Semua gambar/font/suara dimuat, tidak ada overflow horizontal pada matriks viewport, konsol tanpa exception, dan permainan dapat diulang.
-- Demo, stok/kuota asli, sesi admin, XP, retry, serta pending terpisah dengan benar. Unduhan kartu dapat dibuka sebagai PNG 1080×1350.
-- Tidak ada PIN default yang membuka hosting. Data persisten tidak bergantung pada direktori build Hostinger.
-- GitHub commit, status deployment Hostinger, versi publik, endpoint, hash kode dan gambar CDN diverifikasi sesudah publikasi.
+Data tiket: kode, waktu, host, menu, snapshot kartu, nama panggung opsional (maks. 24 karakter), kenyamanan/dokumentasi, nomor antrean, status. Tidak meminta telepon, email, foto, alamat, atau tanggal lahir.
 
-Pengukuran yang tersedia: jumlah tiket diterbitkan/diselesaikan/dibatalkan, jumlah antrean, penggunaan host/menu dari CSV, serta statistik arcade yang sudah ada. Tingkat penyelesaian = tiket selesai / tiket resmi terbit; tingkat pembatalan = tiket batal / tiket resmi terbit. Keduanya metrik turunan, bukan hasil aktual sebelum event berjalan. Waktu antre aktual dan konversi pembelian belum memiliki instrumentasi penuh pada rilis ini.
+CSV: Kode, Waktu, Antrean, Nama, Cosplayer, Menu, **No. kartu**, **Harga normal FS (Rp)**, Metode, Kenyamanan, Izin dokumentasi, Status. Harga diambil dari snapshot tiket. Sel yang diawali `=`, `+`, `-`, `@`, tab, atau CR dinetralkan agar tidak dieksekusi sebagai formula.
 
-## 11. Verifikasi dan serah-terima
+Keamanan: cookie sesi HttpOnly/SameSite=Strict, Origin + header khusus untuk mutasi, PIN scrypt, kunci 60 detik setelah lima PIN salah, tanpa PIN bawaan di hosting, CSP `script-src 'self'` tanpa script inline, dan berkas sumber tidak dapat diunduh.
 
-Tes yang harus dijalankan: tes engine/server sumber 05, tes hub/hosting, `scripts/heart-ui-qa.cjs`, `npm run qa`, `npm run qa:responsive`, pengemasan Hostinger, lalu `scripts/verify-deployment.cjs` dan probe UI produksi. Hasil aktual tersimpan di `docs/RELEASE-1.5.0.md` dan folder artifacts; tidak menyamakan rencana tes dengan bukti lulus.
+## 10. Responsif dan aksesibilitas
 
-Rujukan teknis yang diperiksa: [Node crypto](https://nodejs.org/api/crypto.html), [MDN AudioContext.resume](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/resume), [MDN Web Audio best practices](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices). Katalog aset/provenance: `docs/ASSETS-Heart-Parade.md`.
+Target: ponsel 280–430 px potret/lanskap, foldable (280×653, 344×882, 717×512, 884×1104), tablet 768–1366, laptop 1280–1440, desktop 1920; Chromium, Firefox, WebKit. Memakai dvh/svh dengan fallback dan safe-area; tidak ada overflow horizontal; kontrol penting tidak tertutup game bar hub.
+
+Kontrol sentuh/mouse/keyboard, fokus terlihat, ARIA untuk saklar, status, dan pesan galat, reduced motion, serta preferensi yang tahan kegagalan localStorage. Emulasi browser tidak menggantikan uji perangkat fisik.
+
+## 11. Kriteria penerimaan
+
+- Tujuh menu, dua host, 14 kartu BP06-001–014 dengan artwork berbeda; seluruh menu aktif dapat diperoleh lewat gacha dan pilih kartu; menu/host nonaktif tidak menghasilkan kartu baru.
+- Poster bounty menampilkan harga normal terkini untuk kartu baru, dicoret, dengan GRATIS untuk pelanggan Bpedia; kartu lama mempertahankan snapshot.
+- Petugas dapat mengubah harga, status menu, sesi, jadwal, kuota, dan tiket dari ponsel/tablet.
+- Data 1.5.x termigrasi tanpa kehilangan riwayat/antrean.
+- Semua gambar/font/audio/video dimuat, tanpa overflow horizontal di matriks viewport, konsol tanpa exception.
+- Tidak ada PIN default di hosting; data persisten di luar direktori build.
+
+## 12. Verifikasi dan bukti
+
+Hanya hasil yang benar-benar dijalankan yang dicatat di sini. Rencana tes bukan bukti lulus.
+
+| Pemeriksaan | Status |
+|---|---|
+| `npm test` sumber 05 (engine + server, kontrak 2.0.0) | Lulus 37/37 pada 2 Oktober 2026 (lingkungan pengembangan) |
+| `npm run check` | Lulus pada 2 Oktober 2026 |
+| QA dashboard petugas (Playwright, server lokal): login, validasi PIN, ubah harga, status menu, jadwal Market-In, kuota, filter antrean, aksi tiket, CSV; Chromium/Firefox/WebKit × 17 viewport × terang/gelap | Lulus pada 2 Oktober 2026: tanpa error konsol, tanpa overflow horizontal, tanpa target sentuh < 44 px |
+| Tes hub `tests/heart-engine.test.cjs` dan `tests/heart-server.test.cjs` | Lulus 37/37 pada 2 Oktober 2026 terhadap salinan sementara yang dibuat dengan fungsi `copy` milik `scripts/sync-games.cjs`; terhadap `games/heart` hasil `npm run sync`: belum diverifikasi |
+| QA UI permainan (kartu OPCG, animasi per kartu, poster bounty, jingle) di matriks viewport | belum diverifikasi |
+| Sinkronisasi hub, paket Hostinger, deployment, dan probe produksi 1.6.0 | belum diverifikasi |
+
+Rujukan teknis: [Node crypto](https://nodejs.org/api/crypto.html), [MDN AudioContext.resume](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/resume), [MDN Web Audio best practices](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices). Katalog aset dan provenance: `docs/ASSETS-Heart-Parade.md`.

@@ -14,15 +14,17 @@
  const TIER={
   bundling:{ribbon:'LEGENDARIS',stars:'★★★★★',color:'#d99a12',ray:'#f5b83d38',glow:'#ffd76a',eyebrow:'KAPSUL EMAS · HADIAH UTAMA',lead:'Hadiah utama Market-In 6.0! Isi paket ditunjukkan petugas di booth.',group:'LEGENDARIS · BUNDLING'},
   collab:{ribbon:'EPIK · KOLAB',stars:'★★★★',color:'#2f8fd6',ray:'#39a7e538',glow:'#9fd6ff',eyebrow:'KAPSUL HOLO · KOLAB KARAKTER',lead:'Set kolab karakter yang lucu buat dandan harianmu.',group:'EPIK · KOLAB KARAKTER'},
+  voucher:{ribbon:'LANGKA · VOUCHER',stars:'★★★',color:'#14745d',ray:'#9fd6a438',glow:'#baf3cc',eyebrow:'KAPSUL MINT · VOUCHER BELANJA',lead:'Klaim ke petugas untuk mendapat kode voucher. Perhatikan minimal belanjanya ya!',group:'LANGKA · VOUCHER BELANJA'},
   product:{ribbon:'BEAUTY PICK',stars:'★★★',color:'#e62b5e',ray:'#f9a2c138',glow:'#ff86ad',eyebrow:'KAPSUL PINK · PRODUK GRATIS',lead:'Produk favorit Bpedia, gratis untukmu.',group:'BEAUTY PICK · PRODUK'},
   empty:{ribbon:'KAPSUL KOSONG',stars:'',color:'#9c7e8a',ray:'#ffffff12',glow:'#ffffff',eyebrow:'COBA LAGI',lead:'Kapsul ini kosong. Antre lagi dan coba keberuntunganmu!',group:'KOSONG'}
  };
- const TIER_ORDER=['bundling','collab','product'];
+ const TIER_ORDER=['bundling','collab','voucher','product'];
  const BUBBLES={
   idle:['Sekali tap, langsung pop!','Hadiahnya lucu-lucu, cobain yuk!','Kuas set karakter nunggu kamu!','Semua kapsul berpeluang sama.','Tunjukkan kode GP- ke petugas ya!','#BelanjaBikinBahagia','Satu tap, satu kapsul, satu hadiah!'],
   spin:['Putar… putar…','Kapsul mana yang keluar ya?','Deg-degan!','Ayo, ayo, ayo!'],
   win:['Yeay! Selamat ya!','Cantik banget hadiahnya!','Hoki kamu hari ini!'],
   bundling:['HADIAH UTAMA! Tepuk tangan!','Kapsul emas! Luar biasa!'],
+  voucher:['Voucher belanja! Hoki banget!','Klaim kode vouchermu di booth ya!'],
   empty:['Yah, kosong. Coba lagi ya!']
  };
  const SIDE_BIPY={idle:'rt-bipy-wave',spin:'rt-bipy-stand',win:'rt-bipy-bag',bundling:'rt-bipy-bag',empty:'rt-bipy-stand'};
@@ -88,7 +90,7 @@
   ui.audioUnlocked=true;
   audio.startBgm();
   if(first){
-   audio.preload(['gp-tap','gp-pop','ui_petal_pop.mp3','ui_sparkle_cart.mp3','bpedia_jingle_utama.mp3']);
+   audio.preload(['gp-tap','gp-pop','ui_petal_pop.mp3','ui_sparkle_cart.mp3','ui_payment_success.mp3','bpedia_jingle_utama.mp3','prize-voucher-25','prize-voucher-50','prize-voucher-100k']);
    if(ui.stage==='ready'&&!ui.welcomed){ui.welcomed=true;audio.sonicLogo();setTimeout(()=>{if(ui.stage==='ready')audio.speak('gp-welcome');},900);}
   }
  }
@@ -336,8 +338,8 @@
     audio?.whoosh();
     await big.animate([{transform:`translate(${dx}px,${dy}px) scale(${scale}) rotate(120deg)`},{transform:'translate(0,0) scale(1.08) rotate(-8deg)',offset:.8},{transform:'none'}],{duration:Math.max(220,620*k),easing:'cubic-bezier(.2,.8,.2,1)'}).finished.catch(()=>{});
    }
-   const legendary=tier==='bundling',epic=tier==='collab';
-   const pulses=reduced.matches?1:legendary?8:epic?6:4;
+   const legendary=tier==='bundling',epic=tier==='collab',voucher=tier==='voucher';
+   const pulses=reduced.matches?1:legendary?8:epic?6:voucher?5:4;
    big.classList.add('charging');
    if(legendary)audio?.riser(pulses*.24*k);
    for(let i=0;i<pulses;i++){
@@ -357,8 +359,9 @@
   else{
    audio?.pop();
    if(tier==='bundling'){audio?.fanfare();audio?.jingle();}
+   else if(tier==='voucher'){audio?.win();audio?.claimChime();}
    else{audio?.win();audio?.sparkle();}
-   bubble(tier==='bundling'?'bundling':'win');bipy(tier==='bundling'?'bundling':'win');
+   bubble(tier==='bundling'?'bundling':tier==='voucher'?'voucher':'win');bipy(tier==='bundling'?'bundling':'win');
   }
   setTimeout(()=>{if(ui.popped&&ui.result?.id===result.id){tier==='empty'?audio?.speak('gp-empty'):audio?.prize(result.prize.id);}},instant?0:520);
   ui.pulls.unshift({who:result.username,name:result.prize.name,tier,image:result.prize.image});

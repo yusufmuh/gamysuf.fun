@@ -156,12 +156,13 @@ html[data-background="true"] *{animation-play-state:paused!important}
 /* Lima arena bawaan: dua kolom di tablet, tiga kolom di layar lebar. */
 .new-arena{display:flex;align-items:center;gap:12px;max-width:480px;min-height:76px;margin-top:20px;padding:12px 16px;border:2px solid #45122b;border-radius:18px;background:#f6cfce;color:#45122b;text-decoration:none;box-shadow:4px 4px 0 #f5b83d;transition:transform .2s}
 .new-arena[hidden]{display:none}.new-arena:hover{transform:translateY(-2px)}
-.new-arena>img{flex:none;width:42px;height:42px}.new-arena>span:nth-child(2){min-width:0}
-.new-arena small{display:block;font-size:.6rem;letter-spacing:.1em;font-weight:800}.new-arena b{display:block;margin-top:3px;font-size:.85rem;line-height:1.5}.new-arena-arrow{margin-left:auto;font-size:1.65rem;font-weight:700}
-@media(max-width:359px){.new-arena{gap:9px;padding:10px}.new-arena>img{width:32px;height:32px}.new-arena b{font-size:.74rem}.new-arena small{font-size:.53rem}}
+.new-arena>img{flex:none;width:92px;height:auto}.new-arena>span:nth-child(2){min-width:0}
+.new-arena small{display:block;font-size:.6rem;letter-spacing:.1em;font-weight:800}.new-arena b{display:block;margin-top:3px;font-size:.85rem;line-height:1.5}.new-arena-arrow{margin-left:auto}
+@media(max-width:359px){.new-arena{gap:9px;padding:10px}.new-arena>img{width:64px}.new-arena b{font-size:.74rem}.new-arena small{font-size:.53rem}}
 @media (min-width:760px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1150px){.game-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 /* Five arenas keep readable cover art on both compact and wide screens. */
 .game-card:has(a[href="/g/heart/"]){border-color:color-mix(in srgb,var(--pink) 65%,var(--line))}
-@media (min-width:760px) and (max-width:1149px){.game-card:last-child:nth-child(odd){grid-column:1/-1;max-width:680px;width:100%;justify-self:center}}
+/* A full-width event tile shifts the parity of the remaining cards. */
+@media (min-width:760px) and (max-width:1149px){.game-grid:not(.event-offset) .game-card:last-child:nth-child(odd),.game-grid.event-offset .game-card:last-child:nth-child(even){grid-column:1/-1;max-width:680px;width:100%;justify-self:center}}
 @media (prefers-reduced-motion:reduce){.game-card,.game-cover img{transition:none}}

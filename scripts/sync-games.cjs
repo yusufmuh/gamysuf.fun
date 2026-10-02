@@ -24,7 +24,7 @@ const SKIP=[
  /^assets\/brand\/bipy-(?:full|ngintip|tas|wajah)[^/]*\.png$/,
  /^assets\/images\/cosplayer-brickhall-hero\.png$/,
  /^assets\/products\/src\//,
- /\.(?:psd|ai|xcf|mp4|mov)$/i
+ /\.(?:psd|ai|xcf|mov)$/i
 ];
 
 function copy(src,dest,relative,stats){
@@ -39,6 +39,7 @@ function copy(src,dest,relative,stats){
  stats.files++;stats.bytes+=stat.size;
 }
 
+function syncGames(){
 for(const [slug,folder] of Object.entries(SOURCES)){
  const source=path.join(parent,folder);
  if(!fs.existsSync(path.join(source,'server.cjs')))throw new Error(`Game sumber tidak ditemukan: ${source}`);
@@ -54,3 +55,7 @@ for(const [slug,folder] of Object.entries(SOURCES)){
  fs.writeFileSync(path.join(target,'SOURCE.txt'),`Disalin dari "${folder}" oleh scripts/sync-games.cjs. Ubah game di folder aslinya, lalu jalankan npm run sync.\n`);
  console.log(`${slug.padEnd(7)} ← ${folder}: ${stats.files} berkas, ${(stats.bytes/1048576).toFixed(1)} MB`);
 }
+}
+
+module.exports={copy,syncGames};
+if(require.main===module)syncGames();
