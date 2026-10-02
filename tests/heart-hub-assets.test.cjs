@@ -22,6 +22,7 @@ const expectedAssets=[
  ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/stickers/${host}-${service}.webp`)),
  ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/video/moments/${host}-${service}-bipy.mp4`)),
  'assets/video/heart-parade-bipy-promo.mp4','assets/video/bipy-promo-poster.webp','assets/video/moments/zoro-hug-gemini.mp4','assets/video/moments/sanji-vow-gemini.mp4','assets/video/gemini-bipy-manifest.json','assets/video/moments/bipy-manifest.json',
+ 'assets/video/bipy-princess-rivalry-gemini.mp4','assets/video/bipy-princess-rivalry-poster.webp','assets/video/moments/zoro-twirl-gemini.mp4','assets/video/moments/sanji-cinderella-gemini.mp4','assets/video/moments/sanji-twirl-gemini.mp4',
  ...['pink','jade','gold'].map(id=>`assets/brand/bipy-${id}.webp`),
  'assets/video/grand-line-promo-poster.webp',
  'assets/audio/bpedia-main-bgm.mp3','assets/audio/bpedia-home-suite.mp3',

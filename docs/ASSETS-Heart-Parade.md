@@ -1,6 +1,6 @@
 # Aset Bipy Grand Line Desire
 
-Tanggal: 2 Oktober 2026 · Grand Line Desire 2.2.0 / Gamysuf Arcade 1.7.0. Rilis ini menambah perjalanan kartu, video momen, dealer Bipy, POV Sanji, cap Bipy, dan rangkaian musik dengan narasi Jepang. Aset runtime ada di `assets/` (disalin ke `games/heart/assets` oleh `npm run sync`); arsip master PNG/audio/video ada di folder sumber `05 bipy-heart-parade/docs/art-originals`, yang tidak ikut disalin ke hub. Musik utama baru berasal dari master pemilik di `H:/My Drive/Bpedia/02_Brand Guidline/10_music/3 menit.mp4`.
+Tanggal: 3 Oktober 2026 · Grand Line Desire 2.4.0 / Gamysuf Arcade 1.9.0. Aset runtime ada di `assets/` (disalin ke `games/heart/assets` oleh `npm run sync`); arsip master PNG/audio/video ada di folder sumber `05 bipy-heart-parade/docs/art-originals`, yang tidak ikut disalin ke hub. Musik utama berasal dari master pemilik di `H:/My Drive/Bpedia/02_Brand Guidline/10_music/3 menit.mp4`. Catatan versi lama di bawah merupakan riwayat aset.
 
 | Aset | Asal dan perlakuan |
 |---|---|
@@ -88,3 +88,11 @@ Token brand pada `assets/brand/bpedia-tokens.css` disalin dari guideline pemilik
 `CARDS.image` sekarang memakai 14 `/assets/stickers/<host>-<service>.webp` yang sesuai momen. Artwork adult lama tetap menjadi arsip/POV, tidak menjadi ilustrasi utama kartu baru. Video aktif: `zoro-hug-gemini.mp4`, `sanji-vow-gemini.mp4`, dan 12 `<host>-<service>-bipy.mp4`. Manifest motion graphics menyimpan 14 loop dasar; dua di antaranya digantikan video Gemini pada runtime. `docs/animate-bipy-scenes.py` mereproduksi loop dasar tanpa mengubah PNG asli.
 
 Trailer `heart-parade-bipy-promo.mp4` dibuat baru pada 3 Oktober 2026 dari referensi Bipy resmi; hasil lama yang mengganti Bipy menjadi manusia tidak dipakai. File master Downloads, hash, referensi dan waktu pemotongan ada dalam `assets/video/gemini-bipy-manifest.json`. Ketiga video Gemini tanpa audio; musik game tetap dikontrol melalui ikon suara.
+
+## Runtime 2.4.0 · rival Bipy dan tiga momen Gemini baru
+
+Ditambah `zoro-twirl-gemini.mp4`, `sanji-cinderella-gemini.mp4`, dan `sanji-twirl-gemini.mp4`, masing-masing 10 detik dengan badan/hood utuh dan Bipy lebih kecil daripada partner. Sanji Twirl dipotong di bagian atas untuk mengecualikan tulisan buatan generator. Video rival tiga karakter menggantikan parade; poster diambil dari frame video. Semua file baru H264 tanpa audio dan memakai square pixels. Hash, nama master Downloads, sumber dan pemotongan ada di manifest Gemini.
+
+Video aktif saat ini lima Gemini dan sembilan loop motion graphics, bukan 14 render Gemini baru. Hambatan akun serta daftar sembilan kartu tersisa tercatat di VIDEO-GENERATION-STATUS.md.
+
+Latar dek menampilkan embed resmi Crunchyroll: https://www.youtube.com/watch?v=Llefi8QFN0c, melalui youtube-nocookie, autoplay bisu dan inline. Video tidak diunduh atau dimasukkan ke paket. Pemutar dilepas ketika pengguna menjeda, membuka dialog, kembali Home, menyembunyikan tab atau mengaktifkan kurangi animasi. CSP hanya menambahkan frame-src untuk origin pemutar tersebut. Tema menapisnya dengan pink Bpedia sambil menjaga keterbacaan kartu.

@@ -5,7 +5,7 @@ const {Store}=require('./core/store.cjs');
 const {Engine,fail}=require('./core/engine.cjs');
 const {historyCsv}=require('./core/report.cjs');
 const scrypt=promisify(crypto.scrypt);
-const CSP="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'";
+const CSP="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; font-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'";
 const TYPES={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.wav':'audio/wav','.mp3':'audio/mpeg','.mp4':'video/mp4','.webm':'video/webm','.json':'application/json; charset=utf-8'};
 async function pinRecord(pin){const salt=crypto.randomBytes(24).toString('hex');return {salt,hash:(await scrypt(pin,salt,64)).toString('hex')};}
 async function checkPin(pin,record){if(typeof pin!=='string'||pin.length>32||!record)return false;const hash=await scrypt(pin,record.salt,64),stored=Buffer.from(record.hash,'hex');return stored.length===hash.length&&crypto.timingSafeEqual(stored,hash);}

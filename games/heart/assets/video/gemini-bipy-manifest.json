@@ -29,11 +29,69 @@
       "file": "assets/video/moments/sanji-vow-gemini.mp4",
       "bytes": 356646,
       "sha256": "03f346152b09ba691813d0e104db99220a61aeeb9790d82eb39702f53eb4450b"
+    },
+    {
+      "file": "assets/video/bipy-princess-rivalry-gemini.mp4",
+      "master": "Bpedia-Princess-Rivalry-Gemini-2026-10-03.mp4",
+      "scene": "Wholesome toy mascot rivalry: flowers, comic spar, Bipy claps, all bow and wave.",
+      "conversation": "https://gemini.google.com/u/1/app/05f4b70ac9b7a123",
+      "bytes": 2198889,
+      "sha256": "87ff07773a4f516a4aa16193254c463909a73a4b16fa1a4ffe30f192b1ebc3b2",
+      "masterSHA256": "3c85e6df30b66ec400e5e28c40c99c79dae6e3021e28c0bc44ce5f4e75a2b992"
+    },
+    {
+      "file": "assets/video/bipy-princess-rivalry-poster.webp",
+      "bytes": 31584,
+      "sha256": "6c5cc4831ff9413f0800fbcbd1432359f55f9c62c2cbe35a3c085ec23b838793"
+    },
+    {
+      "file": "assets/video/moments/sanji-cinderella-gemini.mp4",
+      "master": "Bpedia-Sanji-Cinderella-Gemini-2026-10-03.mp4",
+      "scene": "Sanji kneels, fits round pink shoe on seated Bipy and bows.",
+      "conversation": "https://gemini.google.com/u/1/app/1271070eee84449e",
+      "bytes": 885971,
+      "sha256": "7f7d84b4e335c1c74ff8bc023d523922a6bd66a77bd3590a845d3720399f17b3",
+      "masterSHA256": "01f2a0c7014502daa27c85ee7cf8850564f036b5b552809e62d57d8a93851dfc"
+    },
+    {
+      "file": "assets/video/moments/sanji-twirl-gemini.mp4",
+      "master": "Bpedia-Sanji-Princess-Twirl-Gemini-2026-10-03.mp4",
+      "scene": "Sanji leads one full Bipy twirl and both wave; video framing excludes generated header.",
+      "conversation": "https://gemini.google.com/u/1/app/1271070eee84449e",
+      "bytes": 1411987,
+      "sha256": "a128c7dadf432b3b534f0eb42d9c7fb04e7178542f9c96c6ca68f5a759aab835",
+      "masterSHA256": "a66959976cc51ee875a0c8f4dbbb2772989ce098922e449bedfac6d6df49ad32"
+    },
+    {
+      "file": "assets/video/moments/zoro-twirl-gemini.mp4",
+      "master": "Bpedia-Zoro-Princess-Twirl-Gemini-2026-10-03.mp4",
+      "scene": "Zoro leads one Bipy twirl and they wave; full bodies and smaller Bipy scale inspected.",
+      "conversation": "https://gemini.google.com/u/1/app/bb65d09c3127f691",
+      "bytes": 1154035,
+      "sha256": "0a22a179f62cb973b5822229dea369b12a244bf57558ab67140c33bf222e051b",
+      "masterSHA256": "bf4e88d18e5de55c7e4775815a900ea7807a4d8322d16c5f9b5a642e60e0b726"
     }
   ],
   "edits": {
     "trailer": "Silent 1280x720 H264 optimized master, 10 seconds.",
     "zoro-hug": "Master 1.95-2.80 seconds; crop 704x720, contain/pad to 720x900, forward/reverse loop. Wanted transition excluded. Explicit square pixels (SAR 1:1) for WebKit.",
-    "sanji-vow": "Master 4.0-5.8 seconds; crop 704x720, contain/pad to 720x900, forward/reverse loop. Explicit square pixels (SAR 1:1) for WebKit."
+    "sanji-vow": "Master 4.0-5.8 seconds; crop 704x720, contain/pad to 720x900, forward/reverse loop. Explicit square pixels (SAR 1:1) for WebKit.",
+    "sanji-cinderella": "10s landscape source, central 960x720 crop, scale 720x540 and pad to 720x900 with pink, square pixels, silent H264.",
+    "sanji-twirl": "10s portrait source; crop 720x1000 y230 excludes generated brand text while preserving full bodies; scale648x900, pad720x900, square pixels, silent H264.",
+    "zoro-twirl": "10s landscape source, central960x720 crop, scale720x540 and pad720x900 with pink, square pixels, silent H264."
+  },
+  "revision": "2.4.0",
+  "videoQuota": {
+    "observedAt": "2026-10-03T04:37:00+07:00",
+    "status": "Quota exhausted",
+    "resetMessage": "Video akan tersedia lagi pada 3 Okt pukul 09.00",
+    "note": "No upgrade purchased. Zoro Twirl accepted; Cinderella correction refused and new attempt blocked by quota."
+  },
+  "grokAttempt": {
+    "observedAt": "2026-10-03T05:19:00+07:00",
+    "reference": "assets/stickers/zoro-cinderella.webp",
+    "durationSeconds": 6,
+    "status": "Usage limit reached at 50%; no completed video downloaded",
+    "post": "https://grok.com/imagine/post/22ca6b19-7d67-42c8-973e-c1776601c21c?conversation=356a1dd8-da53-4861-915a-ddd66c0750a3"
   }
 }

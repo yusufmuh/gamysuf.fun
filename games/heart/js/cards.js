@@ -78,9 +78,9 @@
  let backSeq=0;
  function cardBack({variant=''}={}){
   const ring=`backRing${++backSeq}`;
-  return `<div class="tcg-back ${esc(variant)}" aria-hidden="true"><div class="back-in"><span class="back-lattice"></span>
-<svg class="back-ring" viewBox="0 0 200 200"><defs><path id="${ring}" d="M100 22a78 78 0 1 1-.1 0"/></defs><circle cx="100" cy="100" r="92" class="r1"/><circle cx="100" cy="100" r="66" class="r2"/><text><textPath href="#${ring}" startOffset="0">GRAND LINE DESIRE · FANSERVICE CARD GAME · BP06 ·</textPath></text><path class="back-heart" d="M100 150 62 113a24 24 0 0 1 34-34l4 4 4-4a24 24 0 0 1 34 34Z"/></svg>
-<img class="back-bipy" src="/assets/brand/bipy-pink.webp" alt="" width="110" height="200" decoding="async">
+  return `<div class="tcg-back pirate-back ${esc(variant)}" aria-hidden="true"><div class="back-in"><span class="back-lattice"></span><span class="back-voyage">GRAND LINE</span>
+<svg class="back-ring" viewBox="0 0 200 200"><defs><path id="${ring}" d="M100 22a78 78 0 1 1-.1 0"/></defs><circle cx="100" cy="100" r="92" class="r1"/><circle cx="100" cy="100" r="78" class="r2"/><text><textPath href="#${ring}" startOffset="0">BPEDIA HEART CREW · GRAND LINE DESIRE · BP06 ·</textPath></text><g class="compass-rose"><path d="m100 29 13 58 58 13-58 13-13 58-13-58-58-13 58-13Z"/><path d="m100 29 0 71 71 0M100 171v-71H29"/><circle cx="100" cy="100" r="28"/></g></svg>
+<span class="back-crossed">⚔</span><img class="back-bipy" src="/assets/brand/bipy-pink.webp" alt="" width="110" height="200" decoding="async"><span class="back-waves">≈ ≈ ≈</span>
 <img class="back-mark" src="/assets/brand/bpedia-white.webp" alt="" width="120" height="44" decoding="async"></div></div>`;
  }
  function poster(card,{hostName='',stamped=true,lazy=true,imgId='',sealed=false}={}){

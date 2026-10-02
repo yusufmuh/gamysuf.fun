@@ -142,11 +142,8 @@
   if(!first&&!motion()){const p=$('posterPreview').querySelector('.poster');p.classList.add('stamping');}
  }
  function renderParade(){
-  if(ui.keys.parade)return;const s=ui.state;ui.keys.parade='1';
-  const seen=new Set(),list=[{src:'/assets/brand/bipy-pink.webp',name:'Bipy Original',alt:'Bipy pink, maskot asli Bpedia'},{src:'/assets/brand/bipy-jade.webp',name:'Bipy Jade',alt:'Bipy kostum pendekar hijau'},{src:'/assets/brand/bipy-gold.webp',name:'Bipy Golden Chef',alt:'Bipy kostum koki kuning'}];
-  [...s.cards].sort((a,b)=>SERVICE_ORDER.indexOf(a.serviceId)-SERVICE_ORDER.indexOf(b.serviceId)).forEach(c=>{if(!seen.has(c.mascot)){seen.add(c.mascot);list.push({src:c.mascot,name:c.bipyName,alt:c.bipyAlt});}});
-  const items=(hidden)=>list.map(b=>`<li class="parade-bipy"${hidden?' aria-hidden="true"':''}><img src="${esc(b.src)}" alt="${hidden?'':esc(b.alt)}" width="320" height="560" loading="lazy" decoding="async"><span>${esc(b.name)}</span></li>`).join('');
-  $('paradeTrack').innerHTML=`<ul class="parade-list" aria-label="Varian Bipy">${items(false)}${items(true)}</ul>`;
+  if(ui.keys.parade)return;ui.keys.parade='1';
+  $('paradeTrack').innerHTML='<div class="rivalry-stage"><video id="rivalryVideo" src="/assets/video/bipy-princess-rivalry-gemini.mp4" poster="/assets/video/bipy-princess-rivalry-poster.webp" muted loop playsinline preload="metadata" aria-label="Zoro dan Sanji beradu aksi komedi untuk menarik perhatian Princess Bipy"></video></div><div class="rivalry-caption"><span>PRINCESS BIPY · PETUALANGAN PILIHANMU</span><button type="button" id="rivalryToggle" aria-pressed="true">Jeda adegan</button></div>';
  }
  function renderBinder(){
   const s=ui.state,owned=new Set(ui.collection),key=`${[...owned].sort().join(',')}|${s.cards.map(c=>c.id).join(',')}`;

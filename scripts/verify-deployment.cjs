@@ -47,6 +47,7 @@ function collectHeartReleaseAssets(files){
   ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/stickers/${host}-${service}.webp`)),
   ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/video/moments/${host}-${service}-bipy.mp4`)),
   'assets/video/heart-parade-bipy-promo.mp4','assets/video/bipy-promo-poster.webp','assets/video/moments/zoro-hug-gemini.mp4','assets/video/moments/sanji-vow-gemini.mp4','assets/video/gemini-bipy-manifest.json','assets/video/moments/bipy-manifest.json',
+  'assets/video/bipy-princess-rivalry-gemini.mp4','assets/video/bipy-princess-rivalry-poster.webp','assets/video/moments/zoro-twirl-gemini.mp4','assets/video/moments/sanji-cinderella-gemini.mp4','assets/video/moments/sanji-twirl-gemini.mp4',
   ...['pink','jade','gold'].map(variant=>`assets/brand/bipy-${variant}.webp`),
   'assets/video/grand-line-promo-poster.webp','assets/audio/bpedia-main-bgm.mp3','assets/audio/bpedia-home-suite.mp3',...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/video/moments/${host}-${service}.mp4`)),...HEART_HOST_IDS.map(host=>`assets/dealers/${host}.webp`)
  ];
@@ -117,7 +118,7 @@ async function main(){
   }
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
  }
- for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/journey.js','css/journey.css','js/game.js','js/audio.js','js/admin.js','js/cards.js','js/export.js','js/fx.js','css/game.css','css/admin.css']})){
+ for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/journey.js','css/voyage.css','css/journey.css','js/game.js','js/audio.js','js/admin.js','js/cards.js','js/export.js','js/fx.js','css/game.css','css/admin.css']})){
   const committedIndex=execFileSync('git',['show',`HEAD:games/${slug}/index.html`],{cwd:root,encoding:'utf8'});
   const cacheQueries=new Map([...committedIndex.matchAll(/(?:src|href)="\/([^"?#]+)\?([^"]+)"/g)].map(match=>[match[1],match[2]]));
   for(const file of files){

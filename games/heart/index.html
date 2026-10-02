@@ -8,10 +8,11 @@
  <link rel="icon" href="/assets/icons/heart.svg" type="image/svg+xml">
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="/css/game.css?v=2.3.0">
- <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.3.0">
- <link rel="stylesheet" href="/css/journey.css?v=2.3.1">
- <script defer src="/js/audio.js?v=2.3.0"></script><script defer src="/js/cards.js?v=2.3.0"></script><script defer src="/js/fx.js?v=2.3.0"></script><script defer src="/js/export.js?v=2.3.0"></script><script defer src="/js/game.js?v=2.3.0"></script><script defer src="/js/journey.js?v=2.3.0"></script>
+ <link rel="stylesheet" href="/css/game.css?v=2.4.0">
+ <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.4.0">
+ <link rel="stylesheet" href="/css/journey.css?v=2.4.0">
+ <link rel="stylesheet" href="/css/voyage.css?v=2.4.0">
+ <script defer src="/js/audio.js?v=2.4.0"></script><script defer src="/js/cards.js?v=2.4.0"></script><script defer src="/js/fx.js?v=2.4.0"></script><script defer src="/js/export.js?v=2.4.0"></script><script defer src="/js/game.js?v=2.4.0"></script><script defer src="/js/journey.js?v=2.4.0"></script>
 </head>
 <body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
  <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
@@ -60,7 +61,8 @@
   </section>
 
   <section class="deck" id="deck" aria-labelledby="deckTitle">
-   <div class="journey-toolbar"><button type="button" id="backHomeButton" class="secondary">← Ganti cosplayer</button><p id="journeyHostLabel">MEJA ZORO · HIJAU GIOK</p><span>01 PILIH COSPLAYER <b>02 KENALI KARTU</b> 03 MOMENMU</span></div>
+   <div class="battle-background" id="battleBackground" aria-hidden="true"></div>
+   <div class="journey-toolbar"><button type="button" id="backHomeButton" class="secondary">← Ganti cosplayer</button><div class="journey-crew" aria-hidden="true"><img src="/assets/dealers/zoro-ready.webp" width="800" height="1000" alt=""><img src="/assets/dealers/sanji-kick.webp" width="800" height="1000" alt=""></div><p id="journeyHostLabel">MEJA ZORO · HIJAU GIOK</p><span>01 PILIH COSPLAYER <b>02 KENALI KARTU</b> 03 MOMENMU</span></div>
    <header class="deck-head">
     <div><p class="eyebrow">DEK BP06 · 7 KARTU PER LEADER</p><h2 id="deckTitle">Tujuh kartu bersama <em id="deckHostName">Zoro</em></h2></div>
     <div class="mode-switch" role="group" aria-label="Cara mendapatkan kartu">
@@ -68,6 +70,7 @@
      <button type="button" id="pickMode" class="mode-button" aria-pressed="false"><span data-icon="cards" id="pickModeIcon"></span><span><b>Pilih Fanservice</b><small id="pickModeNote">Belanja Rp150.000 · pilih momenmu</small></span></button>
     </div>
    </header>
+   <p class="battle-source"><span>AKSI GRAND LINE</span><a href="https://www.youtube.com/watch?v=Llefi8QFN0c" target="_blank" rel="noopener noreferrer">One Piece · Crunchyroll ↗</a><button type="button" id="battleToggle" aria-pressed="true">Jeda latar aksi</button></p>
    <div class="deck-command">
     <div class="purchase-check" id="purchaseCheck" hidden><label for="purchaseAmount">Belanja terverifikasi petugas</label><div><span>Rp</span><input id="purchaseAmount" type="number" min="100000" max="1000000000" step="1000" inputmode="numeric" value="100000"></div><small id="purchaseTierHint">Gacha mulai Rp100.000</small></div>
     <div class="deck-cta"><button type="button" class="primary" id="startButton" disabled><span data-icon="sparkle"></span><span id="startLabel">Kocok tujuh kartu</span><span aria-hidden="true">→</span></button><p class="deck-hint" id="deckHint" aria-live="polite">Bipy memilih satu dari tujuh kartu secara acak.</p></div>
@@ -86,8 +89,8 @@
    </div>
   </section>
 
-  <section class="parade" aria-labelledby="paradeTitle">
-   <header class="section-head"><p class="eyebrow">PARADE BIPY</p><h2 id="paradeTitle">Sepuluh Bipy, <em>satu misi manis</em></h2><p>Setiap kartu ditemani kostum Bipy yang berbeda. Bipy adalah kamu, pelanggan Bpedia.</p><button type="button" id="openStickerGallery" class="secondary">Lihat 50 stiker Bipy</button></header>
+  <section class="parade rivalry" aria-labelledby="paradeTitle">
+   <header class="section-head"><p class="eyebrow">ZORO × SANJI × PRINCESS BIPY</p><h2 id="paradeTitle">Dua rival, <em>satu princess.</em></h2><p>Pedang giok atau mawar emas? Zoro &amp; Sanji berebut mencuri perhatian. Bipy tetap memilih petualangannya sendiri.</p><button type="button" id="openStickerGallery" class="secondary">Lihat 50 stiker Bipy</button></header>
    <div class="parade-track" id="paradeTrack"></div>
   </section>
 
