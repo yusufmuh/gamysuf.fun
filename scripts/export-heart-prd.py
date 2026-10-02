@@ -64,7 +64,7 @@ def export_word() -> None:
                 cells = table.add_row().cells
                 for idx, cell in enumerate(row): cells[idx].text = cell
         else: doc.add_paragraph(str(value), style='List Bullet' if kind == 'bullet' else None)
-    section.footer.paragraphs[0].text = 'GRAND LINE DESIRE  /  BPEDIA  /  GAME 2.2.1'
+    section.footer.paragraphs[0].text = 'GRAND LINE DESIRE  /  BPEDIA  /  GAME 2.2.2'
     doc.save(OUT / 'PRD-Bipy-Grand-Line-Desire.docx')
 
 def export_pdf() -> None:

@@ -57,8 +57,8 @@ async function decodeOriginalVideo(video,play=false){
  return video.evaluate((v,shouldPlay)=>new Promise((resolve,reject)=>{const probe=document.createElement('video');probe.preload='auto';probe.muted=true;probe.setAttribute('playsinline','');const cleanup=()=>{clearTimeout(timer);probe.pause();probe.removeAttribute('src');probe.load();};const timer=setTimeout(()=>{cleanup();reject(new Error('original media decode timeout'));},12000);probe.addEventListener('loadeddata',async()=>{const result={width:probe.videoWidth,height:probe.videoHeight,duration:probe.duration,error:probe.error?.code||null};if(shouldPlay){try{await probe.play();await new Promise(done=>setTimeout(done,300));result.currentTime=probe.currentTime;result.playing=!probe.paused;}catch(error){cleanup();reject(error);return;}}cleanup();resolve(result);},{once:true});probe.addEventListener('error',()=>{cleanup();reject(new Error('original media decode error'));},{once:true});probe.src=v.currentSrc||v.src||v.querySelector('source')?.src;probe.load();}),play);
 }
 async function recordImageDecode(page,label,traffic,selector,card){
- const locator=page.locator(selector),expected=await locator.evaluate(img=>img.src);
- await page.waitForFunction(({selector,expected})=>{const img=document.querySelector(selector);return img?.currentSrc===expected&&img.complete&&img.naturalWidth>0&&img.naturalHeight>0;},{selector,expected},{timeout:12000});await locator.evaluate(img=>img.decode());
+ const locator=page.locator(selector);
+ await page.waitForFunction(selector=>{const img=document.querySelector(selector);return img?.currentSrc===img.src&&img.complete&&img.naturalWidth>0&&img.naturalHeight>0;},selector,{timeout:12000});await locator.evaluate(img=>img.decode());
  const meta=await locator.evaluate(img=>({url:img.currentSrc,width:img.naturalWidth,height:img.naturalHeight,complete:img.complete}));traffic.decodedImages.add(meta.url);report.images.push({label,card,...meta});return meta;
 }
 async function previewAll(page,label,host,traffic,catalog,reduced){
@@ -73,6 +73,8 @@ async function previewAll(page,label,host,traffic,catalog,reduced){
   const pov=page.locator('#momentPreviewPov'),povMeta=await recordImageDecode(page,label,traffic,'#momentPreviewPov',card.id);
   check(povMeta.complete&&povMeta.width>0&&povMeta.height>0,`${label} ${card.id} full-body POV decoded`,povMeta);
   check(await pov.getAttribute('src')===(card.povImage||card.image),`${label} ${card.id} correct POV source`);
+  const stickerMeta=await recordImageDecode(page,label,traffic,'#momentPreviewSticker',card.id+'-sticker');
+  check(stickerMeta.complete&&stickerMeta.width>0&&(await page.locator('#momentPreviewSticker').getAttribute('src'))===card.stickerImage,`${label} ${card.id} supplied matching sticker decoded`,stickerMeta);
   if(host==='zoro')check(!(await pov.getAttribute('src')).includes('/assets/pov/zoro-'),`${label} cropped Zoro POV stays archived`);
   const video=page.locator('#momentPreviewArt video');check(await video.count()===1,`${label} ${card.id} contains actual service MP4`);
   await video.evaluate(v=>new Promise((resolve,reject)=>{if(v.readyState>=2)return resolve();const timer=setTimeout(()=>reject(new Error('service video decode timeout')),12000);v.addEventListener('loadeddata',()=>{clearTimeout(timer);resolve();},{once:true});v.addEventListener('error',()=>{clearTimeout(timer);reject(new Error('service video decode error '+v.error?.code));},{once:true});}));

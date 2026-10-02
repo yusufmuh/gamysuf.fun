@@ -128,9 +128,10 @@ async function main(){
  const momentHashes=new Set();
  for(const file of collectHeartReleaseAssets(heartFiles)){
   const route=`/g/heart/${file}`;
-  const expected=execFileSync('git',['show',`HEAD:games/heart/${file}`],{cwd:root,maxBuffer:64*1024*1024});
+  const committed=execFileSync('git',['show',`HEAD:games/heart/${file}`],{cwd:root,maxBuffer:64*1024*1024});
+  const isText=/\.(?:json|css|js|html)$/i.test(file),expected=isText?Buffer.from(rewriteOutgoing(committed.toString('utf8'),'/g/heart')):committed;
   const actual=await read(`${route}?v=${pkg.version}`);
-  const check=checks[checks.length-1];check.localSha256=hash(expected);check.liveSha256=hash(actual);check.ok=check.localSha256===check.liveSha256;check.verification='exact committed Heart Parade asset bytes';
+  const check=checks[checks.length-1];check.localSha256=hash(expected);check.liveSha256=hash(actual);check.ok=check.localSha256===check.liveSha256;check.verification=isText?'exact committed Heart Parade text after gateway URL rewrite':'exact committed Heart Parade asset bytes';
   if(file.startsWith('assets/moments/')){
    if(momentHashes.has(check.localSha256))throw new Error(`${file}: duplicate Heart Parade moment artwork bytes.`);
    momentHashes.add(check.localSha256);

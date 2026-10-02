@@ -1,6 +1,6 @@
 # PRD · Bipy Grand Line Desire
 
-Game 05 · versi 2.2.1 · Gamysuf Arcade 1.7.0 · 2 Oktober 2026
+Game 05 · versi 2.2.2 · Gamysuf Arcade 1.7.0 · 2 Oktober 2026
 
 ## Produk dan tujuan
 
