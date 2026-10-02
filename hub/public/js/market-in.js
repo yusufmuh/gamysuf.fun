@@ -60,7 +60,7 @@
  }
 
  function fallbackGames(){
-  $('miGames').innerHTML=[['Bipy Gacha Pop','/g/gacha/','Mesin gacha satu tap untuk hadiah beauty dan voucher belanja.','#39A7E5'],['Bipy Heart Parade','/g/heart/','Kartu fanservice Zoro & Sanji bergaya poster bounty.','#D45778']]
+  $('miGames').innerHTML=[['Bipy Gacha Pop','/g/gacha/','Mesin gacha satu tap untuk hadiah beauty dan voucher belanja.','#39A7E5'],['Bipy Grand Line Desire','/g/heart/','Kartu fanservice Zoro & Sanji bergaya poster bounty.','#D45778']]
    .map(([title,url,copy,accent])=>`<article class="mi-game" style="--accent:${accent}"><div class="mi-game-body"><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="btn btn-primary" href="${url}">Main ${esc(EV.shortTitle(title))}</a></div></article>`).join('');
   $('miGames').setAttribute('aria-busy','false');
  }
@@ -82,7 +82,7 @@
     return `<article class="mi-card" data-rarity="${esc(card.rarity||'')}"><div class="mi-card-art"><img src="${esc(card.art||card.image)}" alt="${esc(card.imageAlt||card.name)}" width="320" height="480" loading="lazy" decoding="async"></div><div class="mi-card-meta">${card.cardNo?`<span>${esc(card.cardNo)}</span>`:''}${card.rarity?`<b>${esc(card.rarity)}</b>`:''}</div><h3>${esc(moment||card.name)}</h3>${host?`<p>${esc(host)}</p>`:''}</article>`;
    }).join('');
    $('heartCards').setAttribute('aria-busy','false');
-  }catch{fallback('heartFallback','heartCards','Pratinjau kartu belum bisa dimuat. Semua kartu tetap bisa dilihat langsung di Heart Parade.');}
+  }catch{fallback('heartFallback','heartCards','Pratinjau kartu belum bisa dimuat. Semua kartu tetap bisa dilihat langsung di Grand Line Desire.');}
  }
 
  async function loadGacha(){
@@ -110,7 +110,7 @@
  }
  $('jingle').addEventListener('click',async()=>{
   if(!jingle){
-   jingle=new Audio('/hub/assets/audio/bpedia-jingle.mp3?v=1.6.0');
+   jingle=new Audio('/hub/assets/audio/bpedia-jingle.mp3?v=1.6.1');
    jingle.preload='auto';
    jingle.addEventListener('ended',()=>{jingle.currentTime=0;setJingle(false);});
    jingle.addEventListener('pause',()=>setJingle(false));

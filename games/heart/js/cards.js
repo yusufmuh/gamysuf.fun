@@ -78,7 +78,7 @@
  function cardBack({variant=''}={}){
   const ring=`backRing${++backSeq}`;
   return `<div class="tcg-back ${esc(variant)}" aria-hidden="true"><div class="back-in"><span class="back-lattice"></span>
-<svg class="back-ring" viewBox="0 0 200 200"><defs><path id="${ring}" d="M100 22a78 78 0 1 1-.1 0"/></defs><circle cx="100" cy="100" r="92" class="r1"/><circle cx="100" cy="100" r="66" class="r2"/><text><textPath href="#${ring}" startOffset="0">BIPY HEART PARADE · FANSERVICE CARD GAME · BP06 ·</textPath></text><path class="back-heart" d="M100 150 62 113a24 24 0 0 1 34-34l4 4 4-4a24 24 0 0 1 34 34Z"/></svg>
+<svg class="back-ring" viewBox="0 0 200 200"><defs><path id="${ring}" d="M100 22a78 78 0 1 1-.1 0"/></defs><circle cx="100" cy="100" r="92" class="r1"/><circle cx="100" cy="100" r="66" class="r2"/><text><textPath href="#${ring}" startOffset="0">GRAND LINE DESIRE · FANSERVICE CARD GAME · BP06 ·</textPath></text><path class="back-heart" d="M100 150 62 113a24 24 0 0 1 34-34l4 4 4-4a24 24 0 0 1 34 34Z"/></svg>
 <img class="back-bipy" src="/assets/brand/bipy-pink.webp" alt="" width="110" height="200" decoding="async">
 <img class="back-mark" src="/assets/brand/bpedia-white.webp" alt="" width="120" height="44" decoding="async"></div></div>`;
  }
@@ -110,7 +110,7 @@
   const id=host.id==='sanji'?'sanji':'zoro';
   return `<span class="pack-face host-${id}"><span class="pack-foil"></span><span class="pack-scene tcg-scene"></span><img class="pack-art" src="${esc(host.image)}" alt="" width="1024" height="1536" decoding="async"><span class="pack-shine"></span>
 <span class="pack-top-band"><img src="/assets/brand/bpedia-white.webp" alt="" width="70" height="25" decoding="async"><small>FANSERVICE CARD GAME</small></span>
-<span class="pack-title"><small>BP06 · HEART PARADE BOOSTER</small><b>${esc(host.name)}</b><em>Bipy Heart Parade</em></span>
+<span class="pack-title"><small>BP06 · GRAND LINE DESIRE</small><b>${esc(host.name)}</b><em>Bipy Grand Line Desire</em></span>
 <span class="pack-count">1 KARTU</span></span>`;
  }
  function booster(host,{tearable=false}={}){

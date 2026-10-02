@@ -62,7 +62,8 @@ class Engine{
   if(s.settings.paused||!s.settings.sessionOpen)throw fail('Sesi sedang istirahat. Cek jadwal cosplayer.',409);
   const host=s.hosts.find(h=>h.id===options.host&&h.enabled);
   if(!host)throw fail('Pilih cosplayer yang sedang tersedia.');
-  if(!['touch','no-touch'].includes(options.comfort)||options.consent!==true||typeof options.recording!=='boolean')throw fail('Pilih kenyamanan interaksi dan konfirmasikan persetujuan.');
+  if(!['touch','no-touch'].includes(options.comfort)||typeof options.consent!=='boolean'||typeof options.recording!=='boolean')throw fail('Pilihan kenyamanan dan persetujuan tidak valid.');
+  if((options.comfort==='touch'||options.recording)&&options.consent!==true)throw fail('Sentuhan atau dokumentasi memerlukan persetujuan eksplisit.');
   const demo=s.settings.mode==='demo';
   if(!demo){
    if(options.verified!==true)throw fail('Petugas perlu memeriksa misi booth terlebih dahulu.',409);
@@ -86,7 +87,7 @@ class Engine{
   const next=clone(s),day=dateKey(this.now());
   const queueNumber=demo?null:(next.dailyCounters[day]||0)+1;
   if(!demo)next.dailyCounters[day]=queueNumber;
-  const result={id:(demo?'DEMO-':'HP-')+randomUUID().slice(0,8).toUpperCase(),requestId,at:new Date(this.now()).toISOString(),username,game:'heart',demo,host:{id:host.id,name:host.name,image:host.image,mascot:host.mascot},service:clone(service),method,comfort:options.comfort,recording:options.recording,consent:true,queueNumber,status:demo?'demo':'waiting',estimatedSeconds:demo?0:this.waiting(host.id).reduce((n,r)=>n+r.service.seconds+20,0),duration:s.settings.duration};
+  const result={id:(demo?'DEMO-':'HP-')+randomUUID().slice(0,8).toUpperCase(),requestId,at:new Date(this.now()).toISOString(),username,game:'heart',demo,host:{id:host.id,name:host.name,image:host.image,mascot:host.mascot},service:clone(service),method,comfort:options.comfort,recording:options.recording,consent:options.consent,queueNumber,status:demo?'demo':'waiting',estimatedSeconds:demo?0:this.waiting(host.id).reduce((n,r)=>n+r.service.seconds+20,0),duration:s.settings.duration};
   result.card={...clone(cardFor(host.id,service.id)),price:service.price};
   next.pending=result;
   // Demo memory is bounded; real tickets remain available for audit and daily quotas.

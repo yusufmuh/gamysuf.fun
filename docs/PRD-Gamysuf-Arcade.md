@@ -114,6 +114,8 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
+**2 Oktober 2026 · Persiapan 1.6.1:** Game 5 menjadi Bipy Grand Line Desire, kartu dibuka langsung, trailer masuk pembuka, Bipy terpisah dari leader, poster proporsional, dan tombol tema serta Demo/Main Tercatat eksplisit. Sumber 40/40 + check, hub 67/67, UI 21/21, responsif Game 5 4.140/4.140. Animasi, paket, dan produksi masih menjalani validasi final; lihat [RELEASE-1.6.1.md](RELEASE-1.6.1.md). Bukti 1.6.0 berikut adalah riwayat, bukan bukti deployment 1.6.1.
+
 **2 Oktober 2026 · Gamysuf Arcade 1.6.0 sudah live di [gamysuf.fun](https://gamysuf.fun).** Lima game terdaftar; Game 4 dan Game 5 dikelompokkan pada halaman Market-In. Sumber game sudah disinkronkan, matriks lintas browser sudah lulus, paket Hostinger sudah diuji terisolasi, dan rilis produksi telah diverifikasi. Catatan rilis: [RELEASE-1.6.0.md](RELEASE-1.6.0.md).
 
 | Bukti selesai | Hasil dan batas cakupan |

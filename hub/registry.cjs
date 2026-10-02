@@ -30,10 +30,10 @@ const EVENTS={
   id:'market-in-6',title:'Market-In 6.0',place:'Urban Forest Cipete',city:'Jakarta',dates:'3–4 Okt 2026',
   startDate:'2026-10-03',endDate:'2026-10-04',page:'/market-in',
   headline:'Dua game, satu booth Bpedia.',
-  summary:'Gacha Pop untuk hadiah beauty dan voucher belanja, Heart Parade untuk kartu fanservice bersama Zoro & Sanji. Dua game berbeda, satu profil dan satu album koleksi.',
+  summary:'Gacha Pop untuk hadiah beauty dan voucher belanja, Grand Line Desire untuk kartu fanservice bersama Zoro & Sanji. Dua game berbeda, satu profil dan satu album koleksi.',
   cosplay:'Zoro & Sanji hadir 3–4 Okt — dua hari di booth Bpedia',
-  teaser:'Gacha Pop & Heart Parade di satu booth. Zoro & Sanji hadir dua hari.',
-  logo:'/hub/assets/market-in/market-in-6.webp?v=1.6.0',
+  teaser:'Gacha Pop & Grand Line Desire di satu booth. Zoro & Sanji hadir dua hari.',
+  logo:'/hub/assets/market-in/market-in-6.webp?v=1.6.1',
   schedule:[
    {date:'2026-10-03',day:'Sabtu',label:'Sabtu, 3 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari pertama di booth Bpedia. Jam sesi foto dan fanservice diumumkan petugas.'},
    {date:'2026-10-04',day:'Minggu',label:'Minggu, 4 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari kedua di booth Bpedia. Datang lagi untuk melengkapi kartumu.'}
@@ -142,7 +142,7 @@ const GAMES=[
   eventGroup:'market-in-6',
   mechanic:'Mesin gacha satu tap · kapsul pop · kartu stiker',
   accent:'#39A7E5',
-  cover:'/hub/assets/covers/gacha.jpg?v=1.6.0',
+  cover:'/hub/assets/covers/gacha.jpg?v=1.6.1',
   tagline:'Sekali tap: tuas berputar, kapsul keluar, lalu pop jadi kartu stiker hadiah.',
   description:'Mesin kapsul gashapon bergaya Y2K Market-In 6.0. Cukup satu tap, tanpa isian apa pun: kapsul menggelinding dari corong lalu pop menjadi kartu stiker. Isinya Bundling Paket 1–3, kuas set kolab karakter, Saput Mickey, voucher belanja Bpedia, serta produk PINKFLASH & FOCALLURE.',
   howTo:[
@@ -165,11 +165,11 @@ const GAMES=[
   cards(state){return state.prizes.map(prizeCard).filter(Boolean);}
  },
  {
-  slug:'heart',title:'Bipy Heart Parade',brandTitle:'BIPY HEART PARADE',event:'Market-In 6.0',eventGroup:'market-in-6',
-  mechanic:'Kartu fanservice · gacha booster atau pilih kartu · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.6.0',
+  slug:'heart',title:'Bipy Grand Line Desire',brandTitle:'BIPY GRAND LINE DESIRE',event:'Market-In 6.0',eventGroup:'market-in-6',
+  mechanic:'Zoro & Sanji fanservice · gacha booster atau pilih kartu · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.6.1',
   tagline:'Kartu fanservice Zoro & Sanji bergaya poster bounty. Harga normal dicoret, gratis untuk pelanggan Bpedia.',
   description:'Trading card fanservice bersama cosplayer Zoro dan Sanji. Buka Gacha Booster dan biarkan Bipy memilihkan kartu, atau Pilih Kartu untuk momen favoritmu. Setiap kartu tampil sebagai poster bounty: harga normal fanservice dicoret, GRATIS untuk pelanggan Bpedia. Lengkapi 14 kartu di album.',
-  howTo:['Pilih Zoro atau Sanji, lalu pilih Gacha Booster atau Pilih Kartu.','Pilih interaksi tanpa sentuhan atau sentuhan ringan, lalu konfirmasikan kenyamananmu.','Kartu terbuka sebagai poster bounty: harga normal dicoret, GRATIS untuk pelanggan Bpedia.','Simpan kartu digitalmu. Kartu demo online tidak berlaku untuk klaim di booth.'],
+  howTo:['Pilih Zoro atau Sanji, lalu pilih Gacha Booster atau Pilih Kartu.','Kartu langsung dibuka dengan setelan aman tanpa sentuhan dan tanpa dokumentasi.','Kartu terbuka sebagai poster bounty: harga normal dicoret, GRATIS untuk pelanggan Bpedia.','Gunakan Main tercatat bersama petugas untuk tiket HP-. Demo online tidak berlaku untuk klaim booth.'],
   quickStart:['Pilih Zoro atau Sanji.','Gacha Booster, atau pilih sendiri kartunya.','Poster bounty terbuka: GRATIS untuk pelanggan Bpedia.'],
   tips:['Gacha Booster diacak server dan setiap momen berpeluang sama. Pilih Kartu memastikan momen yang kamu mau.','Setiap momen punya alternatif tanpa sentuhan. Tamu dan cosplayer boleh berhenti kapan saja.'],
   controls:[['Sentuh / klik','Pilih karakter, mode, dan kartu'],['Tab / Enter','Pindah dan pilih kartu dengan keyboard'],['M','Senyap'],['Esc','Tutup pilihan atau selesaikan kartu']],

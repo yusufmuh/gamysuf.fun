@@ -259,7 +259,7 @@ test('Gacha Pop lewat gateway: satu tap jadi kartu album & XP, stok booth tidak 
  assert.equal((await call(hub,'/g/gacha/api/mode',{method:'POST',body:{mode:'live'}})).status,403);
 });
 
-test('Heart Parade: isolated demo, idempotent XP and fourteen collectible moments',async t=>{
+test('Grand Line Desire: isolated demo, idempotent XP and fourteen collectible moments',async t=>{
  const hub=await hubFor(t);
  const draw={requestId:'heart-hub-001',host:'sanji',comfort:'no-touch',consent:true,recording:false};
  const first=await call(hub,'/g/heart/api/play',{method:'POST',body:draw});
@@ -302,9 +302,9 @@ test('Market-In 6.0: dua game berbeda dikelompokkan lewat data katalog dan punya
   assert.equal(game.eventGroup,'market-in-6');
   assert.equal(game.quickStart.length,3);
   assert.equal(game.staffUrl,`/g/${game.slug}/admin.html`);
-  assert.match(game.cover,/\?v=1\.6\.0$/);
+  assert.equal(new URL(game.cover,'https://gamysuf.fun').searchParams.get('v'),catalog.version);
  }
- assert.equal(heart.title,'Bipy Heart Parade');
+ assert.equal(heart.title,'Bipy Grand Line Desire');
  assert.match(heart.mechanic,/gacha booster atau pilih kartu/);
  assert.match(gacha.description,/voucher/i);
  assert.ok(['spin','nyapit','drop'].every(slug=>!catalog.games.find(game=>game.slug===slug).eventGroup),'game lain tetap tile sendiri');

@@ -67,22 +67,49 @@ async function waitVisibleImages(page){
   await Promise.all(visible.map(image=>image.decode().catch(()=>{})));
  });
 }
-async function verifyHeartTrailer(page){
+async function verifyHeartTrailer(page,label='heart'){
  await page.waitForFunction(()=>{
   const video=document.getElementById('paradeTrailer');
   return video&&video.readyState>=1&&video.videoWidth>0&&video.videoHeight>0&&
    Number.isFinite(video.duration)&&video.duration>0&&!video.error;
  },null,{timeout:20000});
- const metadata=await page.locator('#paradeTrailer').evaluate(video=>({url:video.currentSrc,
+ const metadata=await page.locator('#paradeTrailer').evaluate(video=>({url:video.currentSrc,poster:video.poster,
   readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,duration:video.duration,
   muted:video.muted,loop:video.loop,inline:video.playsInline,error:video.error?.message||null}));
  const expectedUrl=`${base}/g/heart/assets/video/heart-parade-promo.mp4`;
  const ready=metadata.url===expectedUrl&&metadata.readyState>=1&&metadata.width>0&&metadata.height>0&&
   Number.isFinite(metadata.duration)&&metadata.duration>0&&!metadata.error;
- check(ready,'heart trailer metadata ready',JSON.stringify(metadata));
+ check(ready,`${label} trailer metadata ready`,JSON.stringify(metadata));
  check(metadata.muted&&metadata.loop&&metadata.inline&&!await page.locator('#videoPlayButton').isDisabled(),
-  'heart trailer playback control ready',JSON.stringify(metadata));
- if(ready)verifiedMedia.push({label:'heart',...metadata});
+  `${label} trailer playback control ready`,JSON.stringify(metadata));
+ const expectedPoster=`${base}/g/heart/assets/video/grand-line-promo-poster.webp`;
+ check(metadata.poster===expectedPoster,`${label} trailer uses release poster`,metadata.poster);
+ const poster=await page.evaluate(async url=>{const image=new Image();image.src=url;await image.decode();return {url:image.currentSrc,width:image.naturalWidth,height:image.naturalHeight};},expectedPoster);
+ check(poster.url===expectedPoster&&poster.width>0&&poster.height>0,`${label} trailer poster decoded`,JSON.stringify(poster));
+ if(ready)verifiedMedia.push({label,...metadata,decodedPoster:poster});
+}
+async function verifyHeartOpening(page,label){
+ await pageReady(page);await waitVisibleImages(page);
+ check((await page.locator('#title').innerText()).replace(/\s+/g,' ').trim()==='Bipy Grand Line Desire',`${label} release title`);
+ check((await page.locator('.t-sub').textContent()).trim()==='Zoro & Sanji Fanservice Card Game',`${label} release subtitle`);
+ check(await page.locator('#prepDialog').count()===0,`${label} direct draw markup`);
+ check(await page.locator('#demoModeButton').getAttribute('aria-pressed')==='true'&&await page.locator('#liveModeButton').getAttribute('aria-pressed')==='false',`${label} public visitor stays in Demo`);
+ for(const selector of ['#demoModeButton','#liveModeButton','#darkThemeButton','#lightThemeButton']){
+  const control=await page.locator(selector).evaluate(node=>{const r=node.getBoundingClientRect();return {inTopbar:Boolean(node.closest('.topbar')),width:r.width,height:r.height,visible:r.width>0&&r.height>0&&getComputedStyle(node).visibility!=='hidden'};});
+  check(control.inTopbar&&control.visible&&control.width>=44&&control.height>=44,`${label} ${selector} topbar touch target`,JSON.stringify(control));
+ }
+ const opening=await page.evaluate(()=>{
+  const box=element=>{const r=element.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+  const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+  const trailer=box(document.querySelector('.hero-trailer')),table=box(document.querySelector('.table')),leaders=[...document.querySelectorAll('.leader-slot')].map(box),bipys=[...document.querySelectorAll('.table-bipys .sticker')].map(box);
+  const poster=box(document.querySelector('#posterPreview .poster')),photo=box(document.querySelector('#posterPreview .poster-photo')),art=document.querySelector('#posterPreview .poster-photo>img:not(.poster-bipy)'),mascot=document.querySelector('#posterPreview .poster-bipy');
+  const row=getComputedStyle(document.querySelector('.table-bipys')),fan=document.querySelector('#momentGrid');
+  return {viewport:{width:innerWidth,height:innerHeight},trailer,table,leaders,bipys,overlaps:bipys.map(b=>leaders.map(l=>overlap(b,l))),row:{display:row.display,position:row.position},poster,photo,art:{...box(art),fit:getComputedStyle(art).objectFit},mascot:{...box(mascot),fit:getComputedStyle(mascot).objectFit},columns:getComputedStyle(fan).gridTemplateColumns.split(/\s+/).length};
+ });
+ check(opening.trailer.top>=0&&opening.trailer.top<opening.viewport.height&&opening.trailer.width>200,`${label} trailer in opening viewport`,JSON.stringify(opening.trailer));
+ check(opening.bipys.length===3&&opening.bipys.every((b,i)=>b.width>40&&b.height>70&&b.left>=opening.table.left-1&&b.right<=opening.table.right+1&&opening.overlaps[i].every(area=>area===0)),`${label} three full Bipy mascots stay below leaders`,JSON.stringify({bipys:opening.bipys,overlaps:opening.overlaps,row:opening.row}));
+ check(opening.art.fit==='contain'&&opening.mascot.fit==='contain'&&opening.photo.height/opening.poster.height>.3&&opening.art.top>=opening.photo.top-1&&opening.art.bottom<=opening.photo.bottom+1&&opening.mascot.bottom<=opening.photo.bottom+1,`${label} bounty preview contains artwork and Bipy`,JSON.stringify({poster:opening.poster,photo:opening.photo,art:opening.art,mascot:opening.mascot}));
+ if(opening.viewport.width<=760)check(opening.columns===2,`${label} mobile deck uses two columns`,String(opening.columns));
 }
 async function main(){
  fs.mkdirSync(out,{recursive:true});
@@ -162,7 +189,8 @@ async function main(){
    await page.locator('#gmyGamebar').waitFor();
    await page.evaluate(()=>document.fonts.ready);
    for(const theme of ['dark','light']){
-    if(theme==='light')await page.locator('[data-gmy-theme]').click();
+    if(game==='heart')await page.locator(`#${theme}ThemeButton`).click();
+    else if(theme==='light')await page.locator('[data-gmy-theme]').click();
     await page.waitForFunction(value=>document.documentElement.dataset.theme===value,theme);
     await waitVisibleImages(page);
     const fit=await layout(page);
@@ -173,6 +201,10 @@ async function main(){
     const brandName=theme==='light'?'bpedia-pink':'bpedia-white';
     check(logos.length&&logos.every(image=>image.loaded&&(game!=='heart'||image.visible)&&new URL(image.src).pathname.match(new RegExp(`${brandName}\\.(?:png|webp)$`))),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
     check(!(await visibleBrokenImages(page)).length,`${game} ${theme} visible assets loaded`);
+    if(game==='heart'){
+     check(await page.locator(`#${theme}ThemeButton`).getAttribute('aria-pressed')==='true',`heart ${theme} explicit theme control`);
+     await verifyHeartOpening(page,`heart mobile ${theme}`);
+    }
     await page.screenshot({path:path.join(out,`${game}-mobile-${theme}-390x844.png`)});
    }
    if(game==='gacha'){
@@ -184,7 +216,22 @@ async function main(){
     check(fit.scrollWidth<=fit.viewport+2,'gacha desktop horizontal fit',JSON.stringify(fit));
     await page.screenshot({path:path.join(out,'gacha-desktop-dark-1449x851.png')});
    }
-   if(game==='heart')await verifyHeartTrailer(page);
+   if(game==='heart'){
+    await verifyHeartTrailer(page);
+    const heartDesktop=await browser.newContext({viewport:{width:1449,height:851},reducedMotion:'reduce'});
+    try{
+     const desktopPage=await heartDesktop.newPage();watch(desktopPage,'heart-desktop');
+     await desktopPage.goto(`${base}/g/heart/`,{waitUntil:'domcontentloaded'});await pageReady(desktopPage);
+     for(const theme of ['dark','light']){
+      await desktopPage.locator(`#${theme}ThemeButton`).click();
+      await desktopPage.waitForFunction(value=>document.documentElement.dataset.theme===value,theme);
+      await verifyHeartOpening(desktopPage,`heart desktop ${theme}`);
+      const fit=await layout(desktopPage);check(fit.scrollWidth<=fit.viewport+2,`heart desktop ${theme} horizontal fit`,JSON.stringify(fit));
+      await desktopPage.screenshot({path:path.join(out,`heart-desktop-${theme}-1449x851.png`)});
+     }
+     await verifyHeartTrailer(desktopPage,'heart-desktop');
+    }finally{await heartDesktop.close();}
+   }
    await context.close();
   }
  }catch(error){check(false,'smoke tour completed',error.stack||String(error));}

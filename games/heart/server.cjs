@@ -89,5 +89,5 @@ async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host
  origin=`http://127.0.0.1:${app.address()?.port||port||4340}`;
  return {server:app,engine,dataDir,origin,close:()=>new Promise(resolve=>app.close(resolve))};
 }
-if(require.main===module){const local=process.argv.includes('--local');createApp({hosted:!local,port:Number(process.env.PORT)||(local?4340:3000),host:local?'127.0.0.1':'0.0.0.0',adminPin:process.env.BPEDIA_ADMIN_PIN||null,allowedHosts:process.env.BPEDIA_ALLOWED_HOSTS||null,dataDir:process.env.BPEDIA_DATA_DIR||(local?undefined:path.join(os.homedir(),'bipy-heart-parade-data'))}).then(app=>console.log(`Bipy Heart Parade: ${app.origin}`)).catch(error=>{console.error(error.message);process.exitCode=1;});}
+if(require.main===module){const local=process.argv.includes('--local');createApp({hosted:!local,port:Number(process.env.PORT)||(local?4340:3000),host:local?'127.0.0.1':'0.0.0.0',adminPin:process.env.BPEDIA_ADMIN_PIN||null,allowedHosts:process.env.BPEDIA_ALLOWED_HOSTS||null,dataDir:process.env.BPEDIA_DATA_DIR||(local?undefined:path.join(os.homedir(),'bipy-heart-parade-data'))}).then(app=>console.log(`Bipy Grand Line Desire: ${app.origin}`)).catch(error=>{console.error(error.message);process.exitCode=1;});}
 module.exports={createApp,TYPES};

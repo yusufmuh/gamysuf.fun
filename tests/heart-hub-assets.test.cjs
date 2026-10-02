@@ -19,7 +19,8 @@ const heart=GAMES.find(game=>game.slug==='heart');
 const expectedAssets=[
  ...state.hosts.flatMap(host=>state.services.map(service=>`assets/moments/${host.id}-${service.id}.webp`)),
  ...HEART_SERVICE_IDS.map(id=>`assets/bipy-variants/bipy-${id}.webp`),
- ...['pink','jade','gold'].map(id=>`assets/brand/bipy-${id}.webp`)
+ ...['pink','jade','gold'].map(id=>`assets/brand/bipy-${id}.webp`),
+ 'assets/video/grand-line-promo-poster.webp'
 ];
 
 test('Heart album and server results agree on fourteen unique moment artworks and stable IDs',()=>{
@@ -65,12 +66,13 @@ test('sync copies MP4 and WebM media while keeping editable source files exclude
  assert.equal(stats.files,3);
 });
 
-test('deployment manifest requires all moment and Bipy art and includes all Heart videos',()=>{
+test('deployment manifest requires all moment and Bipy art, opening trailer poster, and includes all Heart videos',()=>{
  const extras=['assets/media/opening.mp4','assets/media/reveal.webm','assets/moments/extra.png','assets/characters/zoro.webp','js/game.js'];
  const collected=collectHeartReleaseAssets([...expectedAssets,...extras].map(file=>`games/heart/${file}`));
  assert.deepEqual(collected,[...expectedAssets,...extras.slice(0,3)].sort());
  assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/moments/zoro-vow.webp')),/zoro-vow.webp/);
  assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/bipy-variants/bipy-hug.webp')),/bipy-hug.webp/);
+ assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/video/grand-line-promo-poster.webp')),/grand-line-promo-poster.webp/);
 });
 
 test('Heart stylesheet covers the complete trading-card experience',()=>{

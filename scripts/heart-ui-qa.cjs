@@ -15,23 +15,19 @@ function monitor(page,label,diagnostics){
  return expected;
 }
 async function stateOf(page,origin){const r=await page.request.get(origin+'/g/heart/api/state');assert.equal(r.status(),200);return r.json();}
-async function prepare(page,{host='zoro',service='',recording=false}={}){
+async function prepare(page,{host='zoro',service=''}={}){
  await page.locator(`.host-card[data-host="${host}"]`).click();await page.locator(service?'#pickMode':'#gachaMode').click();
  if(service){await page.locator(`.card-choice[data-service="${service}"]`).click();assert.equal(await page.locator(`.card-choice[data-service="${service}"]`).getAttribute('aria-pressed'),'true');}
  else assert.equal(await page.locator('#gachaMode').getAttribute('aria-pressed'),'true');
- if(!await page.locator('#prepDialog').isVisible())await page.locator('#startButton').click();
- await page.locator('#prepDialog[open]').waitFor();
- assert.equal(await page.locator('#pickService').inputValue(),service);assert.equal(await page.locator('#pickService').isVisible(),false);
- assert.ok(await page.locator('[name="comfort"][value="no-touch"]').isChecked());
- assert.equal(await page.locator('#recordingConsent').isChecked(),false);assert.equal(await page.locator('#consentCheck').isChecked(),false);
- if(recording)await page.locator('#recordingConsent').check();await page.locator('#consentCheck').check();
+ assert.equal(await page.locator('#prepDialog').count(),0);
 }
 async function draw(page,origin,options){
  await prepare(page,options);const responsePromise=page.waitForResponse(r=>r.url()===origin+'/g/heart/api/play'&&r.request().method()==='POST');
- await page.locator('#drawButton').click();const response=await responsePromise;assert.equal(response.status(),200);const result=await response.json();
+ await page.locator('#startButton').click();const response=await responsePromise;assert.equal(response.status(),200);const result=await response.json();
+ const submitted=JSON.parse(response.request().postData()||'{}');assert.equal(submitted.comfort,'no-touch');assert.equal(submitted.recording,false);assert.equal(submitted.consent,false);
  await page.locator('#resultDialog[open]').waitFor({timeout:20000});
  assert.equal(result.host.id,options.host);assert.equal(result.method,options.service?'pick':'gacha');if(options.service)assert.equal(result.service.id,options.service);
- assert.equal(result.comfort,'no-touch');assert.equal(result.recording,Boolean(options.recording));assert.equal(result.card.id,`${result.host.id}-${result.service.id}`);
+ assert.equal(result.comfort,'no-touch');assert.equal(result.recording,false);assert.equal(result.consent,false);assert.equal(result.card.id,`${result.host.id}-${result.service.id}`);
  const catalog=await stateOf(page,origin);assert.deepEqual(result.card,catalog.cards.find(card=>card.id===result.card.id));
  assert.equal(await page.locator('#resultHostName').textContent(),result.host.name);assert.equal(await page.locator('#resultTitle').textContent(),result.service.name);
  assert.equal(await page.locator('#resultRomanticLine').textContent(),result.card.romanticLine);assert.equal(await page.locator('#resultHost').getAttribute('src'),result.card.image);
@@ -41,7 +37,7 @@ async function draw(page,origin,options){
  assert.equal((await face.locator('.tcg-effect').textContent()).replace(/\s+/g,' ').trim(),result.card.effect.replace(/[\[\]]/g,'').replace('Saat dimainkan:','Saat dimainkan'));
  await page.locator('#resultHost').evaluate(image=>image.decode());return result;
 }
-async function finish(page){await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});assert.equal(await page.locator('#recordingConsent').isChecked(),false);assert.equal(await page.locator('#consentCheck').isChecked(),false);}
+async function finish(page){await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});assert.equal(await page.locator('#prepDialog').count(),0);}
 async function trailerCheck(page){
  await page.locator('#paradeTrailer').scrollIntoViewIfNeeded();
  await page.waitForFunction(()=>{const v=document.getElementById('paradeTrailer');return v.readyState>=1&&v.videoWidth>0&&Number.isFinite(v.duration)&&v.duration>0;},null,{timeout:20000});
@@ -80,7 +76,7 @@ async function verifyDownload(page,result,kind){
  });
  try{
   const promise=page.waitForEvent('download');await page.locator(kind==='card'?'#saveCard':'#savePoster').click();const d=await promise;assert.equal(await d.failure(),null);
-  const filename=`Heart-Parade-${kind==='poster'?'Poster-':''}${result.host.name}-${result.service.id}.png`;assert.equal(d.suggestedFilename(),filename);
+  const filename=`Grand-Line-Desire-${kind==='poster'?'Poster-':''}${result.host.name}-${result.service.id}.png`;assert.equal(d.suggestedFilename(),filename);
   const file=path.join(out,`${card.id}-${kind}.png`);await d.saveAs(file);const png=fs.readFileSync(file);
   assert.deepEqual(png.subarray(0,8),Buffer.from([137,80,78,71,13,10,26,10]));assert.equal(png.toString('ascii',12,16),'IHDR');assert.equal(png.readUInt32BE(16),size.width);assert.equal(png.readUInt32BE(20),size.height);
   const audit=await page.evaluate(()=>window.__heartExportAudit.output);assert.ok(audit,'UI download must invoke the real PNG canvas renderer');assert.deepEqual({width:audit.width,height:audit.height},size);
@@ -99,6 +95,7 @@ async function verifyDownload(page,result,kind){
    const price=await page.evaluate(value=>window.HeartCards.money(value),card.price);
    for(const value of ['WANTED','DICARI PARA PENGGEMAR',card.bountyName,card.priceLabel.toUpperCase(),price,card.customerOffer.label,card.customerOffer.description,`${card.name.split(' · ')[0]} · ${result.host.name} · ${card.cardNo}`])assert.ok(text.includes(value),`poster export missing ${value}`);
    assert.ok(drawn(card.mascot),'poster export must include selected Bipy');assert.ok(drawn('/g/heart/assets/brand/bpedia-pink.webp'),'poster export must include Bpedia brand');
+   const mascot=drawn(card.mascot),artRatio=art.args[2]/art.args[3],sourceRatio=art.width/art.height;assert.ok(Math.abs(artRatio-sourceRatio)<.01,'poster artwork export must preserve source proportions');assert.ok(mascot.args[1]>=0&&mascot.args[1]+mascot.args[3]<=size.height,'poster Bipy export must stay fully inside the canvas');
    assert.ok(audit.strokes.some(s=>s.width===15&&/^rgba\(200, 16, 46,/.test(s.color)),'poster normal price must have its thick red strike');assert.ok(audit.strokes.some(s=>s.width===6&&/^rgba\(200, 16, 46,/.test(s.color)),'poster normal price must have its second red strike');
   }
   return {kind,cardId:card.id,filename,file,bytes:png.length,...size,distinctSampleColors:colors.size,texts:text,images:audit.images,strokes:audit.strokes};
@@ -112,8 +109,25 @@ async function main(){
   const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
   const page=await context.newPage(),expected=monitor(page,'desktop',diagnostics);expected.add(hub.origin+'/g/heart/assets/video/heart-parade-promo.mp4');
   await page.goto(hub.origin+'/g/heart/');await page.locator('body[data-ready="1"]').waitFor();
+  assert.equal((await page.locator('#title').innerText()).replace(/\s+/g,' ').trim(),'Bipy Grand Line Desire');assert.equal((await page.locator('.t-sub').textContent()).trim(),'Zoro & Sanji Fanservice Card Game');
+  assert.equal(await page.locator('#prepDialog').count(),0);assert.ok(await page.locator('#demoModeButton').isVisible());assert.ok(await page.locator('#liveModeButton').isVisible());
+  expected.add(hub.origin+'/g/heart/api/mode');await page.locator('#liveModeButton').click();await page.locator('#staffModeDialog[open]').waitFor();assert.equal(await page.locator('#staffPin').getAttribute('minlength'),'6');await page.locator('#staffModeCancel').click();await page.locator('#staffModeDialog').waitFor({state:'hidden'});
+  await page.locator('#lightThemeButton').click();await page.waitForFunction(()=>document.documentElement.dataset.theme==='light');assert.equal(await page.locator('#lightThemeButton').getAttribute('aria-pressed'),'true');
+  await page.locator('#darkThemeButton').click();await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');assert.equal(await page.locator('#darkThemeButton').getAttribute('aria-pressed'),'true');
+  checks.push('renamed game, no approval dialog, protected Main Tercatat button, and explicit light/dark controls');
   const desktopLayout=await page.evaluate(()=>{const root=document.documentElement,hero=document.querySelector('.hero'),deck=document.querySelector('.deck-body');return {width:innerWidth,scrollWidth:root.scrollWidth,scrollHeight:root.scrollHeight,heroWidth:hero?.getBoundingClientRect().width||0,deckWidth:deck?.getBoundingClientRect().width||0};});
   assert.ok(desktopLayout.scrollWidth<=desktopLayout.width+2);assert.ok(desktopLayout.scrollHeight<10000);assert.ok(desktopLayout.heroWidth>900&&desktopLayout.deckWidth>900);checks.push('desktop TCG table is styled, bounded, and free of horizontal overflow');
+  const openingLayout=await page.evaluate(()=>{
+   const box=element=>{const r=element.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+   const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+   const trailer=box(document.querySelector('.hero-trailer')),table=box(document.querySelector('.table')),leaders=[...document.querySelectorAll('.leader-slot')].map(box),bipys=[...document.querySelectorAll('.table-bipys .sticker')].map(box);
+   const poster=box(document.querySelector('#posterPreview .poster')),photo=box(document.querySelector('#posterPreview .poster-photo')),art=document.querySelector('#posterPreview .poster-photo>img:not(.poster-bipy)'),mascot=box(document.querySelector('#posterPreview .poster-bipy'));
+   return {viewport:{width:innerWidth,height:innerHeight},trailer,table,leaders,bipys,overlaps:bipys.map(b=>leaders.map(l=>overlap(b,l))),poster,photo,art:{...box(art),fit:getComputedStyle(art).objectFit},mascot};
+  });
+  assert.ok(openingLayout.trailer.top>=0&&openingLayout.trailer.top<openingLayout.viewport.height&&openingLayout.trailer.width>400,'trailer must be visible in the opening area');
+  assert.ok(openingLayout.bipys.every((b,i)=>b.width>40&&b.height>70&&b.left>=openingLayout.table.left-1&&b.right<=openingLayout.table.right+1&&openingLayout.overlaps[i].every(area=>area===0)),'full Bipy mascots must be inside their own row and never cover leaders');
+  assert.equal(openingLayout.art.fit,'contain');assert.ok(openingLayout.photo.height/openingLayout.poster.height>.3&&openingLayout.art.top>=openingLayout.photo.top-1&&openingLayout.art.bottom<=openingLayout.photo.bottom+1&&openingLayout.mascot.bottom<=openingLayout.photo.bottom+1,'poster art and Bipy must fit the reserved photo frame');
+  checks.push('opening trailer, separated full-body Bipy row, and proportional bounty preview geometry');
   const state=await stateOf(page,hub.origin);assert.equal(state.cards.length,14);assert.equal(new Set(state.cards.map(c=>c.image)).size,14);
   for(const host of ['zoro','sanji']){
    await page.locator(`.host-card[data-host="${host}"]`).click();assert.equal(await page.locator('.card-choice[data-service]').count(),7);
@@ -124,7 +138,7 @@ async function main(){
   media=await trailerCheck(page);checks.push('trailer metadata, explicit playback, and reduced-motion pause/autoplay behavior');
   await page.locator('.host-card[data-host="zoro"]').click();await page.locator('#startButton').scrollIntoViewIfNeeded();await page.evaluate(()=>document.fonts.ready);
   await page.locator('.host-art').evaluateAll(images=>Promise.all(images.map(img=>img.decode())));await page.screenshot({path:path.join(out,'heart-desktop.png'),fullPage:true});
-  const first=await draw(page,hub.origin,{host:'zoro',service:'vow',recording:true});checks.push('Zoro explicit selection and recording opt-in');
+  const first=await draw(page,hub.origin,{host:'zoro',service:'vow'});checks.push('Zoro explicit selection opens directly with safe no-touch/no-recording defaults');
   for(const kind of ['card','poster'])download.push(await verifyDownload(page,first,kind));checks.push('Zoro card 1080x1508 and poster 1080x1528 decode with selected art, BP06 metadata, stats/effect, offer, Bipy and brand');
   const ticket=first.id;await page.reload();await page.locator('#resultDialog[open]').waitFor();assert.equal(await page.locator('#ticketCode').textContent(),ticket);checks.push('pending ticket recovers after reload');
   const resultUrl=hub.origin+'/g/heart/api/result';expected.add(resultUrl);
@@ -134,10 +148,11 @@ async function main(){
   for(const host of ['zoro','sanji']){const result=await draw(page,hub.origin,{host});assert.ok(state.cards.some(c=>c.id===result.card.id));await finish(page);checks.push(`${host} gacha retains host, returns catalog card, resets consent`);}
   const playUrl=hub.origin+'/g/heart/api/play';expected.add(playUrl);let lostResult;
   await page.route('**/g/heart/api/play',async r=>{const response=await r.fetch();lostResult=await response.json();await r.abort('failed');});
-  await prepare(page,{host:'zoro'});await page.locator('#drawButton').click();await page.locator('#resultDialog[open]').waitFor();assert.ok(lostResult);assert.equal(await page.locator('#ticketCode').textContent(),lostResult.id);assert.notEqual(lostResult.id,ticket);
+  await prepare(page,{host:'zoro'});await page.locator('#startButton').click();await page.locator('#resultDialog[open]').waitFor();assert.ok(lostResult);assert.equal(await page.locator('#ticketCode').textContent(),lostResult.id);assert.notEqual(lostResult.id,ticket);
   checks.push('lost draw response recovers the same existing result');await page.unroute('**/g/heart/api/play');await finish(page);expected.delete(playUrl);
-  const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce',acceptDownloads:true}),phone=await mobile.newPage();monitor(phone,'phone',diagnostics);
-  await phone.goto(hub.origin+'/g/heart/');await phone.locator('body[data-ready="1"]').waitFor();await phone.screenshot({path:path.join(out,'heart-phone.png'),fullPage:true});
+  const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce',acceptDownloads:true}),phone=await mobile.newPage(),phoneExpected=monitor(phone,'phone',diagnostics);
+  phoneExpected.add(hub.origin+'/g/heart/assets/video/heart-parade-promo.mp4');await phone.goto(hub.origin+'/g/heart/');await phone.locator('body[data-ready="1"]').waitFor();await phone.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(img=>{img.loading='eager';return img.decode().catch(()=>{});}));});await phone.screenshot({path:path.join(out,'heart-phone.png'),fullPage:true});
+  await phone.waitForFunction(()=>{const v=document.getElementById('paradeTrailer');return v.readyState>=1&&v.videoWidth>0&&!v.error;});
   const phoneLayout=await phone.evaluate(()=>{const root=document.documentElement,leaders=document.querySelectorAll('.leader-slot'),cards=document.querySelectorAll('.deck-card'),start=document.getElementById('startButton')?.getBoundingClientRect();return {width:innerWidth,scrollWidth:root.scrollWidth,scrollHeight:root.scrollHeight,leaders:leaders.length,cards:cards.length,start:{width:start?.width||0,height:start?.height||0}};});
   assert.ok(phoneLayout.scrollWidth<=phoneLayout.width+2);assert.ok(phoneLayout.scrollHeight<8000);assert.equal(phoneLayout.leaders,2);assert.equal(phoneLayout.cards,7);assert.ok(phoneLayout.start.width>=44&&phoneLayout.start.height>=44);checks.push('phone TCG table stays compact with two leaders, seven cards, and a usable primary action');
   const sanji=await draw(phone,hub.origin,{host:'sanji',service:'twirl'});assert.equal(await phone.locator('#resultDialog').evaluate(d=>d.scrollTop),0);await phone.screenshot({path:path.join(out,'heart-phone-result.png')});checks.push('Sanji explicit selection and mobile result opens at scrollTop 0');
@@ -145,13 +160,11 @@ async function main(){
   assert.ok(resultLayout.dialog.left>=0&&resultLayout.dialog.right<=390);assert.ok(resultLayout.stage.width>=340&&resultLayout.stage.height>=300);assert.ok(resultLayout.card.width>=170&&resultLayout.card.height>=235);checks.push('mobile result dialog renders a full trading card in a bounded animated stage');
   for(const kind of ['card','poster'])download.push(await verifyDownload(phone,sanji,kind));checks.push('Sanji mobile card/poster downloads retain selected art, stats/effect, BP06 metadata, offer, Bipy and brand');
   await phone.locator('#resultDialog').evaluate(d=>{d.scrollTop=d.scrollHeight;});await finish(phone);
-  await prepare(phone,{host:'sanji',service:'hug',recording:true});await phone.locator('[name="comfort"][value="touch"]').check();await phone.locator('[data-close="prepDialog"]').click();await phone.locator('#startButton').click();
-  assert.ok(await phone.locator('[name="comfort"][value="no-touch"]').isChecked());assert.equal(await phone.locator('#recordingConsent').isChecked(),false);assert.equal(await phone.locator('#consentCheck').isChecked(),false);
-  await phone.locator('#consentCheck').check();await phone.locator('#drawButton').click();await phone.locator('#resultDialog[open]').waitFor();assert.equal(await phone.locator('#resultDialog').evaluate(d=>d.scrollTop),0);await finish(phone);checks.push('cancelled prep resets touch/recording/consent and replay resets mobile scroll');await mobile.close();
+  const hug=await draw(phone,hub.origin,{host:'sanji',service:'hug'});assert.equal(hug.consent,false);assert.equal(await phone.locator('#resultDialog').evaluate(d=>d.scrollTop),0);await finish(phone);checks.push('direct replay keeps safe defaults and resets mobile result scroll');await mobile.close();
   expected.add(hub.origin+'/g/heart/assets/video/heart-parade-promo.mp4');expected.add(hub.origin+'/g/heart/api/admin/state');
   await page.goto(hub.origin+'/g/heart/admin.html');await page.screenshot({path:path.join(out,'admin-login.png')});await page.locator('#pin').fill('246810');await page.locator('#loginForm button').click();await page.locator('#adminContent:visible').waitFor();
-  await page.locator('#mode').selectOption('live');await page.locator('#duration').fill('1500');await page.locator('#settingsForm button').click();await page.locator('#adminNotice:visible').waitFor();checks.push('staff session and reveal settings saved');
-  const booth=await context.newPage(),boothExpected=monitor(booth,'booth',diagnostics);boothExpected.add(hub.origin+'/g/heart/assets/video/heart-parade-promo.mp4');await booth.goto(hub.origin+'/g/heart/');await booth.locator('body[data-ready="1"]').waitFor();await prepare(booth,{host:'sanji'});await booth.locator('#verifiedCheck').check();await booth.locator('#drawButton').click();await booth.locator('#resultDialog[open]').waitFor();assert.match(await booth.locator('#ticketCode').textContent(),/^HP-/);await finish(booth);
+  await page.locator('#duration').fill('1500');await page.locator('#settingsForm button').click();await page.locator('#adminNotice:visible').waitFor();checks.push('staff reveal setting saved');
+  const booth=await context.newPage(),boothExpected=monitor(booth,'booth',diagnostics);boothExpected.add(hub.origin+'/g/heart/assets/video/heart-parade-promo.mp4');await booth.goto(hub.origin+'/g/heart/');await booth.locator('body[data-ready="1"]').waitFor();await booth.locator('#liveModeButton').click();await booth.waitForFunction(()=>document.getElementById('liveModeButton').getAttribute('aria-pressed')==='true');assert.equal(await booth.locator('#modeBadge').textContent(),'MAIN TERCATAT · BOOTH');const official=await draw(booth,hub.origin,{host:'sanji'});assert.match(official.id,/^HP-/);assert.equal(official.consent,false);await finish(booth);checks.push('Main Tercatat button creates an official HP ticket after staff authentication');
   await page.locator('#refreshQueue').click();await page.locator('#queueList [data-action="served"]').waitFor();await page.screenshot({path:path.join(out,'admin-phone-ticket.png'),fullPage:true});await page.locator('#queueList [data-action="served"]').click();await page.locator('#historyList .queue-ticket').waitFor({state:'attached'});assert.equal(await page.locator('#queueList [data-action="served"]').count(),0);checks.push('official booth ticket created and served through UI');await booth.close();
   assert.deepEqual(diagnostics.filter(e=>!e.expected),[]);checks.push('no unexpected console, page, HTTP or request failures');
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({checks,artwork,media,download,diagnostics,errors:[]},null,2));console.log(`Heart UI: ${checks.length} checks passed; screenshots and card in ${out}`);

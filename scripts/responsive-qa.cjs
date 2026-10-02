@@ -267,6 +267,46 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
   }
   if(slug==='heart') {
     await page.locator('body[data-ready="1"]').waitFor({timeout:20000});
+    check(await page.locator('#prepDialog').count()===0,`${log.stem} draw has no preparation dialog`);
+    for(const [theme,other] of [['light','dark'],['dark','light']]) {
+      const button=page.locator(`#${theme}ThemeButton`),control=await target(page,`#${theme}ThemeButton`);
+      check(control.visible&&control.width>=44&&control.height>=44,`${log.stem} ${theme} theme touch target`,JSON.stringify(control));
+      await button.click();
+      check(await page.locator('html').getAttribute('data-theme')===theme,`${log.stem} explicit ${theme} theme applies`);
+      check(await button.getAttribute('aria-pressed')==='true'&&await page.locator(`#${other}ThemeButton`).getAttribute('aria-pressed')==='false',`${log.stem} ${theme} theme pressed states`);
+      check(await page.evaluate(()=>localStorage.getItem('gamysuf-theme'))===theme,`${log.stem} ${theme} theme preference saved`);
+      const themedLayout=await geometry(page);
+      check(themedLayout.scrollWidth<=themedLayout.width+2,`${log.stem} ${theme} theme overflow`,JSON.stringify(themedLayout));
+    }
+    for(const selector of ['#demoModeButton','#liveModeButton']) {
+      const control=await target(page,selector);
+      check(control.visible&&control.width>=44&&control.height>=44,`${log.stem} ${selector} mode touch target`,JSON.stringify(control));
+    }
+    check(await page.locator('#demoModeButton').getAttribute('aria-pressed')==='true'&&await page.locator('#liveModeButton').getAttribute('aria-pressed')==='false',`${log.stem} initial demo mode`);
+    const apiHeaders={'Origin':base,'Content-Type':'application/json','X-Bpedia-Client':'heartparade'};
+    const unauthorized=await page.request.post(base+'/g/heart/api/mode',{headers:apiHeaders,data:{mode:'live'}});
+    check(unauthorized.status()===401,`${log.stem} recorded mode requires staff authentication`);
+    const login=await page.request.post(base+'/g/heart/api/login',{headers:apiHeaders,data:{pin:'246810'}});
+    check(login.status()===200,`${log.stem} isolated QA staff session`);
+    for(const [mode,id,other] of [['live','liveModeButton','demoModeButton'],['demo','demoModeButton','liveModeButton']]) {
+      const switched=page.waitForResponse(response=>response.url()===base+'/g/heart/api/mode'&&response.request().method()==='POST');
+      await page.locator('#'+id).click();const response=await switched,state=await response.json();
+      check(response.status()===200&&state.settings.mode===mode,`${log.stem} ${mode} mode confirmed by server`);
+      await page.locator(`#${id}[aria-pressed="true"]:not([disabled])`).waitFor();
+      check(await page.locator('#'+other).getAttribute('aria-pressed')==='false',`${log.stem} ${mode} mode pressed states`);
+    }
+    const directDraw=async label=>{
+      const played=page.waitForResponse(response=>response.url()===base+'/g/heart/api/play'&&response.request().method()==='POST');
+      await page.locator('#startButton').click();const response=await played,result=await response.json(),request=JSON.parse(response.request().postData()||'{}');
+      check(response.status()===200,`${log.stem} ${label} direct draw succeeds`,String(response.status()));
+      for(const [field,value] of [['comfort','no-touch'],['recording',false],['consent',false]]) {
+        check(request[field]===value,`${log.stem} ${label} submits ${field}`,JSON.stringify(request[field]));
+        check(result[field]===value,`${log.stem} ${label} preserves ${field}`,JSON.stringify(result[field]));
+      }
+      await page.locator('#resultDialog[open]').waitFor({timeout:20000});
+      check(await page.locator('#demoModeButton').isDisabled()&&await page.locator('#liveModeButton').isDisabled(),`${log.stem} ${label} open result locks session mode`);
+      return result;
+    };
     const titleFit=await page.locator('#title').evaluate(n=>({width:n.clientWidth,content:n.scrollWidth}));
     check(titleFit.content<=titleFit.width+2,`${log.stem} complete title visible`,JSON.stringify(titleFit));
     await page.locator('[data-host="sanji"].host-card').click();
@@ -281,15 +321,8 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
     check(await page.locator('#pickMode').getAttribute('aria-pressed')==='true',`${log.stem} explicit selection mode`);
     const control=await target(page,'#startButton');
     check(control.visible&&control.width>=44&&control.height>=44,`${log.stem} heart touch target`);
-    if(!await page.locator('#prepDialog').isVisible())await page.locator('#startButton').click();
-    check(await page.locator('#pickService').inputValue()==='twirl',`${log.stem} visible choice retains hidden service`);
-    check(!await page.locator('#pickService').isVisible(),`${log.stem} service select stays hidden`);
-    check(await page.locator('[name="comfort"][value="no-touch"]').isChecked(),`${log.stem} no-touch default`);
-    check(!await page.locator('#recordingConsent').isChecked(),`${log.stem} recording opt-in`);
-    await page.locator('#recordingConsent').check();
-    await page.locator('#consentCheck').check();
-    await page.locator('#drawButton').click();
-    await page.locator('#resultDialog[open]').waitFor({timeout:20000});
+    const picked=await directDraw('picked card');
+    check(picked.method==='pick'&&picked.service.id==='twirl'&&picked.host.id==='sanji',`${log.stem} visible choice retained by server`);
     await page.waitForFunction(()=>document.querySelector('#resultDialog')?.scrollTop===0,null,{timeout:1000});
     check(await page.locator('#resultDialog').evaluate(dialog=>dialog.scrollTop)===0,`${log.stem} result initially scrolls from top`);
     check((await page.locator('#resultHostName').textContent())==='Sanji',`${log.stem} chosen host retained`);
@@ -300,7 +333,7 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
     await page.screenshot({path:path.join(out,`${log.stem}-result.png`)});
     await page.locator('#finishButton').click();
     await page.locator('#resultDialog').waitFor({state:'hidden'});
-    check(!await page.locator('#recordingConsent').isChecked(),`${log.stem} recording reset after result`);
+    check(!await page.locator('#demoModeButton').isDisabled()&&!await page.locator('#liveModeButton').isDisabled(),`${log.stem} result acknowledgement unlocks session mode`);
     await page.locator('[data-host="zoro"].host-card').click();
     await page.locator('#gachaMode').click();
     check(await page.locator('#gachaMode').getAttribute('aria-pressed')==='true',`${log.stem} gacha selection mode`);
@@ -308,13 +341,8 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
       image.loading='eager';await image.decode();return image.src;
     })));
     check(new Set([...sanjiArt,...zoroArt]).size===14,`${log.stem} fourteen unique decoded artwork URLs`);
-    await page.locator('#startButton').click();
-    check(await page.locator('#pickService').inputValue()==='',`${log.stem} gacha clears explicit service`);
-    check(await page.locator('[name="comfort"][value="no-touch"]').isChecked(),`${log.stem} no-touch reset on replay`);
-    check(!await page.locator('#recordingConsent').isChecked(),`${log.stem} recording remains opt-in on replay`);
-    check(!await page.locator('#consentCheck').isChecked(),`${log.stem} consent reset on replay`);
-    await page.locator('#consentCheck').check();await page.locator('#drawButton').click();
-    await page.locator('#resultDialog[open]').waitFor({timeout:20000});
+    const gacha=await directDraw('gacha replay');
+    check(gacha.method==='gacha'&&gacha.host.id==='zoro',`${log.stem} gacha clears explicit service`);
     await page.waitForFunction(()=>document.querySelector('#resultDialog')?.scrollTop===0,null,{timeout:1000});
     check(await page.locator('#resultDialog').evaluate(dialog=>dialog.scrollTop)===0,`${log.stem} replay result scroll resets`);
     check((await page.locator('#resultHostName').textContent())==='Zoro',`${log.stem} gacha host retained`);
@@ -322,6 +350,7 @@ async function gameFlow(page,base,slug,browserName,sizeId,play=false) {
     const reduced=await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
     check(await page.locator('html').getAttribute('data-motion')===(reduced?'reduce':'full'),`${log.stem} motion preference retained`);
     check(!await page.locator('#startButton').isDisabled(),`${log.stem} heart replay ready`);
+    await page.request.post(base+'/g/heart/api/logout',{headers:apiHeaders,data:{}});
   }
   const layout=await geometry(page);
   check(layout.scrollWidth<=layout.width+2,`${log.stem} game view overflow`,JSON.stringify(layout));
@@ -341,7 +370,7 @@ async function main() {
       try { browser=await playwright[browserName].launch(); }
       catch(error) { check(false,`${browserName} launch`,error.message); continue; }
       try {
-        const selected=browserName==='chromium'||sizeFilter?cases:cases.filter(([id])=>['small-320','phone-390','tablet-768','desktop-1366'].includes(id));
+        const selected=browserName==='chromium'||sizeFilter||gameFilter==='heart'?cases:cases.filter(([id])=>['small-320','phone-390','tablet-768','desktop-1366'].includes(id));
         for(const [sizeId,width,height] of selected) {
           const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,hasTouch:width<=844,isMobile:width<=540 && browserName!=='firefox',reducedMotion:browserName==='chromium'&&sizeId==='phone-390'?'no-preference':'reduce'});
           const page=await context.newPage();

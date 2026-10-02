@@ -25,6 +25,7 @@
  }
  function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
  function cover(g,img,x,y,w,h,ay=.5){if(!img)return;const s=Math.max(w/img.naturalWidth,h/img.naturalHeight),iw=img.naturalWidth*s,ih=img.naturalHeight*s;g.drawImage(img,x+(w-iw)/2,y+(h-ih)*ay,iw,ih);}
+ function contain(g,img,x,y,w,h,ax=.5,ay=.5){if(!img)return;const s=Math.min(w/img.naturalWidth,h/img.naturalHeight),iw=img.naturalWidth*s,ih=img.naturalHeight*s;g.drawImage(img,x+(w-iw)*ax,y+(h-ih)*ay,iw,ih);}
  function spacing(g,px){if('letterSpacing' in g)g.letterSpacing=px+'px';}
  function fit(g,text,maxWidth,make,start,min){let size=start;g.font=make(size);while(size>min&&g.measureText(text).width>maxWidth){size-=2;g.font=make(size);}return size;}
  function gradient(g,x0,y0,x1,y1,stops){const grad=g.createLinearGradient(x0,y0,x1,y1);stops.forEach((c,i)=>grad.addColorStop(i/(stops.length-1),c));return grad;}
@@ -108,9 +109,9 @@
   const px=120,py=300,pw=W-240,ph=640;
   g.fillStyle=ink;g.fillRect(px-14,py-14,pw+28,ph+28);
   g.save();g.beginPath();g.rect(px,py,pw,ph);g.clip();await paintScene(g,host,px,py,pw,ph,{safe,ay:.25});
-  g.drawImage(art,px,py-ph*.02,pw,pw*1.5);
+  contain(g,art,px+18,py+10,pw-36,ph-20,.5,1);
   const vignette=g.createLinearGradient(0,py,0,py+ph);vignette.addColorStop(.7,'rgba(58,36,16,0)');vignette.addColorStop(1,'rgba(58,36,16,.35)');g.fillStyle=vignette;g.fillRect(px,py,pw,ph);
-  if(mascot){const mh=250,mw=mh*mascot.naturalWidth/mascot.naturalHeight;g.shadowColor='rgba(40,20,5,.45)';g.shadowBlur=18;g.shadowOffsetY=6;g.drawImage(mascot,px+pw-mw-18,py+ph-mh+24,mw,mh);g.shadowColor='transparent';}
+  if(mascot){const mh=Math.min(218,ph*.34),mw=mh*mascot.naturalWidth/mascot.naturalHeight;g.shadowColor='rgba(40,20,5,.45)';g.shadowBlur=18;g.shadowOffsetY=6;g.drawImage(mascot,px+pw-mw-18,py+ph-mh-14,mw,mh);g.shadowColor='transparent';}
   g.restore();
   g.font='800 44px Poppins';spacing(g,8);g.fillStyle=ink;g.fillText('DICARI PARA PENGGEMAR',W/2,1028);spacing(g,0);
   const dw=g.measureText('DICARI PARA PENGGEMAR').width;g.lineWidth=3;g.beginPath();g.moveTo(70,1013);g.lineTo(W/2-dw/2-40,1013);g.moveTo(W/2+dw/2+40,1013);g.lineTo(W-70,1013);g.stroke();

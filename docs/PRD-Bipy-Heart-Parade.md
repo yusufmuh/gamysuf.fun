@@ -1,14 +1,14 @@
-# PRD — Bipy Heart Parade
+# PRD — Bipy Grand Line Desire
 
-**Game 05 · Heart Parade 2.0.0 · Gamysuf Arcade 1.6.0 · 2 Oktober 2026**
+**Game 05 · Grand Line Desire 2.1.0 · Gamysuf Arcade 1.6.1 · 2 Oktober 2026**
 
 Pemilik produk: Muhammad Yusuf / Bpedia. Sumber kode: `../05 bipy-heart-parade`. Rute: `https://gamysuf.fun/g/heart/`. Dashboard petugas: `/g/heart/admin.html`.
 
 ## 1. Konsep dan tujuan
 
-Bipy Heart Parade adalah permainan kartu fanservice romantis untuk booth Bpedia di Market-In 6.0. Pemain membuka satu kartu momen bersama Zoro atau Sanji. Setiap kartu dirancang seperti trading card bergaya One Piece Card Game (OPCG): nomor kartu, kelangkaan, cost, power, counter, atribut, warna, kru, teks efek, dan poster bounty. Daya tarik utama: 14 ilustrasi adegan berbeda, animasi pembukaan per kartu, poster bounty berisi harga normal fanservice yang dicoret lalu ditutup **GRATIS** untuk pelanggan Bpedia, trailer Gemini, serta jingle Bpedia.
+Bipy Grand Line Desire adalah permainan kartu fanservice romantis untuk booth Bpedia di Market-In 6.0. Pemain membuka satu kartu momen bersama Zoro atau Sanji. Setiap kartu dirancang seperti trading card bergaya One Piece Card Game (OPCG): nomor kartu, kelangkaan, cost, power, counter, atribut, warna, kru, teks efek, dan poster bounty. Daya tarik utama: 14 ilustrasi adegan berbeda, animasi pembukaan per kartu, poster bounty berisi harga normal fanservice yang dicoret lalu ditutup **GRATIS** untuk pelanggan Bpedia, trailer Gemini, serta jingle Bpedia.
 
-Sasaran utama adalah pengunjung dewasa penggemar cosplay, khususnya perempuan, yang ingin pengalaman personal, playful, dan mudah difoto. Online menghasilkan kartu digital demo; interaksi fisik hanya terjadi di sesi booth yang dikelola petugas. Pilihan kenyamanan tersedia sebelum bermain dan dikonfirmasi ulang saat bertemu cosplayer.
+Sasaran utama adalah pengunjung dewasa penggemar cosplay, khususnya perempuan, yang ingin pengalaman personal, playful, dan mudah difoto. Online menghasilkan kartu digital demo; interaksi fisik hanya terjadi di sesi booth yang dikelola petugas. Permainan dimulai langsung memakai setelan aman tanpa sentuhan dan tanpa dokumentasi. Pilihan interaksi nyata tetap dikonfirmasi langsung oleh petugas dan cosplayer di booth.
 
 **Cosplayer Zoro dan Sanji hadir di booth Bpedia dua hari penuh, 3 dan 4 Oktober 2026**, Urban Forest Cipete. Teks jadwal bawaan: *Zoro & Sanji hadir 3–4 Okt 2026, dua hari penuh di booth Bpedia · Urban Forest Cipete.*
 
@@ -23,9 +23,9 @@ Tujuan operasional: memancing ketertarikan dari luar booth, memperjelas nilai mo
 - Identitas: `02_Brand Guidline/02_Bipy/bipy-full-berdiri.png` dan `03_Warna_Font/bpedia-tokens.css`. Bipy pink dan wordmark Bpedia dari master; varian jade/gold adalah kostum tematik.
 - Konsep karakter merujuk One Piece. Aset tidak dinyatakan sebagai kolaborasi resmi atau bukti izin komersial.
 
-## 3. Lingkup rilis 2.0.0
+## 3. Lingkup rilis 2.1.0
 
-Termasuk: dua host, tujuh menu, 14 kartu BP06, dua cara bermain (gacha booster dan pilih kartu), animasi per kartu, poster bounty dengan harga normal yang dapat diubah petugas, jingle dan BGM, trailer, pilihan tanpa sentuhan, unduhan kartu, antrean per cosplayer, kuota harian WIB, ekspor CSV/backup JSON, migrasi data 1.5.x, serta integrasi album/XP/dashboard arcade.
+Termasuk: dua host, tujuh menu, 14 kartu BP06, dua cara bermain (gacha booster dan pilih kartu), animasi per kartu, poster bounty dengan harga normal yang dapat diubah petugas, jingle dan BGM, trailer utama di area pembuka, tombol Demo/Main tercatat, tema terang/gelap, alur satu klik tanpa dialog persetujuan, unduhan kartu, antrean per cosplayer, kuota harian WIB, ekspor CSV/backup JSON, migrasi data 1.5.x, serta integrasi album/XP/dashboard arcade.
 
 Di luar rilis: pembayaran online, penjualan peluang gacha, integrasi transaksi toko, reservasi lintas booth, login pelanggan, rekaman kamera otomatis, dan publikasi Steam/marketplace. Distribusi di toko aplikasi memerlukan pemeriksaan hak karakter, font, audio, dan materi brand secara terpisah.
 
@@ -111,12 +111,12 @@ Audio:
 
 ## 7. Alur pemain
 
-1. Pilih Zoro atau Sanji, lalu pilih **gacha booster** atau **pilih kartu** (jika dibuka petugas).
-2. Dialog kenyamanan: **tanpa sentuhan** sebagai default atau sentuhan ringan. Nama panggung opsional. Persetujuan interaksi wajib; izin dokumentasi terpisah dan tidak tercentang otomatis.
-3. Di perangkat booth, petugas memverifikasi peserta dewasa dan misi booth sebelum tiket terbit.
+1. Pilih Zoro atau Sanji, lalu pilih **gacha booster** atau **pilih kartu** (jika dibuka petugas). Kartu langsung dibuka tanpa dialog tambahan.
+2. Permintaan digital selalu memakai default **tanpa sentuhan**, tanpa dokumentasi, dan tanpa menyimpan nama. Persetujuan sentuhan/dokumentasi tidak pernah diasumsikan dari klik permainan.
+3. **Demo** menghasilkan kode `DEMO-` pribadi dan tidak mengubah antrean. **Main tercatat** meminta PIN petugas, mengaktifkan sesi resmi, memverifikasi misi booth, lalu menerbitkan tiket `HP-`.
 4. Server menyimpan hasil lebih dulu, lalu animasi kartu berjalan (durasi reveal diatur petugas). Tombol lewati dan reduced motion tersedia.
 5. Kartu menampilkan nomor BP06, rarity, statistik, efek, poster bounty dengan harga normal dicoret dan GRATIS, versi interaksi, kode, serta penanda demo/booth. Kartu dapat diunduh.
-6. Tombol Selesai mengonfirmasi hasil ke server sebelum putaran berikutnya. Tiket booth tetap di antrean sampai petugas menandai selesai/batal.
+6. Tombol Selesai mengonfirmasi hasil ke server sebelum putaran berikutnya. Tiket booth tetap di antrean sampai petugas menandai selesai/batal. Petugas mengonfirmasi kembali pilihan interaksi dan dokumentasi sebelum momen fisik dimulai.
 
 Online memakai kode `DEMO-` dan tidak berlaku untuk klaim booth. Booth memakai `HP-` dan nomor antrean harian.
 
@@ -178,11 +178,11 @@ Hanya hasil yang benar-benar dijalankan yang dicatat di sini. Rencana tes bukan 
 
 | Pemeriksaan | Status |
 |---|---|
-| `npm test` sumber 05 (engine + server, kontrak 2.0.0) | Lulus 37/37 pada 2 Oktober 2026 (lingkungan pengembangan) |
+| `npm test` sumber 05 (engine + server, kontrak 2.1.0) | belum diverifikasi setelah revisi 2.1.0 |
 | `npm run check` | Lulus pada 2 Oktober 2026 |
 | QA dashboard petugas (Playwright, server lokal): login, validasi PIN, ubah harga, status menu, jadwal Market-In, kuota, filter antrean, aksi tiket, CSV; Chromium/Firefox/WebKit × 17 viewport × terang/gelap | Lulus pada 2 Oktober 2026: tanpa error konsol, tanpa overflow horizontal, tanpa target sentuh < 44 px |
 | Tes hub `tests/heart-engine.test.cjs` dan `tests/heart-server.test.cjs` | Lulus 37/37 pada 2 Oktober 2026 terhadap salinan sementara yang dibuat dengan fungsi `copy` milik `scripts/sync-games.cjs`; terhadap `games/heart` hasil `npm run sync`: belum diverifikasi |
 | QA UI permainan (kartu OPCG, animasi per kartu, poster bounty, jingle) di matriks viewport | belum diverifikasi |
-| Sinkronisasi hub, paket Hostinger, deployment, dan probe produksi 1.6.0 | belum diverifikasi |
+| Sinkronisasi hub, paket Hostinger, deployment, dan probe produksi 1.6.1 | belum diverifikasi |
 
 Rujukan teknis: [Node crypto](https://nodejs.org/api/crypto.html), [MDN AudioContext.resume](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/resume), [MDN Web Audio best practices](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices). Katalog aset dan provenance: `docs/ASSETS-Heart-Parade.md`.

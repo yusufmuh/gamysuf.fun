@@ -1,7 +1,7 @@
 {
   "name": "gamysuf-arcade",
-  "version": "1.6.0",
-  "description": "Gamysuf Arcade: lima game Bpedia dengan hub event Market-In 6.0 (Bipy Gacha Pop dan Bipy Heart Parade), koleksi kartu, dan dashboard booth.",
+  "version": "1.6.1",
+  "description": "Gamysuf Arcade: lima game Bpedia dengan hub event Market-In 6.0 (Bipy Gacha Pop dan Bipy Grand Line Desire), koleksi kartu, dan dashboard booth.",
   "author": "Muhammad Yusuf",
   "private": true,
   "main": "hub/server.cjs",

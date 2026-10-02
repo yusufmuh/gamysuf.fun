@@ -97,3 +97,168 @@ html[data-theme=light] .icon-button,html[data-theme=light] .admin-link{border-co
 @media(min-width:761px) and (max-height:760px){.play-shell{min-height:0}.play-body{min-height:0}.play-stage{min-height:calc(100dvh - 120px);padding-block:30px 66px}.showcase{width:min(62%,300px)}.play-details{padding-block:20px}}
 @media(prefers-reduced-motion:reduce){.parade-list{animation:none}.deck-card,.leader-slot .tcg,.play-details,.showcase,.poster-stamp{animation:none!important;transition:none!important}}
 html[data-motion=reduce] .parade-list,html[data-motion=reduce] .deck-card,html[data-motion=reduce] .leader-slot .tcg,html[data-motion=reduce] .play-details,html[data-motion=reduce] .showcase,html[data-motion=reduce] .poster-stamp{animation:none!important;transition:none!important}
+
+/* Grand Line Desire: the trailer and session controls live in the opening area. */
+.hero{align-items:start;overflow:visible;gap:clamp(24px,4vw,58px);grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+.hero h1{font-size:clamp(42px,5.2vw,76px);line-height:1;letter-spacing:-.055em}
+.hero h1 .t-main{max-width:11ch;overflow-wrap:normal}
+.t-sub{font-size:10px;letter-spacing:.12em;line-height:1.7}
+.hero-trailer{width:100%;margin:20px 0 0;padding:0;display:block;border:0;border-radius:0;background:transparent;box-shadow:none}
+.hero-trailer .trailer-screen{aspect-ratio:16/9;width:100%}
+.hero-trailer .trailer-copy{padding:11px 0 0}
+.hero-trailer .trailer-copy .eyebrow{font-size:8px}
+.hero-trailer .trailer-copy h2{margin-top:3px;font-size:22px;line-height:1.2}
+.hero-lead{margin-top:17px;font-size:12px;line-height:1.75}
+.session-controls,.theme-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:15px}
+.theme-controls{margin-top:9px}
+.control-label{width:80px;color:#cdb9ad;font-size:8px;letter-spacing:.12em}
+.segmented-control{display:flex;gap:4px;padding:4px;border:1px solid #ffffff27;border-radius:999px;background:#ffffff06}
+.segmented-control button{min-width:74px;min-height:40px;padding:7px 15px;border:1px solid transparent;border-radius:999px;background:transparent;color:#d9c9bf;font-size:10px}
+.segmented-control button[aria-pressed=true]{border-color:#dfbd76;background:#dfbd761d;color:#ffe0a1}
+.segmented-control button:hover{background:#ffffff12}
+
+/* Cards, mascots and quotation each have a dedicated row. */
+.table{display:grid;gap:18px;padding:clamp(18px,3vw,30px);overflow:visible}
+.leaders{width:100%;max-width:570px;margin:0 auto;padding-top:4px;align-items:start;gap:clamp(10px,1.8vw,24px)}
+.leader-slot{max-height:none;margin-bottom:34px}
+.leader-slot.selected .tcg{transform:none;filter:drop-shadow(0 10px 14px #e9bf7c25)}
+.leader-slot .host-card,.leader-slot .host-card.selected{transform:none}
+.leader-slot .leader-state{bottom:-32px;font-size:8px;padding:4px 8px;max-width:100%;white-space:normal;text-align:center;line-height:1.4}
+.table-bipys{position:relative;display:flex;align-items:end;justify-content:center;gap:clamp(18px,4vw,46px);padding-top:4px}
+.table-bipys .sticker{position:static;inset:auto;display:block;width:clamp(54px,7.5vw,92px);height:clamp(98px,13vw,166px);transform:none;object-fit:contain;object-position:center bottom}
+.table .quote{position:relative;inset:auto;transform:none;width:100%;max-width:480px;margin:0 auto;padding:12px;box-shadow:none}
+.quote blockquote{margin:0;font-size:16px;line-height:1.5}
+.booth-comfort{width:min(1312px,calc(100% - 2*clamp(18px,4vw,64px)));margin:0 auto 28px;padding-top:18px;font-size:10px}
+
+/* The full illustration and companion fit side by side within the bounty photo. */
+.poster{container-type:inline-size}
+.poster-photo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.28fr);align-items:end;width:88%;height:39%;min-height:39%;flex:0 0 39%;margin:3% auto 1%;padding:2%;gap:2%;border-width:2px}
+.poster-photo>img:not(.poster-bipy){position:relative;inset:auto;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center}
+.poster-photo .poster-bipy{position:relative;inset:auto;align-self:end;width:100%;height:78%;object-fit:contain;object-position:center bottom}
+.poster-wanted{font-size:clamp(10px,12cqw,36px);letter-spacing:.12em}
+.poster-dead{font-size:clamp(4px,2.8cqw,9px)}
+.poster-name{font-size:clamp(8px,7.5cqw,24px);line-height:1.08}
+.poster-price{font-size:clamp(4px,2.5cqw,8px)}
+.poster-amount{font-size:clamp(7px,5cqw,16px)}
+.poster-stamp b{font-size:clamp(7px,5.3cqw,17px)}
+.poster-stamp small{font-size:clamp(3.5px,2.2cqw,7px)}
+.poster-fine,.poster-foot{font-size:clamp(3.5px,2.1cqw,7px)}
+.showcase[data-view=poster]{aspect-ratio:2/3}
+.face-poster>.poster{height:auto;aspect-ratio:2/3}
+
+.staff-mode-dialog{width:min(430px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid #d8b66b66;border-radius:16px;background:#21171b;color:#fff3e8;box-shadow:0 24px 80px #0008;overflow:auto}
+.staff-mode-dialog::backdrop{background:#0c080bdc;backdrop-filter:blur(8px)}
+.staff-mode-form{display:grid;gap:13px;padding:clamp(20px,4vw,32px)}
+.staff-mode-form h2{font-size:25px;line-height:1.2;letter-spacing:-.04em}
+.staff-mode-form>p:not(.eyebrow):not(.form-error){font-size:11px;color:#cfbcb1}
+.staff-mode-form label{font-size:11px;font-weight:600}
+.staff-mode-form input{width:100%;min-height:48px;padding:10px 12px;border:1px solid #ffffff40;border-radius:8px;background:#160f13;color:#fff3e8;font-size:20px;letter-spacing:.22em}
+.staff-mode-actions{display:grid;grid-template-columns:1fr 1.3fr;gap:9px;margin-top:5px}
+.staff-mode-actions button{min-width:0;min-height:46px;padding:10px;font-size:11px}
+
+/* Light mode covers every reading surface, including the result and staff dialog. */
+html[data-theme=light]{color-scheme:light}
+html[data-theme=light] .table-grain{opacity:.06;background-image:radial-gradient(#493033 .5px,transparent .7px)}
+html[data-theme=light] :is(.table,.poster-panel,.deck-cta,.trailer,.binder-row,.staff-mode-dialog){background:#fffaf3;color:#382b2d;border-color:#ad8b684d;box-shadow:0 10px 30px #4930220c}
+html[data-theme=light] :is(.table:before,.deck-head,.parade,.binder,.footer,.comfort-note){border-color:#62443b25}
+html[data-theme=light] :is(.event-chip,.hero-lead,.session-note,.control-label,.poster-caption,.deck-hint,.parade-bipy span,.binder-progress small,.section-head>p,.comfort-note,.footer,.trailer-copy>p:not(.eyebrow)){color:#76615b}
+html[data-theme=light] :is(.hero-lead b,.comfort-note b){color:#382b2d}
+html[data-theme=light] :is(.eyebrow,.ribbon small,.ribbon-ico,.binder-label,.binder-progress>b,.hero h1 .t-kicker){color:#895f20}
+html[data-theme=light] :is(.t-sub,.hero-trailer h2 em,.deck-head h2 em,.section-head h2 em){color:#ab3d5b}
+html[data-theme=light] :is(.ribbon,.segmented-control){background:#f6ece0;border-color:#ad8b684d}
+html[data-theme=light] .ribbon p>span{color:#6c554e}
+html[data-theme=light] :is(.segmented-control button,.mode-button){color:#382b2d;background:transparent;border-color:#ad8b684d}
+html[data-theme=light] :is(.segmented-control button[aria-pressed=true],.mode-button[aria-pressed=true]){color:#674518;background:#e8d4ac;border-color:#a77c36}
+html[data-theme=light] .segmented-control button:hover{background:#eadccc}
+html[data-theme=light] .mode-button small{color:#76615b}
+html[data-theme=light] .mode-button>span:first-child{color:#895f20}
+html[data-theme=light] .mode-tag{color:#9d3d56}
+html[data-theme=light] .mode-tag.live{color:#27644f}
+html[data-theme=light] .table .quote{background:#f6ece0;border-color:#b3905755}
+html[data-theme=light] .quote blockquote{color:#654733}
+html[data-theme=light] .quote figcaption{color:#786357}
+html[data-theme=light] .leader-state{background:#fff8ee;color:#785424;border-color:#b3905780}
+html[data-theme=light] .booster-hint{color:#76615b}
+html[data-theme=light] .binder-progress .bar{background:#d8c7b6}
+html[data-theme=light] .slot{border-color:#a8896870}
+html[data-theme=light] .slot-empty{background:#ecdccd}
+html[data-theme=light] .slot-empty b{color:#906324}
+html[data-theme=light] .slot-empty small{color:#705c50}
+html[data-theme=light] .hero-trailer{background:transparent;box-shadow:none}
+html[data-theme=light] .footer a{color:#785424}
+html[data-theme=light] .staff-mode-form>p:not(.eyebrow):not(.form-error){color:#76615b}
+html[data-theme=light] .staff-mode-form input{background:#fff;color:#382b2d;border-color:#ad8b6866}
+html[data-theme=light] #resultDialog{background:#fffaf3;color:#382b2d;border-color:#ad8b685c;scrollbar-color:#b39057 #f4eee6}
+html[data-theme=light] .play-shell,html[data-theme=light] .play-shell[data-host=sanji]{--rarity:#8a6121;background:#f4e9db}
+html[data-theme=light] .play-shell[data-rarity=sr]{--rarity:#a54571}
+html[data-theme=light] .play-shell[data-rarity=sec]{--rarity:#936b19}
+html[data-theme=light] .play-top{background:#f2e4d4;border-color:#ad8b6833}
+html[data-theme=light] .play-stage{background:radial-gradient(ellipse at 50% 45%,#fffaf1,#eee0ce 65%,#e2ceb7)}
+html[data-theme=light] .play-details{background:#fffaf3}
+html[data-theme=light] :is(.play-status,.play-details h2,.play-details blockquote,.play-details .result-bipy b,.ticket strong){color:#4c342b}
+html[data-theme=light] :is(.result-host,.result-host span,.result-kicker,.play-details .result-bipy small,.ticket small,.ticket dt,.play-details>.fine-print){color:#76615b}
+html[data-theme=light] :is(.result-host b,.ticket>span,.ticket dd,.play-brand>span){color:#785424}
+html[data-theme=light] :is(.play-details .result-bipy,.result-kicker>span:not(.rarity-chip),.ticket dl>div){background:#f4e9db;border-color:#ad8b6833}
+html[data-theme=light] .ticket{border-color:#ad8b685c}
+html[data-theme=light] .play-details .comfort-pill{background:#eaf0e4;color:#27644f;border-color:#91a57f60}
+html[data-theme=light] .play-details .comfort-pill span{color:#617154}
+html[data-theme=light] .play-top .ghost{background:#fff8ee;color:#5c4337;border-color:#ad8b6860}
+html[data-theme=light] .view-toggle{background:#fff8eeeF;border-color:#ad8b6860}
+html[data-theme=light] .view-toggle button{color:#76615b}
+html[data-theme=light] .view-toggle button[aria-pressed=true]{color:#674518;background:#e8d4ac;border-color:#a77c36}
+
+@media(max-width:1100px) and (min-width:761px){.hero{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:24px}.hero h1{font-size:clamp(40px,5.5vw,60px)}.hero-trailer .trailer-copy h2{font-size:19px}.table-bipys .sticker{width:65px;height:119px}}
+@media(max-width:760px){.hero{display:grid;grid-template-columns:1fr;padding-top:24px;gap:24px}.hero h1{display:grid;font-size:clamp(43px,10vw,66px);gap:4px}.hero h1 .t-main{max-width:12ch}.hero-trailer{margin-top:16px}.hero-trailer .trailer-copy h2{font-size:22px}.table{padding:18px;gap:14px}.table-bipys .sticker{width:64px;height:116px}.table .quote{padding:10px}.quote blockquote{font-size:15px}.booth-comfort{width:calc(100% - 32px)}.showcase{width:min(56vw,250px,calc((52dvh - 90px)*.71))}.showcase[data-view=poster]{width:min(56vw,250px,calc((52dvh - 90px)*.66))}}
+@media(max-width:420px){.hero h1{font-size:clamp(39px,10vw,46px)}.t-sub{font-size:8px;letter-spacing:.08em}.table{padding:14px;gap:13px}.table-bipys{gap:24px}.table-bipys .sticker{width:50px;height:92px}.leader-slot .leader-state{font-size:7px}.quote blockquote{font-size:14px}.hero-trailer .trailer-copy h2{font-size:20px}.showcase{width:min(60vw,210px,calc((48dvh - 80px)*.71))}.showcase[data-view=poster]{width:min(60vw,210px,calc((48dvh - 80px)*.66))}}
+@media(max-width:320px){.hero h1{font-size:36px}.table{padding:11px}.table-bipys{gap:19px}.table-bipys .sticker{width:43px;height:79px}.quote blockquote{font-size:13px}.control-label{width:70px;font-size:7px}.segmented-control button{min-width:65px;padding-inline:11px}}
+
+/* Persistent controls stay visible in the header instead of hiding below the hero. */
+.topbar{flex-wrap:wrap}
+.topbar .tools{margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.topbar .topbar-control{display:block;margin:0}
+.topbar .control-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.topbar .segmented-control{padding:3px;gap:2px}
+.topbar .segmented-control button{display:block;width:auto;height:auto;min-width:58px;min-height:36px;padding:6px 10px;border-radius:999px;font-size:9px;line-height:1.15}
+.topbar #liveModeButton{min-width:94px}
+@media(max-width:760px){.topbar .tools{width:100%;margin-left:0;justify-content:center}.topbar .segmented-control button{width:auto;height:auto;min-width:56px;min-height:38px}.topbar #liveModeButton{min-width:92px}}
+@media(max-width:420px){.topbar .tools{row-gap:6px}.topbar .segmented-control button{padding-inline:8px;font-size:8px}.topbar #liveModeButton{min-width:84px}.topbar .mode-tag{order:3}.topbar .icon-button,.topbar .admin-link{order:4}}
+.topbar .segmented-control button{min-height:44px}
+.tcg{container-type:inline-size}
+.size-mini .tcg-name{font-size:clamp(9px,7.5cqw,16px)}
+.size-mini .tcg-plate>small{font-size:clamp(6px,4.8cqw,8px)}
+.size-mini .tcg-type{font-size:clamp(6px,4.6cqw,8px)}
+@media(max-width:1100px){.fan{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.deck-card{width:100%;transform:none}.deck-card:nth-child(n+5){margin-top:0}}
+@media(max-width:760px){.fan{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px 5px 12px}.deck-card{width:min(100%,210px)}}
+@media(max-width:320px){.fan{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding-inline:0}}
+
+/* Transform-only character movement keeps the card table and its labels still. */
+.tcg-in>.card-art{height:auto;min-height:0}
+.tcg-in>.card-art img{position:absolute;inset:0;width:100%;height:100%;max-width:100%;max-height:none;object-fit:contain;object-position:center bottom}
+.table-bipys{padding-block:8px 4px}
+.table-bipys .sticker{transform-origin:50% 88%;animation:bipyTableIdle 5.8s cubic-bezier(.45,0,.55,1) infinite;animation-delay:-1.3s;--bipy-sway:1.1deg}
+.table-bipys .s-pink{animation-duration:6.6s;animation-delay:-3.4s;--bipy-sway:-.9deg}
+.table-bipys .s-gold{animation-duration:6.2s;animation-delay:-4.9s;--bipy-sway:1deg}
+.table:has(.host-card:focus-visible) .table-bipys .sticker{animation-play-state:paused}
+.leader-slot .leader-state{transition:background-color .25s ease,border-color .25s ease,color .25s ease}
+.parade-bipy img{transform-origin:50% 88%;animation:bipyParadeIdle 5.4s cubic-bezier(.45,0,.55,1) infinite;animation-delay:-1s}
+.parade-bipy:nth-child(3n+2) img{animation-delay:-2.9s;animation-duration:6.1s}
+.parade-bipy:nth-child(3n) img{animation-delay:-4.2s;animation-duration:5.8s}
+.parade-track:focus-within .parade-list{animation-play-state:paused}
+.play-shell[data-phase=result] .result-bipy img{transform-origin:50% 90%;animation:bipyResultBreathe 6s ease-in-out infinite}
+.mode-button,.segmented-control button,.view-toggle button{transition:background-color .22s ease,border-color .22s ease,color .22s ease,box-shadow .22s ease}
+@keyframes bipyTableIdle{0%,100%{transform:translateY(0) rotate(calc(var(--bipy-sway)*-.6)) scale(1)}50%{transform:translateY(-3px) rotate(var(--bipy-sway)) scale(1.012)}}
+@keyframes bipyParadeIdle{0%,100%{transform:translateY(0) rotate(-.7deg)}50%{transform:translateY(-3px) rotate(.7deg)}}
+@keyframes bipyResultBreathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.015)}}
+@media(hover:hover) and (pointer:fine){
+ .table-bipys:hover .sticker,.parade-bipy:hover img{animation-play-state:paused}
+ .parade-bipy:hover span{color:#f2d493}
+ html[data-theme=light] .parade-bipy:hover span{color:#895f20}
+}
+html[data-motion=reduce] :is(.table-bipys .sticker,.parade-bipy img,.result-bipy img){animation:none!important;transform:none!important}
+html[data-motion=reduce] :is(.leader-slot .tcg,.leader-state,.mode-button,.segmented-control button,.view-toggle button,.booster-button){transition:none!important}
+html[data-motion=reduce] .booster-button:hover:not(:disabled){transform:none!important}
+@media(prefers-reduced-motion:reduce){
+ .table-bipys .sticker,.parade-bipy img,.result-bipy img{animation:none!important;transform:none!important}
+ .leader-slot .tcg,.leader-state,.mode-button,.segmented-control button,.view-toggle button,.booster-button{transition:none!important}
+ .booster-button:hover:not(:disabled){transform:none!important}
+}

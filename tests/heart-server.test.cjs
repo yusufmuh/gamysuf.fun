@@ -9,6 +9,24 @@ async function call(app,route,body,cookie='',extra={}){const res=await fetch(app
 async function staff(t,opts={}){const app=await setup(t,{hosted:true,adminPin:'246810',...opts});const login=await call(app,'/api/login',{pin:'246810'});assert.equal(login.status,200);return {app,cookie:login.cookie.split(';')[0]};}
 const draw={requestId:'server-draw-001',host:'sanji',comfort:'no-touch',recording:false,consent:true};
 
+test('direct player draw keeps consent false and rejects touch or recording without consent',async t=>{
+ const app=await setup(t),request={...draw,consent:false};
+ for(const patch of [{comfort:'touch'},{recording:true}])assert.equal((await call(app,'/api/play',{...request,...patch})).status,400);
+ const result=await call(app,'/api/play',request);assert.equal(result.status,200);assert.equal(result.json.consent,false);
+ assert.equal((await call(app,'/api/state')).json.pending.consent,false);
+ assert.equal((await call(app,'/api/play',request)).json.id,result.json.id);
+});
+test('player mode switching requires a staff session and cannot discard an open card',async t=>{
+ const {app,cookie}=await staff(t);
+ assert.equal((await call(app,'/api/mode',{mode:'live'})).status,401);
+ const live=await call(app,'/api/mode',{mode:'live'},cookie);assert.equal(live.status,200);assert.equal(live.json.settings.mode,'live');
+ const result=await call(app,'/api/play',{...draw,consent:false,verified:true},cookie);assert.equal(result.status,200);assert.equal(result.json.demo,false);assert.equal(result.json.consent,false);
+ assert.equal((await call(app,'/api/mode',{mode:'demo'},cookie)).status,409);
+ assert.equal((await call(app,'/api/result',{id:result.json.id},cookie)).status,200);
+ const demo=await call(app,'/api/mode',{mode:'demo'},cookie);assert.equal(demo.status,200);assert.equal(demo.json.settings.mode,'demo');
+ assert.equal(app.engine.state.history.find(r=>r.id===result.json.id).status,'waiting');
+});
+
 test('public player flow, exact retry and pending recovery',async t=>{const app=await setup(t),p=await call(app,'/api/play',draw);assert.equal(p.status,200);assert.equal(p.json.demo,true);assert.equal((await call(app,'/api/state')).json.pending.id,p.json.id);assert.equal((await call(app,'/api/play',draw)).json.id,p.json.id);assert.equal((await call(app,'/api/result',{id:p.json.id})).status,200);});
 test('public catalog and recovered pending expose canonical card metadata',async t=>{
  const app=await setup(t),state=await call(app,'/api/state');assert.deepEqual(state.json.cards,CARDS);
@@ -64,6 +82,9 @@ test('moment and Bipy images serve WebP MIME and media map includes MP3, MP4 and
   const bytes=Buffer.from(await response.arrayBuffer());assert.equal(bytes.subarray(0,4).toString(),'RIFF');assert.equal(bytes.subarray(8,12).toString(),'WEBP');
  }
  for(const route of ['/assets/audio/bpedia-jingle.mp3','/assets/audio/bpedia-jingle-hook.mp3']){const response=await fetch(app.origin+route);assert.equal(response.status,200,route);assert.equal(response.headers.get('content-type'),'audio/mpeg');await response.arrayBuffer();}
+ for(const [route,type] of [['/assets/video/heart-parade-promo.mp4','video/mp4'],['/assets/audio/heart-parade-bgm.mp3','audio/mpeg']]){
+  const response=await fetch(app.origin+route,{headers:{Range:'bytes=0-1023'}});assert.equal(response.status,206,route);assert.equal(response.headers.get('content-type'),type);assert.equal(response.headers.get('accept-ranges'),'bytes');assert.match(response.headers.get('content-range'),/^bytes 0-1023\/\d+$/);assert.equal((await response.arrayBuffer()).byteLength,1024);
+ }
 });
 test('hosting without PIN has no default credentials and cannot issue live tickets',async t=>{const app=await setup(t,{hosted:true});assert.equal((await call(app,'/api/login',{pin:'123456'})).status,503);assert.equal((await call(app,'/api/mode',{mode:'live'})).status,401);assert.equal((await call(app,'/api/admin/state')).status,401);assert.equal((await call(app,'/api/admin/service',{id:'vow',patch:{price:1}})).status,401);});
 test('staff login, mode, real ticket, serve and export',async t=>{const app=await setup(t,{hosted:true,adminPin:'246810'});const login=await call(app,'/api/login',{pin:'246810'});assert.equal(login.status,200);assert.match(login.cookie,/HttpOnly; SameSite=Strict/);const cookie=login.cookie.split(';')[0];assert.equal((await call(app,'/api/admin/settings',{mode:'live'},cookie)).status,200);assert.equal((await call(app,'/api/play',{...draw,verified:true})).status,401);assert.equal((await call(app,'/api/state')).status,401);const r=await call(app,'/api/play',{...draw,verified:true},cookie);assert.equal(r.json.demo,false);assert.equal((await call(app,'/api/admin/ticket',{id:r.json.id,action:'served'},cookie)).json.stats.served,1);assert.match((await call(app,'/api/admin/export',undefined,cookie)).text,/HP-/);const backup=await call(app,'/api/admin/backup',undefined,cookie);assert.equal(backup.json.services.find(s=>s.id==='vow').price,75000);assert.equal((await call(app,'/api/logout',{},cookie)).status,200);assert.equal((await call(app,'/api/admin/state',undefined,cookie)).status,401);});

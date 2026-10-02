@@ -4,7 +4,7 @@
  const $=id=>document.getElementById(id),clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const storage={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{/* mode privat */}},session(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v);}catch{return null;}return null;}};
  const audio=new window.HeartAudio(),fx=new window.HeartFX($('fxCanvas')),reducedQuery=matchMedia('(prefers-reduced-motion: reduce)');
- const ui={state:null,host:'zoro',mode:'gacha',pick:'',preview:'',stage:'home',busy:false,result:null,request:null,lastFocus:null,collection:[],toastTimer:0,anims:new Set(),timers:new Set(),run:0,tear:null,view:'card',posterStamped:false,userToggled:false,flipping:false,keys:{},previewTimer:0};
+ const ui={state:null,host:'zoro',mode:'gacha',pick:'',preview:'',stage:'home',busy:false,result:null,request:null,lastFocus:null,collection:[],toastTimer:0,anims:new Set(),timers:new Set(),run:0,tear:null,view:'card',posterStamped:false,userToggled:false,flipping:false,keys:{},previewTimer:0,staffMode:null,modeBusy:false};
  const SERVICE_ORDER=['cinderella','twirl','whisper','offering','vow','hug','pat'];
  document.querySelectorAll('[data-icon]').forEach(el=>{el.innerHTML=icon(el.dataset.icon);});
  try{const saved=JSON.parse(storage.get('heart-collection')||'[]');if(Array.isArray(saved))ui.collection=saved.filter(k=>typeof k==='string');}catch{/* koleksi lama rusak diabaikan */}
@@ -17,6 +17,22 @@
   return minimal;
  }
  motion();
+ function themeState(){
+  const root=document.documentElement,saved=storage.get('gamysuf-theme');
+  const theme=window.GamysufTheme?.get?.()||root.dataset.theme||(saved==='light'?'light':'dark');
+  root.dataset.theme=theme;
+  $('darkThemeButton').setAttribute('aria-pressed',String(theme==='dark'));
+  $('lightThemeButton').setAttribute('aria-pressed',String(theme==='light'));
+ }
+ function setTheme(theme){
+  if(window.GamysufTheme?.set)window.GamysufTheme.set(theme);
+  else{
+   document.documentElement.dataset.theme=theme;storage.set('gamysuf-theme',theme);
+   document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='light'?'#fff9f6':'#12050c');
+   window.dispatchEvent(new CustomEvent('gamysuf:theme',{detail:{theme}}));
+  }
+  themeState();
+ }
  async function api(route,body){
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
   try{
@@ -59,7 +75,7 @@
   $('leaders').querySelectorAll('.leader-slot').forEach(slot=>{
    const h=hostOf(slot.dataset.host),selected=h?.id===ui.host,button=slot.querySelector('.host-card');
    slot.classList.toggle('selected',selected);slot.classList.toggle('off',!available(h));
-   button.setAttribute('aria-pressed',String(selected));button.disabled=!available(h)||ui.busy||ui.stage!=='home';
+   button.setAttribute('aria-pressed',String(selected));button.disabled=!available(h)||ui.busy||ui.modeBusy||ui.stage!=='home';
    button.querySelector('.leader-state').textContent=!h?.enabled?'Sedang istirahat':!available(h)?'Kuota hari ini habis':selected?'Leader pilihanmu':`Pilih ${h.name}`;
   });
   const h=host();
@@ -68,13 +84,14 @@
  }
  function renderSession(){
   const s=ui.state,canPlay=!s.settings.paused&&s.settings.sessionOpen&&s.hosts.some(available)&&s.services.some(v=>v.enabled);
-  $('modeBadge').textContent=demo()?'DEMO ONLINE · GRATIS':'TIKET RESMI BOOTH';$('modeBadge').classList.toggle('live',!demo());
+  $('modeBadge').textContent=demo()?'DEMO ONLINE · GRATIS':'MAIN TERCATAT · BOOTH';$('modeBadge').classList.toggle('live',!demo());
+  renderStaffMode();
   $('scheduleText').textContent=s.settings.schedule||'Zoro & Sanji hadir 3–4 Okt 2026, dua hari penuh di booth Bpedia.';
   $('sessionNote').textContent=!canPlay?'Sesi sedang istirahat. Kartu bisa dibuka lagi setelah petugas membuka sesi.':demo()?'Kartu digital gratis untuk koleksimu. Tiket booth diterbitkan petugas.':`${s.queue.waiting} tiket menunggu di antrean booth.`;
   return canPlay;
  }
  function renderMode(canPlay){
-  const s=ui.state,h=host(),locked=!s.settings.allowPick,home=ui.stage==='home',idle=!ui.busy&&home;
+  const s=ui.state,h=host(),locked=!s.settings.allowPick,home=ui.stage==='home',idle=!ui.busy&&!ui.modeBusy&&home;
   document.body.dataset.mode=ui.mode;
   $('gachaMode').setAttribute('aria-pressed',String(ui.mode==='gacha'));$('pickMode').setAttribute('aria-pressed',String(ui.mode==='pick'));
   $('gachaMode').disabled=!idle;$('pickMode').disabled=!idle;$('pickMode').setAttribute('aria-disabled',String(locked));$('pickMode').classList.toggle('locked',locked);
@@ -102,7 +119,7 @@
   updateDeck();
  }
  function updateDeck(){
-  const idle=!ui.busy&&ui.stage==='home';
+  const idle=!ui.busy&&!ui.modeBusy&&ui.stage==='home';
   $('momentGrid').querySelectorAll('.deck-card').forEach(el=>{
    const id=el.dataset.service,v=serviceOf(id),chosen=ui.mode==='pick'&&ui.pick===id,button=el.querySelector('.card-choice');
    el.classList.toggle('chosen',chosen);el.classList.toggle('previewing',ui.preview===id&&!chosen);
@@ -148,21 +165,53 @@
   document.body.dataset.ready='1';
  }
  async function refresh(){
+  if(ui.modeBusy)return false;
   try{
    ui.state=await api('/api/state');$('connection').hidden=true;render();
    if(ui.state.pending&&ui.stage==='home'){clearRequest();openResult(ui.state.pending,{recovered:true});}
    else if(ui.request&&ui.stage==='home')connection('Putaran sebelumnya belum terkonfirmasi. Tekan Coba lagi untuk memulihkannya.');
    return true;
-  }catch(error){connection(error.message);return false;}
+  }catch(error){connection(error.message);renderStaffMode();return false;}
+ }
+ function renderStaffMode(){
+  const mode=ui.state?.settings.mode;
+  for(const [id,value] of [['demoModeButton','demo'],['liveModeButton','live']]){
+   const button=$(id);button.setAttribute('aria-pressed',String(mode===value));
+   button.disabled=ui.busy||ui.modeBusy||ui.stage!=='home'||Boolean(ui.request)||Boolean(ui.state?.pending);
+  }
+ }
+ function clearStaffPin(){
+  $('staffPin').value='';$('staffModeError').hidden=true;
+ }
+ function requestStaffPin(mode){
+  ui.staffMode=mode;clearStaffPin();openDialog('staffModeDialog');$('staffPin').focus({preventScroll:true});
+ }
+ async function switchStaffMode(mode,{login=false}={}){
+  if(ui.busy||ui.modeBusy||ui.stage!=='home'||ui.request||ui.state?.pending)return;
+  if(!login&&ui.state?.settings.mode===mode)return;
+  ui.modeBusy=true;render();renderStaffMode();$('staffModeForm').setAttribute('aria-busy','true');$('staffModeCancel').disabled=true;
+  try{
+   if(login){
+    const pin=$('staffPin').value;$('staffPin').value='';
+    await api('/api/login',{pin});
+   }
+   const state=await api('/api/mode',{mode});
+   ui.state=state;ui.staffMode=null;clearStaffPin();closeDialog('staffModeDialog');$('connection').hidden=true;render();
+   toast(mode==='live'?'Main Tercatat aktif. Petugas memeriksa misi peserta sebelum bermain.':'Demo aktif. Hasil tidak masuk antrean booth.');
+  }catch(error){
+   if(error.status===401&&!login)requestStaffPin(mode);
+   else if($('staffModeDialog').open){$('staffModeError').textContent=error.message;$('staffModeError').hidden=false;$('staffPin').focus({preventScroll:true});}
+   else{connection(error.message);toast(error.message);}
+  }finally{ui.modeBusy=false;$('staffModeForm').removeAttribute('aria-busy');$('staffModeCancel').disabled=false;render();renderStaffMode();}
  }
  function setMode(mode){
-  if(ui.busy||ui.stage!=='home'||!ui.state)return;
+  if(ui.busy||ui.modeBusy||ui.stage!=='home'||!ui.state)return;
   if(mode==='pick'&&!ui.state.settings.allowPick){toast('Pilih Kartu sedang dikunci petugas. Gunakan Gacha Booster.');return;}
   if(ui.mode===mode)return;
   ui.mode=mode;if(mode==='gacha')ui.pick='';audio.unlock();audio.tick();if(mode==='pick')audio.shuffle();render();
  }
  function selectCard(id,{open=false}={}){
-  if(ui.busy||ui.stage!=='home'||!ui.state)return;
+  if(ui.busy||ui.modeBusy||ui.stage!=='home'||!ui.state)return;
   const v=serviceOf(id);if(!v?.enabled)return;
   if(!ui.state.settings.allowPick){ui.preview=id;updateDeck();renderPoster();toast('Pilih Kartu sedang dikunci petugas. Gunakan Gacha Booster.');return;}
   if(open&&ui.mode==='pick'&&ui.pick===id){prepare();return;}
@@ -177,51 +226,50 @@
   button?.focus({preventScroll:true});button?.closest('.deck-card')?.scrollIntoView({behavior:motion()?'auto':'smooth',block:'nearest',inline:'center'});
  }
 
- /* ---------- Dialog kenyamanan ---------- */
+ /* ---------- Undian langsung ---------- */
  function prepare(){
-  if(!ui.state||ui.busy||ui.stage!=='home')return;audio.unlock();
+  if(!ui.state||ui.busy||ui.modeBusy||ui.stage!=='home')return;audio.unlock();
   if(ui.request){draw(ui.request);return;}
   const h=host();if(!h)return;
   if(ui.mode==='pick'&&!ui.pick){const first=$('momentGrid').querySelector('.card-choice:not(:disabled)');first?.closest('.deck-card')?.scrollIntoView({behavior:motion()?'auto':'smooth',block:'nearest',inline:'center'});first?.focus({preventScroll:true});toast('Pilih satu kartu favoritmu dulu.');return;}
   audio.tick();
-  const card=ui.mode==='pick'?cardOf(h.id,ui.pick):null;
-  $('prepPreview').innerHTML=card?cardFace(card,{size:'mini',hostName:h.name,lazy:false}):booster(h);
-  $('prepPreview').dataset.kind=card?'card':'booster';
-  $('prepSelection').textContent=card?`Pilih Kartu · ${shortName(card)} · bersama ${h.name}`:`Gacha Booster · satu kartu acak bersama ${h.name}`;
-  $('drawLabel').textContent=card?'Buka kartu pilihanku':'Buka booster';
-  $('pickService').innerHTML='<option value="">Gacha · Bipy yang memilih</option>'+ui.state.services.filter(v=>v.enabled).map(v=>`<option value="${esc(v.id)}">${esc(v.name)}</option>`).join('');
-  $('pickLabel').hidden=true;$('pickService').value=card?ui.pick:'';
-  $('prepForm').querySelector('input[name="comfort"][value="no-touch"]').checked=true;
-  $('verifiedLabel').hidden=demo();$('verifiedCheck').checked=false;$('verifiedCheck').required=!demo();
-  $('consentCheck').checked=false;$('recordingConsent').checked=false;$('prepError').hidden=true;
-  $('prepMode').textContent=demo()?'Kartu digital gratis. Tiket demo online tidak berlaku untuk klaim booth.':'Tiket booth mengikuti misi dan ketersediaan cosplayer. Persetujuan tetap ditanyakan ulang.';
-  openDialog('prepDialog');
+  const request={requestId:crypto.randomUUID(),host:ui.host,comfort:'no-touch',recording:false,consent:false};
+  if(!demo())request.verified=true;
+  if(ui.mode==='pick')request.pick=ui.pick;
+  draw(request);
  }
  function clearRequest(){ui.request=null;storage.session('heart-request',null);}
  async function draw(request){
-  if(ui.busy||ui.stage!=='home')return;
-  ui.busy=true;ui.request=request;storage.session('heart-request',JSON.stringify(request));$('drawButton').disabled=true;$('drawButton').setAttribute('aria-busy','true');render();
+  if(ui.busy||ui.modeBusy||ui.stage!=='home')return;
+  ui.busy=true;ui.request=request;storage.session('heart-request',JSON.stringify(request));$('startButton').setAttribute('aria-busy','true');render();
   try{
    const result=await api('/api/play',request);
-   clearRequest();$('connection').hidden=true;closeDialog('prepDialog');ui.busy=false;openResult(result);
+   clearRequest();$('connection').hidden=true;ui.busy=false;openResult(result);
   }catch(error){
    let recovered=null;try{const state=await api('/api/state');ui.state=state;recovered=state.pending;}catch{/* tetap tampilkan galat awal */}
    ui.busy=false;
-   if(recovered){clearRequest();closeDialog('prepDialog');openResult(recovered,{recovered:true});}
-   else{if(error.status&&error.status<500)clearRequest();$('prepError').textContent=error.message;$('prepError').hidden=false;connection(error.message);}
-  }finally{ui.busy=false;$('drawButton').disabled=false;$('drawButton').removeAttribute('aria-busy');render();}
+   if(recovered){clearRequest();openResult(recovered,{recovered:true});}
+   else{if(error.status&&error.status<500)clearRequest();connection(error.message);toast(error.message);}
+  }finally{ui.busy=false;$('startButton').removeAttribute('aria-busy');render();}
  }
 
  /* ---------- Reveal & hasil ---------- */
  const shell=$('playShell'),showcase=$('showcase');
  function anim(el,frames,options){
   if(!el?.animate)return Promise.resolve();
-  const a=el.animate(frames,{fill:'forwards',easing:'cubic-bezier(.2,.8,.2,1)',...options});ui.anims.add(a);
-  return a.finished.then(()=>{ui.anims.delete(a);},()=>{ui.anims.delete(a);throw new Error('cancelled');});
+  const settings={fill:'forwards',easing:'cubic-bezier(.2,.8,.2,1)',...options},a=el.animate(frames,settings);ui.anims.add(a);
+  return a.finished.then(()=>{
+   if(settings.fill==='none'||settings.fill==='auto'){a.cancel();ui.anims.delete(a);}
+  },()=>{ui.anims.delete(a);throw new Error('cancelled');});
  }
  function stopAnims(){ui.anims.forEach(a=>{try{a.cancel();}catch{/* sudah selesai */}});ui.anims.clear();}
  const faces={back:$('faceBack'),card:$('faceCard'),poster:$('facePoster')};
  function showFace(name){Object.entries(faces).forEach(([k,el])=>el.classList.toggle('on',k===name));}
+ function syncResultMedia(){
+  const video=faces.card.querySelector('video');if(!video)return;
+  const playing=ui.stage==='result'&&ui.view==='card'&&!ui.flipping&&$('resultDialog').open&&!document.hidden&&!motion();
+  if(playing){if(video.paused)video.play().catch(()=>{});}else video.pause();
+ }
  function status(text){$('drawStatus').textContent=text;}
  function hostFor(r){const h=hostOf(r.host.id);return h?{...h,...r.host,image:h.image}:{...r.host,role:'',fullName:r.host.name};}
  function fillResult(r){
@@ -244,7 +292,7 @@
   $('ticketCode').textContent=r.id;
   $('ticketFacts').innerHTML=r.demo?'':`<div><dt>Nomor antrean</dt><dd>${esc(String(r.queueNumber??'-').padStart(3,'0'))}</dd></div><div><dt>Estimasi saat terbit</dt><dd>±${Math.max(1,Math.ceil((Number(r.estimatedSeconds)||0)/60))} menit</dd></div>`;
   $('ticketNote').textContent=r.demo?'Tiket demo online tidak berlaku untuk klaim booth. Simpan kartunya sebagai kenang-kenangan.':'Tunjukkan kode ini ke petugas dan ikuti panggilan antrean.';
-  $('resultConsent').textContent=(r.recording?'Izin dokumentasi dipilih; petugas tetap bertanya sebelum merekam.':'Tanpa dokumentasi. Jangan merekam tanpa izin baru.')+' Tamu dan cosplayer boleh berhenti atau memilih alternatif.';
+  $('resultConsent').textContent=(r.recording?'Izin dokumentasi dipilih; petugas tetap bertanya sebelum merekam.':'Tanpa dokumentasi.')+' Sentuhan dan dokumentasi hanya setelah persetujuan langsung tamu dan cosplayer. Keduanya boleh berhenti atau memilih alternatif.';
   $('resultError').hidden=true;$('finishButton').disabled=false;
  }
  function decodeAll(root){return Promise.race([Promise.all([...root.querySelectorAll('img')].map(img=>img.decode?img.decode().catch(()=>{}):null)),sleep(1600)]);}
@@ -331,7 +379,7 @@
    anim(showcase,[{transform:`translate(${dx}px,${dy}px) scale(${s})`},{transform:'none'}],{duration:560,easing:'cubic-bezier(.2,.8,.2,1)',fill:'none'}).catch(()=>{});
   }
   fx.start({motif:card.animationMotif,host:card.hostId,rarity:card.rarity,anchor:$('tilt')});
-  const video=faces.card.querySelector('video');if(video&&!motion())video.play().catch(()=>{});
+  syncResultMedia();
   const key=`${r.host.id}:${r.service.id}`;if(!ui.collection.includes(key)){ui.collection.push(key);storage.set('heart-collection',JSON.stringify(ui.collection));}
   if(ui.state)renderBinder();
   if(wasDrawing&&motion())audio.chime(card.rarity);
@@ -341,15 +389,23 @@
  }
  function skip(){if(ui.stage==='drawing'){ui.tear?.();finishReveal();}}
  async function showView(view,{user=false}={}){
-  if(ui.stage!=='result'||ui.flipping)return;if(user)ui.userToggled=true;if(ui.view===view)return;
-  ui.flipping=true;const from=faces[ui.view],to=faces[view];
+  if(ui.stage!=='result'||ui.flipping||!faces[view])return;if(user)ui.userToggled=true;if(ui.view===view)return;
+  const run=ui.run,result=ui.result,alive=()=>run===ui.run&&result===ui.result&&ui.stage==='result';
+  ui.flipping=true;const from=faces[ui.view],to=faces[view];syncResultMedia();
   $('viewCard').setAttribute('aria-pressed',String(view==='card'));$('viewPoster').setAttribute('aria-pressed',String(view==='poster'));showcase.dataset.view=view;
   try{
    if(motion()){showFace(view);}
-   else{audio.flip();await anim(from,[{transform:'rotateY(0deg)'},{transform:'rotateY(90deg)'}],{duration:170,easing:'cubic-bezier(.55,0,1,.45)',fill:'none'});showFace(view);await anim(to,[{transform:'rotateY(-90deg)'},{transform:'rotateY(0deg)'}],{duration:280,easing:'cubic-bezier(0,0,.2,1)',fill:'none'});}
-  }catch{showFace(view);}
-  ui.view=view;ui.flipping=false;
-  if(view==='poster'&&!ui.posterStamped)stampPoster();
+   else{
+    audio.flip();await anim(from,[{transform:'rotateY(0deg)'},{transform:'rotateY(90deg)'}],{duration:170,easing:'cubic-bezier(.55,0,1,.45)',fill:'none'});
+    if(!alive())return;showFace(view);
+    await anim(to,[{transform:'rotateY(-90deg)'},{transform:'rotateY(0deg)'}],{duration:280,easing:'cubic-bezier(0,0,.2,1)',fill:'none'});
+   }
+   if(!alive())return;ui.view=view;
+   if(view==='poster'&&!ui.posterStamped)stampPoster();
+  }catch{
+   if(!alive())return;showFace(view);ui.view=view;
+   if(view==='poster'&&!ui.posterStamped)stampPoster();
+  }finally{if(alive()){ui.flipping=false;syncResultMedia();}}
  }
  function stampPoster(){
   ui.posterStamped=true;const p=faces.poster.querySelector('.poster');if(!p)return;
@@ -361,9 +417,9 @@
   if(ui.busy||!ui.result)return;ui.busy=true;$('finishButton').disabled=true;
   try{
    ui.state=await api('/api/result',{id:ui.result.id});clearRequest();
-   ui.run++;stopAnims();clearTimers();fx.stop();faces.card.querySelector('video')?.pause();
-   $('resultDialog').close();ui.result=null;ui.stage='home';showFace(null);
-   $('playerName').value='';$('recordingConsent').checked=false;$('consentCheck').checked=false;$('connection').hidden=true;
+   ui.run++;stopAnims();clearTimers();fx.stop();
+   $('resultDialog').close();ui.result=null;ui.stage='home';ui.flipping=false;showFace(null);syncResultMedia();
+   $('connection').hidden=true;
    ui.busy=false;render();$('startButton').focus({preventScroll:true});$('deck').scrollIntoView({behavior:'auto',block:'start'});
   }catch(error){$('resultError').textContent='Kartu belum ditutup. '+error.message;$('resultError').hidden=false;}
   finally{ui.busy=false;$('finishButton').disabled=false;if(ui.state)render();}
@@ -373,7 +429,7 @@
   button.disabled=true;button.setAttribute('aria-busy','true');
   try{
    const card=resultCard(r),blob=await(kind==='card'?window.HeartExport.card:window.HeartExport.poster)(card,{hostName:r.host.name});
-   window.HeartExport.download(blob,kind==='card'?`Heart-Parade-${r.host.name}-${r.service.id}.png`:`Heart-Parade-Poster-${r.host.name}-${r.service.id}.png`);
+   window.HeartExport.download(blob,kind==='card'?`Grand-Line-Desire-${r.host.name}-${r.service.id}.png`:`Grand-Line-Desire-Poster-${r.host.name}-${r.service.id}.png`);
    toast(kind==='card'?'Kartu siap disimpan di perangkatmu.':'Poster bounty siap disimpan di perangkatmu.');
   }catch{toast('Gambar belum bisa disimpan. Coba lagi setelah semua gambar termuat.');}
   finally{button.disabled=false;button.removeAttribute('aria-busy');}
@@ -400,25 +456,26 @@
  const setPreview=id=>{clearTimeout(ui.previewTimer);ui.previewTimer=setTimeout(()=>{if(ui.stage!=='home'||ui.preview===id)return;ui.preview=id;updateDeck();renderPoster();},110);};
  $('momentGrid').addEventListener('pointerover',event=>{const card=event.target.closest('.deck-card');if(card&&event.pointerType==='mouse')setPreview(card.dataset.service);});
  $('momentGrid').addEventListener('focusin',event=>{const card=event.target.closest('.deck-card');if(card)setPreview(card.dataset.service);});
- $('prepForm').addEventListener('submit',event=>{
-  event.preventDefault();if(!$('prepForm').reportValidity())return;audio.unlock();
-  const request={requestId:crypto.randomUUID(),host:ui.host,comfort:new FormData($('prepForm')).get('comfort'),consent:$('consentCheck').checked,recording:$('recordingConsent').checked,username:$('playerName').value.trim()};
-  if(!demo())request.verified=$('verifiedCheck').checked;
-  if(ui.state.settings.allowPick&&$('pickService').value)request.pick=$('pickService').value;
-  draw(ui.request||request);
- });
- document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>{if(!ui.busy)closeDialog(button.dataset.close);}));
- $('prepDialog').addEventListener('cancel',event=>{if(ui.busy)event.preventDefault();});
- $('prepDialog').addEventListener('click',event=>{if(event.target===$('prepDialog')&&!ui.busy)closeDialog('prepDialog');});
+ $('demoModeButton').addEventListener('click',()=>switchStaffMode('demo'));
+ $('liveModeButton').addEventListener('click',()=>switchStaffMode('live'));
+ $('staffModeForm').addEventListener('submit',event=>{event.preventDefault();if(!$('staffModeForm').reportValidity()||!ui.staffMode)return;switchStaffMode(ui.staffMode,{login:true});});
+ $('staffModeCancel').addEventListener('click',()=>{if(ui.modeBusy)return;ui.staffMode=null;clearStaffPin();closeDialog('staffModeDialog');});
+ $('staffModeDialog').addEventListener('cancel',event=>{if(ui.modeBusy)event.preventDefault();else{ui.staffMode=null;clearStaffPin();}});
+ $('staffModeDialog').addEventListener('close',()=>{ui.staffMode=null;clearStaffPin();});
+ $('staffModeDialog').addEventListener('click',event=>{if(event.target===$('staffModeDialog')&&!ui.modeBusy){ui.staffMode=null;clearStaffPin();closeDialog('staffModeDialog');}});
+ $('darkThemeButton').addEventListener('click',()=>setTheme('dark'));
+ $('lightThemeButton').addEventListener('click',()=>setTheme('light'));
+ window.addEventListener('gamysuf:theme',themeState);
+ document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>{if(!ui.busy&&!ui.modeBusy)closeDialog(button.dataset.close);}));
  $('resultDialog').addEventListener('cancel',event=>{event.preventDefault();if(ui.stage==='drawing')skip();else acknowledge();});
  $('finishButton').addEventListener('click',acknowledge);$('saveCard').addEventListener('click',()=>save('card'));$('savePoster').addEventListener('click',()=>save('poster'));
  $('skipAnimation').addEventListener('click',skip);
  $('viewCard').addEventListener('click',()=>showView('card',{user:true}));$('viewPoster').addEventListener('click',()=>showView('poster',{user:true}));
  $('soundButton').addEventListener('click',toggleMute);
- $('motionButton').addEventListener('click',()=>{const next=!motion();storage.set('heart-reduced-motion',next?'1':'0');motion();if(next)skip();updateTrailer();toast(next?'Animasi dikurangi.':'Animasi diaktifkan.');});
+ $('motionButton').addEventListener('click',()=>{const next=!motion();storage.set('heart-reduced-motion',next?'1':'0');motion();if(next)skip();updateTrailer();syncResultMedia();toast(next?'Animasi dikurangi.':'Animasi diaktifkan.');});
  $('retryButton').addEventListener('click',async()=>{if(ui.busy)return;if(ui.request)await draw(ui.request);else await refresh();});
- reducedQuery.addEventListener('change',()=>{if(motion())skip();updateTrailer();});
- window.addEventListener('storage',event=>{if(event.key==='gamysuf-reduced-motion'||event.key==='heart-reduced-motion'){motion();updateTrailer();}});
+ reducedQuery.addEventListener('change',()=>{if(motion())skip();updateTrailer();syncResultMedia();});
+ window.addEventListener('storage',event=>{if(event.key==='gamysuf-reduced-motion'||event.key==='heart-reduced-motion'){if(motion())skip();updateTrailer();syncResultMedia();}else if(event.key==='gamysuf-theme'&&['dark','light'].includes(event.newValue)){if(!window.GamysufTheme)document.documentElement.dataset.theme=event.newValue;themeState();}});
 
  const trailer=$('paradeTrailer');let trailerInView=false,trailerUserPaused=false;
  function trailerState(){const playing=!trailer.paused,b=$('videoPlayButton');$('videoPlayLabel').textContent=playing?'Jeda cuplikan':'Putar cuplikan';b.querySelector('[data-icon]').innerHTML=icon(playing?'pause':'play');b.setAttribute('aria-label',playing?'Jeda cuplikan':'Putar cuplikan');b.setAttribute('aria-pressed',String(playing));}
@@ -427,7 +484,7 @@
  trailer.addEventListener('error',()=>{$('videoPlayButton').disabled=true;$('videoPlayLabel').textContent='Cuplikan belum tersedia';},true);
  $('videoPlayButton').addEventListener('click',()=>{if(trailer.paused){trailerUserPaused=false;trailer.play().catch(()=>toast('Cuplikan belum bisa diputar. Permainan tetap siap.'));}else{trailerUserPaused=true;trailer.pause();}});
  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{trailerInView=entries[0].isIntersecting;updateTrailer();},{threshold:.25}).observe(trailer);
- document.addEventListener('visibilitychange',()=>{updateTrailer();if(document.hidden&&ui.stage==='drawing')skip();});
+ document.addEventListener('visibilitychange',()=>{updateTrailer();if(document.hidden&&ui.stage==='drawing')skip();syncResultMedia();});
 
  document.addEventListener('keydown',event=>{
   if(event.altKey||event.ctrlKey||event.metaKey)return;
@@ -442,6 +499,6 @@
  const unlockOnce=()=>audio.unlock();document.addEventListener('click',unlockOnce,{once:true,capture:true});document.addEventListener('keydown',unlockOnce,{once:true,capture:true});
  window.addEventListener('gamysuf:audio',event=>{audio.setMuted(Boolean(event.detail?.muted));soundState();});window.addEventListener('gamysuf:audio-query',soundState);
  window.addEventListener('online',()=>{if(!ui.busy&&ui.stage==='home'&&!ui.request)refresh();});window.addEventListener('offline',()=>connection('Koneksi terputus. Kartu yang sudah terbuka tetap tersimpan.'));
- soundState();refresh();
+ soundState();themeState();renderStaffMode();refresh();
  setInterval(()=>{if(!document.hidden&&!ui.busy&&ui.stage==='home'&&!document.querySelector('dialog[open]')&&!ui.request)refresh();},20000);
 })();

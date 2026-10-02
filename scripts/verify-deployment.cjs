@@ -44,11 +44,12 @@ function collectHeartReleaseAssets(files){
  const required=[
   ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/moments/${host}-${service}.webp`)),
   ...HEART_SERVICE_IDS.map(service=>`assets/bipy-variants/bipy-${service}.webp`),
-  ...['pink','jade','gold'].map(variant=>`assets/brand/bipy-${variant}.webp`)
+  ...['pink','jade','gold'].map(variant=>`assets/brand/bipy-${variant}.webp`),
+  'assets/video/grand-line-promo-poster.webp'
  ];
  const available=new Set(files.map(file=>file.replace(/^games\/heart\//,'')));
  for(const file of required)if(!available.has(file))throw new Error(`Required Heart Parade release asset missing from commit: ${file}`);
- return [...available].filter(file=>/^assets\/(?:moments|bipy-variants)\//.test(file)||/^assets\/brand\/bipy-/.test(file)||/\.(?:mp4|webm)$/i.test(file)).sort();
+ return [...available].filter(file=>required.includes(file)||/^assets\/(?:moments|bipy-variants)\//.test(file)||/^assets\/brand\/bipy-/.test(file)||/\.(?:mp4|webm)$/i.test(file)).sort();
 }
 
 function verifyDecodedImage(check,route,localHash,liveHash,report=imageEvidence){
@@ -112,7 +113,7 @@ async function main(){
   }
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
  }
- for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/game.js','js/audio.js','js/admin.js','css/game.css','css/admin.css']})){
+ for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/game.js','js/audio.js','js/admin.js','js/cards.js','js/export.js','js/fx.js','css/game.css','css/admin.css']})){
   for(const file of files){
    const committed=execFileSync('git',['show',`HEAD:games/${slug}/${file}`],{cwd:root,maxBuffer:10*1024*1024});
    const expected=Buffer.from(rewriteOutgoing(committed.toString(),`/g/${slug}`));

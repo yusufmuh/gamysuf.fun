@@ -186,7 +186,24 @@ test('legacy pending and history hydrate without changing tickets, ownership, qu
 });
 
 test('draw is server selected and retry idempotent before and after acknowledgement',()=>{const e=engine(),r=e.play('request-001',options);assert.equal(r.service.id,'whisper');assert.equal(r.demo,true);assert.deepEqual(e.play('request-001',options),r);assert.throws(()=>e.play('request-002',options),/sebelumnya/);e.acknowledge(r.id);assert.deepEqual(e.play('request-001',options),r);assert.equal(e.state.history.length,1);});
-test('consent and comfort validated before any draw',()=>{for(const patch of [{consent:false},{comfort:'unknown'},{recording:undefined},{host:'unknown'}]){const e=engine();assert.throws(()=>e.play('request-consent',{...options,...patch}));assert.equal(e.state.history.length,0);}});
+test('no-touch draw without recording preserves the real consent choice and remains retryable',()=>{
+ for(const mode of ['demo','live']){
+  const e=engine();e.updateSettings({mode});
+  const r=e.play('request-direct',{...options,consent:false});
+  assert.equal(r.consent,false);assert.equal(r.comfort,'no-touch');assert.equal(r.recording,false);
+  assert.equal(e.state.pending.consent,false);assert.equal(e.state.history[0].consent,false);
+  assert.deepEqual(e.play('request-direct',{...options,consent:true}),r);
+  e.acknowledge(r.id);assert.deepEqual(e.play('request-direct',{...options,consent:false}),r);
+ }
+});
+test('touch and recording require explicit consent before any draw',()=>{
+ for(const patch of [{comfort:'touch',consent:false},{recording:true,consent:false},{consent:undefined},{consent:'true'},{comfort:'unknown'},{recording:undefined},{host:'unknown'}]){
+  const e=engine();assert.throws(()=>e.play('request-consent',{...options,...patch}));assert.equal(e.state.history.length,0);assert.equal(e.state.pending,null);
+ }
+ for(const patch of [{comfort:'touch'},{recording:true},{comfort:'touch',recording:true}]){
+  const e=engine(),r=e.play('request-explicit',{...options,...patch});assert.equal(r.consent,true);
+ }
+});
 test('each active menu reachable; disabled services and hosts cannot be drawn',()=>{for(let i=0;i<7;i++){const e=engine({rng:()=>i/7});assert.equal(e.play('request-'+i,options).service.id,SERVICES[i].id);}const e=engine();e.updateService('whisper',false);assert.notEqual(e.play('request-disabled',options).service.id,'whisper');e.acknowledge(e.state.pending.id);e.updateHost('zoro',{enabled:false});assert.throws(()=>e.play('request-host',options),/tersedia/);});
 test('direct selection obeys allowPick and active services',()=>{const e=engine();assert.equal(e.play('request-pick',{...options,pick:'vow'}).method,'pick');e.acknowledge(e.state.pending.id);e.updateSettings({allowPick:false});assert.throws(()=>e.play('request-pick2',{...options,pick:'vow'}),/belum dibuka/);const f=engine();f.updateService('vow',{enabled:false});assert.throws(()=>f.play('request-pick3',{...options,pick:'vow'}),/tidak tersedia/);});
 test('pause, closed session and no active services reject new draws',()=>{for(const patch of [{paused:true},{sessionOpen:false}]){const e=engine();e.updateSettings(patch);assert.throws(()=>e.play('request-paused',options),/istirahat/);}const e=engine();e.state.services.forEach(s=>s.enabled=false);assert.throws(()=>e.play('request-empty',options),/menu aktif/);});

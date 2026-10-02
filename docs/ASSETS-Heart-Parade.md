@@ -1,6 +1,6 @@
-# Aset Bipy Heart Parade
+# Aset Bipy Grand Line Desire
 
-Tanggal: 2 Oktober 2026 · Heart Parade 2.0.0 / Gamysuf Arcade 1.6.0. Aset runtime ada di `assets/` (disalin ke `games/heart/assets` oleh `npm run sync`); arsip master PNG/audio/video ada di folder sumber `05 bipy-heart-parade/docs/art-originals`, yang tidak ikut disalin ke hub.
+Tanggal: 2 Oktober 2026 · Grand Line Desire 2.1.0 / Gamysuf Arcade 1.6.1. Aset runtime ada di `assets/` (disalin ke `games/heart/assets` oleh `npm run sync`); arsip master PNG/audio/video ada di folder sumber `05 bipy-heart-parade/docs/art-originals`, yang tidak ikut disalin ke hub.
 
 | Aset | Asal dan perlakuan |
 |---|---|
@@ -33,6 +33,7 @@ Ukuran dalam byte; hash SHA-256 dihitung dari berkas di folder sumber pada 2 Okt
 | `assets/audio/garden-bgm.mp3` | BGM `bpedia-bgm.wav` Beauty Drop, dikompresi MP3 112 kbps. Bukan komposisi baru. Saat dokumen ini ditulis tidak dirujuk oleh `js/audio.js` (BGM aktif: `heart-parade-bgm.mp3`). | MP3 | 672.957 | `e7dd2c9484f1efdc0894762a66fd5037cae681e0d590d0a3223d4af508e44645` |
 | `docs/art-originals/gemini/heart-parade-promo-master.mp4` | Master trailer Gemini dari dua scene kartu, akun Google pemilik. Arsip, tidak disajikan. | H.264 1280×720 + AAC 48 kHz, 10,005 detik | 5.571.616 | `50cec86a97016c292edb942bd81db1d9be476e9c2bd064207fadad8841652356` |
 | `assets/video/heart-parade-promo.mp4` | Trailer runtime, dioptimalkan dari master. | H.264 1280×720 24 fps + AAC, 10,01 detik | 2.483.844 | `52f474f2b7c35c7ae26ced3fe9b2b56ced3d468168753d02ca83872073f8c5d8` |
+| `assets/video/grand-line-promo-poster.webp` | Frame lanskap dari trailer runtime pada 9,5 detik, menjaga komposisi Zoro, Sanji, dan Bipy pada layar pembuka. | WebP 960×540 | 32.102 | `bad8b8bc02ee30246ce95700d80a0b9570c631eda2755d67b72df7c842ff18ce` |
 
 Jingle tidak diklaim sebagai komposisi baru dari tim pengembang; asalnya adalah rekaman yang dikirim pemilik. Prompt trailer Gemini tercatat di `IMAGEGEN-PROMPTS-Heart-Parade.md`. Pemutaran audio menunggu interaksi pengguna dan mengikuti tombol bisu.
 
@@ -52,4 +53,4 @@ Katalog server menyimpan 14 kartu kanonis di `core/catalog.cjs`. ID tetap `zoro-
 
 Harga normal FS adalah nilai bawaan yang perlu dikonfirmasi tim booth dan dapat diubah petugas (Rp 0–10.000.000). Poster bounty mencoret harga tersebut dan menampilkan **GRATIS untuk pelanggan Bpedia**. Nilai fiktif BERRY dari rilis 1.5.x tidak lagi dipakai. Statistik cost/power/counter per kartu tercantum di PRD bagian 4.2.
 
-Status verifikasi aset di browser (pemuatan audio jingle, trailer, dan ilustrasi di matriks viewport): belum diverifikasi.
+Status lokal 2 Oktober 2026: 14 ilustrasi berhasil didekode, trailer dan kontrol pemutaran lulus, ekspor kartu 1080×1508 serta poster 1080×1528 mempertahankan ilustrasi, proporsi, Bipy, logo, dan harga. UI terarah lulus 21/21. Matriks responsif Game 5 lulus 4.140/4.140 pada Chromium, Firefox, dan WebKit dengan 12 ukuran layar. Ini bukti browser/viewport emulasi; status produksi dicatat terpisah pada catatan rilis hub.

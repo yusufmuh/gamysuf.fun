@@ -14,7 +14,7 @@ const expected=Buffer.from('committed release bytes');
 const optimized=Buffer.from('CDN image bytes');
 function evidenceFor(file,changes={}){
  return {images:[{
-  url:`https://gamysuf.fun/hub/${file}?v=1.6.0`,
+  url:`https://gamysuf.fun/hub/${file}?v=1.6.1`,
   local:{sha256:hash(expected),dimensions:[520,780]},
   live:{sha256:hash(optimized),dimensions:[520,780]},
   same_dimensions:true,decoded_similarity:{ssim_0_1:0.99,dhash_hamming_bits_64:0},
