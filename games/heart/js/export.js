@@ -98,7 +98,6 @@
   if(mark){const mh=34,mw=mh*mark.naturalWidth/mark.naturalHeight;g.drawImage(mark,ix+46,footY-mh+6,mw,mh);}
   g.textAlign='right';g.font='700 26px Poppins';g.fillStyle='rgba(255,255,255,.92)';g.fillText(`${card.rarity} · ${card.cardNo}`,ix+iw-46,footY);
   g.restore();
-  await bipySeal(g,W-180,H*.65,110);
   return canvas;
  }
  function strike(g,x0,x1,y,width,color,seed){g.save();g.strokeStyle=color;g.lineCap='round';g.lineJoin='round';g.lineWidth=width;g.beginPath();g.moveTo(x0,y+10);g.bezierCurveTo(x0+(x1-x0)*.3,y-4+seed,x0+(x1-x0)*.62,y+8-seed,x1,y-22);g.stroke();g.restore();}
@@ -107,7 +106,7 @@
   const host=card.hostId==='sanji'?'sanji':'zoro',W=1080,H=1528,ink='#3a2410';
   const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const g=canvas.getContext('2d');if(!g)throw new Error('Kanvas tidak tersedia.');
   const paperPhoto=cssImage('poster','--poster-paper');
-  const [art,mascot,logo,paper,photo]=await Promise.all([load(card.image),load(card.mascot),load('/assets/brand/bpedia-pink.webp'),safe?null:load('/assets/ui/poster-paper.svg'),paperPhoto?load(paperPhoto):null]);
+  const [art,logo,paper,photo]=await Promise.all([load(card.image),load('/assets/brand/bpedia-pink.webp'),safe?null:load('/assets/ui/poster-paper.svg'),paperPhoto?load(paperPhoto):null]);
   if(!art)throw new Error('Gambar poster belum termuat.');
   g.fillStyle='#ead2a2';g.fillRect(0,0,W,H);
   if(paper)g.drawImage(paper,0,0,W,H);
@@ -115,30 +114,27 @@
   if(photo)cover(g,photo,0,0,W,H);
   const burn=g.createRadialGradient(W/2,H/2,H*.38,W/2,H/2,H*.76);burn.addColorStop(0,'rgba(107,61,18,0)');burn.addColorStop(1,'rgba(61,30,6,.55)');g.fillStyle=burn;g.fillRect(0,0,W,H);
   g.strokeStyle=ink;g.lineWidth=5;g.strokeRect(34,34,W-68,H-68);g.lineWidth=1.6;g.strokeRect(48,48,W-96,H-96);
-  g.textAlign='center';g.textBaseline='alphabetic';g.fillStyle=ink;spacing(g,10);fit(g,'WANTED',W-200,s=>`italic 900 ${s}px Fraunces`,260,160);g.fillText('WANTED',W/2,262);spacing(g,0);
+  g.textAlign='center';g.textBaseline='alphabetic';g.fillStyle=ink;spacing(g,10);fit(g,'WANTED',W-130,s=>`900 ${s}px Georgia`,230,160);g.fillText('WANTED',W/2,240);spacing(g,0);
   const px=120,py=300,pw=W-240,ph=640;
   g.fillStyle=ink;g.fillRect(px-14,py-14,pw+28,ph+28);
   g.save();g.beginPath();g.rect(px,py,pw,ph);g.clip();await paintScene(g,host,px,py,pw,ph,{safe,ay:.25});
   contain(g,art,px+18,py+10,pw-36,ph-20,.5,1);
   const vignette=g.createLinearGradient(0,py,0,py+ph);vignette.addColorStop(.7,'rgba(58,36,16,0)');vignette.addColorStop(1,'rgba(58,36,16,.35)');g.fillStyle=vignette;g.fillRect(px,py,pw,ph);
-  if(mascot){const mh=Math.min(218,ph*.34),mw=mh*mascot.naturalWidth/mascot.naturalHeight;g.shadowColor='rgba(40,20,5,.45)';g.shadowBlur=18;g.shadowOffsetY=6;g.drawImage(mascot,px+pw-mw-18,py+ph-mh-14,mw,mh);g.shadowColor='transparent';}
   g.restore();
-  g.font='800 44px Poppins';spacing(g,8);g.fillStyle=ink;g.fillText('DICARI PARA PENGGEMAR',W/2,1028);spacing(g,0);
-  const dw=g.measureText('DICARI PARA PENGGEMAR').width;g.lineWidth=3;g.beginPath();g.moveTo(70,1013);g.lineTo(W/2-dw/2-40,1013);g.moveTo(W/2+dw/2+40,1013);g.lineTo(W-70,1013);g.stroke();
-  fit(g,card.bountyName,W-180,s=>`italic 900 ${s}px Fraunces`,116,70);g.fillText(card.bountyName,W/2,1134);
+  g.font='900 62px Georgia';spacing(g,6);g.fillStyle=ink;g.fillText('DEAD OR ALIVE',W/2,1028);spacing(g,0);
+  fit(g,card.bountyName,W-150,s=>`900 ${s}px Georgia`,102,64);g.fillText(card.bountyName,W/2,1134);
   g.font='700 24px Poppins';spacing(g,5);g.fillText(String(card.priceLabel||'Harga normal fanservice').toUpperCase(),W/2-120,1196);spacing(g,0);
-  const price=money(card.price);g.font='italic 900 132px Fraunces';const pw2=g.measureText(price).width,priceX=W/2-120;g.fillText(price,priceX,1322);
+  const price=money(card.price);g.font='italic 900 112px Fraunces';const pw2=g.measureText(price).width,priceX=W/2-120;g.fillText(price,priceX,1322);
   strike(g,priceX-pw2/2-26,priceX+pw2/2+26,1282,15,'rgba(200,16,46,.92)',6);strike(g,priceX-pw2/2-10,priceX+pw2/2+34,1298,6,'rgba(200,16,46,.75)',-4);
   // Stempel tinta: digambar terpisah lalu diberi bintik agar terasa seperti cap karet.
   const st=document.createElement('canvas');st.width=470;st.height=210;const s=st.getContext('2d');
   s.strokeStyle='#cf1f47';s.fillStyle='#cf1f47';s.lineWidth=10;rr(s,10,10,450,190,22);s.stroke();s.lineWidth=3;rr(s,26,26,418,158,14);s.stroke();
   s.textAlign='center';s.textBaseline='alphabetic';s.font='800 106px Poppins';spacing(s,4);s.fillText(card.customerOffer?.label||'GRATIS',235,124);spacing(s,0);s.font='700 30px Poppins';s.fillText(card.customerOffer?.description||'untuk pelanggan Bpedia',235,168);
   s.globalCompositeOperation='destination-out';let seed=11;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;for(let i=0;i<420;i++){s.globalAlpha=.25+rnd()*.5;s.beginPath();s.arc(rnd()*470,rnd()*210,rnd()*3.2,0,Math.PI*2);s.fill();}
-  g.save();g.translate(W/2+250,1300);g.rotate(-.2);g.globalAlpha=.94;g.globalCompositeOperation='multiply';g.drawImage(st,-235,-105);g.restore();
-  g.font='500 27px Poppins';g.fillStyle='#4a2e14';g.fillText('Harga normal fanservice · gratis di booth Bpedia',W/2,1404,W-160);g.fillText('Market-In 6.0, 3–4 Okt',W/2,1440,W-160);
+  g.save();g.translate(W/2+285,1290);g.rotate(-.1);g.globalAlpha=.94;g.globalCompositeOperation='multiply';g.drawImage(st,-141,-63,282,126);g.restore();
+  g.font='500 27px Poppins';g.fillStyle='#4a2e14';g.fillText('Harga normal fanservice · gratis di booth Bpedia',W/2,1404,W-160);g.fillText('Marketing 6.0, 3–4 Okt',W/2,1440,W-160);
   g.textAlign='left';g.font='700 22px Poppins';g.fillStyle=ink;g.fillText(`${String(card.name||'').split(' · ')[0]} · ${hostName||''} · ${card.cardNo}`,74,1478,W-330);
   if(logo){const lh=40,lw=lh*logo.naturalWidth/logo.naturalHeight;g.drawImage(logo,W-74-lw,1478-lh+6,lw,lh);}
-  await bipySeal(g,W-190,870,105);
   return canvas;
  }
  function toBlob(canvas){return new Promise((resolve,reject)=>{try{canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG gagal dibuat.')),'image/png');}catch(error){reject(error);}});}

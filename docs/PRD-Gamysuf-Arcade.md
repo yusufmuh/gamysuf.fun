@@ -6,7 +6,7 @@
 ## 1. Ringkasan
 | Item | Isi |
 |---|---|
-| Produk | Gamysuf Arcade 1.7.0: dashboard 5 game booth Bpedia + slot game tambahan |
+| Produk | Gamysuf Arcade 1.8.0: dashboard 5 game booth Bpedia + slot game tambahan |
 | Domain | **gamysuf.fun** (Hostinger, akun pemilik) |
 | Folder | `C:\Users\Yusuf\coding\00 game\00 gamysuf-arcade` |
 | Repo | GitHub `yusufmuh/gamysuf.fun` — lihat §10 |
@@ -79,11 +79,11 @@ tests/*.test.cjs      tes gateway, isolasi pengunjung, PIN, XP, Studio, aset, mi
 - Panduan: cara kerja 4 langkah, aturan main adil, tabel XP, FAQ, modal "Cara main" per game (langkah, kontrol, tips).
 - Kejujuran: online selalu demo; hadiah fisik hanya di booth. Beauty Drop menampilkan teks "simulasi demo" pada hasil demo.
 
-## 5. Studio (`/studio`)
-Statistik (pemain, aktif hari ini, main hari ini, total), daftar game bawaan + tombol Dashboard + info login, pengumuman beranda (+tautan), game unggulan kabinet, sembunyikan game bawaan, kelola maksimal 6 game tambahan (slug, judul, subjudul, deskripsi, cara main, tag, warna, sampul, ZIP/tautan, publikasi), Top 10 minggu ini.
+## 5. Portal petugas (`/studio`)
+Lima tautan dashboard admin/petugas dan tautan game. Tidak ada login pemilik terpusat. Pengaturan serta autentikasi dilakukan pada masing-masing game. API admin hub lama tetap dilindungi untuk kompatibilitas data; tidak ada UI publik untuk operasinya.
 
 ## 6. Menambah game
-- **Tanpa kode**: Studio → Tambah game (ZIP HTML5 dengan `index.html`, atau tautan https).
+- Slot ZIP/tautan lama tetap dibaca oleh server; UI tambah game terpusat sudah dihapus sesuai revisi 1.8.0.
 - **Game Node dengan server**: buat folder `games/<slug>/` berisi `server.cjs` yang mengekspor `createApp({dataDir,port,cloud})` (pola sama dengan game 03: `engineFor(req)` untuk rute publik), `core/engine.cjs` mengekspor `Engine`, lalu tambah entri di `hub/registry.cjs` (title, cover, howTo, resultRoutes, extract, cards). Tambahkan sumbernya di `scripts/sync-games.cjs`.
 
 ## 7. Deploy Hostinger
@@ -115,6 +115,8 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 - XP dihitung di server dari respons game, bukan dari laporan browser.
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
+
+**3 Oktober 2026 · 1.8.0:** Revisi 16 komentar browser diterapkan pada Game 5 sumber 2.3.0. Kartu dipilih satu ketukan, kotak tiket pemain dan blok musik Home dihapus, flip poster bounty langsung, duo Bipy konsisten dan trailer Gemini baru. Event tampil sebagai Marketing 6.0; `/studio` menjadi portal lima dashboard petugas. Validasi dan status deployment terkini ada di [RELEASE-1.8.0.md](RELEASE-1.8.0.md). Catatan versi lama di bawah adalah riwayat.
 
 **3 Oktober 2026 · 1.7.0:** Game 5 2.2.4 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Seluruh permukaan kartu bisa diketuk. Tema terang/gelap memakai pink guideline Bpedia; 50 gambar pemilik dipakai di galeri, pratinjau dan pose dealer. Server memeriksa nominal, demo tetap terpisah, stempel Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia menjadi suite 350,140 detik dengan dialog Jepang sintetis. Bukti pengujian dan produksi dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah merupakan riwayat.
 
@@ -148,6 +150,8 @@ Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memili
 - Push ke branch produksi dapat memicu deployment. Bukti lokal, commit, paket, dan produksi harus dicatat sesuai tahapnya.
 
 ## 11. Log serah-terima
+
+- **2026-10-03 (Codex, revisi browser 1.8.0)**: 47 tes sumber dan 75 tes integrasi lulus; 558 pemeriksaan browser serta 15 pemeriksaan panel belanja lokal lulus. Animasi Gemini baru dibuat dan diunduh; dua adegan kartu menggunakan potongan master tersebut. Produksi harus cocok dengan hash rilis dan laporan RELEASE-1.8.0.md.
 
 - **2026-10-03 (Codex, verifikasi akhir 1.7.0)**: sumber Game 5 2.2.4 melalui `b5bd236` menyederhanakan pengaturan volume efek saat bisu. Audio produksi 29/29 di tiga browser dengan sembilan hasil demo lulus; tes sumber 47/47 dan integrasi 75/75 diperiksa ulang. CSS 2.2.3 serta seluruh aset tetap identik dengan 361 pemeriksaan sentuh/tema yang sudah lulus. Endpoint/hash produksi 186/186 dan paket akhir 692 berkas lulus; SHA-256 dan catatan batasan dicatat di `RELEASE-1.7.0.md`.
 

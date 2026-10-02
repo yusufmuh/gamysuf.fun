@@ -90,9 +90,8 @@ app.whenReady().then(async()=>{
    await save('08-album.png');
    await win.loadURL(`${base}/studio`);
    await wait(800);
-   await save('09-studio-login.png');
-   await js(`document.getElementById('pin').value='246810';document.getElementById('loginButton').click()`);
-   await until(`!document.getElementById('studioApp').hidden`);
+   await until(`document.querySelectorAll('.staff-game a[href$="/admin.html"]').length===5`);
+   await save('09-staff-portal.png');
    await wait(1000);
    await save('10-studio.png');
    fs.writeFileSync(path.join(out,'qa.json'),JSON.stringify({errors},null,2));

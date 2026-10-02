@@ -50,7 +50,7 @@ test('public catalog and recovered pending expose canonical card metadata',async
  assert.equal(result.json.card.id,'sanji-cinderella');assert.equal(result.json.card.cardNo,'BP06-008');
  assert.deepEqual(result.json.card.customerOffer,{label:'GRATIS',amount:0,description:'untuk pelanggan Bpedia'});assert.equal(result.json.card.price,65000);
  delete app.engine.state.pending.card;delete app.engine.state.history[0].card;
- assert.equal((await call(app,'/api/state')).json.pending.card.image,'/assets/moments/sanji-cinderella.webp');
+ assert.equal((await call(app,'/api/state')).json.pending.card.image,'/assets/stickers/sanji-cinderella.webp');
  assert.deepEqual((await call(app,'/api/play',{...draw,pick:'cinderella'})).json.card,result.json.card);
 });
 test('admin service route accepts {id,patch} and legacy {id,enabled}; prices reach the public catalog',async t=>{

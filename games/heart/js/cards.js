@@ -90,12 +90,12 @@
   return `<div class="poster host-${host}${stamped?' is-stamped':''}" data-card="${esc(card.id)}">
 <span class="poster-paper" aria-hidden="true"></span>${sealed?bipySeal():''}
 <div class="poster-in"><b class="poster-wanted" aria-hidden="true">WANTED</b>
-<span class="poster-photo">${scene()}<img${imgId?` id="${esc(imgId)}"`:''} src="${esc(card.image)}" alt="${esc(card.imageAlt)}" width="960" height="1440" decoding="async"${lazy?' loading="lazy"':''}><img class="poster-bipy" src="${esc(card.mascot)}" alt="${esc(card.bipyAlt)}" width="640" height="1166" decoding="async" loading="lazy"></span>
-<span class="poster-dead">DICARI PARA PENGGEMAR</span>
+<span class="poster-photo">${scene()}<img${imgId?` id="${esc(imgId)}"`:''} src="${esc(card.image)}" alt="${esc(card.imageAlt)}" width="640" height="800" decoding="async"${lazy?' loading="lazy"':''}></span>
+<span class="poster-dead">DEAD OR ALIVE</span>
 <b class="poster-name">${esc(card.bountyName)}</b>
 <span class="poster-price"><small>${esc(card.priceLabel||'Harga normal fanservice')}</small><span class="poster-amount"><s>${esc(money(card.price))}</s><svg class="poster-strike" viewBox="0 0 320 60" preserveAspectRatio="none" aria-hidden="true"><path class="s1" pathLength="1" d="M4 40C70 30 130 36 196 24S292 20 316 14"/><path class="s2" pathLength="1" d="M10 48C90 40 170 42 240 32S300 26 312 24"/></svg></span></span>
 <span class="poster-stamp"><b>${esc(offer.label||'GRATIS')}</b><small>${esc(offer.description||'untuk pelanggan Bpedia')}</small></span>
-<span class="poster-fine">Harga normal fanservice · gratis di booth Bpedia Market-In 6.0, 3–4 Okt</span>
+<span class="poster-fine">Harga normal fanservice · gratis di booth Bpedia Marketing 6.0, 3–4 Okt</span>
 <span class="poster-foot"><span>${esc(name)} · ${esc(hostName||(host==='zoro'?'Zoro':'Sanji'))} · ${esc(card.cardNo)}</span><img src="/assets/brand/bpedia-pink.webp" alt="Bpedia" width="90" height="33" decoding="async"${lazy?' loading="lazy"':''}></span></div></div>`;
  }
  // Gerigi foil booster dibuat sebagai polygon agar tidak perlu gambar tambahan.

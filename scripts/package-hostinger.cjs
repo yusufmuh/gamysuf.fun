@@ -22,14 +22,14 @@ const readme=`# Gamysuf Arcade ${pkg.version} · paket Hostinger
 2. Unggah \`${name}\` apa adanya (package.json sudah di akar ZIP).
 3. Pengaturan: Framework **Other** · Node **22** · Build command **kosong** · Output directory **kosong** · Entry file **hub/server.cjs**.
 4. Environment variables:
-   - \`ADMIN_PIN\` = 6–12 digit angka (wajib untuk Studio & dashboard game; tanpa ini semuanya terkunci).
+   - \`ADMIN_PIN\` = 6–12 digit angka (wajib untuk dashboard game; tanpa ini akses resmi terkunci).
    - \`NODE_ENV\` = \`production\`
    - opsional \`ALLOWED_HOSTS\` = \`gamysuf.fun,www.gamysuf.fun\`
    - opsional \`GAMYSUF_DATA_DIR\` (bawaan \`~/gamysuf-data\`, di luar folder build agar data tidak hilang saat redeploy)
-5. Deploy, lalu buka https://gamysuf.fun (arcade) dan https://gamysuf.fun/studio (Studio pemilik).
+5. Deploy, lalu buka https://gamysuf.fun (arcade) dan https://gamysuf.fun/studio (portal petugas setiap game).
 
 ## Login
-- Studio & dashboard Nyapit/Beauty Drop/Gacha Pop: PIN = ADMIN_PIN.
+- Dashboard Nyapit/Beauty Drop/Gacha Pop: PIN = ADMIN_PIN. Portal petugas tidak memiliki login terpusat.
 - Grand Line Desire: kode booth 1234 sesuai permintaan pemilik; hanya berlaku untuk Game 5. Opsional HEART_BOOTH_PIN mengganti kode ini.
 - Dashboard Spin Wheels: username \`johan123\`, password = ADMIN_PIN.
 - Ganti PIN: ubah ADMIN_PIN di Environment variables lalu simpan (otomatis redeploy).

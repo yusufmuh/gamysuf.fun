@@ -1,0 +1,39 @@
+{
+  "createdDate": "2026-10-03",
+  "generator": "Google Gemini, authenticated owner browser session",
+  "masterDownload": "Bpedia-Grand-Line-Desire-Gemini-2026-10-03.mp4",
+  "masterSHA256": "c5c163f76a9cd6e3291d50efe0ff06a8fd1efa129ad2f1d38b2754630abb66d0",
+  "visualVerification": "Ten contact-sheet frames inspected: official pink Bipy model, chibi Zoro and Sanji, wave/hug/courteous hand bow, no human princess.",
+  "references": [
+    "02_Bipy/bipy-full-berdiri.png",
+    "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_56 PM-6.png",
+    "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_54 PM-4.png"
+  ],
+  "assets": [
+    {
+      "file": "assets/video/heart-parade-bipy-promo.mp4",
+      "bytes": 1671935,
+      "sha256": "1bbbeb424e46328978741c1a42703f5a495ee8d1d1a1ef53d5b67a1f4b57d647"
+    },
+    {
+      "file": "assets/video/bipy-promo-poster.webp",
+      "bytes": 22752,
+      "sha256": "3115fcc4e4aaf876a4a976be9f5f3f98f1f7f0fb59fae5f6b95938ea72d9b796"
+    },
+    {
+      "file": "assets/video/moments/zoro-hug-gemini.mp4",
+      "bytes": 197136,
+      "sha256": "55eb2e124ed99c4e5b72eeea08fa059c6327a6b7a473012ffa8daa6b78f534e5"
+    },
+    {
+      "file": "assets/video/moments/sanji-vow-gemini.mp4",
+      "bytes": 356646,
+      "sha256": "03f346152b09ba691813d0e104db99220a61aeeb9790d82eb39702f53eb4450b"
+    }
+  ],
+  "edits": {
+    "trailer": "Silent 1280x720 H264 optimized master, 10 seconds.",
+    "zoro-hug": "Master 1.95-2.80 seconds; crop 704x720, contain/pad to 720x900, forward/reverse loop. Wanted transition excluded. Explicit square pixels (SAR 1:1) for WebKit.",
+    "sanji-vow": "Master 4.0-5.8 seconds; crop 704x720, contain/pad to 720x900, forward/reverse loop. Explicit square pixels (SAR 1:1) for WebKit."
+  }
+}

@@ -57,13 +57,13 @@ const CARDS=freezeCatalog(HOSTS.flatMap((host,hostIndex)=>SERVICES.map((service,
   cardNo:`BP06-${String(hostIndex*SERVICES.length+serviceIndex+1).padStart(3,'0')}`,rarity:moment.rarity,
   cost:moment.cost,power:moment.power[host.id],counter:moment.counter,attribute:host.attribute,cardColor:host.cardColor,
   crew:host.crew,effect:moment.effect,bountyName:host.fullName,
-  image:`/assets/moments/${host.id}-${service.id}.webp`,imageAlt:`Ilustrasi ${host.name} dalam momen ${service.name}`,
+  image:`/assets/stickers/${host.id}-${service.id}.webp`,imageAlt:`Bipy pink bersama ${host.name} dalam momen ${service.name}`,
   povImage:host.id==='sanji'?`/assets/pov/sanji-${service.id}.webp`:`/assets/moments/zoro-${service.id}.webp`,povAlt:`${host.name} dalam pose ${service.name}`,
   stickerImage:`/assets/stickers/${host.id}-${service.id}.webp`,stickerAlt:`Bipy bersama ${host.name} dalam momen ${service.name}`,
   mascot:`/assets/bipy-variants/bipy-${service.id}.webp`,bipyName:moment.bipyName,bipyAlt:moment.bipyAlt,
   romanticLine:moment.lines[host.id],animationMotif:moment.animationMotif,
   price:service.price,currency:'IDR',priceLabel:'Harga normal fanservice',
-  customerOffer:{...CUSTOMER_OFFER},video:`/assets/video/moments/${host.id}-${service.id}.mp4`};
+  customerOffer:{...CUSTOMER_OFFER},video:`/assets/video/moments/${host.id}-${service.id}-${(host.id==='zoro'&&service.id==='hug')||(host.id==='sanji'&&service.id==='vow')?'gemini':'bipy'}.mp4`};
 })));
 function cardFor(hostId,serviceId){return CARDS.find(card=>card.hostId===hostId&&card.serviceId===serviceId)||null;}
 function defaultState(){return {

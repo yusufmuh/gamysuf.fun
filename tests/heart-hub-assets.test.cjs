@@ -19,6 +19,9 @@ const heart=GAMES.find(game=>game.slug==='heart');
 const expectedAssets=[
  ...state.hosts.flatMap(host=>state.services.map(service=>`assets/moments/${host.id}-${service.id}.webp`)),
  ...HEART_SERVICE_IDS.map(id=>`assets/bipy-variants/bipy-${id}.webp`),
+ ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/stickers/${host}-${service}.webp`)),
+ ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/video/moments/${host}-${service}-bipy.mp4`)),
+ 'assets/video/heart-parade-bipy-promo.mp4','assets/video/bipy-promo-poster.webp','assets/video/moments/zoro-hug-gemini.mp4','assets/video/moments/sanji-vow-gemini.mp4','assets/video/gemini-bipy-manifest.json','assets/video/moments/bipy-manifest.json',
  ...['pink','jade','gold'].map(id=>`assets/brand/bipy-${id}.webp`),
  'assets/video/grand-line-promo-poster.webp',
  'assets/audio/bpedia-main-bgm.mp3','assets/audio/bpedia-home-suite.mp3',
@@ -33,7 +36,7 @@ test('Heart album and server results agree on fourteen unique moment artworks an
  assert.equal(new Set(cards.map(card=>card.image)).size,14);
  for(const host of state.hosts)for(const service of state.services){
   const card=cards.find(item=>item.cardId===`${host.id}-${service.id}`);
-  assert.equal(card.image,`/assets/moments/${host.id}-${service.id}.webp`);
+  assert.equal(card.image,`/assets/stickers/${host.id}-${service.id}.webp`);
   assert.deepEqual(heart.extract('/api/play',{host,service}),card);
  }
  assert.equal(heart.extract('/api/play',{host:{id:'unknown'},service:state.services[0]}),null);
@@ -52,7 +55,7 @@ test('legacy Heart ownership refreshes art without changing XP, duplicates, date
  players.flush();
  const restored=new Players(file,{now});
  const migrated=restored.ensure(id);
- assert.equal(migrated.cards['heart:zoro-cinderella'].image,'/g/heart/assets/moments/zoro-cinderella.webp');
+ assert.equal(migrated.cards['heart:zoro-cinderella'].image,'/g/heart/assets/stickers/zoro-cinderella.webp');
  original.cards['heart:zoro-cinderella'].image=migrated.cards['heart:zoro-cinderella'].image;
  assert.deepEqual(migrated,original);
  assert.deepEqual(restored.record(id,{slug:'heart',outcome,requestKey:'heart:legacy'}),[]);

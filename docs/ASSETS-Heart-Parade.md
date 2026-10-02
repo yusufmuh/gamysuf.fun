@@ -82,3 +82,9 @@ QA audio lokal: 10 pemeriksaan Chromium, 10 Firefox dan 9 WebKit; seluruhnya lul
 Seluruh 50 PNG dari `Bipy varian zoro sanji`, `zoro fanservice`, dan `sanji fanservice` dipakai. Galeri memuat 40 adegan duo dan 10 pose Bipy (25 gambar per karakter), pratinjau tujuh menu per karakter memakai adegan yang cocok, dan dealer berganti pose mengikuti tahap atraksi. WebP mempertahankan alpha serta badan/kaki utuh; semua PNG asli tetap utuh. Total WebP tambahan 4.444.776 byte. Manifest `assets/stickers/manifest.json` mencatat 50 nama sumber, dimensi, hash sumber, hash hasil, karakter, judul dan peran. Helper sumber: `docs/prepare-sticker-assets.py`.
 
 Token brand pada `assets/brand/bpedia-tokens.css` disalin dari guideline pemilik: pink terang #E62B5E, pink gelap #FF5C8A, latar terang #FFF7F8 dan Berry Night #2A0A18.
+
+## Runtime 2.3.0 · konsistensi Bipy dan Gemini baru
+
+`CARDS.image` sekarang memakai 14 `/assets/stickers/<host>-<service>.webp` yang sesuai momen. Artwork adult lama tetap menjadi arsip/POV, tidak menjadi ilustrasi utama kartu baru. Video aktif: `zoro-hug-gemini.mp4`, `sanji-vow-gemini.mp4`, dan 12 `<host>-<service>-bipy.mp4`. Manifest motion graphics menyimpan 14 loop dasar; dua di antaranya digantikan video Gemini pada runtime. `docs/animate-bipy-scenes.py` mereproduksi loop dasar tanpa mengubah PNG asli.
+
+Trailer `heart-parade-bipy-promo.mp4` dibuat baru pada 3 Oktober 2026 dari referensi Bipy resmi; hasil lama yang mengganti Bipy menjadi manusia tidak dipakai. File master Downloads, hash, referensi dan waktu pemotongan ada dalam `assets/video/gemini-bipy-manifest.json`. Ketiga video Gemini tanpa audio; musik game tetap dikontrol melalui ikon suara.

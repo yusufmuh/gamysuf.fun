@@ -1,12 +1,12 @@
 # PRD · Bipy Grand Line Desire
 
-Game 05 · versi 2.2.4 · Gamysuf Arcade 1.7.0 · diperbarui 3 Oktober 2026
+Game 05 · versi 2.3.0 · Gamysuf Arcade 1.8.0 · diperbarui 3 Oktober 2026
 
 ## Produk dan tujuan
 
-Permainan kartu fanservice Zoro dan Sanji untuk booth Bpedia pada Market-In 6.0, Urban Forest Cipete, 3–4 Oktober 2026. Game 4 Bipy Gacha Pop dan Game 5 berada dalam dashboard acara yang sama, dengan permainan dan penyimpanan terpisah. Identitas pelanggan memakai sapaan Babes; Bipy pink mewakili pelanggan dalam ilustrasi momen.
+Permainan kartu fanservice Zoro dan Sanji untuk booth Bpedia pada Marketing 6.0, Urban Forest Cipete, 3–4 Oktober 2026. Game 4 Bipy Gacha Pop dan Game 5 berada dalam dashboard acara yang sama, dengan permainan dan penyimpanan terpisah. Identitas pelanggan memakai sapaan Babes; Bipy pink mewakili pelanggan dalam ilustrasi momen.
 
-Home memperkenalkan penawaran, trailer, dua cosplayer full body, musik Bpedia, dan pilihan karakter. Zoro memakai dek hijau giok; Sanji memakai dek kuning emas. Pemain wajib memilih cosplayer sebelum masuk meja kartu.
+Home memperkenalkan penawaran, trailer Gemini baru, dua leader bergerak, latar Bipy bergerak, dan pilihan karakter. Blok musik dan galeri Home dihapus; galeri tersedia pada Parade Bipy. Zoro memakai dek hijau giok; Sanji memakai dek kuning emas. Pemain wajib memilih cosplayer sebelum masuk meja kartu.
 
 ## Penawaran booth
 
@@ -47,34 +47,46 @@ Pembatalan atraksi tidak menerbitkan tiket. Tombol melewati atraksi langsung men
 
 ## Perjalanan pilih langsung
 
-Home → pilih karakter → Pilih Fanservice → lihat cuplikan dan sudut pandang Babes → pilih kartu → Dapatkan momen. Tidak ada pengocokan. Kartu langsung dibalik dan dicap; video tidak otomatis diganti poster sehingga pelanggan dapat menikmati momennya.
+Home → pilih karakter → Pilih Fanservice → ketuk bagian mana pun pada kartu → hasil langsung terbuka. Tombol Lihat momen tetap membuka pratinjau tersendiri. Tidak ada pengocokan; ketuk hasil untuk flip ke poster bounty, dan ketuk lagi untuk kembali ke animasi kartu.
 
 ## Visual, animasi, dan suara
 
 Logo Bpedia asli dipertahankan. Tema terang memakai pink #E62B5E, pearl #FFF7F8, blush #FDE7EC, dan plum #45122B. Tema gelap memakai pink #FF5C8A, Berry Night #2A0A18, panel #3B1026, dan garis #5A1A36. Token disalin dari guideline Bpedia terkini di 03_Warna_Font/bpedia-tokens.css. Font Poppins dan Fraunces dibundel lokal.
 
-Ada 14 cuplikan H264 720×900, masing-masing lima detik. Tiga belas merupakan animasi ilustrasi dengan gerak kamera/partikel; Knight's Vow Zoro berasal dari video aksi Gemini yang sudah ada. Dokumen ini tidak menyebut tiga belas klip tersebut sebagai animasi tubuh baru. Sanji memiliki tujuh gambar POV HD dari folder pemilik. Potongan kolase Zoro tidak dipakai di layar; ilustrasi momen yang utuh menjadi pengganti.
+Ada 14 cuplikan H264 720×900. Dua belas memakai motion graphics lima detik dari ilustrasi duo Bipy pemilik; Warm Hug Zoro dan Knight's Vow Sanji memakai potongan animasi karakter dari trailer Gemini baru. Master diunduh ke Downloads dan dipotong menjadi loop maju/mundur dengan kanvas utuh. Sanji memiliki tujuh gambar POV HD dari folder pemilik.
 
-Seluruh 50 PNG tambahan pemilik dipakai: 40 adegan Bipy bersama Zoro/Sanji dan 10 pose dealer. Galeri Home menampilkan semuanya dengan filter Zoro/Sanji; gambar utuh dan transparan, dimuat bertahap. Pratinjau 14 menu memakai adegan yang sesuai. Empat pose aktif dealer disiapkan sejak karakter dipilih agar pergantian saat menyiapkan, menumpuk, mengocok, dan menawarkan kartu lebih mulus. Atraksi memakai Web Animations dan menghormati reduced motion. Cap Bipy juga digambar dalam unduhan PNG.
+Seluruh 50 PNG tambahan pemilik dipakai: 40 adegan Bipy bersama Zoro/Sanji dan 10 pose dealer. Galeri pada Parade Bipy menampilkan semuanya dengan filter Zoro/Sanji; gambar utuh dan transparan, dimuat bertahap. Pratinjau 14 menu memakai adegan yang sesuai. Empat pose aktif dealer disiapkan sejak karakter dipilih agar pergantian saat menyiapkan, menumpuk, mengocok, dan menawarkan kartu lebih mulus. Atraksi memakai Web Animations dan menghormati reduced motion. Ekspor PNG memakai duo yang sama tanpa cap Bipy tambahan.
 
-Musik Home berasal dari rekaman Bpedia pemilik. Rangkaian 350,14 detik menggunakan crossfade lima detik dan dua narasi Jepang orisinal di detik 159 dan 330. Narasi memakai sintesis ja-JP-KeitaNeural dengan perlakuan berbeda; bukan rekaman atau tiruan pengisi suara asli Zoro/Sanji. Jingle Bpedia terdengar ketika cap mendarat, dengan musik diturunkan sementara. Browser memulai audio setelah interaksi pengguna; tombol Putar musik Bpedia tersedia di Home.
+Musik Home berasal dari rekaman Bpedia pemilik. Rangkaian 350,14 detik menggunakan crossfade lima detik dan dua narasi Jepang orisinal di detik 159 dan 330. Narasi memakai sintesis ja-JP-KeitaNeural dengan perlakuan berbeda; bukan rekaman atau tiruan pengisi suara asli Zoro/Sanji. Jingle Bpedia terdengar ketika cap mendarat, dengan musik diturunkan sementara. Browser memulai audio setelah interaksi pengguna; kontrol suara tersedia di ikon header.
 
 Bisu menghentikan media dan SFX yang sudah dijadwalkan. Tab tersembunyi menjeda media dan video. Ketika dialog pengocokan, cuplikan atau hasil terbuka, ketujuh video dek dijeda; hanya video momen dalam dialog yang dimainkan. Video dek yang terlihat kembali berjalan setelah dialog ditutup. Error jingle memulihkan volume musik; pemulihan loop WebKit mempertahankan pemutaran setelah batas lagu. WebKit Windows pengujian tidak menyediakan AudioContext pada mesin ini, sehingga SFX sintesis tidak teruji di sana; musik dan jingle native berhasil diuji.
 
 ## Dashboard dan pencatatan
 
-Demo dan Main tercatat memiliki kontrol terpisah. PIN booth Game 5 ditampilkan sebagai 1234 sesuai permintaan pemilik dan hanya membuka Game 5. Studio pemilik serta game lainnya mempertahankan ADMIN_PIN. HEART_BOOTH_PIN dapat mengganti kode booth saat deployment; tanpa ADMIN_PIN yang valid, semua akses resmi tetap terkunci.
+Demo dan Main tercatat memiliki kontrol terpisah. PIN booth Game 5 ditampilkan sebagai 1234 sesuai permintaan pemilik dan hanya membuka Game 5. Game lainnya mempertahankan ADMIN_PIN; portal petugas tidak memiliki login terpusat. HEART_BOOTH_PIN dapat mengganti kode booth saat deployment; tanpa ADMIN_PIN yang valid, semua akses resmi tetap terkunci.
 
 Petugas mengatur mode, jeda, jadwal, pilihan langsung, durasi pembukaan, menu/harga, cosplayer/kuota, antrean, status pelayanan, dan alternatif interaksi. Laporan berisi jumlah gacha/pilih, distribusi host/menu, status tiket, serta jumlah nominal verifikasi per tiket. Angka nominal tersebut bukan omzet unik: satu transaksi dapat mendasari lebih dari satu tiket. Demo tidak masuk laporan resmi. CSV menyertakan snapshot belanja dan menetralkan formula spreadsheet.
 
 ## Perangkat dan pemulihan
 
-Seluruh permukaan kartu dapat diketuk, termasuk gambar, judul, dan keterangannya: membuka pratinjau pada gacha atau memilih kartu pada mode pilih. Tombol Lihat momen tetap membuka cuplikan tersendiri. Pemilihan keyboard memakai tombol native yang juga mencakup permukaan kartu. Mendukung HP portrait/landscape, tablet, foldable, laptop/PC/Mac melalui browser. Kontrol utama minimal 44 piksel; filter galeri 48 piksel. Fullscreen mengikuti kemampuan browser. Ganti karakter kembali ke Home dan galeri mengembalikan fokus ke pembukanya.
+Seluruh permukaan kartu dapat diketuk, termasuk gambar, judul, dan keterangannya: membuka pratinjau pada gacha atau memilih kartu pada mode pilih. Tombol Lihat momen tetap membuka cuplikan tersendiri. Pemilihan keyboard memakai tombol native di setiap kartu. Mendukung HP portrait/landscape, tablet, foldable, laptop/PC/Mac melalui browser. Kontrol utama minimal 44 piksel; filter galeri 48 piksel. Fullscreen mengikuti kemampuan browser. Ganti karakter kembali ke Home dan galeri mengembalikan fokus ke pembukanya.
 
 Request idempotent mencegah tiket ganda. Respons yang terputus dipulihkan dari pending. Reload membuka tiket yang sama; kegagalan menutup tiket tidak menghapus hasil. Kuota, antrean, nomor harian, audit, dan riwayat memakai direktori data persisten di luar build hosting.
 
-## Bukti rilis
+## Riwayat bukti rilis 1.7.0
 
 Tes sumber: 47/47 dan pemeriksaan sintaks lulus. Tes integrasi hub: 75/75, termasuk batas pembelian serta pemisahan kode booth. QA UI terarah: 21/21, termasuk ekspor PNG kartu 1080×1508 dan poster 1080×1528, pemulihan respons/pending, dan pelayanan tiket resmi pada data uji terisolasi. QA audio produksi: tiga browser, 29 pemeriksaan, sembilan demo. Seluruh 14 cuplikan didekode dan diputar di Chromium, Firefox, dan WebKit (42/42).
 
 Pemeriksaan sentuh/galeri produksi akhir: 361/361, 12 kasus pada tiga browser dan empat ukuran layar; gambar, judul, seluruh kartu, batas tombol, dua tema dan 50 gambar lulus. Matriks perjalanan responsif, paket Hostinger, dan bukti produksi terbaru dicatat pada docs/RELEASE-1.7.0.md di repo hub. Laporan lama 1.6.1 merupakan riwayat; tidak digunakan sebagai bukti alur baru.
+
+## Revisi komentar browser · 3 Oktober 2026 · 2.3.0
+
+Mode Pilih Fanservice membuka hasil melalui satu ketukan di gambar, judul, keterangan atau tombol kartu. Gacha tetap mengocok tujuh kartu tertutup. Tombol cuplikan terpisah tidak menerbitkan hasil. Kotak kode tiket, nomor antrean dan estimasi di hasil pemain dihapus; pencatatan dan antrean petugas tetap berjalan.
+
+Hasil kartu dapat diketuk untuk flip 3D menuju poster bounty; Enter/Space dan tombol Kartu/Poster tetap berfungsi. Wanted memakai kertas perkamen, foto duo utuh, DEAD OR ALIVE, nama karakter, tarif fanservice dicoret dan cap GRATIS. Referensi visual: [Toei Animation Official Store](https://store.toei-anim.co.jp/shop/g/gMOVONP0916BEV/). Angka Rp merupakan tarif referensi fanservice, bukan bounty kanonis One Piece.
+
+Seluruh 14 kartu memakai ilustrasi duo Bipy pink dari PNG pemilik. Trailer 10 detik dibuat baru di Gemini memakai Bipy resmi dan dua referensi duo; Warm Hug Zoro dan Knight's Vow Sanji menggunakan potongan animasi karakter dari master tersebut. Dua belas kartu lain memakai loop motion graphics yang menjaga ilustrasi asli. Tidak dinyatakan sebagai 14 video Gemini terpisah. Berkas asli di Downloads; detail pemotongan dan hash pada `assets/video/gemini-bipy-manifest.json`.
+
+CTA gacha tampil sebelum dek dengan tombol 60 piksel; nominal belanja terverifikasi dikelompokkan dalam panel yang sama. Tema terang #E62B5E dan tema gelap #FF5C8A mengikuti token Bpedia. Latar maskot, leader dan aksen kutipan bergerak, dengan pilihan kurangi animasi. Portal `/studio` hanya mengarahkan ke lima dashboard admin/petugas, tanpa login pemilik terpusat; autentikasi setiap game tetap berlaku.
+
+Validasi lokal: 47 tes sumber, 75 tes integrasi hub, 42 pemutaran video di tiga browser serta 14 pemeriksaan ukuran sumber 720×900 SAR 1:1, 558 pemeriksaan browser pada 12 ukuran/peramban dan tiga kasus gerak penuh, 15 pemeriksaan panel belanja resmi, serta tur arcade dengan nol error konsol. Bukti rilis produksi dicatat terpisah dalam RELEASE-1.8.0.md setelah deployment diverifikasi.

@@ -1,0 +1,155 @@
+{
+  "scope": "14 motion graphics loops from the supplied chibi Bipy duo scenes; original artwork and proportions preserved. No articulated Gemini generation claim.",
+  "encoding": {
+    "dimensions": [
+      720,
+      900
+    ],
+    "durationSeconds": 5,
+    "framesPerSecond": 24,
+    "codec": "H264/libx264",
+    "audio": "none"
+  },
+  "assets": [
+    {
+      "host": "zoro",
+      "service": "cinderella",
+      "file": "assets/video/moments/zoro-cinderella-bipy.mp4",
+      "source": "assets/stickers/zoro-cinderella.webp",
+      "sourceSHA256": "ee12ee9d7ea7d3830e2ca7d550e148f324f742bd817cfeeeda2bee75d703c40a",
+      "sha256": "158e3a2977d43d4510606ec11c0102d4268c1372a7b557c997c07b507af7ba6d",
+      "bytes": 158768,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "zoro",
+      "service": "twirl",
+      "file": "assets/video/moments/zoro-twirl-bipy.mp4",
+      "source": "assets/stickers/zoro-twirl.webp",
+      "sourceSHA256": "d403faf65f62544b62b12485d5bbd9a9f55c7b83a3a97789e0e905b8f351b62c",
+      "sha256": "40ac3888b9bd11d6a932632797244f03658ce7a27440e1860b4425cf3c4741c4",
+      "bytes": 155585,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "zoro",
+      "service": "whisper",
+      "file": "assets/video/moments/zoro-whisper-bipy.mp4",
+      "source": "assets/stickers/zoro-whisper.webp",
+      "sourceSHA256": "67181190dbf9b127090c6e1fe236591cecf45cd2474490d2e881fd9702079f11",
+      "sha256": "97f56af3dbb6216acb4a74f75405ef6be2f4df132d66cedc6367a88c4bd783e9",
+      "bytes": 161230,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "zoro",
+      "service": "offering",
+      "file": "assets/video/moments/zoro-offering-bipy.mp4",
+      "source": "assets/stickers/zoro-offering.webp",
+      "sourceSHA256": "62a64ec94966551a29a83a460a8092fae2d0920c2fde282c0ea85f11e357348e",
+      "sha256": "45d3520da182d21b75e1a9fe45ba1f1dbbc4dfcba41d0586c769df8148fc9d87",
+      "bytes": 158005,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "zoro",
+      "service": "vow",
+      "file": "assets/video/moments/zoro-vow-bipy.mp4",
+      "source": "assets/stickers/zoro-vow.webp",
+      "sourceSHA256": "f7d4b33d5835586d259f04d0c53951c27e3e8fad6ecac94e9ac8cdf9a937094b",
+      "sha256": "46ad90ed85c837a3c156877649641137d5839482be9110518d0325b3d03064f9",
+      "bytes": 161363,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "zoro",
+      "service": "hug",
+      "file": "assets/video/moments/zoro-hug-bipy.mp4",
+      "source": "assets/stickers/zoro-hug.webp",
+      "sourceSHA256": "991e1de22afe9db6abbc1aeeff6ef2fc1e036bba1e4351ebc6e71abce8cb3c32",
+      "sha256": "fd6aa6de4335dedf83822d2d68ca2142ba38ef02570f0e3396deac0db6bb4172",
+      "bytes": 159229,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "zoro",
+      "service": "pat",
+      "file": "assets/video/moments/zoro-pat-bipy.mp4",
+      "source": "assets/stickers/zoro-pat.webp",
+      "sourceSHA256": "4f2e86ceb0bb9aa6893a30e6030fe5e2cba7ce0470786010272b2d9d30610e23",
+      "sha256": "419ae2541bc2ce93e145273a799f9492c98539171e669364c0c3a5cdd7477a12",
+      "bytes": 164413,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "cinderella",
+      "file": "assets/video/moments/sanji-cinderella-bipy.mp4",
+      "source": "assets/stickers/sanji-cinderella.webp",
+      "sourceSHA256": "2ea092d2cef60af643dbe974dc72a90bb5ee0a1f70ec065f297feb5a406a9f66",
+      "sha256": "7d0486e9f15440fab0f0b5e6ee79242d3ed7d6b50dc955efeb4a8ce7557ef24f",
+      "bytes": 135171,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "twirl",
+      "file": "assets/video/moments/sanji-twirl-bipy.mp4",
+      "source": "assets/stickers/sanji-twirl.webp",
+      "sourceSHA256": "e1ad0e3d6f1d373fb4bd3e14853defa030d62cc29bf42b0315a044615ca913e0",
+      "sha256": "730acffd3be6b764f36cedab169ac7068f09f7810af70d1bd5b9197535b933be",
+      "bytes": 143092,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "whisper",
+      "file": "assets/video/moments/sanji-whisper-bipy.mp4",
+      "source": "assets/stickers/sanji-whisper.webp",
+      "sourceSHA256": "93e1f27d1e2d6b3e21e45400a8b8f6bce6fd1295be4bb4ed712201208ce69529",
+      "sha256": "2a66f7e5e4d0956903ff9b898dd66edea86d50a14310fc7800ccb8e3fbae46da",
+      "bytes": 144141,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "offering",
+      "file": "assets/video/moments/sanji-offering-bipy.mp4",
+      "source": "assets/stickers/sanji-offering.webp",
+      "sourceSHA256": "d4b90a014df627897caea33792650fab728c17f16e5c7f20a78bd9d61188e4f5",
+      "sha256": "ca10fb2832090f60d6d49d868287817d42a1c5264129b5328292b07aa0065b49",
+      "bytes": 152866,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "vow",
+      "file": "assets/video/moments/sanji-vow-bipy.mp4",
+      "source": "assets/stickers/sanji-vow.webp",
+      "sourceSHA256": "8469ac195f4a0a8f350ed9fcf3abcbc7cbe919172931e7d364dda8941e983778",
+      "sha256": "15381d5df5cad040561a2b1315ef70c3b3c4feddf0281928068b68f2be12c7c3",
+      "bytes": 139151,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "hug",
+      "file": "assets/video/moments/sanji-hug-bipy.mp4",
+      "source": "assets/stickers/sanji-hug.webp",
+      "sourceSHA256": "cb3374bdef3f40266eaf866dabb7926b3d23693eb2304c045522630b85b9f93d",
+      "sha256": "27f5ee3567dc732eb115a2406291a57e10fedbd4a12cb99efce0777a02224b42",
+      "bytes": 120040,
+      "kind": "owner-artwork-motion-graphics"
+    },
+    {
+      "host": "sanji",
+      "service": "pat",
+      "file": "assets/video/moments/sanji-pat-bipy.mp4",
+      "source": "assets/stickers/sanji-pat.webp",
+      "sourceSHA256": "e1376b1c1111e37c457cfe672d233d0d2a6744882032215cc67fbd92db371060",
+      "sha256": "01b7f2160e7c64f482a20ac491cdbbd11f2e1ca21364a3580ae6f4ed9e99d282",
+      "bytes": 138759,
+      "kind": "owner-artwork-motion-graphics"
+    }
+  ]
+}

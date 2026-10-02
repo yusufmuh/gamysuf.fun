@@ -18,7 +18,7 @@ Gacha Pop memigrasikan katalog lama ke 20 hadiah/497 kapsul awal dengan memperhi
 Musik Bpedia dari berkas pemilik disusun menjadi suite berulang hampir enam menit dengan dua dialog pengenalan Jepang sintetis. Empat belas video momen terdiri atas 13 animasi ilustrasi dan satu video aksi yang tersedia. Tema terang pink/gelap, bisu, animasi, layar penuh dan Demo/Main Tercatat tersedia di header. Pemutaran suara menunggu interaksi pertama sesuai browser. Formulir persetujuan sebelum kartu dihapus; petugas mengonfirmasi interaksi nyata dan dokumentasi di booth.
 
 Fitur pemain: profil & avatar Bipy, XP & level, streak harian, 3 misi harian, 11 lencana, album 91 kartu, papan peringkat mingguan/sepanjang masa, kode pemulihan profil, panduan & FAQ. Online memakai demo pribadi; klaim hadiah atau fanservice dilakukan pada sesi booth resmi.
-Studio pemilik (`/studio`): statistik, tautan dashboard tiap game, pengumuman, game unggulan, sembunyikan game, kelola game tambahan.
+Portal petugas (`/studio`): tautan mode admin/petugas pada lima game, tanpa login pemilik terpusat. Admin setiap game mempertahankan autentikasinya.
 
 ## Menjalankan
 

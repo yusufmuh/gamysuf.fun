@@ -8,10 +8,10 @@
  <link rel="icon" href="/assets/icons/heart.svg" type="image/svg+xml">
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="/css/game.css?v=2.2.0">
- <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.2.1">
- <link rel="stylesheet" href="/css/journey.css?v=2.2.3">
- <script defer src="/js/audio.js?v=2.2.4"></script><script defer src="/js/cards.js?v=2.2.0"></script><script defer src="/js/fx.js?v=2.2.0"></script><script defer src="/js/export.js?v=2.2.0"></script><script defer src="/js/game.js?v=2.2.1"></script><script defer src="/js/journey.js?v=2.2.2"></script>
+ <link rel="stylesheet" href="/css/game.css?v=2.3.0">
+ <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.3.0">
+ <link rel="stylesheet" href="/css/journey.css?v=2.3.0">
+ <script defer src="/js/audio.js?v=2.3.0"></script><script defer src="/js/cards.js?v=2.3.0"></script><script defer src="/js/fx.js?v=2.3.0"></script><script defer src="/js/export.js?v=2.3.0"></script><script defer src="/js/game.js?v=2.3.0"></script><script defer src="/js/journey.js?v=2.3.0"></script>
 </head>
 <body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
  <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
@@ -30,16 +30,16 @@
  </header>
  <main id="homeView">
   <section class="hero" aria-labelledby="title">
+   <div class="hero-mascots" aria-hidden="true"><img class="hero-zoro" src="/assets/dealers/zoro-ready.webp" alt="" width="800" height="1000"><img class="hero-sanji" src="/assets/dealers/sanji-flower.webp" alt="" width="800" height="1000"><span class="petal petal-a"></span><span class="petal petal-b"></span><span class="petal petal-c"></span></div>
    <div class="hero-copy">
-    <p class="event-chip"><span class="dot" aria-hidden="true"></span>MARKET-IN 6.0 · URBAN FOREST CIPETE · 3–4 OKT</p>
+    <p class="event-chip"><span class="dot" aria-hidden="true"></span>MARKETING 6.0 · URBAN FOREST CIPETE · 3–4 OKT</p>
     <h1 id="title"><span class="t-kicker">Bipy</span> <span class="t-main">Grand Line Desire</span></h1>
     <p class="t-sub">Zoro &amp; Sanji Fanservice Card Game</p>
     <section class="trailer hero-trailer" aria-labelledby="trailerTitle">
-     <div class="trailer-screen"><video id="paradeTrailer" muted loop playsinline preload="metadata" poster="/assets/video/grand-line-promo-poster.webp" aria-label="Cuplikan animasi Bipy Grand Line Desire tanpa suara"><source src="/assets/video/heart-parade-promo.mp4" type="video/mp4"></video><button type="button" id="videoPlayButton" class="trailer-toggle" aria-pressed="false" aria-label="Putar cuplikan"><span data-icon="play"></span><span id="videoPlayLabel">Putar cuplikan</span></button></div>
+     <div class="trailer-screen"><video id="paradeTrailer" muted loop playsinline preload="metadata" poster="/assets/video/bipy-promo-poster.webp" aria-label="Cuplikan animasi Bipy Grand Line Desire tanpa suara"><source src="/assets/video/heart-parade-bipy-promo.mp4" type="video/mp4"></video><button type="button" id="videoPlayButton" class="trailer-toggle" aria-pressed="false" aria-label="Putar cuplikan"><span data-icon="play"></span><span id="videoPlayLabel">Putar cuplikan</span></button></div>
      <div class="trailer-copy"><p class="eyebrow">TRAILER</p><h2 id="trailerTitle">Satu tebasan giok, <em>satu mawar emas.</em></h2></div>
     </section>
     <p class="hero-lead">Babes, momen favoritmu dimulai di sini. Kenali tujuh fanservice, pilih Zoro atau Sanji, lalu buka kartu momenmu.</p>
-    <div class="home-music"><button type="button" id="homeMusicButton" class="secondary">♫ Putar musik Bpedia</button><button type="button" id="openStickerGallery" class="secondary">Galeri stiker Bipy</button><p id="homeMusicStatus" role="status">Musik Bpedia · Zoro &amp; Sanji menyapa bergantian</p></div>
     <div class="purchase-guide" aria-label="Cara mendapatkan fanservice di booth">
      <article><span class="tier-number">01</span><div><small>BELANJA MINIMAL</small><b>Rp100.000</b><h2>Gacha Fanservice</h2><p>Bipy mengocok tujuh kartu. Pilih satu kartu tertutup dan temukan kejutanmu.</p></div></article>
      <article><span class="tier-number">02</span><div><small>BELANJA MINIMAL</small><b>Rp150.000</b><h2>Pilih Fanservice</h2><p>Kenali momennya, lihat cuplikannya, lalu pilih sendiri kartu favoritmu.</p></div></article>
@@ -55,7 +55,7 @@
      <img class="sticker s-pink" src="/assets/brand/bipy-pink.webp" alt="Bipy pink, maskot Bpedia" width="1098" height="2000" decoding="async">
      <img class="sticker s-gold" src="/assets/brand/bipy-gold.webp" alt="Bipy Golden Chef dengan wajan" width="929" height="1693" decoding="async">
     </div>
-    <figure class="quote" aria-live="polite"><blockquote id="hostQuote">Hari ini, aku tidak akan salah arah. Tujuanku kamu.</blockquote><figcaption id="quoteName">— Zoro, The Jade Swordsman</figcaption></figure>
+    <figure class="quote" aria-live="polite"><span class="quote-mark" aria-hidden="true">“</span><div><small>SATU PESAN UNTUK BABES</small><blockquote id="hostQuote">Hari ini, aku tidak akan salah arah. Tujuanku kamu.</blockquote><figcaption id="quoteName">— Zoro, The Jade Swordsman</figcaption></div><span class="quote-heart" aria-hidden="true">♡</span></figure>
    </div>
   </section>
 
@@ -68,15 +68,14 @@
      <button type="button" id="pickMode" class="mode-button" aria-pressed="false"><span data-icon="cards" id="pickModeIcon"></span><span><b>Pilih Fanservice</b><small id="pickModeNote">Belanja Rp150.000 · pilih momenmu</small></span></button>
     </div>
    </header>
-   <div class="purchase-check" id="purchaseCheck" hidden><label for="purchaseAmount">Nominal belanja yang sudah diperiksa petugas</label><div><span>Rp</span><input id="purchaseAmount" type="number" min="100000" max="1000000000" step="1000" inputmode="numeric" value="100000"><span id="purchaseTierHint">Gacha mulai Rp100.000</span></div></div>
+   <div class="deck-command">
+    <div class="purchase-check" id="purchaseCheck" hidden><label for="purchaseAmount">Belanja terverifikasi petugas</label><div><span>Rp</span><input id="purchaseAmount" type="number" min="100000" max="1000000000" step="1000" inputmode="numeric" value="100000"></div><small id="purchaseTierHint">Gacha mulai Rp100.000</small></div>
+    <div class="deck-cta"><button type="button" class="primary" id="startButton" disabled><span data-icon="sparkle"></span><span id="startLabel">Kocok tujuh kartu</span><span aria-hidden="true">→</span></button><p class="deck-hint" id="deckHint" aria-live="polite">Bipy memilih satu dari tujuh kartu secara acak.</p></div>
+   </div>
    <div class="deck-body">
     <div class="deck-stage" id="deckStage">
      <button type="button" class="booster-button" id="boosterButton" aria-label="Buka Gacha Booster"><span id="boosterPreview"></span><span class="booster-hint">Ketuk untuk membuka</span></button>
      <div class="fan" id="momentGrid" role="group" aria-label="Kartu dalam dek"></div>
-     <div class="deck-cta">
-      <button type="button" class="primary" id="startButton" disabled><span data-icon="sparkle"></span><span id="startLabel">Kocok tujuh kartu</span></button>
-      <p class="deck-hint" id="deckHint" aria-live="polite">Bipy memilih satu dari tujuh kartu secara acak.</p>
-     </div>
     </div>
     <aside class="poster-panel" aria-labelledby="posterTitle">
      <p class="eyebrow">POSTER BOUNTY</p>
@@ -88,7 +87,7 @@
   </section>
 
   <section class="parade" aria-labelledby="paradeTitle">
-   <header class="section-head"><p class="eyebrow">PARADE BIPY</p><h2 id="paradeTitle">Sepuluh Bipy, <em>satu misi manis</em></h2><p>Setiap kartu ditemani kostum Bipy yang berbeda. Bipy adalah kamu, pelanggan Bpedia.</p></header>
+   <header class="section-head"><p class="eyebrow">PARADE BIPY</p><h2 id="paradeTitle">Sepuluh Bipy, <em>satu misi manis</em></h2><p>Setiap kartu ditemani kostum Bipy yang berbeda. Bipy adalah kamu, pelanggan Bpedia.</p><button type="button" id="openStickerGallery" class="secondary">Lihat 50 stiker Bipy</button></header>
    <div class="parade-track" id="paradeTrack"></div>
   </section>
 
@@ -141,13 +140,14 @@
      <span class="rays" id="rays" aria-hidden="true"></span>
      <span class="flash" id="flash" aria-hidden="true"></span>
      <button type="button" class="booster-stage" id="boosterStage" aria-label="Sobek booster"></button>
-     <div class="showcase" id="showcase" data-view="card">
+     <div class="showcase" id="showcase" data-view="card" role="button" tabindex="0" aria-label="Balik kartu menjadi poster bounty">
       <div class="tilt" id="tilt">
        <div class="face face-back" id="faceBack"></div>
        <div class="face face-card" id="faceCard"></div>
        <div class="face face-poster" id="facePoster"></div>
       </div>
      </div>
+     <p class="flip-hint" id="flipHint"><span aria-hidden="true">↻</span> Ketuk kartu untuk membalik ke poster bounty</p>
      <canvas class="fx" id="fxCanvas" aria-hidden="true"></canvas>
      <div class="view-toggle" id="viewToggle" role="group" aria-label="Tampilan hasil">
       <button type="button" id="viewCard" aria-pressed="true"><span data-icon="cards"></span>Kartu</button>
@@ -159,9 +159,8 @@
      <h2 id="resultTitle" tabindex="-1">Kartu fanservice</h2>
      <p class="result-host">bersama <b id="resultHostName">Zoro</b> · <span id="resultRole">The Jade Swordsman</span></p>
      <blockquote id="resultRomanticLine"></blockquote>
-     <div class="result-bipy"><img id="resultBipy" src="/assets/brand/bipy-pink.webp" alt="" width="640" height="1166"><p><b id="resultBipyName">Bipy</b><small>menemanimu di kartu ini</small></p></div>
+     <div class="result-bipy"><img id="resultBipy" src="/assets/brand/bipy-pink.webp" alt="" width="640" height="800"><p><b id="resultBipyName">Bipy</b><small>Momen pilihan Babes</small></p></div>
      <div class="comfort-pill" id="resultComfort"></div>
-     <div class="ticket" id="ticketBox"><span id="ticketLabel">KARTU DIGITAL · DEMO ONLINE</span><strong id="ticketCode"></strong><dl id="ticketFacts"></dl><small id="ticketNote"></small></div>
      <p class="fine-print" id="resultConsent"></p>
      <div class="play-actions">
       <button type="button" class="secondary" id="saveCard"><span data-icon="download"></span>Simpan kartu</button>

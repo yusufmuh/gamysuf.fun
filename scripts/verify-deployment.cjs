@@ -44,6 +44,9 @@ function collectHeartReleaseAssets(files){
  const required=[
   ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/moments/${host}-${service}.webp`)),
   ...HEART_SERVICE_IDS.map(service=>`assets/bipy-variants/bipy-${service}.webp`),
+  ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/stickers/${host}-${service}.webp`)),
+  ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/video/moments/${host}-${service}-bipy.mp4`)),
+  'assets/video/heart-parade-bipy-promo.mp4','assets/video/bipy-promo-poster.webp','assets/video/moments/zoro-hug-gemini.mp4','assets/video/moments/sanji-vow-gemini.mp4','assets/video/gemini-bipy-manifest.json','assets/video/moments/bipy-manifest.json',
   ...['pink','jade','gold'].map(variant=>`assets/brand/bipy-${variant}.webp`),
   'assets/video/grand-line-promo-poster.webp','assets/audio/bpedia-main-bgm.mp3','assets/audio/bpedia-home-suite.mp3',...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/video/moments/${host}-${service}.mp4`)),...HEART_HOST_IDS.map(host=>`assets/dealers/${host}.webp`)
  ];
@@ -86,6 +89,7 @@ async function main(){
  for(const route of ['/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/gacha/','/g/gacha/admin.html','/g/heart/','/g/heart/admin.html']){
   const html=(await read(route)).toString();
   if(!html.includes('Content-Security-Policy'))throw new Error(`${route}: CSP meta not present.`);
+  if(route==='/studio'&&(html.includes('id="loginPanel"')||(html.match(/class="panel staff-game"/g)||[]).length!==5))throw new Error('Staff portal release markup not present.');
  }
  const hubFiles=execFileSync('git',['ls-tree','-r','--name-only','HEAD','hub/public'],{cwd:root,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
  const committedServer=execFileSync('git',['show','HEAD:hub/server.cjs'],{cwd:root,encoding:'utf8',maxBuffer:10*1024*1024});

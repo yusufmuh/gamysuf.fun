@@ -269,14 +269,14 @@ test('Grand Line Desire: isolated demo, idempotent XP and fourteen collectible m
  assert.equal(hub.mounts.get('heart').app.engine.state.history.length,0);
  const me=(await call(hub,'/hub-api/me')).json;
  assert.ok(me.cards.some(card=>card.key===`heart:sanji-${first.json.service.id}`));
- assert.equal(me.cards.find(card=>card.key===`heart:sanji-${first.json.service.id}`).image,`/g/heart/assets/moments/sanji-${first.json.service.id}.webp`);
+ assert.equal(me.cards.find(card=>card.key===`heart:sanji-${first.json.service.id}`).image,`/g/heart/assets/stickers/sanji-${first.json.service.id}.webp`);
  assert.equal((await call(hub,'/g/heart/api/play',{method:'POST',body:draw})).json.id,first.json.id);
  assert.equal((await call(hub,'/hub-api/me')).json.xp,me.xp);
  const album=(await call(hub,'/hub-api/album')).json;
  const heartCards=album.games.find(game=>game.slug==='heart').cards;
  assert.equal(heartCards.length,14);assert.equal(album.total,91);
  assert.equal(new Set(heartCards.map(card=>card.image)).size,14);
- for(const card of heartCards)assert.equal(card.image,`/g/heart/assets/moments/${card.key.slice('heart:'.length)}.webp`);
+ for(const card of heartCards)assert.equal(card.image,`/g/heart/assets/stickers/${card.key.slice('heart:'.length)}.webp`);
  assert.equal((await call(hub,'/g/heart/api/result',{method:'POST',body:{id:first.json.id}})).status,200);
  const login=await call(hub,'/g/heart/api/login',{method:'POST',body:{pin:'246810'}});
  const cookie=login.headers['set-cookie'].map(s=>s.split(';')[0]).join('; ');
@@ -325,7 +325,7 @@ test('Market-In 6.0: dua game berbeda dikelompokkan lewat data katalog dan punya
  const page=await call(hub,'/market-in');
  assert.equal(page.status,200);
  assert.match(page.headers['content-type'],/text\/html/);
- assert.match(page.text,/<title>[^<]*Market-In 6\.0/);
+ assert.match(page.text,/<title>[^<]*Marketing 6\.0/);
  assert.match(page.text,/property="og:title"/);
  assert.doesNotMatch(page.text,/<script>|<script(?![^>]*\ssrc=)[^>]*>|\son[a-z]+=/i,'tanpa script inline atau handler inline');
  for(const href of ['/g/gacha/','/g/heart/'])assert.ok(page.text.includes(`href="${href}"`),href);

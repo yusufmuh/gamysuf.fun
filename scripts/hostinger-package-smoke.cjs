@@ -25,11 +25,11 @@ async function main(){
   const poster=await get('/g/heart/assets/video/grand-line-promo-poster.webp');assert.match(poster.headers.get('content-type'),/image\/webp/);assert.equal((await poster.arrayBuffer()).byteLength,32102);
   const state=await (await get('/g/heart/api/state')).json();assert.equal(state.cards.length,14);
   for(const card of state.cards){const art=await get(card.image);assert.match(art.headers.get('content-type'),/image\/webp/);assert.ok((await art.arrayBuffer()).byteLength>10000);}
-  for(const route of ['/g/heart/assets/video/heart-parade-promo.mp4','/g/heart/assets/audio/bpedia-home-suite.mp3']){
+  for(const route of ['/g/heart/assets/video/heart-parade-bipy-promo.mp4','/g/heart/assets/video/moments/zoro-hug-gemini.mp4','/g/heart/assets/video/moments/sanji-vow-gemini.mp4','/g/heart/assets/audio/bpedia-home-suite.mp3']){
    const response=await get(route,{Range:'bytes=0-255'});assert.equal(response.status,206);assert.equal((await response.arrayBuffer()).byteLength,256);
   }
   checks.push('14 artworks, new poster, rewritten font paths, video/audio MIME and byte ranges survive packaging');
-  assert.ok(html.includes('stickerGalleryDialog')&&html.includes('bpedia-tokens.css?v=2.2.1'));
+  assert.ok(html.includes('stickerGalleryDialog')&&html.includes('bpedia-tokens.css?v=2.3.0')&&!html.includes('id="ticketBox"')&&!html.includes('home-music'));
   const stickers=await (await get('/g/heart/assets/stickers/manifest.json')).json();assert.equal(stickers.items.length,50);
   for(const item of stickers.items){const response=await get(item.image);assert.match(response.headers.get('content-type'),/image\/webp/);assert.equal(crypto.createHash('sha256').update(Buffer.from(await response.arrayBuffer())).digest('hex'),item.sha256);}
   for(const card of state.cards)assert.ok(stickers.items.some(item=>item.image===card.stickerImage&&item.hostId===card.hostId));
