@@ -114,7 +114,7 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
-**2 Oktober 2026 · Persiapan 1.6.1:** Game 5 menjadi Bipy Grand Line Desire, kartu dibuka langsung, trailer masuk pembuka, Bipy terpisah dari leader, poster proporsional, dan tombol tema serta Demo/Main Tercatat eksplisit. Sumber 40/40 + check, hub 67/67, UI 21/21, responsif Game 5 4.140/4.140. Animasi, paket, dan produksi masih menjalani validasi final; lihat [RELEASE-1.6.1.md](RELEASE-1.6.1.md). Bukti 1.6.0 berikut adalah riwayat, bukan bukti deployment 1.6.1.
+**2 Oktober 2026 · 1.6.1 live:** Game 5 menjadi Bipy Grand Line Desire, kartu dibuka langsung, trailer masuk pembuka, Bipy terpisah dari leader, poster proporsional, dan tombol tema serta Demo/Main Tercatat eksplisit. Sumber 40/40 + check, hub 67/67, UI 21/21, responsif Game 5 4.140/4.140, animasi penuh 14 kartu lulus, dan paket 601 berkas lulus smoke test terisolasi. Produksi: 93/93 endpoint/hash/aset, 106/106 UI dan 107/107 gameplay demo. hPanel melaporkan main/49bdd502 selesai pukul 17:19 WIB. Lihat [RELEASE-1.6.1.md](RELEASE-1.6.1.md). Bukti 1.6.0 berikut adalah riwayat.
 
 **2 Oktober 2026 · Gamysuf Arcade 1.6.0 sudah live di [gamysuf.fun](https://gamysuf.fun).** Lima game terdaftar; Game 4 dan Game 5 dikelompokkan pada halaman Market-In. Sumber game sudah disinkronkan, matriks lintas browser sudah lulus, paket Hostinger sudah diuji terisolasi, dan rilis produksi telah diverifikasi. Catatan rilis: [RELEASE-1.6.0.md](RELEASE-1.6.0.md).
 
@@ -144,6 +144,8 @@ Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memili
 - Push ke branch produksi dapat memicu deployment. Bukti lokal, commit, paket, dan produksi harus dicatat sesuai tahapnya.
 
 ## 11. Log serah-terima
+
+- **2026-10-02 (Codex, produksi 1.6.1)**: menyelesaikan delapan komentar browser Game 5 dan bug tambahan pada ukuran ilustrasi, poster, lifecycle flip/video, serta cache. Commit implementasi `d53c5cab`, cache `49bdd502`, produksi 1.6.1 terverifikasi dengan 93 pemeriksaan berkas/aset, 106 UI, dan 107 gameplay demo. Game tetap `/g/heart/`, ID BP06 dan data resmi dipertahankan.
 
 - **2026-10-02 (Codex, persiapan 1.6.0)**: menyelaraskan dokumentasi lima game, halaman Market-In 3–4 Oktober, katalog Game 4 dan migrasi, kartu BP06/mode/kenyamanan Game 5, serta album 91 kartu. Hasil lokal yang selesai dan gerbang rilis tersisa dicatat pada §10 dan `RELEASE-1.6.0.md`. Catatan persiapan `RELEASE-1.5.1.md` digantikan oleh catatan 1.6.0 agar versi tidak ambigu.
 - **2026-10-02 (Codex, produksi 1.6.0)**: mendorong rilis ke `main`, memverifikasi katalog produksi 1.6.0, 89 endpoint/hash/aset, byte range audio/video, dan 50 pemeriksaan UI live. Game 4 dan Game 5 dapat diakses melalui halaman Market-In dan rute masing-masing.

@@ -178,11 +178,15 @@ Hanya hasil yang benar-benar dijalankan yang dicatat di sini. Rencana tes bukan 
 
 | Pemeriksaan | Status |
 |---|---|
-| `npm test` sumber 05 (engine + server, kontrak 2.1.0) | belum diverifikasi setelah revisi 2.1.0 |
+| `npm test` sumber 05 (engine + server, kontrak 2.1.0) | Lulus 40/40 pada 2 Oktober 2026 setelah sinkronisasi final |
 | `npm run check` | Lulus pada 2 Oktober 2026 |
 | QA dashboard petugas (Playwright, server lokal): login, validasi PIN, ubah harga, status menu, jadwal Market-In, kuota, filter antrean, aksi tiket, CSV; Chromium/Firefox/WebKit × 17 viewport × terang/gelap | Lulus pada 2 Oktober 2026: tanpa error konsol, tanpa overflow horizontal, tanpa target sentuh < 44 px |
-| Tes hub `tests/heart-engine.test.cjs` dan `tests/heart-server.test.cjs` | Lulus 37/37 pada 2 Oktober 2026 terhadap salinan sementara yang dibuat dengan fungsi `copy` milik `scripts/sync-games.cjs`; terhadap `games/heart` hasil `npm run sync`: belum diverifikasi |
-| QA UI permainan (kartu OPCG, animasi per kartu, poster bounty, jingle) di matriks viewport | belum diverifikasi |
-| Sinkronisasi hub, paket Hostinger, deployment, dan probe produksi 1.6.1 | belum diverifikasi |
+| Tes hub `tests/heart-engine.test.cjs` dan `tests/heart-server.test.cjs` | Lulus 40/40 terhadap `games/heart` hasil `npm run sync`; seluruh suite hub 67/67 |
+| QA UI permainan | 21/21: undian/pilih langsung, mode petugas, tema, geometri, ekspor, pemulihan, antrean. Matriks Game 5 Chromium/Firefox/WebKit × 12 viewport lulus 4.140/4.140 |
+| QA animasi penuh | 14 kartu, 16 draw, tujuh motif, Bipy bergerak/reduced motion, klik berulang, flip/close dan pembersihan animasi; 5/5 kelompok lulus tanpa error konsol |
+| Paket Hostinger 1.6.1 | 601 berkas; smoke test paket yang diekstrak terisolasi lulus termasuk dependensi, lima game, aset, media/range dan mode petugas |
+| Deployment produksi 1.6.1 | Live di `https://gamysuf.fun/g/heart/`; 93/93 pemeriksaan endpoint/hash/aset, 106/106 tampilan, 107/107 gameplay demo. hPanel melaporkan main/49bdd502 selesai pada 2 Oktober 2026 17:19 WIB |
+
+Bukti hub: `docs/RELEASE-1.6.1.md`, `artifacts/deployment-1.6.1.json`, `artifacts/live-ui-1.6.1/report.json`, dan `artifacts/live-heart-1.6.1/report.json`. Gameplay produksi memakai empat demo pengunjung terisolasi, tanpa login/perubahan mode petugas atau tiket resmi.
 
 Rujukan teknis: [Node crypto](https://nodejs.org/api/crypto.html), [MDN AudioContext.resume](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/resume), [MDN Web Audio best practices](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices). Katalog aset dan provenance: `docs/ASSETS-Heart-Parade.md`.

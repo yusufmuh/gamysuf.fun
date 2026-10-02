@@ -54,3 +54,5 @@ Katalog server menyimpan 14 kartu kanonis di `core/catalog.cjs`. ID tetap `zoro-
 Harga normal FS adalah nilai bawaan yang perlu dikonfirmasi tim booth dan dapat diubah petugas (Rp 0–10.000.000). Poster bounty mencoret harga tersebut dan menampilkan **GRATIS untuk pelanggan Bpedia**. Nilai fiktif BERRY dari rilis 1.5.x tidak lagi dipakai. Statistik cost/power/counter per kartu tercantum di PRD bagian 4.2.
 
 Status lokal 2 Oktober 2026: 14 ilustrasi berhasil didekode, trailer dan kontrol pemutaran lulus, ekspor kartu 1080×1508 serta poster 1080×1528 mempertahankan ilustrasi, proporsi, Bipy, logo, dan harga. UI terarah lulus 21/21. Matriks responsif Game 5 lulus 4.140/4.140 pada Chromium, Firefox, dan WebKit dengan 12 ukuran layar. Ini bukti browser/viewport emulasi; status produksi dicatat terpisah pada catatan rilis hub.
+
+Produksi 1.6.1 pada `https://gamysuf.fun`: 93/93 pemeriksaan endpoint/hash/aset lulus, mencakup 14 artwork unik, varian Bipy, video, poster pembuka baru, dan kode renderer/ekspor. UI live 106/106 dan gameplay demo 107/107 lulus; unduhan poster nyata 1080×1528 terverifikasi. Bukti rinci berada pada catatan rilis dan folder `artifacts` hub.
