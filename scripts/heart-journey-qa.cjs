@@ -12,14 +12,16 @@ const option=name=>process.argv.find(v=>v.startsWith(`--${name}=`))?.split('=')[
 const browserNames=['chromium','firefox','webkit'].filter(v=>!option('browser')||option('browser')===v);
 const viewportFilter=(process.env.HEART_JOURNEY_VIEWPORTS||'').split(',').map(value=>value.trim()).filter(Boolean);
 const cases=sizes.filter(([id,width])=>(!option('size')||option('size')===id)&&(!viewportFilter.length||viewportFilter.includes(id)||viewportFilter.includes(String(width)))&&(!process.argv.includes('--quick')||['small-320','phone-390','laptop-1440'].includes(id)));
-const report={version,target:liveUrl?'live-public-demo':'isolated-hub',startedAt:new Date().toISOString(),checks:[],cases:[],media:[],screenshots:[],diagnostics:[],failures:[]};
+const report={version,target:liveUrl?'live-public-demo':'isolated-hub',startedAt:new Date().toISOString(),checks:[],cases:[],media:[],trailers:[],images:[],screenshots:[],diagnostics:[],failures:[]};
 function check(ok,label,details){report.checks.push({ok:Boolean(ok),label,...(details===undefined?{}:{details})});assert.ok(ok,label+(details===undefined?'':': '+JSON.stringify(details)));}
 function collectCheck(ok,label,details){report.checks.push({ok:Boolean(ok),label,details});if(!ok){report.failures.push({label,details});console.error(`${label}: ${JSON.stringify(details)}`);}}
 function save(){fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({...report,passed:report.checks.filter(v=>v.ok).length,failed:report.checks.filter(v=>!v.ok).length},null,2)+'\n');}
 async function shot(page,label,stage){const file=path.join(out,`${label}-${stage}.png`);await page.screenshot({path:file});report.screenshots.push(file);}
 async function keyboardClick(page,selector){const locator=page.locator(selector);await locator.scrollIntoViewIfNeeded();await locator.focus();await page.keyboard.press('Enter');}
+async function deckPaused(page,label){await page.waitForFunction(()=>[...document.querySelectorAll('#momentGrid video')].every(video=>video.paused));check(await page.locator('#momentGrid video').evaluateAll(videos=>videos.length===7&&videos.every(video=>video.paused)),`${label} hidden deck videos pause behind the modal`);}
+async function deckResumed(page,label){await page.locator('#momentGrid video').first().scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('#momentGrid video')].some(video=>!video.paused&&video.currentTime>0));check(await page.locator('#momentGrid video').evaluateAll(videos=>videos.some(video=>!video.paused)),`${label} visible deck resumes after modal closes`);}
 function monitor(page,label){
- const traffic={play:[],ack:[],otherWrites:[],decoded:new Set()};
+ const traffic={play:[],ack:[],otherWrites:[],decoded:new Set(),decodedImages:new Set()};
  page.on('request',request=>{if(request.method()!=='POST')return;const url=request.url();let body;try{body=JSON.parse(request.postData()||'{}');}catch{body={};}if(url.endsWith('/g/heart/api/play'))traffic.play.push(body);else if(url.endsWith('/g/heart/api/result'))traffic.ack.push(body);else traffic.otherWrites.push({url,body});});
  page.on('pageerror',error=>report.diagnostics.push({label,type:'pageerror',message:error.message}));
  page.on('console',message=>{if(message.type()==='error')report.diagnostics.push({label,type:'console',url:message.location().url,message:message.text()});});
@@ -51,6 +53,14 @@ async function chooseHost(page,label,host,keyboard=false){
  check(await page.locator('#momentGrid .deck-card').count()===7,`${label} ${host} has7 service previews`);
  check(!await page.locator('.hero').isVisible(),`${label} service table replaces host home`);
 }
+async function decodeOriginalVideo(video,play=false){
+ return video.evaluate((v,shouldPlay)=>new Promise((resolve,reject)=>{const probe=document.createElement('video');probe.preload='auto';probe.muted=true;probe.setAttribute('playsinline','');const cleanup=()=>{clearTimeout(timer);probe.pause();probe.removeAttribute('src');probe.load();};const timer=setTimeout(()=>{cleanup();reject(new Error('original media decode timeout'));},12000);probe.addEventListener('loadeddata',async()=>{const result={width:probe.videoWidth,height:probe.videoHeight,duration:probe.duration,error:probe.error?.code||null};if(shouldPlay){try{await probe.play();await new Promise(done=>setTimeout(done,300));result.currentTime=probe.currentTime;result.playing=!probe.paused;}catch(error){cleanup();reject(error);return;}}cleanup();resolve(result);},{once:true});probe.addEventListener('error',()=>{cleanup();reject(new Error('original media decode error'));},{once:true});probe.src=v.currentSrc||v.src||v.querySelector('source')?.src;probe.load();}),play);
+}
+async function recordImageDecode(page,label,traffic,selector,card){
+ const locator=page.locator(selector),expected=await locator.evaluate(img=>img.src);
+ await page.waitForFunction(({selector,expected})=>{const img=document.querySelector(selector);return img?.currentSrc===expected&&img.complete&&img.naturalWidth>0&&img.naturalHeight>0;},{selector,expected},{timeout:12000});await locator.evaluate(img=>img.decode());
+ const meta=await locator.evaluate(img=>({url:img.currentSrc,width:img.naturalWidth,height:img.naturalHeight,complete:img.complete}));traffic.decodedImages.add(meta.url);report.images.push({label,card,...meta});return meta;
+}
 async function previewAll(page,label,host,traffic,catalog,reduced){
  await chooseHost(page,label,host,host==='zoro');
  for(const [index,id] of services.entries()){
@@ -58,15 +68,17 @@ async function previewAll(page,label,host,traffic,catalog,reduced){
   const selector=`.peek-video[data-service="${id}"]`;
   if(index===0)await keyboardClick(page,selector);else await page.locator(selector).click();
   await page.locator('#momentPreviewDialog[open]').waitFor();
+  await deckPaused(page,label+' preview');
   check(await page.locator('#momentPreviewArt .tcg').getAttribute('data-card')===card.id,`${label} ${card.id} preview card`);
-  const pov=page.locator('#momentPreviewPov');await pov.evaluate(img=>img.decode());
+  const pov=page.locator('#momentPreviewPov'),povMeta=await recordImageDecode(page,label,traffic,'#momentPreviewPov',card.id);
+  check(povMeta.complete&&povMeta.width>0&&povMeta.height>0,`${label} ${card.id} full-body POV decoded`,povMeta);
   check(await pov.getAttribute('src')===(card.povImage||card.image),`${label} ${card.id} correct POV source`);
   if(host==='zoro')check(!(await pov.getAttribute('src')).includes('/assets/pov/zoro-'),`${label} cropped Zoro POV stays archived`);
   const video=page.locator('#momentPreviewArt video');check(await video.count()===1,`${label} ${card.id} contains actual service MP4`);
   await video.evaluate(v=>new Promise((resolve,reject)=>{if(v.readyState>=2)return resolve();const timer=setTimeout(()=>reject(new Error('service video decode timeout')),12000);v.addEventListener('loadeddata',()=>{clearTimeout(timer);resolve();},{once:true});v.addEventListener('error',()=>{clearTimeout(timer);reject(new Error('service video decode error '+v.error?.code));},{once:true});}));
   if(!reduced)await page.waitForFunction(()=>{const v=document.querySelector('#momentPreviewArt video');return v&&!v.paused&&v.currentTime>0;},null,{timeout:12000});
   const meta=await video.evaluate(v=>({url:v.currentSrc,width:v.videoWidth,height:v.videoHeight,duration:v.duration,paused:v.paused,muted:v.muted,inline:v.hasAttribute('playsinline'),fit:getComputedStyle(v).objectFit,error:v.error?.code||null}));
-  meta.decoder=await video.evaluate(v=>new Promise((resolve,reject)=>{const probe=document.createElement('video');probe.preload='auto';probe.muted=true;probe.setAttribute('playsinline','');const cleanup=()=>{clearTimeout(timer);probe.pause();probe.removeAttribute('src');probe.load();};const timer=setTimeout(()=>{cleanup();reject(new Error('original service metadata timeout'));},12000);probe.addEventListener('loadeddata',()=>{const result={width:probe.videoWidth,height:probe.videoHeight,duration:probe.duration};cleanup();resolve(result);},{once:true});probe.addEventListener('error',()=>{cleanup();reject(new Error('original service metadata decode error'));},{once:true});probe.src=v.currentSrc;probe.load();}));
+  meta.decoder=await decodeOriginalVideo(video);
   check(meta.decoder&&Math.abs(meta.decoder.width/meta.decoder.height-.8)<.003&&Math.abs(meta.duration-5)<.1,`${label} ${card.id} service video decoded/proportional`,meta);
   if(Math.abs(meta.width/meta.height-.8)>=.003)meta.playbackDimensionQuirk='WebKit compositor dimensions differ from original loadedmetadata dimensions; source aspect remains4:5 and CSS contains it.';
   check(meta.muted&&meta.inline&&meta.fit==='contain'&&!meta.error,`${label} ${card.id} video muted/inline/contain`,meta);
@@ -80,20 +92,22 @@ async function previewAll(page,label,host,traffic,catalog,reduced){
 }
 async function finishResult(page,label,result,traffic,before,reduced){
  await page.waitForFunction(()=>document.getElementById('playShell').dataset.phase==='result',null,{timeout:20000});
+ await deckPaused(page,label+' result');
  check(result.demo&&result.status==='demo'&&result.id.startsWith('DEMO-'),`${label} result remains isolated free DEMO`,result.id);
  check(result.comfort==='no-touch'&&result.recording===false&&result.consent===false,`${label} safe defaults preserved`);
  check(!('purchaseAmount' in result),`${label} demo has no purchase claim`);
  check(traffic.play.length===before+1,`${label} repeated selection causes only one draw`);
  const request=traffic.play.at(-1);check(request.comfort==='no-touch'&&request.recording===false&&request.consent===false,`${label} safe draw payload`);
- await page.locator('#resultHost').evaluate(img=>img.decode());
+ await recordImageDecode(page,label,traffic,'#resultHost','result-art');
  await page.locator('#faceCard .bipy-seal.is-stamped').waitFor();
- await page.locator('#faceCard .bipy-seal img').evaluate(img=>img.decode());
+ await recordImageDecode(page,label,traffic,'#faceCard .bipy-seal img','card-stamp');
  check((await page.locator('#faceCard .bipy-seal img').getAttribute('src')).endsWith('/assets/brand/bipy-pink.webp'),`${label} card bears original pink Bipy stamp`);
  await page.waitForTimeout(reduced?50:700);
  await auditGeometry(page,label+' result','#resultDialog');
  await keyboardClick(page,'#viewPoster');await page.locator('#facePoster.on').waitFor();
  await page.waitForTimeout(reduced?30:1100);
  const seal=page.locator('#facePoster .bipy-seal');
+ await recordImageDecode(page,label,traffic,'#facePoster .bipy-seal img','poster-stamp');
  check(await seal.evaluate(el=>el.classList.contains('is-stamped')&&Number(getComputedStyle(el).opacity)>.5),`${label} poster Bipy stamp visible`);
  check((await seal.locator('img').getAttribute('src')).endsWith('/assets/brand/bipy-pink.webp'),`${label} poster bears original pink Bipy stamp`);
  check(await seal.evaluate(el=>getComputedStyle(el).borderTopColor)==='rgb(230, 43, 94)',`${label} Bipy stamp uses pink ink`);
@@ -106,7 +120,9 @@ async function gacha(page,label,traffic,{reduced=false,cancel=false,slot=0}={}){
  await page.locator('#gachaMode').click();const before=traffic.play.length;
  await page.evaluate(()=>{window.__dealPhases=[];window.__dealObserver?.disconnect();window.__dealObserver=new MutationObserver(()=>window.__dealPhases.push(document.getElementById('dealShell').dataset.phase));window.__dealObserver.observe(document.getElementById('dealShell'),{attributes:true,attributeFilter:['data-phase']});});
  await page.locator('#startButton').click();await page.locator('#dealDialog[open]').waitFor();
- if(cancel){check(traffic.play.length===before,`${label} initial deck preview makes no draw`);await page.locator('#cancelDealButton').click();await page.locator('#dealDialog').waitFor({state:'hidden'});check(traffic.play.length===before,`${label} cancel deck makes no draw`);await page.locator('#startButton').click();}
+ await deckPaused(page,label+' deal');
+ await recordImageDecode(page,label,traffic,'#dealerBipy','dealer-preview');
+ if(cancel){check(traffic.play.length===before,`${label} initial deck preview makes no draw`);await page.locator('#cancelDealButton').click();await page.locator('#dealDialog').waitFor({state:'hidden'});check(traffic.play.length===before,`${label} cancel deck makes no draw`);if(!reduced)await deckResumed(page,label+' cancel');await page.locator('#startButton').click();}
  await page.waitForFunction(()=>document.getElementById('dealShell').dataset.phase==='choose',null,{timeout:15000});
  const phases=await page.evaluate(()=>window.__dealPhases);
  if(!reduced)for(const phase of ['preview','stack','shuffle','choose'])check(phases.includes(phase),`${label} gacha reaches ${phase}`,phases);
@@ -114,8 +130,8 @@ async function gacha(page,label,traffic,{reduced=false,cancel=false,slot=0}={}){
  check(traffic.play.length===before,`${label} no draw before customer's closed-card choice`);
  check(await page.locator('#dealCards .deal-slot').count()===7,`${label}7 closed selectable cards`);
  check(await page.locator('#dealCards .deal-slot:disabled').count()===0,`${label} closed cards enabled only at choice`);
- await page.locator('#dealerBipy').evaluate(img=>img.decode());
- check((await page.locator('#dealerBipy').getAttribute('src')).includes('/assets/dealers/'),`${label} full-body dealer asset used`);
+ const dealerMeta=await recordImageDecode(page,label,traffic,'#dealerBipy','dealer');
+ check(dealerMeta.complete&&dealerMeta.width>0&&dealerMeta.height>0&&(await page.locator('#dealerBipy').getAttribute('src')).includes('/assets/dealers/'),`${label} full-body dealer decoded and correct source used`,dealerMeta);
  await page.waitForTimeout(reduced?50:800);await auditGeometry(page,label+' closed choice','#dealDialog');await shot(page,label,'closed-choice');
  const responsePromise=page.waitForResponse(r=>r.url().endsWith('/g/heart/api/play')&&r.request().method()==='POST');
  const button=page.locator(`#dealCards .deal-slot[data-slot="${slot}"]`);await button.click();await button.evaluate(el=>el.click());
@@ -148,6 +164,7 @@ async function runCase(browser,name,id,width,height,origin){
   await shot(page,label,'home');
   const response=await page.request.get(origin+'/g/heart/api/state');check(response.status()===200,`${label} public state available`);const catalog=await response.json();
   check(catalog.settings.mode==='demo',`${label} fresh visitor demo mode`);
+  const trailer=page.locator('#paradeTrailer'),trailerDecode=await decodeOriginalVideo(trailer,true);const trailerUrl=await trailer.evaluate(v=>v.currentSrc||v.querySelector('source').src);check(trailerDecode.width>0&&trailerDecode.height>0&&trailerDecode.duration>0&&trailerDecode.currentTime>0&&trailerDecode.playing&&!trailerDecode.error,`${label} opening trailer independently decoded and played`,trailerDecode);traffic.decoded.add(trailerUrl);report.trailers.push({label,card:'opening-trailer',url:trailerUrl,decoder:trailerDecode,duration:trailerDecode.duration,error:trailerDecode.error,paused:!trailerDecode.playing});
   for(const host of ['zoro','sanji'])await previewAll(page,label,host,traffic,catalog,!full);
   await chooseHost(page,label,'zoro',true);await auditGeometry(page,label+' dark table');
   await gacha(page,label,traffic,{reduced:!full,cancel:true,slot:3});
@@ -158,14 +175,19 @@ async function runCase(browser,name,id,width,height,origin){
   await keyboardClick(page,'#backHomeButton');check(await page.locator('body').getAttribute('data-journey')==='home',`${label} can return to host home after repeats`);
   check(traffic.play.length===3&&traffic.ack.length===3,`${label}3 isolated draws and3 matching ACKs`,{play:traffic.play.length,ack:traffic.ack.length});
   check(!traffic.otherWrites.length,`${label} no admin/staff/official mutations`,traffic.otherWrites);
+  await recordImageDecode(page,label,traffic,'#gmyAvatar','arcade-avatar');
   const unexpected=report.diagnostics.filter(d=>d.label===label).filter(d=>{
    if(d.type==='requestfailed'&&d.media&&/ERR_ABORTED|aborted|cancelled/i.test(d.message)){d.expectedMediaCancellation=true;d.decodedService=traffic.decoded.has(d.url);return false;}
+   const decoded=[...report.media,...report.trailers].find(media=>media.label===label&&media.url===d.url&&!media.error);
+   if(name==='firefox'&&d.type==='requestfailed'&&d.media&&d.message==='NS_ERROR_PARSED_DATA_CACHED'&&traffic.decoded.has(d.url)&&decoded){d.expectedMediaCancellation=true;d.decodedService=true;d.reason='Firefox closes an internal media channel after cached parsing without passing this status to the decoder.';d.successfulDecode={card:decoded.card,decoder:decoded.decoder,duration:decoded.duration,error:decoded.error,paused:decoded.paused};d.primarySource='https://github.com/mozilla/gecko-dev/blob/master/dom/media/ChannelMediaResource.cpp#L584-L605';return false;}
+   const image=report.images.find(image=>(image.label===label||image.label.startsWith(label+'-'))&&image.url===d.url&&image.complete&&image.width>0&&image.height>0);
+   if(name==='firefox'&&d.type==='requestfailed'&&d.message==='NS_BINDING_ABORTED'&&traffic.decodedImages.has(d.url)&&image){d.expectedImageCancellation=true;d.reason='Preview image URL was individually decoded successfully before its element source was replaced.';d.successfulDecode=image;return false;}
    return true;
-  });check(!unexpected.length,`${label} no unexpected console/page/HTTP/request errors`,unexpected);
+  });collectCheck(!unexpected.length,`${label} no unexpected console/page/HTTP/request errors`,unexpected);
   const caseChecks=report.checks.slice(firstCheck);caseReport.status=caseChecks.every(value=>value.ok)?'passed':'failed';caseReport.draws=traffic.play;caseReport.acks=traffic.ack;
   console.log(`${label}: ${caseReport.status}, ${caseChecks.filter(value=>value.ok).length}/${caseChecks.length} checks`);
  }catch(error){caseReport.status='failed';caseReport.error=error.stack||error.message;report.failures.push({label,error:caseReport.error});await shot(page,label,'failure').catch(()=>{});console.error(`${label}: FAILED ${error.message}`);throw error;}
- finally{await context.close();save();}
+ finally{try{await context.close();}catch(error){if(name!=='firefox'||!String(error.message).includes('Browser.removeBrowserContext')||!String(error.message).includes('_maybeDontRestoreTabs'))throw error;report.diagnostics.push({label,type:'test-browser-cleanup',message:error.message,reason:'Firefox test browser failed to remove an already completed private window; outer browser.close still runs.'});}save();}
 }
 async function main(){
  check(browserNames.length>0&&cases.length>0,'requested browser/viewport filters match cases');fs.mkdirSync(out,{recursive:true});

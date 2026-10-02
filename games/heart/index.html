@@ -9,8 +9,9 @@
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="stylesheet" href="/css/game.css?v=2.2.0">
- <link rel="stylesheet" href="/css/journey.css?v=2.2.0">
- <script defer src="/js/audio.js?v=2.2.0"></script><script defer src="/js/cards.js?v=2.2.0"></script><script defer src="/js/fx.js?v=2.2.0"></script><script defer src="/js/export.js?v=2.2.0"></script><script defer src="/js/game.js?v=2.2.0"></script><script defer src="/js/journey.js?v=2.2.0"></script>
+ <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.2.1">
+ <link rel="stylesheet" href="/css/journey.css?v=2.2.1">
+ <script defer src="/js/audio.js?v=2.2.0"></script><script defer src="/js/cards.js?v=2.2.0"></script><script defer src="/js/fx.js?v=2.2.0"></script><script defer src="/js/export.js?v=2.2.0"></script><script defer src="/js/game.js?v=2.2.1"></script><script defer src="/js/journey.js?v=2.2.1"></script>
 </head>
 <body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
  <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
@@ -38,7 +39,7 @@
      <div class="trailer-copy"><p class="eyebrow">TRAILER</p><h2 id="trailerTitle">Satu tebasan giok, <em>satu mawar emas.</em></h2></div>
     </section>
     <p class="hero-lead">Babes, momen favoritmu dimulai di sini. Kenali tujuh fanservice, pilih Zoro atau Sanji, lalu buka kartu momenmu.</p>
-    <div class="home-music"><button type="button" id="homeMusicButton" class="secondary">♫ Putar musik Bpedia</button><p id="homeMusicStatus" role="status">Musik Bpedia · Zoro &amp; Sanji menyapa bergantian</p></div>
+    <div class="home-music"><button type="button" id="homeMusicButton" class="secondary">♫ Putar musik Bpedia</button><button type="button" id="openStickerGallery" class="secondary">Galeri stiker Bipy</button><p id="homeMusicStatus" role="status">Musik Bpedia · Zoro &amp; Sanji menyapa bergantian</p></div>
     <div class="purchase-guide" aria-label="Cara mendapatkan fanservice di booth">
      <article><span class="tier-number">01</span><div><small>BELANJA MINIMAL</small><b>Rp100.000</b><h2>Gacha Fanservice</h2><p>Bipy mengocok tujuh kartu. Pilih satu kartu tertutup dan temukan kejutanmu.</p></div></article>
      <article><span class="tier-number">02</span><div><small>BELANJA MINIMAL</small><b>Rp150.000</b><h2>Pilih Fanservice</h2><p>Kenali momennya, lihat cuplikannya, lalu pilih sendiri kartu favoritmu.</p></div></article>
@@ -107,7 +108,12 @@
   </div>
  </dialog>
  <dialog id="momentPreviewDialog" class="moment-preview-dialog" aria-labelledby="momentPreviewTitle">
-  <div class="moment-preview-shell"><button type="button" id="closeMomentPreview" class="ghost">Tutup ×</button><div id="momentPreviewArt"></div><div class="moment-preview-copy"><p class="eyebrow" id="momentPreviewHost"></p><h2 id="momentPreviewTitle"></h2><p id="momentPreviewDetail"></p><figure class="pov-preview"><img id="momentPreviewPov" alt="" width="1122" height="1402"><figcaption>Sudut pandang Babes</figcaption></figure><button type="button" id="choosePreviewCard" class="primary">Pilih momen ini</button></div></div>
+  <div class="moment-preview-shell"><button type="button" id="closeMomentPreview" class="ghost">Tutup ×</button><div id="momentPreviewArt"></div><div class="moment-preview-copy"><p class="eyebrow" id="momentPreviewHost"></p><h2 id="momentPreviewTitle"></h2><p id="momentPreviewDetail"></p><div class="moment-perspectives"><figure class="pov-preview"><img id="momentPreviewPov" alt="" width="1122" height="1402"><figcaption>Sudut pandang Babes</figcaption></figure><figure class="sticker-preview"><img id="momentPreviewSticker" alt="" width="640" height="800"><figcaption>Bipy dalam momenmu</figcaption></figure></div><button type="button" id="choosePreviewCard" class="primary">Pilih momen ini</button></div></div>
+ </dialog>
+ <dialog id="stickerGalleryDialog" class="sticker-gallery-dialog" aria-labelledby="stickerGalleryTitle">
+  <header><div><p class="eyebrow">PARADE STIKER · BPEDIA</p><h2 id="stickerGalleryTitle">Bipy &amp; sahabatnya</h2><p>40 momen bersama Zoro &amp; Sanji, serta 10 pose Bipy.</p></div><button type="button" id="closeStickerGallery" class="secondary">Tutup ×</button></header>
+  <div class="sticker-filters" role="group" aria-label="Filter galeri stiker"><button type="button" data-sticker-filter="all" aria-pressed="true">Semua · 50</button><button type="button" data-sticker-filter="zoro" aria-pressed="false">Zoro · 25</button><button type="button" data-sticker-filter="sanji" aria-pressed="false">Sanji · 25</button></div>
+  <p id="stickerGalleryStatus" role="status">Memuat galeri…</p><div id="stickerGalleryGrid" class="sticker-gallery-grid"></div>
  </dialog>
  <footer class="footer"><span>BIPY GRAND LINE DESIRE · <i>Zoro &amp; Sanji Fanservice Card Game</i></span><span>Ilustrasi fan-art karakter dewasa · bukan produk resmi</span><a href="/admin.html">Dashboard petugas</a></footer>
 

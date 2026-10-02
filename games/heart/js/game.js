@@ -458,7 +458,7 @@
   const button=event.target.closest('.host-card');if(!button||button.disabled||ui.busy||ui.stage!=='home')return;
   ui.host=button.dataset.host;ui.hostChosen=true;document.body.dataset.journey='table';audio.unlock();audio.tick();render();window.scrollTo({top:0,behavior:motion()?'auto':'smooth'});
  });
- $('momentGrid').addEventListener('click',event=>{const preview=event.target.closest('.peek-video');if(preview){window.HeartJourney?.preview(preview.dataset.service);return;}const button=event.target.closest('.card-choice');if(button&&!button.disabled){if(ui.mode==='gacha')window.HeartJourney?.preview(button.dataset.service);else selectCard(button.dataset.service);}});
+ $('momentGrid').addEventListener('click',event=>{const preview=event.target.closest('.peek-video');if(preview){window.HeartJourney?.preview(preview.dataset.service);return;}const button=event.target.closest('.card-choice')||event.target.closest('.deck-card')?.querySelector('.card-choice');if(button&&!button.disabled){if(ui.mode==='gacha')window.HeartJourney?.preview(button.dataset.service);else selectCard(button.dataset.service);}});
  const setPreview=id=>{clearTimeout(ui.previewTimer);ui.previewTimer=setTimeout(()=>{if(ui.stage!=='home'||ui.preview===id)return;ui.preview=id;updateDeck();renderPoster();},110);};
  $('momentGrid').addEventListener('pointerover',event=>{const card=event.target.closest('.deck-card');if(card&&event.pointerType==='mouse')setPreview(card.dataset.service);});
  $('momentGrid').addEventListener('focusin',event=>{const card=event.target.closest('.deck-card');if(card)setPreview(card.dataset.service);});

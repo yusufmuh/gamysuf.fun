@@ -41,4 +41,4 @@ Produksi: `npm start` (entry `hub/server.cjs`), env `ADMIN_PIN` (6–12 digit, w
 
 Dokumen lengkap & status serah-terima: [docs/PRD-Gamysuf-Arcade.md](docs/PRD-Gamysuf-Arcade.md).
 
-Status 2 Oktober 2026: kandidat **1.7.0**, Game 5 sumber 2.2.0. Sumber 47/47 tes + pemeriksaan sintaks, UI 21/21, audio 29/29, media 42/42, serta tur dashboard/lima game lulus. Matriks responsif, paket dan produksi diperiksa sebelum publikasi; bukti aktual dicatat di [docs/RELEASE-1.7.0.md](docs/RELEASE-1.7.0.md). PRD Game 5: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md). Bukti versi lama tetap disimpan sebagai riwayat.
+Status 2 Oktober 2026: **1.7.0**, Game 5 sumber 2.2.1. Seluruh kartu bisa diketuk; pink terang/gelap mengikuti token guideline Bpedia, 50 stiker pemilik masuk galeri/pratinjau/pose dealer. Sumber 47/47 tes, integrasi 75/75, serta UI, audio dan media telah diperiksa. Bukti responsif, paket dan produksi dicatat di [docs/RELEASE-1.7.0.md](docs/RELEASE-1.7.0.md). PRD Game 5: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md). Bukti versi lama tetap disimpan sebagai riwayat.

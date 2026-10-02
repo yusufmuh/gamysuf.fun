@@ -1,0 +1,103 @@
+/* Bpedia design tokens 2026 — hasil ekspor dari design system. Tema: light, dark */
+:root {
+  --pink-500: #E62B5E;
+  --pink-600: #D81F57;
+  --on-pink: #FFFFFF;
+  --berry-700: #B3164B;
+  --plum-900: #45122B;
+  --ink-700: #6E4556;
+  --ink-500: #9C7E8A;
+  --petal-400: #F7729A;
+  --tulip-300: #F9A2C1;
+  --pink-200: #FBCFDB;
+  --blush-100: #FDE7EC;
+  --pearl-50: #FFF7F8;
+  --white: #FFFFFF;
+  --night-950: #2A0A18;
+  --on-night: #FFFFFF;
+  --on-night-accent: #F9A2C1;
+  --honey-400: #F5B83D;
+  --line: #F3D3DD;
+  --success: #1E9E6A;
+  --warning: #E08A1E;
+  --error: #C62828;
+  --info: #3E7BD9;
+  --success-100: #E9F7F0;
+  --success-700: #1E7A55;
+  --honey-100: #FFF4DB;
+  --honey-800: #8A5A00;
+  --bipy-hood: #FA89AA;
+  --bipy-hair: #F9BF90;
+  --bipy-skin: #FBDACA;
+  --bipy-heart: #EE2564;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-18: 72px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+  --shadow-card: 0 10px 30px rgba(179,22,75,0.08);
+  --shadow-pop: 0 16px 34px rgba(179,22,75,0.28);
+  --shadow-phone: 0 24px 50px rgba(69,18,43,0.22);
+  --touch-target: 48px;
+  --icon-md: 24px;
+  --feed-margin: 72px;
+  --logo-min-width: 120px;
+  --font-sans: Poppins, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Fraunces, "DM Serif Display", Georgia, serif;
+}
+[data-theme="dark"] {
+  --pink-500: #FF5C8A;
+  --pink-600: #FF7AA0;
+  --on-pink: #2A0A18;
+  --berry-700: #F9A2C1;
+  --plum-900: #FDEAF0;
+  --ink-700: #E7C9D4;
+  --ink-500: #B89AA7;
+  --petal-400: #F7729A;
+  --tulip-300: #C24C77;
+  --pink-200: #5A1A36;
+  --blush-100: #3B1026;
+  --pearl-50: #2A0A18;
+  --white: #3B1026;
+  --night-950: #1A0610;
+  --on-night: #FFFFFF;
+  --on-night-accent: #F9A2C1;
+  --honey-400: #F5B83D;
+  --line: #5A1A36;
+  --success: #4CC99A;
+  --warning: #F2B25C;
+  --error: #FF8A80;
+  --info: #8DB6F2;
+  --success-100: #0F3B2A;
+  --success-700: #7FE0B5;
+  --honey-100: #3D2A05;
+  --honey-800: #F5C96B;
+  --bipy-hood: #FA89AA;
+  --bipy-hair: #F9BF90;
+  --bipy-skin: #FBDACA;
+  --bipy-heart: #EE2564;
+}
+.app-display { font-family: var(--font-sans); font-size: 28px; line-height: 34px; font-weight: 700; }}
+.app-title { font-family: var(--font-sans); font-size: 22px; line-height: 28px; font-weight: 600; }}
+.app-headline { font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 600; }}
+.app-body { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }}
+.app-body-s { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; }}
+.app-caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; }}
+.app-button { font-family: var(--font-sans); font-size: 16px; line-height: 20px; font-weight: 600; }}
+.app-price { font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 800; }}
+.feed-display { font-family: var(--font-sans); font-size: 88px; line-height: 92px; font-weight: 800; letter-spacing: -0.02em; }}
+.feed-h1 { font-family: var(--font-sans); font-size: 64px; line-height: 70px; font-weight: 800; letter-spacing: -0.015em; }}
+.feed-h2 { font-family: var(--font-sans); font-size: 44px; line-height: 52px; font-weight: 700; }}
+.feed-body { font-family: var(--font-sans); font-size: 28px; line-height: 40px; font-weight: 400; }}
+.feed-eyebrow { font-family: var(--font-sans); font-size: 20px; line-height: 24px; font-weight: 700; letter-spacing: 0.14em; }}
+.tagline { font-family: var(--font-serif); font-size: 48px; line-height: 52px; font-weight: 600; font-style: italic; }}
+.tagline-s { font-family: var(--font-serif); font-size: 24px; line-height: 30px; font-weight: 600; font-style: italic; }}

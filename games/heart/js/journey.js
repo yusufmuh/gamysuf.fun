@@ -5,26 +5,28 @@
  let turn=0,animations=new Set(),selectedPreview='',priorFocus=null;
  const videos=new Set(),visibleVideos=new Set();
  const videoObserver=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting)visibleVideos.add(entry.target);else visibleVideos.delete(entry.target);}syncDeckVideos();},{threshold:.15});
- function syncDeckVideos(){for(const video of videos){const playing=visibleVideos.has(video)&&document.body.dataset.journey==='table'&&!document.hidden&&!game.context().reduced;if(playing)video.play().catch(()=>{});else video.pause();}}
+ function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const playing=visibleVideos.has(video)&&document.body.dataset.journey==='table'&&!document.hidden&&!reduced&&!blocked;if(playing)video.play().catch(()=>{});else video.pause();}}
+ const dialogObserver=new MutationObserver(syncDeckVideos);for(const modal of document.querySelectorAll('dialog'))dialogObserver.observe(modal,{attributes:true,attributeFilter:['open']});
  const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+ const dealerPoses={zoro:{preview:'welcome',stack:'confident',shuffle:'ready',choose:'cheer'},sanji:{preview:'welcome',stack:'serve',shuffle:'kick',choose:'flower'}};
+ function phase(value){shell.dataset.phase=value;const host=shell.dataset.host==='sanji'?'sanji':'zoro';$('dealerBipy').src=`/assets/dealers/${host}-${dealerPoses[host][value]}.webp`;$('dealerBipy').alt=`Bipy ${host==='zoro'?'Zoro':'Sanji'} · ${value==='choose'?'mempersilakanmu memilih kartu':value==='shuffle'?'mengocok kartu':'menyiapkan dek'}`;}
  function clear(){turn++;for(const animation of animations)animation.cancel();animations.clear();}
  async function animate(el,frames,options){const animation=el.animate(frames,{fill:'forwards',easing:'cubic-bezier(.22,.8,.2,1)',...options});animations.add(animation);try{await animation.finished;}catch{/* Atraksi dibatalkan. */}finally{animation.cancel();animations.delete(animation);}}
  function closeDeal(){clear();dialog.close();game.setDealing(false);priorFocus?.focus({preventScroll:true});}
- function choosePhase(){clear();shell.dataset.phase='choose';$('dealStatus').textContent='Giliranmu, Babes. Pilih satu kartu tertutup.';$('skipDealButton').hidden=true;$('dealCards').querySelectorAll('button').forEach(button=>{button.disabled=false;});$('dealCards').querySelector('button')?.focus({preventScroll:true});}
+ function choosePhase(){clear();phase('choose');$('dealStatus').textContent='Giliranmu, Babes. Pilih satu kartu tertutup.';$('skipDealButton').hidden=true;$('dealCards').querySelectorAll('button').forEach(button=>{button.disabled=false;});$('dealCards').querySelector('button')?.focus({preventScroll:true});}
  async function deal(){
   const context=game.context();if(!context.state||context.busy||context.dealing||dialog.open)return;
   game.unlock();game.setDealing(true);priorFocus=document.activeElement;clear();const current=turn;
   const cards=context.state.cards.filter(card=>card.hostId===context.host&&context.state.services.some(service=>service.id===card.serviceId&&service.enabled));
   if(!cards.length){game.setDealing(false);return;}
-  shell.dataset.host=context.host;shell.dataset.phase='preview';$('skipDealButton').hidden=false;
-  $('dealerBipy').src=`/assets/dealers/${context.host}.webp`;$('dealerBipy').alt=`Bipy ${context.host==='zoro'?'Zoro':'Sanji'} melakukan atraksi kartu`;
+  shell.dataset.host=context.host;phase('preview');$('skipDealButton').hidden=false;
   $('dealCards').innerHTML=cards.map((card,index)=>`<button type="button" class="deal-slot" data-slot="${index}" style="--i:${index};--count:${cards.length}" disabled aria-label="Pilih kartu tertutup nomor ${index+1}"><span class="deal-front">${cardFace(card,{size:'mini'})}</span><span class="deal-back">${cardBack()}</span><span class="deal-number">${index+1}</span></button>`).join('');
   $('dealStatus').textContent=`Tujuh fanservice bersama ${context.host==='zoro'?'Zoro':'Sanji'}. Bipy akan mengocoknya untukmu.`;
   dialog.showModal();
   if(context.reduced){choosePhase();return;}
   await pause(1600);if(current!==turn||!dialog.open)return;
-  shell.dataset.phase='stack';game.shuffle();$('dealStatus').textContent='Semua momen dikumpulkan menjadi satu dek…';await pause(800);if(current!==turn||!dialog.open)return;
-  shell.dataset.phase='shuffle';$('dealStatus').textContent='Lihat tangan Bipy. Kartu berpindah, kejutan tetap terjaga.';
+  phase('stack');game.shuffle();$('dealStatus').textContent='Semua momen dikumpulkan menjadi satu dek…';await pause(800);if(current!==turn||!dialog.open)return;
+  phase('shuffle');$('dealStatus').textContent='Lihat tangan Bipy. Kartu berpindah, kejutan tetap terjaga.';
   await Promise.all([...$('dealCards').children].map((el,index)=>animate(el,[{transform:'translate(-50%,-50%) rotate(0deg)'},{transform:`translate(calc(-50% + ${index%2?120:-120}px),calc(-50% - ${35+index*7}px)) rotate(${index%2?18:-18}deg)`},{transform:`translate(-50%,-50%) rotate(${(index-3)*2}deg)`}],{duration:540,delay:index*35,iterations:3})));
   if(current!==turn||!dialog.open)return;choosePhase();
  }
@@ -32,6 +34,7 @@
   const context=game.context(),card=game.card(serviceId),service=context.state?.services.find(item=>item.id===serviceId);if(!card||!service||context.busy)return;
   selectedPreview=serviceId;priorFocus=document.activeElement;game.unlock();$('momentPreviewArt').innerHTML=cardFace(card,{size:'full',lazy:false,video:true});
   $('momentPreviewPov').src=card.povImage||card.image;$('momentPreviewPov').alt=card.povAlt||card.imageAlt;
+  $('momentPreviewSticker').src=card.stickerImage;$('momentPreviewSticker').alt=card.stickerAlt;
   $('momentPreviewHost').textContent=`${context.host==='zoro'?'ZORO · HIJAU GIOK':'SANJI · KUNING EMAS'} / ${card.cardNo}`;$('momentPreviewTitle').textContent=service.name;$('momentPreviewDetail').textContent=service.detail;
   $('choosePreviewCard').hidden=context.mode!=='pick';previewDialog.showModal();const video=$('momentPreviewArt').querySelector('video');if(video&&!context.reduced)video.play().catch(()=>{});
  }
@@ -43,6 +46,12 @@
  $('choosePreviewCard').addEventListener('click',()=>{closePreview();game.selectCard(selectedPreview);});
  $('backHomeButton').addEventListener('click',()=>game.backHome());
  $('homeMusicButton').addEventListener('click',()=>game.music());
+ const gallery=$('stickerGalleryDialog');let galleryItems=null,galleryFocus=null,galleryFilter='all';
+ function renderGallery(){if(!galleryItems)return;const items=galleryItems.filter(item=>galleryFilter==='all'||item.hostId===galleryFilter);$('stickerGalleryGrid').replaceChildren(...items.map(item=>{const figure=document.createElement('figure'),img=document.createElement('img'),caption=document.createElement('figcaption');figure.dataset.host=item.hostId;img.src=item.image;img.alt=item.title;img.width=item.width;img.height=item.height;img.loading='lazy';img.decoding='async';caption.textContent=item.title;figure.append(img,caption);return figure;}));$('stickerGalleryStatus').textContent=`${items.length} stiker · ${galleryFilter==='all'?'seluruh koleksi':galleryFilter==='zoro'?'Zoro & Bipy hijau':'Sanji & Bipy kuning'}`;gallery.scrollTop=0;}
+ $('openStickerGallery').addEventListener('click',async()=>{galleryFocus=$('openStickerGallery');game.unlock();gallery.showModal();if(galleryItems){renderGallery();return;}try{const response=await fetch('/assets/stickers/manifest.json');if(!response.ok)throw new Error('Galeri belum tersedia.');const manifest=await response.json();if(!Array.isArray(manifest.items)||manifest.items.length!==50)throw new Error('Galeri belum lengkap.');galleryItems=manifest.items;renderGallery();}catch{$('stickerGalleryStatus').textContent='Galeri belum dapat dimuat. Tutup lalu buka kembali untuk mencoba lagi.';}});
+ function closeGallery(){gallery.close();galleryFocus?.focus({preventScroll:true});}
+ $('closeStickerGallery').addEventListener('click',closeGallery);gallery.addEventListener('cancel',event=>{event.preventDefault();closeGallery();});
+ gallery.querySelector('.sticker-filters').addEventListener('click',event=>{const button=event.target.closest('button[data-sticker-filter]');if(!button)return;galleryFilter=button.dataset.stickerFilter;gallery.querySelectorAll('[data-sticker-filter]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));renderGallery();});
  setInterval(()=>{const audio=game.audioStatus();$('homeMusicButton').textContent=audio.muted||audio.paused?'♫ Putar musik Bpedia':'♫ Musik Bpedia sedang diputar';$('homeMusicStatus').textContent=!audio.paused&&audio.time>=159&&audio.time<177?'Zoro: belanja Rp100.000, lalu pilih satu kartu gacha.':!audio.paused&&audio.time>=330&&audio.time<347?'Sanji: belanja Rp150.000, lalu pilih fanservice favoritmu.':'Musik Bpedia · Zoro & Sanji menyapa bergantian';},1000);
  $('fullscreenButton').addEventListener('click',async()=>{game.unlock();try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else game.notify('Layar penuh mengikuti pengaturan browser perangkatmu.');}catch{game.notify('Gunakan mode layar penuh dari menu browser.');}});
  document.addEventListener('fullscreenchange',()=>{$('fullscreenButton').setAttribute('aria-label',document.fullscreenElement?'Keluar dari layar penuh':'Layar penuh');$('fullscreenButton').setAttribute('aria-pressed',String(Boolean(document.fullscreenElement)));});

@@ -22,7 +22,7 @@ Permintaan pengguna: "buat 3 game menjadi 1 dashboard interaktif yang bisa menga
 | `nyapit` | `../02 nyapit` (v1.4.0) | Mesin capit + maskot B! | Cozzone UP 2026 |
 | `drop` | `../03 bipy-beauty-drop` (v1.0.0) | Papan pin + kapsul mekar + gacha fanservice | TAKEOVER X 2026 |
 | `gacha` · Game 4 | `../04 bipy-gacha-pop` (v1.0.1, katalog v2) | Gacha satu tap, 20 hadiah / 497 kapsul awal, kartu stiker | Market-In 6.0 (3–4 Okt 2026) |
-| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.2.0) | Gacha Rp100.000 / Pilih Rp150.000, 7 menu × Zoro/Sanji, 14 kartu BP06 | Market-In 6.0 (3–4 Okt 2026) |
+| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.2.1) | Gacha Rp100.000 / Pilih Rp150.000, 7 menu × Zoro/Sanji, 14 kartu BP06, 50 stiker | Market-In 6.0 (3–4 Okt 2026) |
 
 `games/<slug>/` hanyalah **salinan** berkas runtime (`npm run sync`). Ubah game di folder aslinya, lalu sync.
 Kelima game memiliki opsi `cloud` di `server.cjs` masing-masing (commit di repo lokal game 01/02/03, perilaku desktop/.exe tidak berubah).
@@ -116,7 +116,7 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
-**2 Oktober 2026 · kandidat 1.7.0:** Game 5 2.2.0 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Server memeriksa nominal, demo tetap terpisah, stempel bulat Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia disusun menjadi suite 350,140 detik dengan dialog Jepang sintetis. Sumber 47/47, UI 21/21, audio 29/29 dan 42/42 pemutaran media lulus. Matriks lintas browser, paket dan produksi diperiksa sebelum publikasi; bukti aktual dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah adalah riwayat, bukan bukti rilis baru.
+**2 Oktober 2026 · 1.7.0:** Game 5 2.2.1 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Seluruh permukaan kartu bisa diketuk. Tema terang/gelap memakai pink guideline Bpedia; 50 gambar pemilik dipakai di galeri, pratinjau dan pose dealer. Server memeriksa nominal, demo tetap terpisah, stempel Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia menjadi suite 350,140 detik dengan dialog Jepang sintetis. Bukti pengujian dan produksi dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah merupakan riwayat.
 
 **2 Oktober 2026 · 1.6.1 live:** Game 5 menjadi Bipy Grand Line Desire, kartu dibuka langsung, trailer masuk pembuka, Bipy terpisah dari leader, poster proporsional, dan tombol tema serta Demo/Main Tercatat eksplisit. Sumber 40/40 + check, hub 67/67, UI 21/21, responsif Game 5 4.140/4.140, animasi penuh 14 kartu lulus, dan paket 601 berkas lulus smoke test terisolasi. Produksi: 93/93 endpoint/hash/aset, 106/106 UI dan 107/107 gameplay demo. hPanel melaporkan main/49bdd502 selesai pukul 17:19 WIB. Lihat [RELEASE-1.6.1.md](RELEASE-1.6.1.md). Bukti 1.6.0 berikut adalah riwayat.
 

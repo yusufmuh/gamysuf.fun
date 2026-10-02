@@ -1,6 +1,6 @@
 # PRD · Bipy Grand Line Desire
 
-Game 05 · versi 2.2.0 · Gamysuf Arcade 1.7.0 · 2 Oktober 2026
+Game 05 · versi 2.2.1 · Gamysuf Arcade 1.7.0 · 2 Oktober 2026
 
 ## Produk dan tujuan
 
@@ -51,15 +51,15 @@ Home → pilih karakter → Pilih Fanservice → lihat cuplikan dan sudut pandan
 
 ## Visual, animasi, dan suara
 
-Logo Bpedia asli dipertahankan. Tema terang memakai pink #E62B5E, pearl #FFF7F8, blush #FDE7EC, dan plum #45122B dari guideline terkini. Tema gelap memakai latar arang hangat dengan aksen pink, giok, dan emas. Font Poppins dan Fraunces dibundel lokal.
+Logo Bpedia asli dipertahankan. Tema terang memakai pink #E62B5E, pearl #FFF7F8, blush #FDE7EC, dan plum #45122B. Tema gelap memakai pink #FF5C8A, Berry Night #2A0A18, panel #3B1026, dan garis #5A1A36. Token disalin dari guideline Bpedia terkini di 03_Warna_Font/bpedia-tokens.css. Font Poppins dan Fraunces dibundel lokal.
 
 Ada 14 cuplikan H264 720×900, masing-masing lima detik. Tiga belas merupakan animasi ilustrasi dengan gerak kamera/partikel; Knight's Vow Zoro berasal dari video aksi Gemini yang sudah ada. Dokumen ini tidak menyebut tiga belas klip tersebut sebagai animasi tubuh baru. Sanji memiliki tujuh gambar POV HD dari folder pemilik. Potongan kolase Zoro tidak dipakai di layar; ilustrasi momen yang utuh menjadi pengganti.
 
-Dealer memakai Bipy hijau/kuning full body dari aset pemilik. Atraksi kartu memakai Web Animations; gerak Bipy, foil, partikel, dan stempel menghormati pengaturan reduced motion. Cap Bipy juga digambar dalam unduhan PNG, bukan hanya pada layar.
+Seluruh 50 PNG tambahan pemilik dipakai: 40 adegan Bipy bersama Zoro/Sanji dan 10 pose dealer. Galeri Home menampilkan semuanya dengan filter Zoro/Sanji; gambar utuh dan transparan, dimuat bertahap. Pratinjau 14 menu memakai adegan yang sesuai. Bipy dealer hijau/kuning berganti pose saat menyiapkan, menumpuk, mengocok, dan menawarkan kartu. Atraksi memakai Web Animations dan menghormati reduced motion. Cap Bipy juga digambar dalam unduhan PNG.
 
 Musik Home berasal dari rekaman Bpedia pemilik. Rangkaian 350,14 detik menggunakan crossfade lima detik dan dua narasi Jepang orisinal di detik 159 dan 330. Narasi memakai sintesis ja-JP-KeitaNeural dengan perlakuan berbeda; bukan rekaman atau tiruan pengisi suara asli Zoro/Sanji. Jingle Bpedia terdengar ketika cap mendarat, dengan musik diturunkan sementara. Browser memulai audio setelah interaksi pengguna; tombol Putar musik Bpedia tersedia di Home.
 
-Bisu menghentikan media dan SFX yang sudah dijadwalkan. Tab tersembunyi menjeda media dan video. Error jingle memulihkan volume musik; pemulihan loop WebKit mempertahankan pemutaran setelah batas lagu. WebKit Windows pengujian tidak menyediakan AudioContext pada mesin ini, sehingga SFX sintesis tidak teruji di sana; musik dan jingle native berhasil diuji.
+Bisu menghentikan media dan SFX yang sudah dijadwalkan. Tab tersembunyi menjeda media dan video. Ketika dialog pengocokan, cuplikan atau hasil terbuka, ketujuh video dek dijeda; hanya video momen dalam dialog yang dimainkan. Video dek yang terlihat kembali berjalan setelah dialog ditutup. Error jingle memulihkan volume musik; pemulihan loop WebKit mempertahankan pemutaran setelah batas lagu. WebKit Windows pengujian tidak menyediakan AudioContext pada mesin ini, sehingga SFX sintesis tidak teruji di sana; musik dan jingle native berhasil diuji.
 
 ## Dashboard dan pencatatan
 
@@ -69,7 +69,7 @@ Petugas mengatur mode, jeda, jadwal, pilihan langsung, durasi pembukaan, menu/ha
 
 ## Perangkat dan pemulihan
 
-Mendukung sentuh/mouse dan keyboard, HP portrait/landscape, tablet, foldable, laptop/PC/Mac melalui browser. Kontrol utama dan dialog minimal 44 piksel. Fullscreen menggunakan kemampuan browser dan memberikan pesan jika tidak tersedia. Ganti karakter mengembalikan Home; pilihan dan dialog tidak mengunci fokus di bagian tersembunyi.
+Seluruh permukaan kartu dapat diketuk, termasuk gambar, judul, dan keterangannya: membuka pratinjau pada gacha atau memilih kartu pada mode pilih. Tombol Lihat momen tetap membuka cuplikan tersendiri. Pemilihan keyboard memakai tombol native yang juga mencakup permukaan kartu. Mendukung HP portrait/landscape, tablet, foldable, laptop/PC/Mac melalui browser. Kontrol utama minimal 44 piksel; filter galeri 48 piksel. Fullscreen mengikuti kemampuan browser. Ganti karakter kembali ke Home dan galeri mengembalikan fokus ke pembukanya.
 
 Request idempotent mencegah tiket ganda. Respons yang terputus dipulihkan dari pending. Reload membuka tiket yang sama; kegagalan menutup tiket tidak menghapus hasil. Kuota, antrean, nomor harian, audit, dan riwayat memakai direktori data persisten di luar build hosting.
 

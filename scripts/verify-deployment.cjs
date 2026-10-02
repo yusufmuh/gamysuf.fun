@@ -49,7 +49,7 @@ function collectHeartReleaseAssets(files){
  ];
  const available=new Set(files.map(file=>file.replace(/^games\/heart\//,'')));
  for(const file of required)if(!available.has(file))throw new Error(`Required Heart Parade release asset missing from commit: ${file}`);
- return [...available].filter(file=>required.includes(file)||/^assets\/(?:moments|bipy-variants|dealers|pov)\//.test(file)||/^assets\/brand\/bipy-/.test(file)||/^assets\/audio\/.*\.(?:mp3|wav|ogg)$/i.test(file)||/\.(?:mp4|webm)$/i.test(file)).sort();
+ return [...available].filter(file=>required.includes(file)||/^assets\/(?:moments|bipy-variants|dealers|pov|stickers)\//.test(file)||/^assets\/brand\/(?:bipy-|bpedia-tokens)/.test(file)||/^assets\/audio\/.*\.(?:mp3|wav|ogg)$/i.test(file)||/\.(?:mp4|webm)$/i.test(file)).sort();
 }
 
 function verifyDecodedImage(check,route,localHash,liveHash,report=imageEvidence){
@@ -114,10 +114,12 @@ async function main(){
   if(!check.ok)throw new Error(`${file}: deployed bytes differ; provide matching decoded-image evidence for CDN-transformed images.`);
  }
  for(const [slug,files] of Object.entries({spin:['js/app.js','js/audio.js','css/bipy.css'],nyapit:['js/app.js','js/audio.js','js/festival.js','css/stage.css'],drop:['js/game.js','css/game.css'],gacha:['js/game.js','js/machine.js','js/fx.js','js/audio.js','css/game.css'],heart:['js/journey.js','css/journey.css','js/game.js','js/audio.js','js/admin.js','js/cards.js','js/export.js','js/fx.js','css/game.css','css/admin.css']})){
+  const committedIndex=execFileSync('git',['show',`HEAD:games/${slug}/index.html`],{cwd:root,encoding:'utf8'});
+  const cacheQueries=new Map([...committedIndex.matchAll(/(?:src|href)="\/([^"?#]+)\?([^"]+)"/g)].map(match=>[match[1],match[2]]));
   for(const file of files){
    const committed=execFileSync('git',['show',`HEAD:games/${slug}/${file}`],{cwd:root,maxBuffer:10*1024*1024});
    const expected=Buffer.from(rewriteOutgoing(committed.toString(),`/g/${slug}`));
-   const actual=await read(`/g/${slug}/${file}?v=${pkg.version}`);
+   const actual=await read(`/g/${slug}/${file}?${cacheQueries.get(file)||`v=${pkg.version}`}`);
    const check=checks[checks.length-1];check.localSha256=hash(expected);check.liveSha256=hash(actual);check.ok=check.localSha256===check.liveSha256;check.verification='committed bytes after gateway URL rewrite';
    if(!check.ok)throw new Error(`${slug}/${file}: live game code mismatch.`);
   }

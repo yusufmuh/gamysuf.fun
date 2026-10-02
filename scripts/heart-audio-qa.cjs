@@ -86,9 +86,10 @@ async function audit(browserType,origin){
   await page.locator('#soundButton').click();await waitAudio(page,()=>{const a=window.__heartAudio;return !a.bgm.paused&&(!a.out||a.out.gain.value>.84);});checks.push(synth?'real sound button mutes both media and master gain, then resumes BGM':'real sound button mutes both media and resumes BGM without synthesized audio support');
   let draws=0;
   async function draw(service){
+   await page.waitForFunction(()=>{const state=window.HeartGame.context();return state.stage==='home'&&!state.busy;});
    await page.locator('#pickMode').click();await page.locator(`.card-choice[data-service="${service}"]`).click();
-   const response=page.waitForResponse(r=>r.url().endsWith('/g/heart/api/play')&&r.request().method()==='POST');await page.locator('#startButton').click();
-   const result=await (await response).json();assert.equal(result.demo,true,'audio QA must never issue official booth tickets');assert.equal(result.service.id,service);draws++;return result;
+   const [response]=await Promise.all([page.waitForResponse(r=>r.url().endsWith('/g/heart/api/play')&&r.request().method()==='POST'),page.locator('#startButton').click()]);
+   const result=await response.json();assert.equal(result.demo,true,'audio QA must never issue official booth tickets');assert.equal(result.service.id,service);draws++;return result;
   }
   await draw('vow');
   if(synth){
@@ -116,7 +117,7 @@ async function audit(browserType,origin){
   await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});
   assert.deepEqual(errors,[]);checks.push('zero page or unexpected console errors');
   return {browser:browserType.name(),checks,draws,samples,limitations,expectedFailures,errors,...(failures.length?{error:failures.join('\n')}:{})};
- }catch(error){if(page)try{samples.failure=await snapshot(page);}catch{}return {browser:browserType.name(),checks,samples,limitations,expectedFailures,errors,error:[...failures,error.stack].join('\n')};}
+ }catch(error){if(page)try{samples.failure=await snapshot(page);samples.failureUi=await page.evaluate(()=>({url:location.href,journey:document.body.dataset.journey,state:window.HeartGame.context(),startDisabled:document.querySelector('#startButton').disabled,dialogOpen:document.querySelector('#resultDialog').open,connection:document.querySelector('#connection').textContent}));await page.screenshot({path:path.join(out,`${browserType.name()}-failure.png`)});}catch{}return {browser:browserType.name(),checks,samples,limitations,expectedFailures,errors,error:[...failures,error.stack].join('\n')};}
  finally{if(context)await context.close();await browser.close();}
 }
 

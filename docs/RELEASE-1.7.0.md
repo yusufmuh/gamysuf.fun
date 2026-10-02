@@ -14,7 +14,7 @@ Header menyediakan Demo/Main Tercatat, tema terang pink/gelap, suara, animasi, l
 
 | Pemeriksaan | Hasil saat kandidat dibuat |
 |---|---|
-| Sumber Game 5 2.2.0 | 47/47 tes engine/server dan pemeriksaan sintaks lulus |
+| Sumber Game 5 2.2.1 | 47/47 tes engine/server dan pemeriksaan sintaks lulus |
 | Integrasi hub 1.7.0 | 75/75 tes lulus, termasuk pemeriksaan nominal serta isolasi PIN Game 5 |
 | UI terarah | 21/21 lulus, termasuk gacha, pilih, pemulihan, ekspor dan mode resmi lokal |
 | Audio nyata | 29/29 di Chromium, Firefox, WebKit; sembilan hasil demo |
@@ -26,7 +26,7 @@ Header menyediakan Demo/Main Tercatat, tema terang pink/gelap, suara, animasi, l
 
 WebKit Windows pada lingkungan uji ini tidak menyediakan AudioContext; musik dan jingle native tetap berhasil. Ukuran decode video WebKit dapat berubah ketika compositor meresize tampilan; rasio sumber diperiksa dengan decode terpisah dan badan/kaki diperiksa pada screenshot. Emulasi browser/viewport bukan bukti pengujian semua perangkat fisik.
 
-Artefak pengujian berada di `artifacts/heart-ui/`, `artifacts/heart-audio/`, dan `artifacts/heart-journey/`. Bukti rilis sebelumnya tetap berlaku hanya pada versi yang disebutkan di [RELEASE-1.6.1.md](RELEASE-1.6.1.md).
+Matriks lokal 21 kasus memakai sumber 2.2.0. Pemeriksaan produksi menemukan empat video dek masih berjalan di belakang dialog hasil; 2.2.1 menjeda seluruh dek ketika dialog terbuka dan memulihkan hanya preview yang terlihat setelah ditutup. URL script berubah untuk menghindari cache lama. Perbaikan ini diuji terarah di tiga browser, kemudian alur produksi diperiksa kembali. Artefak pengujian berada di `artifacts/heart-ui/`, `artifacts/heart-audio/`, dan `artifacts/heart-journey/`. Bukti rilis sebelumnya tetap berlaku hanya pada versi yang disebutkan di [RELEASE-1.6.1.md](RELEASE-1.6.1.md).
 
 ## Bukti publikasi
 

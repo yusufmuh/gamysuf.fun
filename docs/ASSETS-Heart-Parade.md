@@ -63,7 +63,7 @@ Harga normal FS adalah nilai bawaan yang perlu dikonfirmasi tim booth dan dapat 
 
 Pemetaan PNG pemilik ke tujuh POV Sanji dan dua dealer terdapat pada assets/pov/manifest.json, beserta dimensi dan hash. Tujuh Zoro POV merupakan potongan kolase rendah resolusi dan diarsipkan, tidak dipakai runtime UI. Ilustrasi Zoro yang utuh menjadi fallback. Sumber asli tidak ditimpa.
 
-Empat belas cuplikan ada di assets/video/moments/manifest.json: 13 animasi ilustrasi dan satu video aksi Zoro Knight's Vow yang dipangkas dari master Gemini yang benar. Semua H264/yuv420p,720×900,24fps,lima detik,tanpa audio,total4.340.172byte,faststart. Full decode14/14 dan browser playback42/42. WebKit dapat melaporkan758×947 sesudah playback; rasio tetap proporsional dan tidak teramati pemotongan.
+Empat belas cuplikan tercatat di `assets/video/moments/manifest.json`: 13 animasi ilustrasi dan satu video aksi Zoro Knight's Vow yang dipangkas dari master Gemini yang sesuai. Semua memakai H.264/yuv420p, 720×900, 24 fps, lima detik, tanpa audio, dan faststart; total 4.340.172 byte. Decode penuh 14/14 dan pemutaran browser 42/42 lulus. WebKit dapat melaporkan dimensi hasil resize compositor setelah playback; rasio sumber diperiksa lewat decode terpisah dan screenshot memperlihatkan badan serta kaki utuh.
 
 Audio aktif beserta hash ada pada assets/audio/manifest.json. Rangkaian Bpedia memakai dua narasi Jepang orisinal, bukan suara aktor/voice clone. Sumber sintesis: https://github.com/rany2/edge-tts. Master musik/jingle pemilik tetap utuh.
 
@@ -75,4 +75,10 @@ Audio aktif beserta hash ada pada assets/audio/manifest.json. Rangkaian Bpedia m
 | `assets/audio/sanji-welcome-ja.mp3` | 16.944 | 101664 | `af4f2d61e91a70a98b4ebf548bc3abc2099db1021af48ddd0c935968e68aba3b` |
 | `assets/audio/bpedia-jingle-hook.mp3` | 6.800 | 109966 | `a8dcac2770bff10d6281343a735c1845123b33468a96c6e7481da87b7ec41117` |
 
-QA audio baru: Chromium10,Firefox10,WebKit9pemeriksaan; seluruhnya lulus. UI terarah21/21. Status rilis dan bukti responsif/produksi ada di dokumen RELEASE-1.7.0.md hub.
+QA audio lokal: 10 pemeriksaan Chromium, 10 Firefox dan 9 WebKit; seluruhnya lulus. UI terarah 21/21 dan matriks perjalanan 4.514/4.514 lulus pada 21 kombinasi browser/viewport. Status rilis dan bukti produksi dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md) di hub.
+
+## Tambahan gambar pemilik · 2.2.1
+
+Seluruh 50 PNG dari `Bipy varian zoro sanji`, `zoro fanservice`, dan `sanji fanservice` dipakai. Galeri memuat 40 adegan duo dan 10 pose Bipy (25 gambar per karakter), pratinjau tujuh menu per karakter memakai adegan yang cocok, dan dealer berganti pose mengikuti tahap atraksi. WebP mempertahankan alpha serta badan/kaki utuh; semua PNG asli tetap utuh. Total WebP tambahan 4.444.776 byte. Manifest `assets/stickers/manifest.json` mencatat 50 nama sumber, dimensi, hash sumber, hash hasil, karakter, judul dan peran. Helper sumber: `docs/prepare-sticker-assets.py`.
+
+Token brand pada `assets/brand/bpedia-tokens.css` disalin dari guideline pemilik: pink terang #E62B5E, pink gelap #FF5C8A, latar terang #FFF7F8 dan Berry Night #2A0A18.

@@ -1,0 +1,807 @@
+{
+  "schema": 1,
+  "count": 50,
+  "provenance": "50 owner-supplied PNGs, optimized with preserved alpha; PNG originals unchanged.",
+  "items": [
+    {
+      "id": "zoro-welcome",
+      "hostId": "zoro",
+      "role": "dealer",
+      "title": "Bipy Zoro menyambutmu",
+      "image": "/assets/dealers/zoro-welcome.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_10 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "e0f2a00c589c0635331f1e286f6c426dbf5390143dd02fe89d379721fb6d4307",
+      "sha256": "ee7ccaf5f78cf1fa286d112e03a06c3438797def70a2264c12f786f5af63eb1c"
+    },
+    {
+      "id": "zoro-ready",
+      "hostId": "zoro",
+      "role": "dealer",
+      "title": "Bipy Zoro siap beraksi",
+      "image": "/assets/dealers/zoro-ready.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_11 PM-2.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "93af77388a26de0ce4df0732dd11aa5d4d3c410f2f0044853ebb7e3ac4d87d8f",
+      "sha256": "ced7677e065a5444c3aae1183082a947fed0ad702f1c7f5ad917241f10df3196"
+    },
+    {
+      "id": "zoro-confident",
+      "hostId": "zoro",
+      "role": "dealer",
+      "title": "Bipy Zoro penuh percaya diri",
+      "image": "/assets/dealers/zoro-confident.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_12 PM-3.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "50e5463f94699b3956330795764796197c335802e2e6785ba682d81977dc561f",
+      "sha256": "7d773d8e1c5c4cc2dbb5ec1c148eee4efda8115fa7458e0be0dbfd7865a3d78b"
+    },
+    {
+      "id": "zoro-cheer",
+      "hostId": "zoro",
+      "role": "dealer",
+      "title": "Jempol manis Bipy Zoro",
+      "image": "/assets/dealers/zoro-cheer.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_13 PM-4.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "d32a6fe08b69531010f0c80689066da8b638a1d0eb7aae754ffed144ee4ccc15",
+      "sha256": "1e3fb1ae4744dcf0c5507835b281372bfea14aff1c6d3e27d3112aa5115326e1"
+    },
+    {
+      "id": "zoro-jump",
+      "hostId": "zoro",
+      "role": "dealer",
+      "title": "Lompatan Bipy Zoro",
+      "image": "/assets/dealers/zoro-jump.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_14 PM-5.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "b885bbea877bc314f9711b79715ff3bc6c22a7be9131376ae49927d97ba1f683",
+      "sha256": "6d674018f099ad95520c15b59bd0cedf531fe7a4587a4b2e427847bbfe51a401"
+    },
+    {
+      "id": "sanji-welcome",
+      "hostId": "sanji",
+      "role": "dealer",
+      "title": "Bipy Sanji menyapamu",
+      "image": "/assets/dealers/sanji-welcome.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_15 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "63304faa347bfe03721ea7e2ec0d18b449cef907d58ab9d878394979b41fa474",
+      "sha256": "e863e37f860594aec769515a96ae8409ef33ec5f67c7095e6f410976c7a5ff8c"
+    },
+    {
+      "id": "sanji-hearts",
+      "hostId": "sanji",
+      "role": "dealer",
+      "title": "Finger heart Bipy Sanji",
+      "image": "/assets/dealers/sanji-hearts.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_17 PM-7.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "04f33ea35b89846129a7169c2103df6b1f3337146f224716bd65843a280b3de6",
+      "sha256": "f7a2a02661ed82529c51138ab0732acd2c901f6edaeadb0ab9eb3f6eeab0eecb"
+    },
+    {
+      "id": "sanji-flower",
+      "hostId": "sanji",
+      "role": "dealer",
+      "title": "Bunga dari Bipy Sanji",
+      "image": "/assets/dealers/sanji-flower.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_18 PM-8.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "b819903dffed70a9565d611ebf82df8f486f930fc85547ecdcfc418c7343652a",
+      "sha256": "213464323a8f86667dfa202beec42f926a738ae551ec5d07c0e8727a659796bb"
+    },
+    {
+      "id": "sanji-serve",
+      "hostId": "sanji",
+      "role": "dealer",
+      "title": "Bipy Sanji menyiapkan kejutan",
+      "image": "/assets/dealers/sanji-serve.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_19 PM-9.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "9bac0d3cb47f7ffcd1fb5b39cc946f992d2cb35cea743da3ab28f7fa7fd32ca0",
+      "sha256": "35e8d773fb8bce3e52f597871217e762b1040ce05b0ca7a597a16e082dab3b39"
+    },
+    {
+      "id": "sanji-kick",
+      "hostId": "sanji",
+      "role": "dealer",
+      "title": "Tendangan ceria Bipy Sanji",
+      "image": "/assets/dealers/sanji-kick.webp",
+      "width": 800,
+      "height": 1000,
+      "source": "Bipy varian zoro sanji/ChatGPT Image Oct 2, 2026, 08_47_20 PM-10.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "c75f9b20bee6ae310b719e52d3d22e1900152d8dd4105c336bd6c30fe107198e",
+      "sha256": "731771eac23839951db677572cb5597b3a4a68ae6fa153af7464cd5319cf1d71"
+    },
+    {
+      "id": "sanji-cinderella",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Cinderella's Fit · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-cinderella.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_28 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "be795f17ee56dc6256c2a20a08f704cb41ad01bc15233303e32bf56aad422660",
+      "sha256": "2ea092d2cef60af643dbe974dc72a90bb5ee0a1f70ec065f297feb5a406a9f66"
+    },
+    {
+      "id": "sanji-twirl",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Princess Twirl · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-twirl.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_29 PM-2.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "f6b8a5f8743166865a9d2bbb2500284f2c0fcf3cb8c9342d01d0de9d47ba318a",
+      "sha256": "e1ad0e3d6f1d373fb4bd3e14853defa030d62cc29bf42b0315a044615ca913e0"
+    },
+    {
+      "id": "sanji-whisper",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Blossom Whisper · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-whisper.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_30 PM-3.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "85baf0ef54a11f6aa9a299d0669173d5c5e3dcac00e8ee21ef1f26d4dad06c5c",
+      "sha256": "93e1f27d1e2d6b3e21e45400a8b8f6bce6fd1295be4bb4ed712201208ce69529"
+    },
+    {
+      "id": "sanji-offering",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Sweet Offering · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-offering.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_31 PM-4.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "0161feb15133dfcd03997cf5f8f3b277063978b92f7900f703a1c9c756ac8c8d",
+      "sha256": "d4b90a014df627897caea33792650fab728c17f16e5c7f20a78bd9d61188e4f5"
+    },
+    {
+      "id": "sanji-vow",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Knight's Vow · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-vow.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_32 PM-5.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "a3deaef03fe732ac13f6418ab9d792a28548ba7e84e0f154e3c09f1cf2d0e3d5",
+      "sha256": "8469ac195f4a0a8f350ed9fcf3abcbc7cbe919172931e7d364dda8941e983778"
+    },
+    {
+      "id": "sanji-hug",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Warm Hug · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-hug.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_33 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "d41473e0e3f72d0e340ec0a70d90d3566ca429f22dda2a429d33b8ed543339db",
+      "sha256": "cb3374bdef3f40266eaf866dabb7926b3d23693eb2304c045522630b85b9f93d"
+    },
+    {
+      "id": "sanji-back-hug",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Pelukan dari belakang · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-back-hug.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_34 PM-7.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "94f57c084037451ee8171e5789d3a3a33850b6f86c761a99ef0fe594c0de8b11",
+      "sha256": "034a6d68019f56799baf095de62af4e7d95cf3fdb20f8cc3044a1827485915f9"
+    },
+    {
+      "id": "sanji-pat",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Pat on Head · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-pat.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_35 PM-8.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "7352767826542449cf83f149c75369caa5191b5fd28524bb015c6d3b6c37d12b",
+      "sha256": "e1376b1c1111e37c457cfe672d233d0d2a6744882032215cc67fbd92db371060"
+    },
+    {
+      "id": "sanji-rose-walk",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Berjalan dengan mawar · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-rose-walk.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_36 PM-9.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "b31d90b71b3a6bf0ea83163c211abdf92dc12eb4665ff589a1aac038c6bf3884",
+      "sha256": "61c1ac4db9743dad8bdcff852fc2a6c732f39378632e520c292d4167c2dd580c"
+    },
+    {
+      "id": "sanji-dance-dip",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Dansa manis · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-dance-dip.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_22_37 PM-10.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "2fc1de1e206612fddd09a48876359a64ec0b2d00a3d51a056cff44fc1bdda761",
+      "sha256": "a50319694eb0bf391095384f20f4392d54e628eeed273ce28c58e53ff087e881"
+    },
+    {
+      "id": "sanji-greeting",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Sapaan ceria · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-greeting.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_50 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "301c09fac9b8430f1ba00476086462359d6227b26f954bb1d49590a5381e4931",
+      "sha256": "03f3731de7b2bf884cb697b1d0aeac799ffba704883d162cf99d543a44ad0e34"
+    },
+    {
+      "id": "sanji-walk",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Berjalan bersama · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-walk.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_52 PM-2.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "726feb54a63605f40f02d50b1ef4f5c191bcc03fba9c07d442c48d408d718089",
+      "sha256": "d2f5b7d9d68de3f602a1311042b2b0f2211398027db7109642b68682130e4783"
+    },
+    {
+      "id": "sanji-tulip",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Setangkai tulip · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-tulip.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_53 PM-3.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "c463d4781c14bd872400bfecf5fa1d13a4907af1f825e9e79892249b17d59c92",
+      "sha256": "5506fb1bc0a302eb7fa4f65b536777d77de87d107b54a3af1772ca0808f680d1"
+    },
+    {
+      "id": "sanji-vow-smile",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Salam sang ksatria · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-vow-smile.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_54 PM-4.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "5e751e6f2a947b895558a53ab3abd276edd219a349d8cb96a6d3b9e11961f6a0",
+      "sha256": "09bc5dc10b55581928b97799d0dc7ce1ae74e4115e76259bb59e1237fdb56e3f"
+    },
+    {
+      "id": "sanji-gentle-pat",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Perhatian kecil · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-gentle-pat.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_55 PM-5.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "fa431d89f11c1ad18ed1152957367a372e0db9d226cebdb27cc8229be5a2a75d",
+      "sha256": "90aeb02cf7b3da169aeeff8049451568f65c807ff6cf6bdd02fdd36cd92fae83"
+    },
+    {
+      "id": "sanji-warm-embrace",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Pelukan hangat · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-warm-embrace.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_56 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "c06465a00f45cc903d8922df675f10b46e5ec2c48b10e6922436957b5bd91fe2",
+      "sha256": "065fcc415500eec24135049c518252fd5fb55f9929431833891582c22bd45756"
+    },
+    {
+      "id": "sanji-back-embrace",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Satu pelukan, dua senyum · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-back-embrace.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_57 PM-7.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "62cb0426c9a6c0deb99a295b65a6011286bf578a68585a66f3377db17b743757",
+      "sha256": "2100bc5775c649cf1c4e4f1cc3e800f44b14e9f3a7fd5600659b2e308f337f80"
+    },
+    {
+      "id": "sanji-waltz",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Putaran bahagia · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-waltz.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_58 PM-8.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "b7daba6c004ef291c562633e4ad87d2eeb3390a5a7aa2d71a62ffe0e7ed99aa0",
+      "sha256": "eb736547ea55db4b6ee33bab614aac5ae3eb0318d2d7562909c09c8ef51fac87"
+    },
+    {
+      "id": "sanji-carry",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Digendong Sanji · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-carry.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_36_59 PM-9.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "367e0218f12774d9a286807606d6ae3c79d22b7ef06f336a8e93c453dc5bd941",
+      "sha256": "883e8d2dfd17fcb34b446ea3f03fadf1d2646b16112b469cd6193a03d0aaa917"
+    },
+    {
+      "id": "sanji-finger-hearts",
+      "hostId": "sanji",
+      "role": "duo",
+      "title": "Finger heart bersama · Bipy & Sanji",
+      "image": "/assets/stickers/sanji-finger-hearts.webp",
+      "width": 640,
+      "height": 800,
+      "source": "sanji fanservice/ChatGPT Image Oct 2, 2026, 08_37_00 PM-10.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "398172274f3679edc90569affede9c6329c7f905d779986fa5ad375cc9e743db",
+      "sha256": "0a9691dbecd7187ca4d9b551dc9d2aa7c676f61162c76f1295065b1072b6d75f"
+    },
+    {
+      "id": "zoro-greeting",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Sapaan ceria · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-greeting.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_38 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "3b29c31ad95d7182086abc5b936506754e406e33f105bb18d827a9642e70a2e4",
+      "sha256": "d767284df2bddf6f1a831d54e3b5ac6a2eab416ab0e26b31df2a359a49fe7abb"
+    },
+    {
+      "id": "zoro-high-five",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Tos bersama · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-high-five.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_39 PM-2.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "6342d83cc4ca34d3acee873a8992a5d4d2287eb610f3cb566287cccacdbb3c60",
+      "sha256": "8685960e54be3aa1b8107083971177831608ed69cc5e8cac19d3fb519593436e"
+    },
+    {
+      "id": "zoro-shoulders",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Bipy di bahu Zoro · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-shoulders.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_40 PM-3.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "0dd221a7f99505b7dfcecee0be1a9c853b09d5fdbbfce59b35e353b0e84b07b2",
+      "sha256": "9e39e0d275dde0814a7ed488bead435acfeeee4b70f4f775d0d5a9d7f0bb3a91"
+    },
+    {
+      "id": "zoro-ready",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Siap berpetualang · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-ready.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_41 PM-4.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "318445fb44100dd58b5ece5f29e039686f7543e0e3c4b0d2be1bce51e87a8411",
+      "sha256": "2a555cafe35e0022a1f67dbb2ef6687d661f71f3d5a4e63599802f51e4cb3be5"
+    },
+    {
+      "id": "zoro-thumbs-up",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Dua jempol manis · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-thumbs-up.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_42 PM-5.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "ec4225490a0fd888e3277df73ae11f8885ff9ba0ec966b07773a7fc476d43028",
+      "sha256": "b6edf857cd9dbd6b1d136b0d07927fe59d3ede03fec7e6c18b712ba4a6359bc9"
+    },
+    {
+      "id": "zoro-carry",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Digendong Zoro · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-carry.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_43 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "9b6639811b4435d2817a741c32a8ab46a838c9fdff54f59508c218f7c52d929d",
+      "sha256": "b54297c38068f71ef3cecb853405ae24806b479a0f8a5aa7d62e5fd0548575b4"
+    },
+    {
+      "id": "zoro-confident",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Sahabat sang pendekar · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-confident.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_44 PM-7.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "5ee6db714b0c8bf2bcd27bf9845c1cd94a8a0cefbabf9009523c557bb4e3e849",
+      "sha256": "84afada654089338a126835f1f011c2f5a37795fb38d5b0d95eb7ef145117e05"
+    },
+    {
+      "id": "zoro-jump",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Lompatan bahagia · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-jump.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_45 PM-8.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "845f3597dda425a83307401513d8277db79c04ddae6761287aebfe3a87390891",
+      "sha256": "8aa58f8aa99e6253e77bc07e6fa0571bad717fc0b23ac9db6da30d91c009d6f0"
+    },
+    {
+      "id": "zoro-shopping",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Bipy di tas belanja · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-shopping.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_46 PM-9.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "3cb11e81b82b564bfd71aa485487bb2203a666998e4d4c1fa98b11a00f806666",
+      "sha256": "28c341650bc1cd16183371ff36766b1f3f8faf96cb8977dc12e5c76b8ca029aa"
+    },
+    {
+      "id": "zoro-sitting",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Istirahat bersama · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-sitting.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_21_47 PM-10.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "21c0d715a1a9520c31667772dd5ca4c3553b1f9e4e2ddc1a1540d8c051f51285",
+      "sha256": "f1784b1589e880711d60609704492f87034f1311618559762ab2f91cf0129e43"
+    },
+    {
+      "id": "zoro-cinderella",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Cinderella's Fit · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-cinderella.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_51 PM-1.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "d85ce051c0c083bc3a566feb50f1d5f7b5df86ad4da0e0989c93d36072c7f830",
+      "sha256": "ee12ee9d7ea7d3830e2ca7d550e148f324f742bd817cfeeeda2bee75d703c40a"
+    },
+    {
+      "id": "zoro-twirl",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Princess Twirl · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-twirl.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_52 PM-2.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "4e0ba1765eb5092f573086380bac894c470e6708054e65be58bbd8e187906f79",
+      "sha256": "d403faf65f62544b62b12485d5bbd9a9f55c7b83a3a97789e0e905b8f351b62c"
+    },
+    {
+      "id": "zoro-whisper",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Blossom Whisper · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-whisper.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_53 PM-3.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "8b4586096cab522d52f61a0f14b0798472ee5647d670d54bda88236bab7125e9",
+      "sha256": "67181190dbf9b127090c6e1fe236591cecf45cd2474490d2e881fd9702079f11"
+    },
+    {
+      "id": "zoro-offering",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Sweet Offering · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-offering.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_54 PM-4.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "c7f13e28c7c370ea177126fb9c51d21e505623c419a35f2863090b7759f9ef13",
+      "sha256": "62a64ec94966551a29a83a460a8092fae2d0920c2fde282c0ea85f11e357348e"
+    },
+    {
+      "id": "zoro-vow",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Knight's Vow · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-vow.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_55 PM-5.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "117e6ef0930e37268011a37eae70570668cfae7fa9fd77a451ea1afed9182cab",
+      "sha256": "f7d4b33d5835586d259f04d0c53951c27e3e8fad6ecac94e9ac8cdf9a937094b"
+    },
+    {
+      "id": "zoro-hug",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Warm Hug · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-hug.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_56 PM-6.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "c9437ce09d48b89ea8ba1b85dbf5c350ee55afb2de871c907ea8adc48a4226d8",
+      "sha256": "991e1de22afe9db6abbc1aeeff6ef2fc1e036bba1e4351ebc6e71abce8cb3c32"
+    },
+    {
+      "id": "zoro-back-hug",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Pelukan dari belakang · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-back-hug.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_58 PM-7.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "78484b11390f494708f2b941046b5f20f3d05a8d5c885e49f674b81af1ee413f",
+      "sha256": "73c8bc290da2b0217cd9eb1d7076f0af09723ac6fb9885cb33ce8a4cc05e1750"
+    },
+    {
+      "id": "zoro-pat",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Pat on Head · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-pat.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_30_59 PM-8.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "43b7622928ecf771ed3497090637fd4c99bc9edfca2ffb2393a4b676d5639941",
+      "sha256": "4f2e86ceb0bb9aa6893a30e6030fe5e2cba7ce0470786010272b2d9d30610e23"
+    },
+    {
+      "id": "zoro-carry-smile",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Senyum dalam pelukan · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-carry-smile.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_31_01 PM-9.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "01d0b9450175ad679ac160590d4d0e00b7c23389aabaf9ba059fffca1523a277",
+      "sha256": "c3b485145395559b5710959d984fe7741e4a6411eab10ef8e5f934e0c11921e6"
+    },
+    {
+      "id": "zoro-walk",
+      "hostId": "zoro",
+      "role": "duo",
+      "title": "Berjalan bersama · Bipy & Zoro",
+      "image": "/assets/stickers/zoro-walk.webp",
+      "width": 640,
+      "height": 800,
+      "source": "zoro fanservice/ChatGPT Image Oct 2, 2026, 08_31_02 PM-10.png",
+      "sourceDimensions": [
+        1122,
+        1402
+      ],
+      "sourceSha256": "842a3090ac310ffebecc03cf409f1900406e6c02e5b000bb39324e76f7b0b5f8",
+      "sha256": "e23465c33461458d227e0c3d46524a63fab8069a51ba80ff10e8cbb0ab6a6e54"
+    }
+  ]
+}
