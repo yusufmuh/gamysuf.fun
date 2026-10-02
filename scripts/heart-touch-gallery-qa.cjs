@@ -34,12 +34,13 @@ async function run(browser,name,width,height,origin){
    check(await page.locator('#momentGrid video').evaluateAll(items=>items.every(item=>item.paused)),`${label} underlying videos pause during preview`);await page.locator('#closeMomentPreview').click();
    await page.locator('#pickMode').click();await tap(page,card.locator('h3'),.5,.5);check(await card.evaluate(el=>el.classList.contains('chosen')),`${label} ${host} title tap selects direct-pick card`);
    const next=page.locator('.deck-card[data-service="twirl"]');await tap(page,next.locator('.tcg'));check(await next.evaluate(el=>el.classList.contains('chosen')),`${label} ${host} artwork tap changes direct-pick choice`);
+   check(await page.locator('#momentGrid .deck-card').evaluateAll(cards=>cards.every(card=>{const outer=card.getBoundingClientRect(),button=card.querySelector('.card-choice').getBoundingClientRect();return button.height>=44&&button.height<=60&&button.top>=outer.top-1&&button.bottom<=outer.bottom+1;})),`${label} ${host} selection buttons remain inside their own cards`);
    await next.locator('.card-choice').focus();await page.keyboard.press('Enter');check(await next.evaluate(el=>el.classList.contains('chosen')),`${label} ${host} native keyboard selection works`);
    await next.locator('.peek-video').click();await page.locator('#momentPreviewDialog').waitFor({state:'visible'});check(await page.locator('#momentPreviewTitle').textContent()==='Princess Twirl',`${label} ${host} video preview stays separately clickable`);await page.locator('#closeMomentPreview').click();await page.locator('#gachaMode').click();
   }
   check(writes===0,`${label} gallery, previews and selections issue no tickets`);
   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${label} no horizontal page overflow`);
-  await page.locator('#backHomeButton').click();await page.screenshot({path:path.join(out,`${label}-light.png`),fullPage:true});await page.locator('#darkThemeButton').click();await page.screenshot({path:path.join(out,`${label}-dark.png`),fullPage:true});
+  await page.locator('#backHomeButton').click();await page.waitForFunction(()=>scrollY===0);await page.screenshot({path:path.join(out,`${label}-light.png`),fullPage:true});await page.screenshot({path:path.join(out,`${label}-light-preview.png`)});await page.locator('#darkThemeButton').click();await page.screenshot({path:path.join(out,`${label}-dark.png`),fullPage:true});await page.screenshot({path:path.join(out,`${label}-dark-preview.png`)});
   report.cases.push({label,checks:report.checks.length-start,pass:true});console.log(`${label}: ${report.checks.length-start} checks passed`);
  }finally{await context.close();}
 }

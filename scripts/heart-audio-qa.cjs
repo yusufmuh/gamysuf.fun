@@ -87,7 +87,9 @@ async function audit(browserType,origin){
   let draws=0;
   async function draw(service){
    await page.waitForFunction(()=>{const state=window.HeartGame.context();return state.stage==='home'&&!state.busy;});
-   await page.locator('#pickMode').click();await page.locator(`.card-choice[data-service="${service}"]`).click();
+   await page.locator('#pickMode').click();
+   assert.ok(await page.locator('#momentGrid .deck-card').evaluateAll(cards=>cards.every(card=>{const outer=card.getBoundingClientRect(),button=card.querySelector('.card-choice').getBoundingClientRect();return button.height>=44&&button.height<=60&&button.top>=outer.top-1&&button.bottom<=outer.bottom+1;})),'selection buttons stay inside their own cards before and after results');
+   await page.locator(`.card-choice[data-service="${service}"]`).click();
    const [response]=await Promise.all([page.waitForResponse(r=>r.url().endsWith('/g/heart/api/play')&&r.request().method()==='POST'),page.locator('#startButton').click()]);
    const result=await response.json();assert.equal(result.demo,true,'audio QA must never issue official booth tickets');assert.equal(result.service.id,service);draws++;return result;
   }

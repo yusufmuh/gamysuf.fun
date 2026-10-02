@@ -44,7 +44,7 @@ html[data-theme=light] .table{background:var(--blush-100);box-shadow:var(--shado
 html[data-theme=light] .table:before{border-color:var(--pink-200)}
 html[data-theme=dark] .table{background:var(--blush-100);box-shadow:0 24px 70px #1a061055}
 .deck .deck-card{cursor:pointer;touch-action:manipulation}
-.deck .card-choice{position:static!important;touch-action:manipulation}
+.deck .card-choice{position:static!important;height:auto!important;touch-action:manipulation}
 .deck .card-choice::before{content:'';position:absolute;inset:0;border-radius:16px;z-index:4}
 .deck .card-choice:disabled::before{pointer-events:none}
 .deck .peek-video{position:relative;z-index:5}
