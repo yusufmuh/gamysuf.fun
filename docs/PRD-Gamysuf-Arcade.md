@@ -114,7 +114,7 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
-**2 Oktober 2026 · kandidat rilis lokal Gamysuf Arcade 1.6.0 siap dipublikasikan.** Lima game terdaftar; Game 4 dan Game 5 dikelompokkan pada halaman Market-In. Sumber game sudah disinkronkan, matriks lintas browser sudah lulus, dan paket Hostinger sudah diuji terisolasi. Catatan rilis: [RELEASE-1.6.0.md](RELEASE-1.6.0.md). Status ini belum mengonfirmasi produksi v1.6.0.
+**2 Oktober 2026 · Gamysuf Arcade 1.6.0 sudah live di [gamysuf.fun](https://gamysuf.fun).** Lima game terdaftar; Game 4 dan Game 5 dikelompokkan pada halaman Market-In. Sumber game sudah disinkronkan, matriks lintas browser sudah lulus, paket Hostinger sudah diuji terisolasi, dan rilis produksi telah diverifikasi. Catatan rilis: [RELEASE-1.6.0.md](RELEASE-1.6.0.md).
 
 | Bukti selesai | Hasil dan batas cakupan |
 |---|---|
@@ -129,10 +129,10 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 | Suite tambahan sebelumnya | 866/866 pemeriksaan; cakupan tambahan, bukan pengganti matriks penuh setelah perubahan terakhir |
 | Matriks responsif final | 2.331/2.331 pemeriksaan Chromium, Firefox, dan WebKit; ponsel, foldable, tablet, laptop, dan desktop |
 | Paket Hostinger | 600 berkas; 134.124.400 byte; smoke test terisolasi lulus untuk hub, Market-In, Game 4, Game 5, API, video, audio, MIME, dan byte range; SHA-256 `cd0125d4bf5fa92f79b0b01124fbaf11ee15c7819dcafe1210e0dfba3ca52047` |
+| Produksi | 89/89 endpoint, hash kode, dan aset lulus; katalog 1.6.0, 14 artwork Heart Parade unik, 7 varian Bipy, 4 audio, 1 video, serta byte range HTTP 206 terverifikasi |
+| UI live | 50/50 pemeriksaan dashboard dan game lulus tanpa error konsol, HTTP, atau jaringan yang belum terverifikasi |
 
-Angka di atas merupakan bukti selesai pada tahap lokal ini. Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memiliki perilaku vendor yang berbeda. Bukti versi lama hanya berlaku pada rilis yang disebutkan di berkasnya.
-
-**Gerbang rilis yang masih wajib dipenuhi:** setelah publikasi yang diotorisasi, verifikasi build/versi/commit, endpoint, hash kode dan aset, serta UI produksi; simpan bukti `artifacts/deployment-1.6.0.json` dan laporan UI live. Berkas bukti tersebut adalah keluaran yang diwajibkan, bukan hasil yang sudah tersedia.
+Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memiliki perilaku vendor yang berbeda. Bukti versi lama hanya berlaku pada rilis yang disebutkan di berkasnya. Bukti produksi 1.6.0 tersimpan di `artifacts/deployment-1.6.0.json`, `artifacts/live-ui-1.6.0/report.json`, dan `artifacts/live-image-verification/report-1.6.0.json`.
 
 ### Catatan runtime Hostinger
 - Data produksi berada di luar direktori build (`~/gamysuf-data`); jangan hapus atau reset saat deployment.
@@ -144,4 +144,5 @@ Angka di atas merupakan bukti selesai pada tahap lokal ini. Matriks memakai brow
 ## 11. Log serah-terima
 
 - **2026-10-02 (Codex, persiapan 1.6.0)**: menyelaraskan dokumentasi lima game, halaman Market-In 3–4 Oktober, katalog Game 4 dan migrasi, kartu BP06/mode/kenyamanan Game 5, serta album 91 kartu. Hasil lokal yang selesai dan gerbang rilis tersisa dicatat pada §10 dan `RELEASE-1.6.0.md`. Catatan persiapan `RELEASE-1.5.1.md` digantikan oleh catatan 1.6.0 agar versi tidak ambigu.
+- **2026-10-02 (Codex, produksi 1.6.0)**: mendorong rilis ke `main`, memverifikasi katalog produksi 1.6.0, 89 endpoint/hash/aset, byte range audio/video, dan 50 pemeriksaan UI live. Game 4 dan Game 5 dapat diakses melalui halaman Market-In dan rute masing-masing.
 - **Riwayat 1.5.0–1.1.0**: lihat masing-masing `docs/RELEASE-<versi>.md` dan berkas bukti dengan versi yang sama. Hasil lama tidak dijadikan bukti kelulusan rilis 1.6.0.

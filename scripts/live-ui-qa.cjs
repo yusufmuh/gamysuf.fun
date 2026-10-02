@@ -14,6 +14,8 @@ const out=path.join(__dirname,'..','artifacts',`live-ui-${version}`);
 const checks=[];
 const errors=[];
 const cancelledImages=[];
+const mediaAborts=[];
+const verifiedMedia=[];
 function check(ok,label,detail=''){
  checks.push({ok:Boolean(ok),label,detail});
  if(!ok)console.error(`FAIL ${label}: ${detail}`);
@@ -26,6 +28,10 @@ function watch(page,label){
   // Keep these cancellations as evidence and verify the final visible images after decode().
   if(request.resourceType()==='image'&&request.failure()?.errorText==='net::ERR_ABORTED'){
    cancelledImages.push(`${label}: ${request.url()}`);return;
+  }
+  // Defer media cancellation verdicts until the exact trailer has passed readiness checks.
+  if(request.url().startsWith(base)&&request.resourceType()==='media'&&request.failure()?.errorText==='net::ERR_ABORTED'){
+   mediaAborts.push({label,url:request.url(),error:request.failure().errorText});return;
   }
   if(request.url().startsWith(base))errors.push(`${label} request: ${request.url()} ${request.failure()?.errorText||''}`);
  });
@@ -61,6 +67,23 @@ async function waitVisibleImages(page){
   await Promise.all(visible.map(image=>image.decode().catch(()=>{})));
  });
 }
+async function verifyHeartTrailer(page){
+ await page.waitForFunction(()=>{
+  const video=document.getElementById('paradeTrailer');
+  return video&&video.readyState>=1&&video.videoWidth>0&&video.videoHeight>0&&
+   Number.isFinite(video.duration)&&video.duration>0&&!video.error;
+ },null,{timeout:20000});
+ const metadata=await page.locator('#paradeTrailer').evaluate(video=>({url:video.currentSrc,
+  readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,duration:video.duration,
+  muted:video.muted,loop:video.loop,inline:video.playsInline,error:video.error?.message||null}));
+ const expectedUrl=`${base}/g/heart/assets/video/heart-parade-promo.mp4`;
+ const ready=metadata.url===expectedUrl&&metadata.readyState>=1&&metadata.width>0&&metadata.height>0&&
+  Number.isFinite(metadata.duration)&&metadata.duration>0&&!metadata.error;
+ check(ready,'heart trailer metadata ready',JSON.stringify(metadata));
+ check(metadata.muted&&metadata.loop&&metadata.inline&&!await page.locator('#videoPlayButton').isDisabled(),
+  'heart trailer playback control ready',JSON.stringify(metadata));
+ if(ready)verifiedMedia.push({label:'heart',...metadata});
+}
 async function main(){
  fs.mkdirSync(out,{recursive:true});
  let browser;
@@ -93,8 +116,8 @@ async function main(){
 
   // Skip writes only to this isolated browser's localStorage; no profile is submitted.
   await deskPage.locator('#onboardSkip').click();
-  check(await deskPage.locator('#newArena').isVisible()&&await deskPage.locator('#newArena').getAttribute('href')==='/g/heart/',
-    'Heart Parade shortcut is visible on dashboard');
+  check(await deskPage.locator('#newArena').isVisible()&&await deskPage.locator('#newArena').getAttribute('href')==='#market-in'&&
+    await deskPage.locator('#market-in').count()===1,'event shortcut targets the dashboard event section');
   await deskPage.locator('#themeToggle').click();
   await deskPage.waitForFunction(()=>document.documentElement.dataset.theme==='light');
   await deskPage.locator('#topnav').scrollIntoViewIfNeeded();
@@ -144,9 +167,11 @@ async function main(){
     await waitVisibleImages(page);
     const fit=await layout(page);
     check(fit.scrollWidth<=fit.viewport+2,`${game} ${theme} mobile horizontal fit`,JSON.stringify(fit));
-    const logos=await page.locator('img[data-brand="bpedia"]').evaluateAll(images=>images.map(image=>({src:image.src,loaded:image.complete&&image.naturalWidth>0})));
+    const logoSelector=game==='heart'?`.brand .logo-${theme}`:'img[data-brand="bpedia"]';
+    const logos=await page.locator(logoSelector).evaluateAll(images=>images.map(image=>({src:image.src,loaded:image.complete&&image.naturalWidth>0,
+     visible:getComputedStyle(image).display!=='none'&&image.getBoundingClientRect().width>0})));
     const brandName=theme==='light'?'bpedia-pink':'bpedia-white';
-    check(logos.length&&logos.every(image=>image.loaded&&new URL(image.src).pathname.match(new RegExp(`${brandName}\\.(?:png|webp)$`))),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
+    check(logos.length&&logos.every(image=>image.loaded&&(game!=='heart'||image.visible)&&new URL(image.src).pathname.match(new RegExp(`${brandName}\\.(?:png|webp)$`))),`${game} ${theme} Bpedia logo loaded`,JSON.stringify(logos));
     check(!(await visibleBrokenImages(page)).length,`${game} ${theme} visible assets loaded`);
     await page.screenshot({path:path.join(out,`${game}-mobile-${theme}-390x844.png`)});
    }
@@ -159,13 +184,18 @@ async function main(){
     check(fit.scrollWidth<=fit.viewport+2,'gacha desktop horizontal fit',JSON.stringify(fit));
     await page.screenshot({path:path.join(out,'gacha-desktop-dark-1449x851.png')});
    }
+   if(game==='heart')await verifyHeartTrailer(page);
    await context.close();
   }
  }catch(error){check(false,'smoke tour completed',error.stack||String(error));}
  finally{
   await browser?.close();
+  for(const abort of mediaAborts){
+   abort.verified=verifiedMedia.some(media=>media.label===abort.label&&media.url===abort.url);
+   if(!abort.verified)errors.push(`${abort.label} request: ${abort.url} ${abort.error} (media readiness unverified)`);
+  }
   check(!errors.length,'browser console, HTTP and network clean',JSON.stringify(errors));
-  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({at:new Date().toISOString(),base,checks,errors,cancelledImages},null,2));
+  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({at:new Date().toISOString(),base,checks,errors,cancelledImages,mediaAborts,verifiedMedia},null,2));
  }
  console.log(`Live UI QA: ${checks.filter(item=>item.ok).length}/${checks.length} checks. ${out}`);
  if(checks.some(item=>!item.ok))process.exitCode=1;

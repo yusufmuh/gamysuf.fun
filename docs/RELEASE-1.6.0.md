@@ -1,6 +1,6 @@
 # Gamysuf Arcade 1.6.0 — Market-In 6.0
 
-Status pada 2 Oktober 2026: kandidat rilis lokal siap dipublikasikan. Versi 1.6.0 belum dikonfirmasi melalui pemeriksaan produksi. Dokumen ini menggantikan catatan persiapan 1.5.1.
+Status pada 2 Oktober 2026: **rilis 1.6.0 sudah live di [gamysuf.fun](https://gamysuf.fun)**. Kode rilis tersedia di GitHub dan pemeriksaan produksi, aset, serta UI live sudah lulus. Dokumen ini menggantikan catatan persiapan 1.5.1.
 
 ## Perubahan
 
@@ -18,7 +18,7 @@ Trailer Gemini memakai dua scene kartu, dengan audio trailer diolah menjadi loop
 
 Album seluruh arcade menjadi 91 kartu (16 Spin + 18 Nyapit + 23 Drop + 20 Gacha Pop + 14 Heart Parade). Pembaruan artwork Heart Parade mempertahankan kepemilikan kartu dan XP. Sumber game berada di folder saudara 01–05; `games/` adalah hasil sinkronisasi.
 
-## Bukti lokal yang selesai
+## Bukti rilis
 
 | Pemeriksaan | Hasil |
 |---|---|
@@ -34,11 +34,13 @@ Album seluruh arcade menjadi 91 kartu (16 Spin + 18 Nyapit + 23 Drop + 20 Gacha 
 | Suite tambahan sebelumnya | 866/866 pemeriksaan lulus |
 | Matriks responsif final | 2.331/2.331 pemeriksaan Chromium, Firefox, dan WebKit lulus |
 | Paket Hostinger | 600 berkas; 134.124.400 byte; isi bersih dan smoke test terisolasi lulus untuk hub, Market-In, Game 4, Game 5, API, video, audio, MIME, dan byte range; SHA-256 `cd0125d4bf5fa92f79b0b01124fbaf11ee15c7819dcafe1210e0dfba3ca52047` |
+| Produksi | 89/89 endpoint, hash kode, dan aset rilis lulus; 14 artwork Heart Parade unik, 7 varian Bipy, 4 audio, serta 1 video cocok dengan commit rilis |
+| UI live | 50/50 pemeriksaan lulus; dashboard, kelima game, dua tema, lebar ponsel/desktop, logo, gambar, dan metadata trailer terverifikasi; tidak ada error konsol, HTTP, atau jaringan yang belum terverifikasi |
 
-Hasil ini berasal dari lingkungan pengembangan. Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memiliki perilaku vendor yang berbeda.
+Matriks responsif memakai browser dan viewport emulasi; perangkat fisik tetap dapat memiliki perilaku vendor yang berbeda. Baris produksi dan UI live berasal dari pemeriksaan langsung terhadap domain publik.
 
-## Gerbang rilis
+## Verifikasi produksi
 
 Target responsif meliputi ponsel 280–430 px potret/lanskap, foldable 280×653 / 344×882 / 717×512 / 884×1104, tablet 768–1366, laptop 1280–1440, desktop 1920, serta Chromium/Firefox/WebKit dan dua tema. Seluruh alur penting harus tetap terlihat di atas game bar, tanpa overflow horizontal; kontrol sentuh dashboard minimal 44 px. Periksa keyboard/fokus, reduced motion, audio, aset, kartu hasil, pemulihan koneksi, mode demo/booth, serta antrean petugas.
 
-Sebelum rilis dinyatakan selesai, periksa build/versi/commit produksi, endpoint, hash kode/aset, dan UI live. Catat bukti di `artifacts/deployment-1.6.0.json` serta laporan UI live versi ini. Data persisten di luar direktori build harus dipertahankan. Dokumen teknis dan status lanjutan: [PRD-Gamysuf-Arcade.md](PRD-Gamysuf-Arcade.md).
+Produksi melayani katalog versi 1.6.0 dan seluruh rute utama melalui HTTPS. Bukti endpoint/hash/aset disimpan di `artifacts/deployment-1.6.0.json`; tur browser disimpan di `artifacts/live-ui-1.6.0/report.json`; pembandingan gambar CDN disimpan di `artifacts/live-image-verification/report-1.6.0.json`. Audio dan video mendukung byte range HTTP 206. Data persisten tetap berada di luar direktori build. Dokumen teknis dan status lanjutan: [PRD-Gamysuf-Arcade.md](PRD-Gamysuf-Arcade.md).
