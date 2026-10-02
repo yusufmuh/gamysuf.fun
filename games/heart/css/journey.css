@@ -82,7 +82,7 @@ html[data-theme=dark] .table{background:var(--blush-100);box-shadow:0 24px 70px 
 @keyframes heroPetal{0%{transform:translateY(-30px) rotate(0);opacity:0}20%,80%{opacity:.2}100%{transform:translateY(420px) rotate(220deg);opacity:0}}
 .tcg-leader .host-art{animation:leaderBreathe 3.8s ease-in-out infinite;transform-origin:50% 85%}
 .host-sanji.tcg-leader .host-art{animation-delay:-1.9s}
-@keyframes leaderBreathe{0%,100%{transform:translateY(0) rotate(-1deg) scale(1)}50%{transform:translateY(-8px) rotate(1deg) scale(1.025)}}
+@keyframes leaderBreathe{0%,100%{transform:translateY(0) rotate(-.7deg) scale(.94)}50%{transform:translateY(-4px) rotate(.7deg) scale(.95)}}
 .table .quote{display:flex;align-items:center;gap:14px;text-align:left!important;padding:20px!important;border-radius:20px;border:1px solid var(--pink-200);box-shadow:0 8px 24px #e62b5e10;margin:16px 0 0!important}
 .quote-mark{font:900 68px/1 Georgia;color:var(--pink);align-self:start;max-height:50px}
 .table .quote small{display:block;font:700 8px/1.5 Poppins,sans-serif;letter-spacing:.12em;color:var(--pink)}
