@@ -1,6 +1,6 @@
 # Gamysuf Arcade 1.9.0 · Grand Line Desire 2.4.0
 
-3 Oktober 2026. Rilis disiapkan untuk [Game 5](https://gamysuf.fun/g/heart/); verifikasi produksi menyusul setelah deployment.
+3 Oktober 2026. **Live di [gamysuf.fun](https://gamysuf.fun) dan [Game 5](https://gamysuf.fun/g/heart/)**. Hub 1.9.0, sumber Game 5 2.4.0. Commit runtime `2beb3e67f25499e4dabea10ff7b51131f57b1391` selesai dideploy Hostinger pukul 05.26 WIB. Tab game pengguna telah dimuat ulang dengan tampilan baru.
 
 Belakang kartu memakai kompas pelaut, ombak, tali emas dan Bipy pink. Toolbar menampilkan Bipy varian Zoro/Sanji bergerak, CTA kocok memakai perspektif/tombol timbul, dan mode Gacha/Pilih memiliki warna serta bentuk yang berbeda. Semua kartu tetap dapat diketuk langsung pada mode Pilih Fanservice. Tema terang #E62B5E dan gelap #FF5C8A mengikuti token Bpedia.
 
@@ -14,4 +14,8 @@ Pemeriksaan pemutar WebKit awal menemukan izin fullscreen embed tidak lengkap; a
 
 Integrasi hub: **75/75 tes lulus**, termasuk aset rilis, pencatatan dan pemisahan PIN. Paket Hostinger **718 berkas, 164.339.113 byte**, lulus lima pemeriksaan ekstraksi, instalasi, boot seluruh game, byte range media, 50 hash galeri dan alur petugas terisolasi. SHA-256 `ca33b8fa0c4b3d9a24bbb1065882e917b93787c9c478de490b629ffb3efe3743`. Berkas: `release/Gamysuf-Arcade-1.9.0-Hostinger.zip`; bukti `artifacts/package/smoke-1.9.0.json`.
 
-Bukti produksi menyusul setelah deployment. Kuota, koleksi, XP, antrean serta direktori data produksi dipertahankan.
+Verifikasi produksi: **212/212 endpoint publik, kode dan aset** cocok dengan byte commit atau bukti decode gambar CDN yang terikat pada hash. **315/315 pemeriksaan perjalanan pelaut** lulus di tiga browser dan empat viewport, dengan nol error JavaScript. Video rival dan cuplikan resmi benar-benar maju dalam keadaan bisu; pause, modal dan kurangi animasi menghentikannya. CDN mengganti header CSP dengan `upgrade-insecure-requests`, sehingga kebijakan game diperiksa pada meta CSP yang disisipkan gateway dan pemutaran embed dibuktikan secara langsung.
+
+**561/561 pemeriksaan alur kartu produksi** dan **42/42 pemutaran video produksi** lulus di tiga browser. Satu ketukan seluruh kartu pada mode Pilih, satu permintaan hasil, gacha tujuh kartu, flip sentuh/keyboard, ekspor poster, galeri, dua tema dan portal petugas tetap lulus. Pengamatan animasi flip dilakukan pada event klik yang sama agar tidak kehilangan animasi pendek saat browser pengujian sibuk; gerakan rotateY native serta penyelesaian flip tetap diperiksa.
+
+Bukti: `artifacts/deployment-1.9.0.json`, `artifacts/heart-voyage-live/report.json`, `artifacts/heart-voyage/report-all-browsers.json`, `artifacts/heart-browser-revision-live/report.json`, `artifacts/heart-bipy-media-live/report.json`, dan tangkapan `artifacts/heart-voyage-live/princess-rivalry-full-cast.png`. Pengujian hasil produksi hanya memakai demo pribadi; tidak menerbitkan atau melayani tiket booth resmi. Kuota, koleksi, XP, antrean serta direktori data produksi dipertahankan.

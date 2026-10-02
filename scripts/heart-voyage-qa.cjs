@@ -15,6 +15,7 @@ async function run(browser,name,w,h,origin){
   check(await page.locator('#rivalryVideo').count()===1,label+' mascot rivalry replaces parade');
   const video=page.locator('#rivalryVideo');await video.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#rivalryVideo').currentTime>0,{},{timeout:30000});
   check(await video.evaluate(el=>el.videoWidth>0&&!el.paused&&el.muted&&el.loop),label+' genuine rivalry video plays muted');
+  if(name==='chromium'&&w===1440)await page.locator('.rivalry').screenshot({path:path.join(out,'princess-rivalry.png')});
   await page.locator('#rivalryToggle').click();check(await video.evaluate(el=>el.paused),label+' rivalry pause works');await page.locator('#rivalryToggle').click();
   for(const theme of ['light','dark']){
    await page.locator(`#${theme}ThemeButton`).click();await page.locator('.host-card[data-host="zoro"]').click();
@@ -38,9 +39,10 @@ async function run(browser,name,w,h,origin){
 }
 async function embed(browser,origin){
  const page=await browser.newPage({viewport:{width:1440,height:900}});
- try{const response=await page.goto(origin+'/g/heart/');await ready(page);const csp=(await response.allHeaders())['content-security-policy']||await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');check(csp.includes('frame-src https://www.youtube-nocookie.com'),'CSP permits only selected YouTube embedding origin');await page.locator('.host-card[data-host="zoro"]').click();await page.waitForFunction(()=>document.querySelector('#battleBackground iframe'));
+ try{const response=await page.goto(origin+'/g/heart/');await ready(page);const csp=await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content')||(await response.allHeaders())['content-security-policy'];check(csp.split(';').map(part=>part.trim()).includes('frame-src https://www.youtube-nocookie.com'),'Game CSP permits only selected YouTube embedding origin');await page.locator('.host-card[data-host="zoro"]').click();await page.waitForFunction(()=>document.querySelector('#battleBackground iframe'));
   await page.waitForTimeout(12000);const frame=page.frames().find(item=>item.url().includes('youtube-nocookie.com/embed/Llefi8QFN0c'));assert.ok(frame,'official player frame loaded');
   const details=await frame.evaluate(()=>({title:document.title,body:document.body.innerText.slice(0,600),video:document.querySelector('video')?{paused:document.querySelector('video').paused,time:document.querySelector('video').currentTime,muted:document.querySelector('video').muted,width:document.querySelector('video').videoWidth}:null}));report.embed=details;check(Boolean(details.video&&details.video.time>8&&!details.video.paused&&details.video.muted),'Official One Piece background video actually advances muted');
+  await page.screenshot({path:path.join(out,'official-battle-playing.png')});
  }finally{await page.close();}
 }
 (async()=>{fs.mkdirSync(out,{recursive:true});let hub;try{if(!live)hub=await createHub({dataDir:fs.mkdtempSync(path.join(os.tmpdir(),'heart-voyage-')),local:true,adminPin:'246810'});const origin=live||hub.origin;report.origin=origin;for(const name of (process.env.HEART_VOYAGE_BROWSERS||'chromium,firefox,webkit').split(',')){const browser=await playwright[name].launch();try{for(const [w,h] of [[390,844],[768,1024],[844,390],[1440,900]])await run(browser,name,w,h,origin);if(name==='chromium')await embed(browser,origin);}finally{await browser.close();}}check(report.errors.length===0,'zero game JavaScript errors');report.pass=true;}catch(error){report.pass=false;report.error=error.stack;console.error(error.stack);process.exitCode=1;}finally{if(hub)await hub.close();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log('Voyage QA: '+report.checks.length+' checks; pass='+report.pass);}})();
