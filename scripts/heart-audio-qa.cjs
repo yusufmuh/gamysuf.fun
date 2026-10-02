@@ -9,7 +9,7 @@ const requested=(process.env.HEART_AUDIO_BROWSERS||'chromium,firefox,webkit').sp
 async function snapshot(page){return page.evaluate(()=>{
  const a=window.__heartAudio;
  const media=m=>({src:m.currentSrc||m.src,time:m.currentTime,duration:Number.isFinite(m.duration)?m.duration:null,paused:m.paused,loop:m.loop,volume:m.volume,readyState:m.readyState,error:m.error?{code:m.error.code,message:m.error.message}:null});
- return {muted:a.muted,unlocked:a.unlocked,context:a.ctx?.state||null,gain:a.out?.gain.value??null,sources:a.sources?.size??null,bgm:media(a.bgm),hook:media(a.hook),events:window.__heartAudioEvents.slice(-16)};
+ return {muted:a.muted,unlocked:a.unlocked,context:a.ctx?.state||null,contextTime:a.ctx?.currentTime??null,gain:a.out?.gain.value??null,sources:a.sources?.size??null,bgm:media(a.bgm),hook:media(a.hook),events:window.__heartAudioEvents.slice(-16)};
 });}
 async function waitAudio(page,predicate,timeout=15000){await page.waitForFunction(predicate,null,{timeout});}
 

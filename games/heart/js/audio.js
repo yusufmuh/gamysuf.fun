@@ -30,7 +30,7 @@
   }
   setMuted(value){
    this.muted=Boolean(value);pref.set('heart-muted',this.muted?'1':'0');
-   if(this.out)this.out.gain.setValueAtTime(this.muted?0:.85,this.ctx.currentTime);
+   if(this.out)this.out.gain.value=this.muted?0:.85;
    if(this.muted){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();}else this.unlock();
   }
   visibility(){
