@@ -45,12 +45,7 @@ async function trailerCheck(page){
  await page.waitForFunction(()=>{const v=document.getElementById('paradeTrailer');return v.readyState>=1&&v.videoWidth>0&&Number.isFinite(v.duration)&&v.duration>0;},null,{timeout:20000});
  const meta=await page.locator('#paradeTrailer').evaluate(v=>({width:v.videoWidth,height:v.videoHeight,duration:v.duration,muted:v.muted,loop:v.loop,inline:v.playsInline,paused:v.paused,error:v.error?.message||null}));
  assert.ok(meta.width>0&&meta.height>0&&meta.duration>0);assert.ok(meta.muted&&meta.loop&&meta.inline&&meta.paused);assert.equal(meta.error,null);
- assert.equal(await page.locator('html').getAttribute('data-motion'),'reduce');assert.equal(await page.locator('#videoPlayButton').isDisabled(),false);
- await page.locator('#videoPlayButton').click();await page.waitForFunction(()=>!document.getElementById('paradeTrailer').paused);
- await page.locator('#videoPlayButton').click();await page.waitForFunction(()=>document.getElementById('paradeTrailer').paused&&document.getElementById('videoPlayButton').getAttribute('aria-pressed')==='false');
- assert.equal(await page.locator('#videoPlayButton').getAttribute('aria-pressed'),'false');
- // A new explicit play clears the user pause before checking motion changes.
- await page.locator('#videoPlayButton').click();await page.waitForFunction(()=>!document.getElementById('paradeTrailer').paused);
+ assert.equal(await page.locator('html').getAttribute('data-motion'),'reduce');assert.equal(await page.locator('#videoPlayButton').count(),0);
  await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForFunction(()=>document.documentElement.dataset.motion==='full');
  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.getElementById('paradeTrailer').paused);
  await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForFunction(()=>!document.getElementById('paradeTrailer').paused);

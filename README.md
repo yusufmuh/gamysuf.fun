@@ -1,4 +1,4 @@
-# Gamysuf Arcade 1.10.0
+# Gamysuf Arcade 1.11.0
 
 Satu dashboard interaktif untuk lima game booth Bpedia, berjalan di cloud (Hostinger Node.js):
 
@@ -40,4 +40,4 @@ Produksi: `npm start` (entry `hub/server.cjs`), env `ADMIN_PIN` (6–12 digit, w
 
 Dokumen lengkap & status serah-terima: [docs/PRD-Gamysuf-Arcade.md](docs/PRD-Gamysuf-Arcade.md).
 
-Status 3 Oktober 2026: rilis **1.10.0**, Game 5 **2.5.0**, dengan artwork full body HD, pratinjau baru, ikon tutup bunga, aksen anime pada logo dan tiga pose aksi Bipy Zoro. Catatan validasi, paket dan produksi: [docs/RELEASE-1.10.0.md](docs/RELEASE-1.10.0.md). Lima video kartu Gemini tetap aktif; sembilan video generatif masih menunggu kuota. PRD: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md).
+Status 3 Oktober 2026: rilis **1.11.0**, Game 5 **2.6.0**. Trailer tampil tanpa tombol di atas video; subtitle fanservice lebih besar, termasuk 20 px di tablet. Footer berisi atraksi Bipy Zoro–Sanji memperebutkan perhatian Bipy pink, menggunakan lima artwork maskot asli dan animasi CSS dengan jeda serta dukungan kurangi animasi. Catatan validasi, paket dan produksi: [docs/RELEASE-1.11.0.md](docs/RELEASE-1.11.0.md). Lima video kartu Gemini tetap aktif; sembilan video generatif masih menunggu kuota. PRD: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md).

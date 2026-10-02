@@ -23,7 +23,7 @@ html[data-theme=light] body{background:#fff7f8;color:#45122b}
 
 .home-music{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0}.home-music button{min-height:46px;font-size:12px}.home-music p{font-size:10px;color:var(--muted);margin:0}
 .topbar .brand,.footer a{display:inline-flex;align-items:center;min-height:44px}.topbar .tools button,.topbar .admin-link{min-height:44px}.topbar .icon-button{min-width:44px}
-#closeMomentPreview,#cancelDealButton,#skipAnimation,#viewCard,#viewPoster,#videoPlayButton,#staffModeCancel{min-height:44px;min-width:44px}
+#closeMomentPreview,#cancelDealButton,#skipAnimation,#viewCard,#viewPoster,#staffModeCancel{min-height:44px;min-width:44px}
 
 /* Brand colors are mapped from the owner's 2026 Bpedia design tokens. */
 html[data-theme=dark]{--bg:var(--pearl-50);--paper:var(--pearl-50);--surface:var(--white);--text:var(--plum-900);--ink:var(--plum-900);--muted:var(--ink-700);--pink:var(--pink-500)}

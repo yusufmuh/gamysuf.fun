@@ -7,6 +7,14 @@
  let battlePaused=false;
  let observedActions=null;
  const actionObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);},{threshold:.15});
+ const footerRivalry=$('footerRivalry');let footerInView=false,footerPaused=false;
+ function syncFooterRivalry(){
+  const reduced=game.context().reduced,blocked=Boolean(document.querySelector('dialog[open]'));
+  footerRivalry.dataset.inView=String(footerInView&&!document.hidden&&!footerPaused&&!reduced&&!blocked);
+  const button=$('footerRivalryToggle');button.disabled=reduced;button.textContent=reduced?'Animasi dikurangi':footerPaused?'Putar atraksi':'Jeda atraksi';button.setAttribute('aria-pressed',String(!footerPaused&&!reduced));
+ }
+ new IntersectionObserver(entries=>{footerInView=entries[0].isIntersecting;syncFooterRivalry();},{threshold:.15}).observe(footerRivalry);
+ $('footerRivalryToggle').addEventListener('click',()=>{footerPaused=!footerPaused;syncFooterRivalry();});
  function syncBattle(){
   const active=document.body.dataset.journey==='table'&&!document.hidden&&!game.context().reduced&&!battlePaused&&!document.querySelector('dialog[open]');
   const stage=$('battleBackground');
@@ -15,7 +23,7 @@
   $('battleToggle').textContent=battlePaused?'Putar latar aksi':'Jeda latar aksi';$('battleToggle').setAttribute('aria-pressed',String(!battlePaused));
  }
  const videoObserver=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting)visibleVideos.add(entry.target);else visibleVideos.delete(entry.target);}syncDeckVideos();},{threshold:.15});
- function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const inJourney=video.id==='rivalryVideo'?document.body.dataset.journey==='home':document.body.dataset.journey==='table';const playing=visibleVideos.has(video)&&inJourney&&!document.hidden&&!reduced&&!blocked&&video.dataset.userPaused!=='true';if(playing)video.play().catch(()=>{});else video.pause();}syncBattle();}
+ function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const inJourney=video.id==='rivalryVideo'?document.body.dataset.journey==='home':document.body.dataset.journey==='table';const playing=visibleVideos.has(video)&&inJourney&&!document.hidden&&!reduced&&!blocked&&video.dataset.userPaused!=='true';if(playing)video.play().catch(()=>{});else video.pause();}syncBattle();syncFooterRivalry();}
  const dialogObserver=new MutationObserver(syncDeckVideos);for(const modal of document.querySelectorAll('dialog'))dialogObserver.observe(modal,{attributes:true,attributeFilter:['open']});
  dialogObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});dialogObserver.observe(document.body,{attributes:true,attributeFilter:['data-journey']});
  const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));

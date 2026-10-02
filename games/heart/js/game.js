@@ -479,12 +479,9 @@
  reducedQuery.addEventListener('change',()=>{if(motion())skip();updateTrailer();syncResultMedia();});
  window.addEventListener('storage',event=>{if(event.key==='gamysuf-reduced-motion'||event.key==='heart-reduced-motion'){if(motion())skip();updateTrailer();syncResultMedia();}else if(event.key==='gamysuf-theme'&&['dark','light'].includes(event.newValue)){if(!window.GamysufTheme)document.documentElement.dataset.theme=event.newValue;themeState();}});
 
- const trailer=$('paradeTrailer');let trailerInView=false,trailerUserPaused=false;
- function trailerState(){const playing=!trailer.paused,b=$('videoPlayButton');$('videoPlayLabel').textContent=playing?'Jeda cuplikan':'Putar cuplikan';b.querySelector('[data-icon]').innerHTML=icon(playing?'pause':'play');b.setAttribute('aria-label',playing?'Jeda cuplikan':'Putar cuplikan');b.setAttribute('aria-pressed',String(playing));}
- function updateTrailer(){if(document.hidden||motion()||!trailerInView||trailerUserPaused)trailer.pause();else trailer.play().catch(()=>{});}
- trailer.addEventListener('play',trailerState);trailer.addEventListener('pause',trailerState);
- trailer.addEventListener('error',()=>{$('videoPlayButton').disabled=true;$('videoPlayLabel').textContent='Cuplikan belum tersedia';},true);
- $('videoPlayButton').addEventListener('click',()=>{if(trailer.paused){trailerUserPaused=false;trailer.play().catch(()=>toast('Cuplikan belum bisa diputar. Permainan tetap siap.'));}else{trailerUserPaused=true;trailer.pause();}});
+ const trailer=$('paradeTrailer');let trailerInView=false;
+ function updateTrailer(){if(document.hidden||motion()||!trailerInView)trailer.pause();else trailer.play().catch(()=>{});}
+ trailer.addEventListener('error',()=>{trailer.dataset.unavailable='true';trailer.setAttribute('aria-label','Poster Bipy Grand Line Desire. Cuplikan belum tersedia.');},true);
  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{trailerInView=entries[0].isIntersecting;updateTrailer();},{threshold:.25}).observe(trailer);
  document.addEventListener('visibilitychange',()=>{updateTrailer();if(document.hidden&&ui.stage==='drawing')skip();syncResultMedia();});
 

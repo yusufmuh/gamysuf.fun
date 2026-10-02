@@ -76,13 +76,13 @@ async function verifyHeartTrailer(page,label='heart'){
  const metadata=await page.locator('#paradeTrailer').evaluate(video=>({url:video.currentSrc,poster:video.poster,
   readyState:video.readyState,width:video.videoWidth,height:video.videoHeight,duration:video.duration,
   muted:video.muted,loop:video.loop,inline:video.playsInline,error:video.error?.message||null}));
- const expectedUrl=`${base}/g/heart/assets/video/heart-parade-promo.mp4`;
+ const expectedUrl=`${base}/g/heart/assets/video/heart-parade-bipy-promo.mp4`;
  const ready=metadata.url===expectedUrl&&metadata.readyState>=1&&metadata.width>0&&metadata.height>0&&
   Number.isFinite(metadata.duration)&&metadata.duration>0&&!metadata.error;
  check(ready,`${label} trailer metadata ready`,JSON.stringify(metadata));
- check(metadata.muted&&metadata.loop&&metadata.inline&&!await page.locator('#videoPlayButton').isDisabled(),
-  `${label} trailer playback control ready`,JSON.stringify(metadata));
- const expectedPoster=`${base}/g/heart/assets/video/grand-line-promo-poster.webp`;
+ check(metadata.muted&&metadata.loop&&metadata.inline&&await page.locator('#videoPlayButton').count()===0,
+  `${label} trailer unobstructed autoplay ready`,JSON.stringify(metadata));
+ const expectedPoster=`${base}/g/heart/assets/video/bipy-promo-poster.webp`;
  check(metadata.poster===expectedPoster,`${label} trailer uses release poster`,metadata.poster);
  const poster=await page.evaluate(async url=>{const image=new Image();image.src=url;await image.decode();return {url:image.currentSrc,width:image.naturalWidth,height:image.naturalHeight};},expectedPoster);
  check(poster.url===expectedPoster&&poster.width>0&&poster.height>0,`${label} trailer poster decoded`,JSON.stringify(poster));

@@ -1,6 +1,8 @@
 # PRD · Bipy Grand Line Desire
 
-Game 05 · versi 2.5.0 · Gamysuf Arcade 1.10.0 · diperbarui 3 Oktober 2026
+Game 05 · versi 2.6.0 · Gamysuf Arcade 1.11.0 · diperbarui 3 Oktober 2026
+
+Revisi tampilan 2.6.0: tombol Putar/Jeda cuplikan di atas trailer dihapus; video tetap autoplay bisu ketika terlihat dan berhenti mengikuti pengaturan kurangi animasi. Subtitle fanservice memakai 15–21 px, dengan 20 px pada tablet 601–1000 px. Footer di beranda dan meja kartu memuat Bipy Zoro, Sanji, dan pink dalam atraksi komedi 8,8 detik: lompat, maju, berganti pose dan hati melayang. Lima artwork pemilik dipakai tanpa mengubah proporsi atau logo Bipy. Gerak ini animasi ilustrasi CSS, bukan video generatif baru. Tombol Jeda atraksi, pengaturan sistem, latar tab, dialog dan batas viewport menghentikan gerak. Dashboard petugas dan atribusi tetap ada di bawah atraksi.
 
 ## Produk dan tujuan
 
@@ -102,9 +104,9 @@ Dek memutar cuplikan resmi [Crunchyroll](https://www.youtube.com/watch?v=Llefi8Q
 Validasi lokal: 47 tes sumber dan pemeriksaan sintaks, 75 tes hub, 561 pemeriksaan alur kartu, 315 pemeriksaan perjalanan pelaut, 42 pemutaran video, 15 pemeriksaan panel belanja dan 18 tangkapan tur arcade dengan nol error konsol. Ukuran 14 video kartu tetap 720×900 SAR 1:1. Pemeriksaan perjalanan juga membuktikan waktu video resmi benar-benar maju dalam keadaan bisu. Produksi 1.9.0 telah lulus 561 pemeriksaan alur, 315 pemeriksaan perjalanan, 42 pemutaran video dan 212 endpoint/hash/aset. Paket 718 berkas lulus lima pemeriksaan terisolasi. Detail, hash dan commit runtime dicatat di RELEASE-1.9.0.md pada repo hub.
 
 
-## Revisi hero dan pratinjau · 2.5.0
+## Revisi hero dan pratinjau · 2.6.0
 
-# Gamysuf Arcade 1.10.0 · Grand Line Desire 2.5.0
+# Gamysuf Arcade 1.11.0 · Grand Line Desire 2.6.0
 
 3 Oktober 2026. Revisi enam komentar pratinjau dan hero: ilustrasi Zoro/Sanji dewasa baru, full body 1024×1536 transparan; gambar lama yang mencampur figur dewasa dan Bipy pada panel kiri pratinjau diganti. Panel kiri kini berjudul **Cosplayer pilihanmu**, sementara panel Bipy tetap memperlihatkan pose yang sesuai untuk setiap fanservice.
 

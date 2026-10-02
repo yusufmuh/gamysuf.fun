@@ -8,12 +8,12 @@
  <link rel="icon" href="/assets/icons/heart.svg" type="image/svg+xml">
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="/css/game.css?v=2.5.0">
- <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.5.0">
- <link rel="stylesheet" href="/css/journey.css?v=2.5.0">
- <link rel="stylesheet" href="/css/voyage.css?v=2.5.0">
- <link rel="stylesheet" href="/css/presentation.css?v=2.5.0">
- <script defer src="/js/audio.js?v=2.5.0"></script><script defer src="/js/cards.js?v=2.5.0"></script><script defer src="/js/fx.js?v=2.5.0"></script><script defer src="/js/export.js?v=2.5.0"></script><script defer src="/js/game.js?v=2.5.0"></script><script defer src="/js/journey.js?v=2.5.0"></script>
+ <link rel="stylesheet" href="/css/game.css?v=2.6.0">
+ <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.6.0">
+ <link rel="stylesheet" href="/css/journey.css?v=2.6.0">
+ <link rel="stylesheet" href="/css/voyage.css?v=2.6.0">
+ <link rel="stylesheet" href="/css/presentation.css?v=2.6.0">
+ <script defer src="/js/audio.js?v=2.6.0"></script><script defer src="/js/cards.js?v=2.6.0"></script><script defer src="/js/fx.js?v=2.6.0"></script><script defer src="/js/export.js?v=2.6.0"></script><script defer src="/js/game.js?v=2.6.0"></script><script defer src="/js/journey.js?v=2.6.0"></script>
 </head>
 <body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
  <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
@@ -38,7 +38,7 @@
     <h1 id="title"><span class="t-kicker">Bipy</span> <span class="t-main">Grand Line Desire</span></h1>
     <p class="t-sub">Zoro &amp; Sanji Fanservice Card Game</p>
     <section class="trailer hero-trailer" aria-labelledby="trailerTitle">
-     <div class="trailer-screen"><video id="paradeTrailer" muted loop playsinline preload="metadata" poster="/assets/video/bipy-promo-poster.webp" aria-label="Cuplikan animasi Bipy Grand Line Desire tanpa suara"><source src="/assets/video/heart-parade-bipy-promo.mp4" type="video/mp4"></video><button type="button" id="videoPlayButton" class="trailer-toggle" aria-pressed="false" aria-label="Putar cuplikan"><span data-icon="play"></span><span id="videoPlayLabel">Putar cuplikan</span></button></div>
+     <div class="trailer-screen"><video id="paradeTrailer" muted loop playsinline preload="metadata" poster="/assets/video/bipy-promo-poster.webp" aria-label="Cuplikan animasi Bipy Grand Line Desire tanpa suara"><source src="/assets/video/heart-parade-bipy-promo.mp4" type="video/mp4"></video></div>
      <div class="trailer-copy"><p class="eyebrow">TRAILER</p><h2 id="trailerTitle">Satu tebasan giok, <em>satu mawar emas.</em></h2></div>
     </section>
     <p class="hero-lead">Babes, momen favoritmu dimulai di sini. Kenali tujuh fanservice, pilih Zoro atau Sanji, lalu buka kartu momenmu.</p>
@@ -118,7 +118,20 @@
   <div class="sticker-filters" role="group" aria-label="Filter galeri stiker"><button type="button" data-sticker-filter="all" aria-pressed="true">Semua · 50</button><button type="button" data-sticker-filter="zoro" aria-pressed="false">Zoro · 25</button><button type="button" data-sticker-filter="sanji" aria-pressed="false">Sanji · 25</button></div>
   <p id="stickerGalleryStatus" role="status">Memuat galeri…</p><div id="stickerGalleryGrid" class="sticker-gallery-grid"></div>
  </dialog>
- <footer class="footer"><span>BIPY GRAND LINE DESIRE · <i>Zoro &amp; Sanji Fanservice Card Game</i></span><span>Ilustrasi fan-art karakter dewasa · bukan produk resmi</span><a href="/admin.html">Dashboard petugas</a></footer>
+ <footer class="footer">
+  <section class="footer-rivalry" id="footerRivalry" aria-labelledby="footerRivalryTitle" data-in-view="false">
+   <div class="footer-rivalry-copy"><p class="eyebrow">PERTARUNGAN PALING MANIS</p><h2 id="footerRivalryTitle">Dua jagoan. <br><em>Satu Bipy pink.</em></h2><p>Tebasan giok atau tendangan emas? Keduanya unjuk aksi. Bipy pink yang memilih!</p><button type="button" id="footerRivalryToggle" aria-pressed="true">Jeda atraksi</button></div>
+   <div class="footer-duel" role="img" aria-label="Bipy Zoro hijau dan Bipy Sanji kuning bergantian melompat dan beradu aksi komedi untuk menarik perhatian Bipy pink di tengah">
+    <span class="duel-orbit" aria-hidden="true"></span><span class="duel-floor" aria-hidden="true"></span>
+    <div class="duel-fighter duel-zoro" aria-hidden="true"><span class="duel-bubble">Aku dulu!</span><img class="duel-pose duel-pose-first" src="/assets/dealers/zoro-ready.webp" alt="" width="800" height="1000" loading="lazy" decoding="async"><img class="duel-pose duel-pose-second" src="/assets/dealers/zoro-jump.webp" alt="" width="800" height="1000" loading="lazy" decoding="async"></div>
+    <div class="duel-princess" aria-hidden="true"><span class="duel-crown">♡</span><img src="/assets/brand/bipy-pink.webp" alt="" width="1098" height="2000" loading="lazy" decoding="async"></div>
+    <div class="duel-fighter duel-sanji" aria-hidden="true"><span class="duel-bubble">Mademoiselle!</span><img class="duel-pose duel-pose-first" src="/assets/dealers/sanji-kick.webp" alt="" width="800" height="1000" loading="lazy" decoding="async"><img class="duel-pose duel-pose-second" src="/assets/dealers/sanji-flower.webp" alt="" width="800" height="1000" loading="lazy" decoding="async"></div>
+    <span class="duel-swoosh duel-swoosh-jade" aria-hidden="true"></span><span class="duel-swoosh duel-swoosh-gold" aria-hidden="true"></span><span class="duel-heart duel-heart-a" aria-hidden="true">♡</span><span class="duel-heart duel-heart-b" aria-hidden="true">♡</span>
+    <span class="duel-name duel-name-zoro" aria-hidden="true">BIPY ZORO</span><span class="duel-name duel-name-pink" aria-hidden="true">BIPY PINK</span><span class="duel-name duel-name-sanji" aria-hidden="true">BIPY SANJI</span>
+   </div>
+  </section>
+  <div class="footer-meta"><span>BIPY GRAND LINE DESIRE · <i>Zoro &amp; Sanji Fanservice Card Game</i></span><span>Ilustrasi fan-art karakter dewasa · bukan produk resmi</span><a href="/admin.html">Dashboard petugas</a></div>
+ </footer>
 
  <dialog id="staffModeDialog" class="staff-mode-dialog" aria-labelledby="staffModeTitle" aria-describedby="staffModeDescription">
   <form id="staffModeForm" class="staff-mode-form">
