@@ -17,6 +17,7 @@ function temporary(t){
 const state={hosts:HEART_HOST_IDS.map(id=>({id,name:id==='zoro'?'Zoro':'Sanji',image:`/assets/characters/${id}.webp`})),services:HEART_SERVICE_IDS.map(id=>({id,name:id}))};
 const heart=GAMES.find(game=>game.slug==='heart');
 const expectedAssets=[
+ 'assets/characters/zoro-hero-hd.webp','assets/characters/sanji-hero-hd.webp','assets/characters/hero-hd-manifest.json',
  ...state.hosts.flatMap(host=>state.services.map(service=>`assets/moments/${host.id}-${service.id}.webp`)),
  ...HEART_SERVICE_IDS.map(id=>`assets/bipy-variants/bipy-${id}.webp`),
  ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/stickers/${host}-${service}.webp`)),

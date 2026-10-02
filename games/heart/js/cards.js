@@ -66,7 +66,7 @@
  function leaderCard(host,{lazy=false}={}){
   const id=host.id==='sanji'?'sanji':'zoro';
   return `<div class="tcg tcg-leader host-${id} rar-leader size-full" data-card="leader-${id}">
-<div class="tcg-in">${scene()}<span class="card-art"><img class="host-art" src="${esc(host.image)}" alt="${esc(host.name)} full body, ${id==='zoro'?'rambut hijau dan tiga pedang tersarung':'setelan hitam detail emas, mawar dan hidangan'}" width="1024" height="1536" decoding="async"${lazy?' loading="lazy"':' fetchpriority="high"'}></span>
+<div class="tcg-in">${scene()}<span class="card-art"><img class="host-art" src="${esc(host.image)}" alt="${esc(host.name)} full body, ${id==='zoro'?'rambut hijau dan tiga pedang tersarung':'setelan hitam detail emas dan mawar'}" width="1024" height="1536" decoding="async"${lazy?' loading="lazy"':' fetchpriority="high"'}></span>
 <span class="tcg-shade" aria-hidden="true"></span><span class="tcg-holo" aria-hidden="true"></span>
 <span class="tcg-life"><small>LIFE</small><b>${esc(host.leaderLife)}</b></span>
 <span class="tcg-power"><small>POWER</small><b>${esc(power(host.leaderPower))}</b></span>

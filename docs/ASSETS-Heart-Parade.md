@@ -96,3 +96,7 @@ Ditambah `zoro-twirl-gemini.mp4`, `sanji-cinderella-gemini.mp4`, dan `sanji-twir
 Video aktif saat ini lima Gemini dan sembilan loop motion graphics, bukan 14 render Gemini baru. Hambatan akun serta daftar sembilan kartu tersisa tercatat di VIDEO-GENERATION-STATUS.md.
 
 Latar dek menampilkan embed resmi Crunchyroll: https://www.youtube.com/watch?v=Llefi8QFN0c, melalui youtube-nocookie, autoplay bisu dan inline. Video tidak diunduh atau dimasukkan ke paket. Pemutar dilepas ketika pengguna menjeda, membuka dialog, kembali Home, menyembunyikan tab atau mengaktifkan kurangi animasi. CSP hanya menambahkan frame-src untuk origin pemutar tersebut. Tema menapisnya dengan pink Bpedia sambil menjaga keterbacaan kartu.
+
+## Hero HD dan pratinjau 2.5.0
+
+Dua figur dewasa baru /assets/characters/zoro-hero-hd.webp dan sanji-hero-hd.webp, 1024×1536 RGBA, dibuat dengan OpenAI built-in image_gen. Original PNG di docs/artwork dan Downloads, tanpa crop atau perubahan kreatif setelah generasi; WebP quality 95 menjaga alpha. Manifest hero-hd-manifest.json menyimpan prompt, referensi dan hash. Kartu leader serta panel Cosplayer pilihanmu memakai kedua file ini. Bipy ready/jump/cheer menggunakan WebP dari PNG pemilik yang sudah tercatat dalam manifest stiker, tanpa mengubah artwork. Present diganti animasi CSS duo karakter, bukan video resmi baru.

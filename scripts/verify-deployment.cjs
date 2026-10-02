@@ -42,6 +42,7 @@ function committedHubHtml(html,serverSource){
 
 function collectHeartReleaseAssets(files){
  const required=[
+  'assets/characters/zoro-hero-hd.webp','assets/characters/sanji-hero-hd.webp','assets/characters/hero-hd-manifest.json',
   ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/moments/${host}-${service}.webp`)),
   ...HEART_SERVICE_IDS.map(service=>`assets/bipy-variants/bipy-${service}.webp`),
   ...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/stickers/${host}-${service}.webp`)),

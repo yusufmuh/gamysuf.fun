@@ -8,17 +8,18 @@
  <link rel="icon" href="/assets/icons/heart.svg" type="image/svg+xml">
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="/css/game.css?v=2.4.0">
- <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.4.0">
- <link rel="stylesheet" href="/css/journey.css?v=2.4.0">
- <link rel="stylesheet" href="/css/voyage.css?v=2.4.0">
- <script defer src="/js/audio.js?v=2.4.0"></script><script defer src="/js/cards.js?v=2.4.0"></script><script defer src="/js/fx.js?v=2.4.0"></script><script defer src="/js/export.js?v=2.4.0"></script><script defer src="/js/game.js?v=2.4.0"></script><script defer src="/js/journey.js?v=2.4.0"></script>
+ <link rel="stylesheet" href="/css/game.css?v=2.5.0">
+ <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.5.0">
+ <link rel="stylesheet" href="/css/journey.css?v=2.5.0">
+ <link rel="stylesheet" href="/css/voyage.css?v=2.5.0">
+ <link rel="stylesheet" href="/css/presentation.css?v=2.5.0">
+ <script defer src="/js/audio.js?v=2.5.0"></script><script defer src="/js/cards.js?v=2.5.0"></script><script defer src="/js/fx.js?v=2.5.0"></script><script defer src="/js/export.js?v=2.5.0"></script><script defer src="/js/game.js?v=2.5.0"></script><script defer src="/js/journey.js?v=2.5.0"></script>
 </head>
 <body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
  <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
  <div class="table-grain" aria-hidden="true"></div>
  <header class="topbar">
-  <a class="brand" href="/" aria-label="Bipy Grand Line Desire, beranda"><img class="logo-dark" src="/assets/brand/bpedia-white.webp" alt="Bpedia" width="108" height="39"><img class="logo-light" src="/assets/brand/bpedia-pink.webp" alt="" width="108" height="39"><span>presents</span></a>
+  <a class="brand" href="/" aria-label="Bipy Grand Line Desire, beranda"><img class="logo-dark" src="/assets/brand/bpedia-white.webp" alt="Bpedia" width="108" height="39"><img class="logo-light" src="/assets/brand/bpedia-pink.webp" alt="" width="108" height="39"><span class="brand-crew" aria-hidden="true"><img class="brand-zoro" src="/assets/characters/zoro-hero-hd.webp" alt="" width="1024" height="1536"><i>×</i><img class="brand-sanji" src="/assets/characters/sanji-hero-hd.webp" alt="" width="1024" height="1536"></span></a>
   <div class="tools">
    <div class="session-controls topbar-control" role="group" aria-label="Mode sesi"><span class="control-label">MODE SESI</span><div class="segmented-control"><button type="button" id="demoModeButton" aria-pressed="true">Demo</button><button type="button" id="liveModeButton" aria-pressed="false">Main tercatat</button></div></div>
    <div class="theme-controls topbar-control" role="group" aria-label="Tampilan warna"><span class="control-label">TAMPILAN</span><div class="segmented-control"><button type="button" id="darkThemeButton" aria-pressed="true">Gelap</button><button type="button" id="lightThemeButton" aria-pressed="false">Terang</button></div></div>
@@ -110,7 +111,7 @@
   </div>
  </dialog>
  <dialog id="momentPreviewDialog" class="moment-preview-dialog" aria-labelledby="momentPreviewTitle">
-  <div class="moment-preview-shell"><button type="button" id="closeMomentPreview" class="ghost">Tutup ×</button><div id="momentPreviewArt"></div><div class="moment-preview-copy"><p class="eyebrow" id="momentPreviewHost"></p><h2 id="momentPreviewTitle"></h2><p id="momentPreviewDetail"></p><div class="moment-perspectives"><figure class="pov-preview"><img id="momentPreviewPov" alt="" width="1122" height="1402"><figcaption>Sudut pandang Babes</figcaption></figure><figure class="sticker-preview"><img id="momentPreviewSticker" alt="" width="640" height="800"><figcaption>Bipy dalam momenmu</figcaption></figure></div><button type="button" id="choosePreviewCard" class="primary">Pilih momen ini</button></div></div>
+  <div class="moment-preview-shell"><button type="button" id="closeMomentPreview" class="ghost preview-close" aria-label="Tutup pratinjau momen" title="Tutup pratinjau"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none"><path class="close-petals" d="M16 3c4-2 8 2 7 6 5 1 7 6 4 10 1 5-5 9-9 7-4 4-10 1-10-4-5-1-7-7-3-10-1-5 5-9 9-6Z"/><path class="close-cross" d="m12 12 8 8m0-8-8 8"/></svg></button><div id="momentPreviewArt"></div><div class="moment-preview-copy"><p class="eyebrow" id="momentPreviewHost"></p><h2 id="momentPreviewTitle"></h2><p id="momentPreviewDetail"></p><div class="moment-perspectives"><figure class="pov-preview"><img id="momentPreviewPov" alt="" width="1024" height="1536"><figcaption>Cosplayer pilihanmu</figcaption></figure><figure class="sticker-preview"><img id="momentPreviewSticker" alt="" width="640" height="800"><figcaption>Bipy dalam momenmu</figcaption></figure></div><button type="button" id="choosePreviewCard" class="primary">Pilih momen ini</button></div></div>
  </dialog>
  <dialog id="stickerGalleryDialog" class="sticker-gallery-dialog" aria-labelledby="stickerGalleryTitle">
   <header><div><p class="eyebrow">PARADE STIKER · BPEDIA</p><h2 id="stickerGalleryTitle">Bipy &amp; sahabatnya</h2><p>40 momen bersama Zoro &amp; Sanji, serta 10 pose Bipy.</p></div><button type="button" id="closeStickerGallery" class="secondary">Tutup ×</button></header>

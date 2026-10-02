@@ -29,7 +29,7 @@ async function main(){
    const response=await get(route,{Range:'bytes=0-255'});assert.equal(response.status,206);assert.equal((await response.arrayBuffer()).byteLength,256);
   }
   checks.push('14 artworks, new poster, rewritten font paths, video/audio MIME and byte ranges survive packaging');
-  assert.ok(html.includes('stickerGalleryDialog')&&html.includes('bpedia-tokens.css?v=2.4.0')&&!html.includes('id="ticketBox"')&&!html.includes('home-music'));
+  assert.ok(html.includes('stickerGalleryDialog')&&html.includes('bpedia-tokens.css?v=2.5.0')&&!html.includes('id="ticketBox"')&&!html.includes('home-music'));
   const stickers=await (await get('/g/heart/assets/stickers/manifest.json')).json();assert.equal(stickers.items.length,50);
   for(const item of stickers.items){const response=await get(item.image);assert.match(response.headers.get('content-type'),/image\/webp/);assert.equal(crypto.createHash('sha256').update(Buffer.from(await response.arrayBuffer())).digest('hex'),item.sha256);}
   for(const card of state.cards)assert.ok(stickers.items.some(item=>item.image===card.stickerImage&&item.hostId===card.hostId));

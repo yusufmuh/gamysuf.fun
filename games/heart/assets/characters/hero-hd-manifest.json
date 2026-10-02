@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "date": "2026-10-03",
+  "generator": "OpenAI built-in image_gen",
+  "mode": "reference-guided generation",
+  "assets": [
+    {
+      "host": "zoro",
+      "image": "/assets/characters/zoro-hero-hd.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "original": "C:\\Users\\Yusuf\\coding\\00 game\\05 bipy-heart-parade\\docs\\artwork\\zoro-hero-hd.png",
+      "originalSha256": "e31b4722e525bc041f66088f20e4cc21966f0393c77af81e5bb7ad9bbcebea93",
+      "runtimeSha256": "52aeb98bd82a269bcde24871bc4947f9f6495c74601d632c193ae74a138a72bd",
+      "bytes": 415920,
+      "prompt": "Create a NEW premium full-body anime character illustration, using the attached image only as the recognizable character identity reference. Roronoa Zoro from One Piece, clearly adult age 25+, handsome mature masculine face, short moss-green hair, scar over CLOSED LEFT eye, three small gold earrings on left ear, athletic swordsman physique. Fashion editorial fan-art with a charismatic confident half-smile, eyes towards the viewer, standing in a graceful three-quarter contrapposto, right hand gently inviting the viewer with an open palm. Dark jade tailored kimono coat with understated embroidery and folded neckline, black trousers, deep burgundy waist sash, three SHEATHED katanas at his hip, handsome black leather boots. Strong shoulders, natural adult proportions, elegant restrained pose and warm personality. Keep him fully dressed; tasteful romantic idol styling. Exquisite HD 2D anime illustration, crisp confident linework, detailed painted cloth, sophisticated jade and rose-gold rim light, a few small pink petals only close to clothing. This is a transparent isolated website hero cutout: alpha TRANSPARENT background, no scenery, no text, no logos, no panels, no Bipy or other characters. Show the COMPLETE figure from the top of his hair through BOTH boots with comfortable transparent padding on all four sides, especially below feet. Vertical 2:3 composition. No crop, no childlike proportions, no nudity, no sexual activity. Visually different from the attached old costume while preserving Zoro identity.",
+      "reference": "/assets/characters/zoro.webp",
+      "referenceSha256": "f041a142b226e1dc931eceaf567cc174b76b376efc6cf8791123a07f48e42297",
+      "download": "C:\\Users\\Yusuf\\Downloads\\Bpedia-Zoro-Full-Body-HD-2026-10-03.png"
+    },
+    {
+      "host": "sanji",
+      "image": "/assets/characters/sanji-hero-hd.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "original": "C:\\Users\\Yusuf\\coding\\00 game\\05 bipy-heart-parade\\docs\\artwork\\sanji-hero-hd.png",
+      "originalSha256": "3ddc34644743500f7abb1723fdae5558c5082379ef03381241d4540cf50c38ef",
+      "runtimeSha256": "2935e71a1be49114d8b3792e63e2785d7dc73b87a14cd01c4a13f71c09cbc21b",
+      "bytes": 214434,
+      "prompt": "Create a NEW premium full-body anime character illustration, using the attached image only as recognizable character identity reference. Vinsmoke Sanji from One Piece, clearly adult age 25+, beautiful mature masculine face, blonde asymmetrical hair concealing one eye, recognizable spiral eyebrow on the visible eye, subtle small goatee, lean athletic physique. Fashion editorial romantic idol fan-art: relaxed confident smile and attentive gaze toward viewer. Standing in an elegant natural three-quarter pose, offering a single deep dusty-pink rose in one hand; other hand lightly adjusts his gold cuff. Bespoke double-breasted black suit with six small brass buttons, tailored straight black trousers, warm ivory shirt with top button undone and loosely elegant narrow gold tie, polished black shoes. Rich charcoal cloth with muted gold seams, warm golden rim lighting and small soft pink petals near his jacket. Harmonize with a premium dark-jade Zoro illustration: refined HD 2D anime linework, beautifully painted facial features and realistic fashion folds. Keep him fully dressed with tasteful charming body language. Transparent isolated website hero cutout, alpha TRANSPARENT background, no scenery, no text, no logos, no panels, no Bipy or other characters. Show COMPLETE full body from top of hair through BOTH shoes, all limbs and rose inside frame, comfortable transparent padding on all four sides especially below shoes. Vertical 2:3 composition. No crop, no oversized chibi head, no nudity, no sexual activity. Fresh new pose rather than a recreation of the old reference.",
+      "reference": "/assets/characters/sanji.webp",
+      "referenceSha256": "a38ff74b9fae7a7752daf296f43feda7f60811652a52bb8f37f87f1f07f0f2d4",
+      "download": "C:\\Users\\Yusuf\\Downloads\\Bpedia-Sanji-Full-Body-HD-2026-10-03.png"
+    }
+  ],
+  "invariants": [
+    "Adult characters only",
+    "Full body and both feet retained",
+    "Transparent alpha",
+    "Bipy owner artwork unchanged"
+  ],
+  "encoding": "WebP quality 95, no cropping, resizing or creative postprocessing"
+}

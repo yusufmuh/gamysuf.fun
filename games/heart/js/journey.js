@@ -5,6 +5,8 @@
  let turn=0,animations=new Set(),selectedPreview='',priorFocus=null;
  const videos=new Set(),visibleVideos=new Set();
  let battlePaused=false;
+ let observedActions=null;
+ const actionObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);},{threshold:.15});
  function syncBattle(){
   const active=document.body.dataset.journey==='table'&&!document.hidden&&!game.context().reduced&&!battlePaused&&!document.querySelector('dialog[open]');
   const stage=$('battleBackground');
@@ -41,16 +43,16 @@
   await Promise.all([...$('dealCards').children].map((el,index)=>animate(el,[{transform:'translate(-50%,-50%) rotate(0deg)'},{transform:`translate(calc(-50% + ${index%2?120:-120}px),calc(-50% - ${35+index*7}px)) rotate(${index%2?18:-18}deg)`},{transform:`translate(-50%,-50%) rotate(${(index-3)*2}deg)`}],{duration:540,delay:index*35,iterations:3})));
   if(current!==turn||!dialog.open)return;choosePhase();
  }
- function preview(serviceId){
+ function preview(serviceId,opener=null){
   const context=game.context(),card=game.card(serviceId),service=context.state?.services.find(item=>item.id===serviceId);if(!card||!service||context.busy)return;
-  selectedPreview=serviceId;priorFocus=document.activeElement;game.unlock();$('momentPreviewArt').innerHTML=cardFace(card,{size:'full',lazy:false,video:true});
+  selectedPreview=serviceId;priorFocus=opener?.isConnected?opener:document.activeElement;game.unlock();$('momentPreviewArt').innerHTML=cardFace(card,{size:'full',lazy:false,video:true});
   $('momentPreviewPov').src=card.povImage||card.image;$('momentPreviewPov').alt=card.povAlt||card.imageAlt;
   $('momentPreviewSticker').src=card.stickerImage;$('momentPreviewSticker').alt=card.stickerAlt;
   $('momentPreviewHost').textContent=`${context.host==='zoro'?'ZORO · HIJAU GIOK':'SANJI · KUNING EMAS'} / ${card.cardNo}`;$('momentPreviewTitle').textContent=service.name;$('momentPreviewDetail').textContent=service.detail;
   $('choosePreviewCard').hidden=context.mode!=='pick';previewDialog.showModal();const video=$('momentPreviewArt').querySelector('video');if(video&&!context.reduced)video.play().catch(()=>{});
  }
  function closePreview(){for(const video of $('momentPreviewArt').querySelectorAll('video'))video.pause();previewDialog.close();priorFocus?.focus({preventScroll:true});}
- function update(){const context=game.context();prepareDealer(context.host);$('journeyHostLabel').textContent=context.host==='zoro'?'MEJA ZORO · HIJAU GIOK':'MEJA SANJI · KUNING EMAS';document.body.classList.toggle('journey-dealing',context.dealing);document.querySelectorAll('.card-choice').forEach(button=>{button.textContent=context.mode==='gacha'?'Kenali momen':'Pilih kartu ini';});for(const video of videos)if(!video.isConnected){video.pause();videoObserver.unobserve(video);videos.delete(video);visibleVideos.delete(video);}for(const video of document.querySelectorAll('#momentGrid video,#rivalryVideo'))if(!videos.has(video)){videos.add(video);videoObserver.observe(video);}syncDeckVideos();}
+ function update(){const context=game.context();const actions=$('deckActions');if(actions!==observedActions){if(observedActions)actionObserver.unobserve(observedActions);observedActions=actions;if(actions)actionObserver.observe(actions);}prepareDealer(context.host);$('journeyHostLabel').textContent=context.host==='zoro'?'MEJA ZORO · HIJAU GIOK':'MEJA SANJI · KUNING EMAS';document.body.classList.toggle('journey-dealing',context.dealing);document.querySelectorAll('.card-choice').forEach(button=>{button.textContent=context.mode==='gacha'?'Kenali momen':'Pilih kartu ini';});for(const video of videos)if(!video.isConnected){video.pause();videoObserver.unobserve(video);videos.delete(video);visibleVideos.delete(video);}for(const video of document.querySelectorAll('#momentGrid video,#rivalryVideo'))if(!videos.has(video)){videos.add(video);videoObserver.observe(video);}syncDeckVideos();}
  $('dealCards').addEventListener('click',event=>{const button=event.target.closest('.deal-slot');if(!button||button.disabled||shell.dataset.phase!=='choose')return;const slot=Number(button.dataset.slot);clear();dialog.close();game.chooseDeal(slot);});
  $('cancelDealButton').addEventListener('click',closeDeal);$('skipDealButton').addEventListener('click',choosePhase);dialog.addEventListener('cancel',event=>{event.preventDefault();closeDeal();});
  $('closeMomentPreview').addEventListener('click',closePreview);previewDialog.addEventListener('cancel',event=>{event.preventDefault();closePreview();});
@@ -66,6 +68,6 @@
  gallery.querySelector('.sticker-filters').addEventListener('click',event=>{const button=event.target.closest('button[data-sticker-filter]');if(!button)return;galleryFilter=button.dataset.stickerFilter;gallery.querySelectorAll('[data-sticker-filter]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));renderGallery();});
  $('fullscreenButton').addEventListener('click',async()=>{game.unlock();try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else game.notify('Layar penuh mengikuti pengaturan browser perangkatmu.');}catch{game.notify('Gunakan mode layar penuh dari menu browser.');}});
  document.addEventListener('fullscreenchange',()=>{$('fullscreenButton').setAttribute('aria-label',document.fullscreenElement?'Keluar dari layar penuh':'Layar penuh');$('fullscreenButton').setAttribute('aria-pressed',String(Boolean(document.fullscreenElement)));});
- document.addEventListener('visibilitychange',()=>{syncDeckVideos();if(document.hidden){for(const video of $('momentPreviewArt').querySelectorAll('video'))video.pause();if(dialog.open&&shell.dataset.phase!=='choose')choosePhase();}else if(previewDialog.open&&!game.context().reduced){$('momentPreviewArt').querySelector('video')?.play().catch(()=>{});}});
+ document.addEventListener('visibilitychange',()=>{if(observedActions)observedActions.dataset.inView=String(!document.hidden&&observedActions.getBoundingClientRect().top<innerHeight&&observedActions.getBoundingClientRect().bottom>0);syncDeckVideos();if(document.hidden){for(const video of $('momentPreviewArt').querySelectorAll('video'))video.pause();if(dialog.open&&shell.dataset.phase!=='choose')choosePhase();}else if(previewDialog.open&&!game.context().reduced){$('momentPreviewArt').querySelector('video')?.play().catch(()=>{});}});
  window.HeartJourney={deal,preview,update};update();
 })();

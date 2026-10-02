@@ -8,7 +8,7 @@ const report={origin:'',checks:[],cases:[],errors:[]};
 function check(value,label){assert.ok(value,label);report.checks.push(label);}
 async function tap(page,locator){await locator.scrollIntoViewIfNeeded();const box=await locator.boundingBox();assert.ok(box);await page.touchscreen.tap(box.x+box.width/2,box.y+box.height*.36);}
 async function fit(page,label){check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+' no page overflow');}
-async function ready(page){await page.waitForFunction(()=>window.HeartGame?.context().state);assert.equal(await page.locator('link[href*="/css/journey.css?v=2.4.0"]').count(),1,'current frame-safe leader stylesheet');}
+async function ready(page){await page.waitForFunction(()=>window.HeartGame?.context().state);assert.equal(await page.locator('link[href*="/css/journey.css?v=2.5.0"]').count(),1,'current frame-safe leader stylesheet');}
 async function resultReady(page){await page.locator('#resultDialog[open]').waitFor();await page.waitForFunction(()=>window.HeartGame.context().stage==='result');}
 async function finish(page){await page.locator('#finishButton').click();await page.locator('#resultDialog').waitFor({state:'hidden'});}
 async function caseRun(browser,name,w,h,origin){

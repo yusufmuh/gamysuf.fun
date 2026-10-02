@@ -15,8 +15,8 @@ const SERVICES = [
 ];
 const PRICE_LIMIT = 10000000;
 const HOSTS = [
- {id:'zoro',name:'Zoro',fullName:'RORONOA ZORO',role:'The Jade Swordsman',attribute:'Slash',cardColor:'green',crew:'Bpedia Heart Crew / Swordsman',quote:'Hari ini, aku tidak akan salah arah. Tujuanku kamu.',image:'/assets/characters/zoro.webp',mascot:'/assets/brand/bipy-jade.webp',color:'#27785E',leaderLife:5,leaderPower:5000},
- {id:'sanji',name:'Sanji',fullName:'VINSMOKE SANJI',role:'The Golden Gentleman',attribute:'Strike',cardColor:'gold',crew:'Bpedia Heart Crew / Cook',quote:'Satu momen istimewa, disiapkan sepenuh hati untukmu.',image:'/assets/characters/sanji.webp',mascot:'/assets/brand/bipy-gold.webp',color:'#C48A23',leaderLife:5,leaderPower:5000}
+ {id:'zoro',name:'Zoro',fullName:'RORONOA ZORO',role:'The Jade Swordsman',attribute:'Slash',cardColor:'green',crew:'Bpedia Heart Crew / Swordsman',quote:'Hari ini, aku tidak akan salah arah. Tujuanku kamu.',image:'/assets/characters/zoro-hero-hd.webp',mascot:'/assets/brand/bipy-jade.webp',color:'#27785E',leaderLife:5,leaderPower:5000},
+ {id:'sanji',name:'Sanji',fullName:'VINSMOKE SANJI',role:'The Golden Gentleman',attribute:'Strike',cardColor:'gold',crew:'Bpedia Heart Crew / Cook',quote:'Satu momen istimewa, disiapkan sepenuh hati untukmu.',image:'/assets/characters/sanji-hero-hd.webp',mascot:'/assets/brand/bipy-gold.webp',color:'#C48A23',leaderLife:5,leaderPower:5000}
 ];
 const SCHEDULE = 'Zoro & Sanji hadir 3–4 Okt 2026, dua hari penuh di booth Bpedia · Urban Forest Cipete.';
 const LEGACY_SCHEDULES = ['Jadwal sesi cosplayer diumumkan petugas booth.'];
@@ -58,7 +58,7 @@ const CARDS=freezeCatalog(HOSTS.flatMap((host,hostIndex)=>SERVICES.map((service,
   cost:moment.cost,power:moment.power[host.id],counter:moment.counter,attribute:host.attribute,cardColor:host.cardColor,
   crew:host.crew,effect:moment.effect,bountyName:host.fullName,
   image:`/assets/stickers/${host.id}-${service.id}.webp`,imageAlt:`Bipy pink bersama ${host.name} dalam momen ${service.name}`,
-  povImage:host.id==='sanji'?`/assets/pov/sanji-${service.id}.webp`:`/assets/moments/zoro-${service.id}.webp`,povAlt:`${host.name} dalam pose ${service.name}`,
+  povImage:host.image,povAlt:`Ilustrasi HD ${host.name} dewasa, seluruh badan`,
   stickerImage:`/assets/stickers/${host.id}-${service.id}.webp`,stickerAlt:`Bipy bersama ${host.name} dalam momen ${service.name}`,
   mascot:`/assets/bipy-variants/bipy-${service.id}.webp`,bipyName:moment.bipyName,bipyAlt:moment.bipyAlt,
   romanticLine:moment.lines[host.id],animationMotif:moment.animationMotif,
