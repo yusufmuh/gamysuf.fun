@@ -116,7 +116,7 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
-**3 Oktober 2026 · 1.8.0:** Revisi 16 komentar browser diterapkan pada Game 5 sumber 2.3.0. Kartu dipilih satu ketukan, kotak tiket pemain dan blok musik Home dihapus, flip poster bounty langsung, duo Bipy konsisten dan trailer Gemini baru. Event tampil sebagai Marketing 6.0; `/studio` menjadi portal lima dashboard petugas. Validasi dan status deployment terkini ada di [RELEASE-1.8.0.md](RELEASE-1.8.0.md). Catatan versi lama di bawah adalah riwayat.
+**3 Oktober 2026 · 1.8.0 live:** Revisi 16 komentar browser diterapkan pada Game 5 sumber 2.3.0. Kartu dipilih satu ketukan, kotak tiket pemain dan blok musik Home dihapus, flip poster bounty langsung, duo Bipy konsisten dan trailer Gemini baru. Event tampil sebagai Marketing 6.0; `/studio` menjadi portal lima dashboard petugas. Validasi dan status deployment terkini ada di [RELEASE-1.8.0.md](RELEASE-1.8.0.md). Catatan versi lama di bawah adalah riwayat.
 
 **3 Oktober 2026 · 1.7.0:** Game 5 2.2.4 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Seluruh permukaan kartu bisa diketuk. Tema terang/gelap memakai pink guideline Bpedia; 50 gambar pemilik dipakai di galeri, pratinjau dan pose dealer. Server memeriksa nominal, demo tetap terpisah, stempel Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia menjadi suite 350,140 detik dengan dialog Jepang sintetis. Bukti pengujian dan produksi dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah merupakan riwayat.
 
@@ -151,7 +151,7 @@ Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memili
 
 ## 11. Log serah-terima
 
-- **2026-10-03 (Codex, revisi browser 1.8.0)**: 47 tes sumber dan 75 tes integrasi lulus; 558 pemeriksaan browser serta 15 pemeriksaan panel belanja lokal lulus. Animasi Gemini baru dibuat dan diunduh; dua adegan kartu menggunakan potongan master tersebut. Produksi harus cocok dengan hash rilis dan laporan RELEASE-1.8.0.md.
+- **2026-10-03 (Codex, revisi browser 1.8.0)**: 47 tes sumber dan 75 tes integrasi lulus; 558 pemeriksaan browser serta 15 pemeriksaan panel belanja lokal lulus. Animasi Gemini baru dibuat dan diunduh; dua adegan kartu menggunakan potongan master tersebut. Produksi akhir 561/561 pemeriksaan browser, 42/42 pemutaran video dan 206/206 endpoint/hash/aset lulus. Paket 712 berkas lulus lima pemeriksaan terisolasi; detail commit dan hash akhir ada di RELEASE-1.8.0.md.
 
 - **2026-10-03 (Codex, verifikasi akhir 1.7.0)**: sumber Game 5 2.2.4 melalui `b5bd236` menyederhanakan pengaturan volume efek saat bisu. Audio produksi 29/29 di tiga browser dengan sembilan hasil demo lulus; tes sumber 47/47 dan integrasi 75/75 diperiksa ulang. CSS 2.2.3 serta seluruh aset tetap identik dengan 361 pemeriksaan sentuh/tema yang sudah lulus. Endpoint/hash produksi 186/186 dan paket akhir 692 berkas lulus; SHA-256 dan catatan batasan dicatat di `RELEASE-1.7.0.md`.
 

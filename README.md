@@ -1,4 +1,4 @@
-# Gamysuf Arcade 1.7.0
+# Gamysuf Arcade 1.8.0
 
 Satu dashboard interaktif untuk lima game booth Bpedia, berjalan di cloud (Hostinger Node.js):
 
@@ -7,15 +7,14 @@ Satu dashboard interaktif untuk lima game booth Bpedia, berjalan di cloud (Hosti
 | Spin Wheels (roda + Mystery Beauty Box) | `/g/spin/` | Pesta Folka 2026 |
 | Nyapit Bareng Bpedia (mesin capit) | `/g/nyapit/` | Cozzone UP 2026 |
 | Bipy Beauty Drop (papan pin + kapsul mekar) | `/g/drop/` | TAKEOVER X 2026 |
-| Game 4 · Bipy Gacha Pop (gacha satu tap, 20 hadiah / 497 kapsul awal) | `/g/gacha/` | Market-In 6.0 · 3–4 Okt 2026 |
-| Game 5 · Bipy Grand Line Desire (14 kartu BP06, 7 menu × Zoro/Sanji) | `/g/heart/` | Market-In 6.0 · 3–4 Okt 2026 |
-| Slot game tambahan (ZIP HTML5 atau tautan) | `/play/<slug>/` | diatur di Studio |
+| Game 4 · Bipy Gacha Pop (gacha satu tap, 20 hadiah / 497 kapsul awal) | `/g/gacha/` | Marketing 6.0 · 3–4 Okt 2026 |
+| Game 5 · Bipy Grand Line Desire (14 kartu BP06, 7 menu × Zoro/Sanji) | `/g/heart/` | Marketing 6.0 · 3–4 Okt 2026 |
 
 Halaman acara `/market-in` mengelompokkan Game 4 dan Game 5 di satu booth Bpedia di Urban Forest Cipete pada 3–4 Oktober 2026. Zoro dan Sanji dijadwalkan hadir kedua hari; jam sesi diumumkan petugas. Masing-masing game tetap memiliki rute, mekanik, stok atau antrean, serta dashboard petugas sendiri.
 
-Gacha Pop memigrasikan katalog lama ke 20 hadiah/497 kapsul awal dengan memperhitungkan hadiah resmi yang sudah keluar dan mempertahankan pengaturan, foto, riwayat, hadiah tambahan, serta hasil tertunda. Tiga voucher belanja memiliki ketentuan sendiri. Grand Line Desire dibuka dengan trailer dan pilihan Zoro/Sanji wajib. **Belanja booth Rp100.000 mendapat gacha**: tujuh menu diperkenalkan, kartu ditumpuk dan dikocok bersama Bipy dealer, lalu pemain memilih satu kartu tertutup. **Belanja Rp150.000 mendapat pilih fanservice** dengan keterangan dan cuplikan setiap menu. Server memeriksa nominal mode tercatat; demo terpisah dari stok dan antrean resmi. Setiap hasil memperoleh stempel bulat Bipy pink yang ikut diekspor ke kartu dan poster bounty. Harga FS referensi dicoret dan diganti **GRATIS untuk pelanggan Bpedia** yang memenuhi syarat; harga bawaan perlu dikonfirmasi tim booth.
+Gacha Pop memigrasikan katalog lama ke 20 hadiah/497 kapsul awal dengan memperhitungkan hadiah resmi yang sudah keluar dan mempertahankan pengaturan, foto, riwayat, hadiah tambahan, serta hasil tertunda. Tiga voucher belanja memiliki ketentuan sendiri. Grand Line Desire dibuka dengan trailer dan pilihan Zoro/Sanji wajib. **Belanja booth Rp100.000 mendapat gacha**: tujuh menu diperkenalkan, kartu ditumpuk dan dikocok bersama Bipy dealer, lalu pemain memilih satu kartu tertutup. **Belanja Rp150.000 mendapat pilih fanservice**: ketuk bagian mana pun pada kartu favorit untuk langsung membuka hasil; tombol cuplikan tetap tersedia terpisah. Server memeriksa nominal mode tercatat; demo terpisah dari stok dan antrean resmi. Setiap hasil memakai duo Bipy yang sesuai momen dan dapat diketuk untuk flip 3D menjadi poster bounty Wanted/Dead or Alive. Harga FS referensi dicoret dan diganti **GRATIS untuk pelanggan Bpedia** yang memenuhi syarat; harga bawaan perlu dikonfirmasi tim booth.
 
-Musik Bpedia dari berkas pemilik disusun menjadi suite berulang hampir enam menit dengan dua dialog pengenalan Jepang sintetis. Empat belas video momen terdiri atas 13 animasi ilustrasi dan satu video aksi yang tersedia. Tema terang pink/gelap, bisu, animasi, layar penuh dan Demo/Main Tercatat tersedia di header. Pemutaran suara menunggu interaksi pertama sesuai browser. Formulir persetujuan sebelum kartu dihapus; petugas mengonfirmasi interaksi nyata dan dokumentasi di booth.
+Musik Bpedia dari berkas pemilik disusun menjadi suite berulang hampir enam menit dengan dua dialog pengenalan Jepang sintetis. Trailer baru di Gemini menggunakan referensi Bipy resmi. Empat belas cuplikan momen terdiri atas dua potongan animasi karakter dari master Gemini baru dan 12 motion graphics ilustrasi duo pemilik. Tema terang pink/gelap, bisu, animasi, layar penuh dan Demo/Main Tercatat tersedia di header. Pemutaran suara menunggu interaksi pertama sesuai browser. Formulir persetujuan sebelum kartu dihapus; petugas mengonfirmasi interaksi nyata dan dokumentasi di booth.
 
 Fitur pemain: profil & avatar Bipy, XP & level, streak harian, 3 misi harian, 11 lencana, album 91 kartu, papan peringkat mingguan/sepanjang masa, kode pemulihan profil, panduan & FAQ. Online memakai demo pribadi; klaim hadiah atau fanservice dilakukan pada sesi booth resmi.
 Portal petugas (`/studio`): tautan mode admin/petugas pada lima game, tanpa login pemilik terpusat. Admin setiap game mempertahankan autentikasinya.
@@ -41,4 +40,4 @@ Produksi: `npm start` (entry `hub/server.cjs`), env `ADMIN_PIN` (6–12 digit, w
 
 Dokumen lengkap & status serah-terima: [docs/PRD-Gamysuf-Arcade.md](docs/PRD-Gamysuf-Arcade.md).
 
-Status 2 Oktober 2026: **1.7.0**, Game 5 sumber 2.2.4. Seluruh kartu bisa diketuk; pink terang/gelap mengikuti token guideline Bpedia, 50 stiker pemilik masuk galeri/pratinjau/pose dealer. Sumber 47/47 tes, integrasi 75/75, serta UI, audio dan media telah diperiksa. Bukti responsif, paket dan produksi dicatat di [docs/RELEASE-1.7.0.md](docs/RELEASE-1.7.0.md). PRD Game 5: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md). Bukti versi lama tetap disimpan sebagai riwayat.
+Status 3 Oktober 2026: **1.8.0 live**, Game 5 sumber 2.3.0 dan CSS journey v2.3.1. Satu ketukan membuka pilihan kartu, flip poster Wanted, trailer Gemini baru dan duo Bipy sesuai momen. Sumber 47/47 tes, integrasi 75/75, browser live 561/561, video live 42/42 dan endpoint/hash 206/206 lulus. Portal petugas mengarah ke dashboard tiap game. Bukti dan paket: [docs/RELEASE-1.8.0.md](docs/RELEASE-1.8.0.md). PRD Game 5: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md).
