@@ -50,7 +50,7 @@ def export_word() -> None:
     for name in ['Title', 'Heading 1', 'Heading 2']:
         doc.styles[name].font.name = 'Arial'; doc.styles[name].font.color.rgb = RGBColor.from_string('B82D56')
     doc.add_heading('Bipy Grand Line Desire', 0)
-    doc.add_paragraph('PRODUCT REQUIREMENTS DOCUMENT\nGame 05 / Gamysuf Arcade 1.7.0\n2 Oktober 2026')
+    doc.add_paragraph('PRODUCT REQUIREMENTS DOCUMENT\nGame 05 / Gamysuf Arcade 1.7.0\n3 Oktober 2026')
     doc.add_picture(str(COVER), width=Inches(6.6))
     doc.add_paragraph('Dua pesona. Tujuh momen manis. Satu pengalaman Bpedia.', style='Subtitle')
     doc.add_page_break()
@@ -64,7 +64,7 @@ def export_word() -> None:
                 cells = table.add_row().cells
                 for idx, cell in enumerate(row): cells[idx].text = cell
         else: doc.add_paragraph(str(value), style='List Bullet' if kind == 'bullet' else None)
-    section.footer.paragraphs[0].text = 'GRAND LINE DESIRE  /  BPEDIA  /  GAME 2.2.2'
+    section.footer.paragraphs[0].text = 'GRAND LINE DESIRE  /  BPEDIA  /  GAME 2.2.4'
     doc.save(OUT / 'PRD-Bipy-Grand-Line-Desire.docx')
 
 def export_pdf() -> None:
@@ -75,7 +75,7 @@ def export_pdf() -> None:
     styles.add(ParagraphStyle('HeadDoc', fontName='DocArialBold', fontSize=15, leading=19, spaceBefore=16, spaceAfter=9, textColor=colors.HexColor('#B82D56'), keepWithNext=True))
     styles.add(ParagraphStyle('CellDoc', parent=styles['BodyDoc'], fontSize=8, leading=11, spaceAfter=0))
     styles.add(ParagraphStyle('TitleDoc', fontName='DocArialBold', fontSize=35, leading=42, textColor=colors.HexColor('#B82D56'), spaceAfter=18))
-    story = [Spacer(1,30), Paragraph('Bipy<br/>Grand Line Desire',styles['TitleDoc']), Paragraph('PRODUCT REQUIREMENTS DOCUMENT<br/>Game 05 / Gamysuf Arcade 1.7.0<br/>2 Oktober 2026',styles['BodyDoc']), Spacer(1,18),Image(str(COVER),width=490,height=490*940/1440),Spacer(1,16),Paragraph('Dua pesona. Tujuh momen manis.<br/>Satu pengalaman Bpedia.',styles['HeadDoc']),PageBreak()]
+    story = [Spacer(1,30), Paragraph('Bipy<br/>Grand Line Desire',styles['TitleDoc']), Paragraph('PRODUCT REQUIREMENTS DOCUMENT<br/>Game 05 / Gamysuf Arcade 1.7.0<br/>3 Oktober 2026',styles['BodyDoc']), Spacer(1,18),Image(str(COVER),width=490,height=490*940/1440),Spacer(1,16),Paragraph('Dua pesona. Tujuh momen manis.<br/>Satu pengalaman Bpedia.',styles['HeadDoc']),PageBreak()]
     for kind,value in blocks(TEXT):
         if kind == 'title': continue
         if kind == 'table':

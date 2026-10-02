@@ -1,6 +1,6 @@
 # PRD · Bipy Grand Line Desire
 
-Game 05 · versi 2.2.2 · Gamysuf Arcade 1.7.0 · 2 Oktober 2026
+Game 05 · versi 2.2.4 · Gamysuf Arcade 1.7.0 · diperbarui 3 Oktober 2026
 
 ## Produk dan tujuan
 
@@ -55,7 +55,7 @@ Logo Bpedia asli dipertahankan. Tema terang memakai pink #E62B5E, pearl #FFF7F8,
 
 Ada 14 cuplikan H264 720×900, masing-masing lima detik. Tiga belas merupakan animasi ilustrasi dengan gerak kamera/partikel; Knight's Vow Zoro berasal dari video aksi Gemini yang sudah ada. Dokumen ini tidak menyebut tiga belas klip tersebut sebagai animasi tubuh baru. Sanji memiliki tujuh gambar POV HD dari folder pemilik. Potongan kolase Zoro tidak dipakai di layar; ilustrasi momen yang utuh menjadi pengganti.
 
-Seluruh 50 PNG tambahan pemilik dipakai: 40 adegan Bipy bersama Zoro/Sanji dan 10 pose dealer. Galeri Home menampilkan semuanya dengan filter Zoro/Sanji; gambar utuh dan transparan, dimuat bertahap. Pratinjau 14 menu memakai adegan yang sesuai. Bipy dealer hijau/kuning berganti pose saat menyiapkan, menumpuk, mengocok, dan menawarkan kartu. Atraksi memakai Web Animations dan menghormati reduced motion. Cap Bipy juga digambar dalam unduhan PNG.
+Seluruh 50 PNG tambahan pemilik dipakai: 40 adegan Bipy bersama Zoro/Sanji dan 10 pose dealer. Galeri Home menampilkan semuanya dengan filter Zoro/Sanji; gambar utuh dan transparan, dimuat bertahap. Pratinjau 14 menu memakai adegan yang sesuai. Empat pose aktif dealer disiapkan sejak karakter dipilih agar pergantian saat menyiapkan, menumpuk, mengocok, dan menawarkan kartu lebih mulus. Atraksi memakai Web Animations dan menghormati reduced motion. Cap Bipy juga digambar dalam unduhan PNG.
 
 Musik Home berasal dari rekaman Bpedia pemilik. Rangkaian 350,14 detik menggunakan crossfade lima detik dan dua narasi Jepang orisinal di detik 159 dan 330. Narasi memakai sintesis ja-JP-KeitaNeural dengan perlakuan berbeda; bukan rekaman atau tiruan pengisi suara asli Zoro/Sanji. Jingle Bpedia terdengar ketika cap mendarat, dengan musik diturunkan sementara. Browser memulai audio setelah interaksi pengguna; tombol Putar musik Bpedia tersedia di Home.
 
@@ -75,6 +75,6 @@ Request idempotent mencegah tiket ganda. Respons yang terputus dipulihkan dari p
 
 ## Bukti rilis
 
-Tes sumber: 47/47 dan pemeriksaan sintaks lulus. Tes integrasi hub mencakup batas pembelian serta pemisahan kode booth. QA UI terarah: 21/21, termasuk ekspor PNG kartu 1080×1508 dan poster 1080×1528, pemulihan respons/pending, dan pelayanan tiket resmi pada data uji terisolasi. QA audio: tiga browser, 29 pemeriksaan, sembilan demo. Seluruh 14 cuplikan didekode dan diputar di Chromium, Firefox, dan WebKit (42/42).
+Tes sumber: 47/47 dan pemeriksaan sintaks lulus. Tes integrasi hub: 75/75, termasuk batas pembelian serta pemisahan kode booth. QA UI terarah: 21/21, termasuk ekspor PNG kartu 1080×1508 dan poster 1080×1528, pemulihan respons/pending, dan pelayanan tiket resmi pada data uji terisolasi. QA audio produksi: tiga browser, 29 pemeriksaan, sembilan demo. Seluruh 14 cuplikan didekode dan diputar di Chromium, Firefox, dan WebKit (42/42).
 
-Matriks perjalanan responsif, paket Hostinger, dan bukti produksi terbaru dicatat pada docs/RELEASE-1.7.0.md di repo hub. Laporan lama 1.6.1 merupakan riwayat; tidak digunakan sebagai bukti alur baru.
+Pemeriksaan sentuh/galeri produksi akhir: 361/361, 12 kasus pada tiga browser dan empat ukuran layar; gambar, judul, seluruh kartu, batas tombol, dua tema dan 50 gambar lulus. Matriks perjalanan responsif, paket Hostinger, dan bukti produksi terbaru dicatat pada docs/RELEASE-1.7.0.md di repo hub. Laporan lama 1.6.1 merupakan riwayat; tidak digunakan sebagai bukti alur baru.

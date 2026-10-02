@@ -22,7 +22,7 @@ Permintaan pengguna: "buat 3 game menjadi 1 dashboard interaktif yang bisa menga
 | `nyapit` | `../02 nyapit` (v1.4.0) | Mesin capit + maskot B! | Cozzone UP 2026 |
 | `drop` | `../03 bipy-beauty-drop` (v1.0.0) | Papan pin + kapsul mekar + gacha fanservice | TAKEOVER X 2026 |
 | `gacha` · Game 4 | `../04 bipy-gacha-pop` (v1.0.1, katalog v2) | Gacha satu tap, 20 hadiah / 497 kapsul awal, kartu stiker | Market-In 6.0 (3–4 Okt 2026) |
-| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.2.2) | Gacha Rp100.000 / Pilih Rp150.000, 7 menu × Zoro/Sanji, 14 kartu BP06, 50 stiker | Market-In 6.0 (3–4 Okt 2026) |
+| `heart` · Game 5 | `../05 bipy-heart-parade` (v2.2.4) | Gacha Rp100.000 / Pilih Rp150.000, 7 menu × Zoro/Sanji, 14 kartu BP06, 50 stiker | Market-In 6.0 (3–4 Okt 2026) |
 
 `games/<slug>/` hanyalah **salinan** berkas runtime (`npm run sync`). Ubah game di folder aslinya, lalu sync.
 Kelima game memiliki opsi `cloud` di `server.cjs` masing-masing (commit di repo lokal game 01/02/03, perilaku desktop/.exe tidak berubah).
@@ -116,7 +116,7 @@ Target responsif: ponsel 280–430 px potret/lanskap; foldable 280×653, 344×88
 
 ## 10. Status (PERBARUI SETIAP BERHENTI)
 
-**2 Oktober 2026 · 1.7.0:** Game 5 2.2.2 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Seluruh permukaan kartu bisa diketuk. Tema terang/gelap memakai pink guideline Bpedia; 50 gambar pemilik dipakai di galeri, pratinjau dan pose dealer. Server memeriksa nominal, demo tetap terpisah, stempel Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia menjadi suite 350,140 detik dengan dialog Jepang sintetis. Bukti pengujian dan produksi dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah merupakan riwayat.
+**3 Oktober 2026 · 1.7.0:** Game 5 2.2.4 menyediakan home pengenalan, pilihan karakter wajib, gacha belanja Rp100.000 dengan atraksi Bipy dan pilihan kartu tertutup, serta pilih langsung belanja Rp150.000. Seluruh permukaan kartu bisa diketuk. Tema terang/gelap memakai pink guideline Bpedia; 50 gambar pemilik dipakai di galeri, pratinjau dan pose dealer. Server memeriksa nominal, demo tetap terpisah, stempel Bipy masuk ekspor, dan setiap menu memiliki cuplikan. Musik Bpedia menjadi suite 350,140 detik dengan dialog Jepang sintetis. Bukti pengujian dan produksi dicatat pada [RELEASE-1.7.0.md](RELEASE-1.7.0.md). Angka 1.6.x di bawah merupakan riwayat.
 
 **2 Oktober 2026 · 1.6.1 live:** Game 5 menjadi Bipy Grand Line Desire, kartu dibuka langsung, trailer masuk pembuka, Bipy terpisah dari leader, poster proporsional, dan tombol tema serta Demo/Main Tercatat eksplisit. Sumber 40/40 + check, hub 67/67, UI 21/21, responsif Game 5 4.140/4.140, animasi penuh 14 kartu lulus, dan paket 601 berkas lulus smoke test terisolasi. Produksi: 93/93 endpoint/hash/aset, 106/106 UI dan 107/107 gameplay demo. hPanel melaporkan main/49bdd502 selesai pukul 17:19 WIB. Lihat [RELEASE-1.6.1.md](RELEASE-1.6.1.md). Bukti 1.6.0 berikut adalah riwayat.
 
@@ -148,6 +148,10 @@ Matriks memakai browser dan viewport emulasi; perangkat fisik tetap dapat memili
 - Push ke branch produksi dapat memicu deployment. Bukti lokal, commit, paket, dan produksi harus dicatat sesuai tahapnya.
 
 ## 11. Log serah-terima
+
+- **2026-10-03 (Codex, verifikasi akhir 1.7.0)**: sumber Game 5 2.2.4 melalui `b5bd236` menyederhanakan pengaturan volume efek saat bisu. Audio produksi 29/29 di tiga browser dengan sembilan hasil demo lulus; tes sumber 47/47 dan integrasi 75/75 diperiksa ulang. CSS 2.2.3 serta seluruh aset tetap identik dengan 361 pemeriksaan sentuh/tema yang sudah lulus. Endpoint/hash produksi 186/186 dan paket akhir 692 berkas lulus; SHA-256 dan catatan batasan dicatat di `RELEASE-1.7.0.md`.
+
+- **2026-10-02 (Codex, produksi 1.7.0)**: Game 5 sumber 2.2.3 sudah dipublikasikan melalui implementasi `ee94b25`. Klik seluruh kartu, warna guideline terang/gelap dan seluruh 50 gambar terverifikasi: 361/361 pemeriksaan sentuh/galeri live pada 12 kasus. Perbaikan tinggi tombol Firefox menjaga pilihan berulang tetap dapat diklik. Tes sumber 47/47, integrasi 75/75 dan endpoint/aset live 186/186 lulus; paket 692 berkas lulus lima pemeriksaan terisolasi. Bukti lengkap, hash ZIP dan batasan media ada di `RELEASE-1.7.0.md`; PRD PDF/Word empat halaman ada di `outputs/heart-parade/`.
 
 - **2026-10-02 (Codex, kandidat 1.7.0)**: menerapkan alur pembelian/karakter/dealer/kartu sesuai brief terbaru, suite musik Bpedia dan dialog Jepang, 14 video momen, POV Sanji, stempel Bipy, laporan nominal per tiket, tema, kontrol sentuh dan PIN Game 5 terpisah. PRD Game 5 serta provenance media diperbarui; verifikasi produksi dicatat setelah deployment.
 
