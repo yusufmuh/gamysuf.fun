@@ -11,8 +11,10 @@
    this.bgm=new Audio('/assets/audio/bpedia-home-suite.mp3');this.bgm.loop=true;this.bgm.preload='none';this.bgm.volume=BGM_VOLUME;
    this.bgm.addEventListener('seeked',()=>{if(this.bgm.loop&&this.bgm.paused&&this.bgm.currentTime<.5&&this.unlocked&&!this.muted&&!document.hidden)this.bgm.play().catch(()=>{});});
    this.hook=new Audio('/assets/audio/bpedia-jingle-hook.mp3');this.hook.preload='none';this.hook.volume=.95;
-   this.hook.addEventListener('ended',()=>{if(this.hook.ended)this.duck(false);});
-   this.hook.addEventListener('pause',()=>{if(this.hook.paused)this.duck(false);});
+   this.voice=new Audio();this.voice.preload='auto';this.voice.volume=1;this.voiceTurn=0;this.announcedKey='';
+   this.voice.addEventListener('ended',()=>this.duck(!this.hook.paused));this.voice.addEventListener('pause',()=>this.duck(!this.hook.paused));this.voice.addEventListener('error',()=>this.duck(!this.hook.paused));
+   this.hook.addEventListener('ended',()=>{if(this.hook.ended)this.duck(!this.voice.paused);});
+   this.hook.addEventListener('pause',()=>{if(this.hook.paused)this.duck(!this.voice.paused);});
    for(const event of ['error','abort'])this.hook.addEventListener(event,()=>this.duck(false));
    document.addEventListener('visibilitychange',()=>this.visibility());
   }
@@ -31,10 +33,10 @@
   setMuted(value){
    this.muted=Boolean(value);pref.set('heart-muted',this.muted?'1':'0');
    if(this.out)this.out.gain.value=this.muted?0:.85;
-   if(this.muted){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();}else this.unlock();
+   if(this.muted){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();this.stopAnnouncement();}else this.unlock();
   }
   visibility(){
-   if(document.hidden){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();if(this.ctx?.state==='running')this.ctx.suspend().catch(()=>{});}
+   if(document.hidden){this.hookTurn++;this.clearSfx();this.bgm.pause();this.hook.pause();this.stopAnnouncement();if(this.ctx?.state==='running')this.ctx.suspend().catch(()=>{});}
    else if(this.unlocked&&!this.muted){this.ctx?.resume().catch(()=>{});this.bgm.play().catch(()=>{});}
   }
   duck(on){
@@ -90,6 +92,17 @@
    const turn=++this.hookTurn;this.hook.pause();await this.rewind(this.hook);
    if(turn!==this.hookTurn||this.muted||document.hidden)return;
    this.duck(true);this.hook.play().catch(()=>{if(turn===this.hookTurn)this.duck(false);});
+  }
+  prepareAnnouncement(host,service){
+   if(!['zoro','sanji'].includes(host)||!['cinderella','twirl','whisper','offering','vow','hug','pat'].includes(service))return false;
+   const key=`${host}-${service}`;if(this.announcedKey!==key){this.stopAnnouncement();this.announcedKey=key;this.voice.src=`/assets/audio/results/${key}.mp3`;this.voice.load();}return true;
+  }
+  stopAnnouncement(){this.voiceTurn++;this.voice.pause();}
+  async announce(host,service){
+   if(this.muted||!this.unlocked||document.hidden||!this.prepareAnnouncement(host,service))return false;
+   const turn=++this.voiceTurn;this.hookTurn++;this.hook.pause();this.voice.pause();await this.rewind(this.voice);
+   if(turn!==this.voiceTurn||this.muted||document.hidden)return false;
+   this.duck(true);try{await this.voice.play();return true;}catch{if(turn===this.voiceTurn)this.duck(false);return false;}
   }
  }
  window.HeartAudio=HeartAudio;

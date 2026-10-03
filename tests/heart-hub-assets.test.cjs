@@ -17,6 +17,7 @@ function temporary(t){
 const state={hosts:HEART_HOST_IDS.map(id=>({id,name:id==='zoro'?'Zoro':'Sanji',image:`/assets/characters/${id}.webp`})),services:HEART_SERVICE_IDS.map(id=>({id,name:id}))};
 const heart=GAMES.find(game=>game.slug==='heart');
 const expectedAssets=[
+ 'assets/audio/results/manifest.json',...HEART_HOST_IDS.flatMap(host=>HEART_SERVICE_IDS.map(service=>`assets/audio/results/${host}-${service}.mp3`)),
  'assets/characters/zoro-hero-hd.webp','assets/characters/sanji-hero-hd.webp','assets/characters/hero-hd-manifest.json',
  ...state.hosts.flatMap(host=>state.services.map(service=>`assets/moments/${host.id}-${service.id}.webp`)),
  ...HEART_SERVICE_IDS.map(id=>`assets/bipy-variants/bipy-${id}.webp`),
@@ -82,6 +83,7 @@ test('deployment manifest requires current Bpedia music and artwork, and include
  assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/bipy-variants/bipy-hug.webp')),/bipy-hug.webp/);
  assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/video/grand-line-promo-poster.webp')),/grand-line-promo-poster.webp/);
  assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/audio/bpedia-main-bgm.mp3')),/bpedia-main-bgm.mp3/);
+ assert.throws(()=>collectHeartReleaseAssets(expectedAssets.filter(file=>file!=='assets/audio/results/sanji-pat.mp3')),/sanji-pat.mp3/);
 });
 
 test('Heart stylesheet covers the complete trading-card experience',()=>{

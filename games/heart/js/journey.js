@@ -5,9 +5,20 @@
  let turn=0,animations=new Set(),selectedPreview='',priorFocus=null;
  const videos=new Set(),visibleVideos=new Set();
  let battlePaused=false;
+ let homeBattlePaused=false,homeBattleInView=false;
+ function syncHomeBattle(){
+  const stage=$('homeBattleBackground'),reduced=game.context().reduced,active=document.body.dataset.journey==='home'&&homeBattleInView&&!document.hidden&&!reduced&&!homeBattlePaused&&!document.querySelector('dialog[open]');
+  if(active&&!stage.firstElementChild){const frame=document.createElement('iframe');frame.title='Zoro dan Sanji beraksi · One Piece · Crunchyroll';frame.src='https://www.youtube-nocookie.com/embed/Llefi8QFN0c?autoplay=1&mute=1&controls=0&loop=1&playlist=Llefi8QFN0c&playsinline=1&start=8&rel=0';frame.allow='autoplay; encrypted-media; fullscreen';frame.allowFullscreen=true;frame.referrerPolicy='strict-origin-when-cross-origin';frame.tabIndex=-1;stage.append(frame);}else if(!active&&stage.firstElementChild)stage.replaceChildren();
+  const button=$('homeBattleToggle');button.disabled=reduced;button.textContent=reduced?'Latar dijeda':homeBattlePaused?'Putar latar':'Jeda latar';button.setAttribute('aria-pressed',String(!homeBattlePaused&&!reduced));
+ }
+ new IntersectionObserver(entries=>{homeBattleInView=entries[0].isIntersecting;syncHomeBattle();},{threshold:0}).observe($('homeBattleBackground'));
+ $('homeBattleToggle').addEventListener('click',()=>{homeBattlePaused=!homeBattlePaused;syncHomeBattle();});
  let observedActions=null;
  const actionObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);},{threshold:.15});
  const footerRivalry=$('footerRivalry');let footerInView=false,footerPaused=false;
+ const leaderArena=document.querySelector('.leader-duel-arena'),binder=$('binder');
+ const visualObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);},{threshold:.1});
+ visualObserver.observe(leaderArena);visualObserver.observe(binder);
  function syncFooterRivalry(){
   const reduced=game.context().reduced,blocked=Boolean(document.querySelector('dialog[open]'));
   footerRivalry.dataset.inView=String(footerInView&&!document.hidden&&!footerPaused&&!reduced&&!blocked);
@@ -23,10 +34,11 @@
   $('battleToggle').textContent=battlePaused?'Putar latar aksi':'Jeda latar aksi';$('battleToggle').setAttribute('aria-pressed',String(!battlePaused));
  }
  const videoObserver=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting)visibleVideos.add(entry.target);else visibleVideos.delete(entry.target);}syncDeckVideos();},{threshold:.15});
- function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const inJourney=video.id==='rivalryVideo'?document.body.dataset.journey==='home':document.body.dataset.journey==='table';const playing=visibleVideos.has(video)&&inJourney&&!document.hidden&&!reduced&&!blocked&&video.dataset.userPaused!=='true';if(playing)video.play().catch(()=>{});else video.pause();}syncBattle();syncFooterRivalry();}
+ function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const inJourney=video.id==='rivalryVideo'||video.classList.contains('binder-video')?document.body.dataset.journey==='home':document.body.dataset.journey==='table';const playing=visibleVideos.has(video)&&inJourney&&!document.hidden&&!reduced&&!blocked&&video.dataset.userPaused!=='true';if(playing)video.play().catch(()=>{});else video.pause();}syncBattle();syncFooterRivalry();syncHomeBattle();for(const el of [leaderArena,binder])el.dataset.active=String(el.dataset.inView==='true'&&!document.hidden&&!reduced&&!blocked&&document.body.dataset.journey==='home');}
  const dialogObserver=new MutationObserver(syncDeckVideos);for(const modal of document.querySelectorAll('dialog'))dialogObserver.observe(modal,{attributes:true,attributeFilter:['open']});
  dialogObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});dialogObserver.observe(document.body,{attributes:true,attributeFilter:['data-journey']});
  const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+ new MutationObserver(syncDeckVideos).observe(binder,{attributes:true,attributeFilter:['data-in-view']});new MutationObserver(syncDeckVideos).observe(leaderArena,{attributes:true,attributeFilter:['data-in-view']});
  const dealerPoses={zoro:{preview:'welcome',stack:'confident',shuffle:'ready',choose:'cheer'},sanji:{preview:'welcome',stack:'serve',shuffle:'kick',choose:'flower'}};
  const preparedDealers=new Map();
  function prepareDealer(host){for(const pose of new Set(Object.values(dealerPoses[host]))){const src=`/assets/dealers/${host}-${pose}.webp`;if(preparedDealers.has(src))continue;const img=new Image();img.decoding='async';img.src=src;preparedDealers.set(src,img);}}
@@ -60,7 +72,7 @@
   $('choosePreviewCard').hidden=context.mode!=='pick';previewDialog.showModal();const video=$('momentPreviewArt').querySelector('video');if(video&&!context.reduced)video.play().catch(()=>{});
  }
  function closePreview(){for(const video of $('momentPreviewArt').querySelectorAll('video'))video.pause();previewDialog.close();priorFocus?.focus({preventScroll:true});}
- function update(){const context=game.context();const actions=$('deckActions');if(actions!==observedActions){if(observedActions)actionObserver.unobserve(observedActions);observedActions=actions;if(actions)actionObserver.observe(actions);}prepareDealer(context.host);$('journeyHostLabel').textContent=context.host==='zoro'?'MEJA ZORO · HIJAU GIOK':'MEJA SANJI · KUNING EMAS';document.body.classList.toggle('journey-dealing',context.dealing);document.querySelectorAll('.card-choice').forEach(button=>{button.textContent=context.mode==='gacha'?'Kenali momen':'Pilih kartu ini';});for(const video of videos)if(!video.isConnected){video.pause();videoObserver.unobserve(video);videos.delete(video);visibleVideos.delete(video);}for(const video of document.querySelectorAll('#momentGrid video,#rivalryVideo'))if(!videos.has(video)){videos.add(video);videoObserver.observe(video);}syncDeckVideos();}
+ function update(){const context=game.context();const actions=$('deckActions');if(actions!==observedActions){if(observedActions)actionObserver.unobserve(observedActions);observedActions=actions;if(actions)actionObserver.observe(actions);}prepareDealer(context.host);$('journeyHostLabel').textContent=context.host==='zoro'?'MEJA ZORO · HIJAU GIOK':'MEJA SANJI · KUNING EMAS';document.body.classList.toggle('journey-dealing',context.dealing);document.querySelectorAll('.card-choice').forEach(button=>{button.textContent=context.mode==='gacha'?'Kenali momen':'Pilih kartu ini';});for(const video of videos)if(!video.isConnected){video.pause();videoObserver.unobserve(video);videos.delete(video);visibleVideos.delete(video);}for(const video of document.querySelectorAll('#momentGrid video,#rivalryVideo,#binder video'))if(!videos.has(video)){videos.add(video);videoObserver.observe(video);}syncDeckVideos();}
  $('dealCards').addEventListener('click',event=>{const button=event.target.closest('.deal-slot');if(!button||button.disabled||shell.dataset.phase!=='choose')return;const slot=Number(button.dataset.slot);clear();dialog.close();game.chooseDeal(slot);});
  $('cancelDealButton').addEventListener('click',closeDeal);$('skipDealButton').addEventListener('click',choosePhase);dialog.addEventListener('cancel',event=>{event.preventDefault();closeDeal();});
  $('closeMomentPreview').addEventListener('click',closePreview);previewDialog.addEventListener('cancel',event=>{event.preventDefault();closePreview();});

@@ -5,7 +5,7 @@ const {createHub}=require('../hub/server.cjs');
 const live=process.env.GAMYSUF_LIVE_URL||'',out=path.join(__dirname,'../artifacts',live?'heart-voyage-live':'heart-voyage');
 const report={checks:[],errors:[],cases:[],embed:{}};
 function check(value,label){assert.ok(value,label);report.checks.push(label);}
-async function ready(page){await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="voyage.css?v=2.6.0"]').waitFor({state:'attached'});}
+async function ready(page){await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="voyage.css?v=2.7.0"]').waitFor({state:'attached'});}
 async function fit(page,label){check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+' no horizontal overflow');}
 async function run(browser,name,w,h,origin){
  const context=await browser.newContext({viewport:{width:w,height:h},hasTouch:true,reducedMotion:'no-preference'}),page=await context.newPage(),label=`${name}-${w}x${h}`;

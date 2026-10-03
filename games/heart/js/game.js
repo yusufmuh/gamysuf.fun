@@ -53,7 +53,7 @@
  function resultCard(r){return r.card||cardOf(r.host.id,r.service.id);}
  function toast(text){const t=$('toast');t.textContent=text;t.hidden=false;clearTimeout(ui.toastTimer);ui.toastTimer=setTimeout(()=>{t.hidden=true;},3600);}
  function connection(text){$('connectionText').textContent=text;$('connection').hidden=false;}
- function soundState(){const b=$('soundButton');b.innerHTML=icon(audio.muted?'mute':'sound');b.setAttribute('aria-label',audio.muted?'Aktifkan suara':'Matikan suara');b.setAttribute('aria-pressed',String(audio.muted));window.dispatchEvent(new CustomEvent('gamysuf:audio-state',{detail:{muted:audio.muted}}));}
+ function soundState(){for(const b of [$('soundButton'),$('resultSoundButton')]){b.innerHTML=icon(audio.muted?'mute':'sound');b.setAttribute('aria-label',audio.muted?'Aktifkan suara':'Matikan suara');b.setAttribute('aria-pressed',String(audio.muted));}window.dispatchEvent(new CustomEvent('gamysuf:audio-state',{detail:{muted:audio.muted}}));}
  function toggleMute(){audio.setMuted(!audio.muted);soundState();toast(audio.muted?'Suara dimatikan.':'Suara aktif.');}
  function openDialog(id){const d=$(id);if(d.open)return;ui.lastFocus=document.activeElement&&document.activeElement!==document.body?document.activeElement:$('startButton');d.showModal();}
  function closeDialog(id){const d=$(id);if(!d.open)return;d.close();if(ui.lastFocus?.isConnected)ui.lastFocus.focus({preventScroll:true});}
@@ -78,9 +78,6 @@
    button.setAttribute('aria-pressed',String(selected));button.disabled=!available(h)||ui.busy||ui.modeBusy||ui.stage!=='home';
    button.querySelector('.leader-state').textContent=!h?.enabled?'Sedang istirahat':!available(h)?'Kuota hari ini habis':selected?'Leader pilihanmu':`Pilih ${h.name}`;
   });
-  const h=host();
-  $('hostQuote').textContent=h?.quote||'Momen manis akan segera kembali.';
-  $('quoteName').textContent=h?`— ${h.name}, ${h.role}`:'— Bipy';
  }
  function renderSession(){
   const s=ui.state,canPlay=!s.settings.paused&&s.settings.sessionOpen&&s.hosts.some(available)&&s.services.some(v=>v.enabled);
@@ -152,7 +149,7 @@
   $('binderCount').textContent=`${count}/14`;$('binderBar').style.transform=`scaleX(${count/14})`;
   $('collectionCount').textContent=count===14?'Lengkap! Semua kartu Zoro & Sanji ada di binder-mu.':count?`${14-count} kartu lagi untuk melengkapi binder.`:'Kartu yang kamu buka akan tersimpan di sini.';
   if(ui.keys.binder===key)return;ui.keys.binder=key;
-  $('binder').innerHTML=['zoro','sanji'].map(hid=>{const h=hostOf(hid);return `<div class="binder-row host-${esc(hid)}" role="list" aria-label="Kartu ${esc(h?.name||hid)}"><span class="binder-label" aria-hidden="true">${esc(h?.name||hid)}</span>${SERVICE_ORDER.map(sid=>{const c=cardOf(hid,sid);if(!c)return '';const has=owned.has(`${hid}:${sid}`);return `<div class="slot${has?' owned':''}" role="listitem" aria-label="${esc(shortName(c))} · ${esc(h?.name||hid)} · ${has?'sudah dimiliki':'belum ditemukan'}">${has?cardFace(c,{size:'mini',hostName:h?.name}):`<span class="slot-empty" aria-hidden="true"><img src="${esc(c.image)}" alt="" width="960" height="1440" loading="lazy" decoding="async"><b>?</b><small>${esc(shortName(c))}</small></span>`}</div>`;}).join('')}</div>`;}).join('');
+  $('binder').innerHTML=['zoro','sanji'].map(hid=>{const h=hostOf(hid);return `<div class="binder-row host-${esc(hid)}" role="list" aria-label="Kartu ${esc(h?.name||hid)}"><span class="binder-label" aria-hidden="true">${esc(h?.name||hid)}</span>${SERVICE_ORDER.map((sid,index)=>{const c=cardOf(hid,sid);if(!c)return '';const has=owned.has(`${hid}:${sid}`);return `<div class="slot binder-visual${has?' owned':''}" role="listitem" style="--slot-i:${index}" aria-label="${esc(shortName(c))} · ${esc(h?.name||hid)} · ${has?'sudah dimiliki':'belum ditemukan'}"><span class="binder-scene" aria-hidden="true"><img class="binder-moment" src="${esc(c.stickerImage)}" alt="" width="800" height="1000" loading="lazy" decoding="async">${has&&c.video?`<video class="binder-video" src="${esc(c.video)}" muted loop playsinline preload="none" poster="${esc(c.stickerImage)}"></video>`:''}<span class="binder-foil"></span><span class="binder-spark binder-spark-a">✦</span><span class="binder-spark binder-spark-b">✧</span><span class="binder-gem">${icon(has?'heart':'lock')}</span></span></div>`;}).join('')}</div>`;}).join('');
  }
  function render(){
   const s=ui.state;if(!s)return;
@@ -385,7 +382,7 @@
   status(`${RARITY[card.rarity]||card.rarity} · ${shortName(card)} · ${r.host.name}`);
   resetResultScroll();$('resultTitle').focus({preventScroll:true});
   for(const seal of $('playStage').querySelectorAll('.bipy-seal'))seal.classList.add('is-stamped');
-  if(!quiet){timer(()=>{audio.thump();audio.jingle();},motion()?0:420);}
+  if(!quiet&&wasDrawing){audio.prepareAnnouncement(r.host.id,r.service.id);timer(()=>{audio.thump();audio.announce(r.host.id,r.service.id);},motion()?0:420);}
  }
  function skip(){if(ui.stage==='drawing'){ui.tear?.();finishReveal();}}
  async function showView(view,{user=false}={}){
@@ -417,7 +414,7 @@
   if(ui.busy||!ui.result)return;ui.busy=true;$('finishButton').disabled=true;
   try{
    ui.state=await api('/api/result',{id:ui.result.id});clearRequest();
-   ui.run++;stopAnims();clearTimers();fx.stop();
+   ui.run++;stopAnims();clearTimers();fx.stop();audio.stopAnnouncement();
    $('resultDialog').close();ui.result=null;ui.stage='home';ui.dealtSlot=null;ui.flipping=false;showFace(null);syncResultMedia();
    $('connection').hidden=true;
    ui.busy=false;render();$('startButton').focus({preventScroll:true});$('deck').scrollIntoView({behavior:'auto',block:'start'});
@@ -471,9 +468,11 @@
  document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>{if(!ui.busy&&!ui.modeBusy)closeDialog(button.dataset.close);}));
  $('resultDialog').addEventListener('cancel',event=>{event.preventDefault();if(ui.stage==='drawing')skip();else acknowledge();});
  $('finishButton').addEventListener('click',acknowledge);$('saveCard').addEventListener('click',()=>save('card'));$('savePoster').addEventListener('click',()=>save('poster'));
+ $('replayResultVoice').addEventListener('click',()=>{if(!ui.result||ui.stage!=='result')return;if(audio.muted){toast('Aktifkan suara dari tombol speaker untuk mendengarkan kartu.');return;}audio.unlock();audio.announce(ui.result.host.id,ui.result.service.id).then(played=>{if(!played&&!audio.muted)toast('Ketuk Dengarkan kartu untuk mencoba lagi.');});});
  $('skipAnimation').addEventListener('click',skip);
  $('viewCard').addEventListener('click',()=>showView('card',{user:true}));$('viewPoster').addEventListener('click',()=>showView('poster',{user:true}));
  $('soundButton').addEventListener('click',toggleMute);
+ $('resultSoundButton').addEventListener('click',toggleMute);
  $('motionButton').addEventListener('click',()=>{const next=!motion();storage.set('heart-reduced-motion',next?'1':'0');motion();if(next)skip();updateTrailer();syncResultMedia();toast(next?'Animasi dikurangi.':'Animasi diaktifkan.');});
  $('retryButton').addEventListener('click',async()=>{if(ui.busy)return;if(ui.request)await draw(ui.request);else await refresh();});
  reducedQuery.addEventListener('change',()=>{if(motion())skip();updateTrailer();syncResultMedia();});
@@ -498,7 +497,7 @@
  const unlockOnce=()=>audio.unlock();document.addEventListener('click',unlockOnce,{once:true,capture:true});document.addEventListener('keydown',unlockOnce,{once:true,capture:true});
  window.addEventListener('gamysuf:audio',event=>{audio.setMuted(Boolean(event.detail?.muted));soundState();});window.addEventListener('gamysuf:audio-query',soundState);
  window.addEventListener('online',()=>{if(!ui.busy&&ui.stage==='home'&&!ui.request)refresh();});window.addEventListener('offline',()=>connection('Koneksi terputus. Kartu yang sudah terbuka tetap tersimpan.'));
- window.HeartGame={context:()=>({state:ui.state,host:ui.host,mode:ui.mode,pick:ui.pick,busy:ui.busy||ui.modeBusy,stage:ui.stage,dealing:ui.dealing,reduced:motion(),demo:demo()}),setMode,selectCard,card:serviceId=>cardOf(ui.host,serviceId),setDealing:value=>{ui.dealing=Boolean(value);render();},chooseDeal:slot=>{if(!Number.isInteger(slot)||slot<0||slot>6)return;ui.dealing=false;ui.dealtSlot=slot;render();prepare();},backHome:()=>{if(ui.busy||ui.stage!=='home'||ui.dealing)return;ui.hostChosen=false;ui.dealtSlot=null;document.body.dataset.journey='home';render();window.scrollTo({top:0,behavior:'smooth'});},music:()=>{audio.setMuted(false);audio.unlock();soundState();},audioStatus:()=>({muted:audio.muted,paused:audio.bgm.paused,time:audio.bgm.currentTime}),unlock:()=>audio.unlock(),shuffle:()=>audio.shuffle(),tick:()=>audio.tick(),notify:toast};
+ window.HeartGame={context:()=>({state:ui.state,host:ui.host,mode:ui.mode,pick:ui.pick,busy:ui.busy||ui.modeBusy,stage:ui.stage,dealing:ui.dealing,reduced:motion(),demo:demo()}),setMode,selectCard,card:serviceId=>cardOf(ui.host,serviceId),setDealing:value=>{ui.dealing=Boolean(value);render();},chooseDeal:slot=>{if(!Number.isInteger(slot)||slot<0||slot>6)return;ui.dealing=false;ui.dealtSlot=slot;render();prepare();},backHome:()=>{if(ui.busy||ui.stage!=='home'||ui.dealing)return;ui.hostChosen=false;ui.dealtSlot=null;document.body.dataset.journey='home';render();window.scrollTo({top:0,behavior:'smooth'});},music:()=>{audio.setMuted(false);audio.unlock();soundState();},audioStatus:()=>({muted:audio.muted,paused:audio.bgm.paused,time:audio.bgm.currentTime,voice:{key:audio.announcedKey,paused:audio.voice.paused,time:audio.voice.currentTime,src:audio.voice.currentSrc,ready:audio.voice.readyState,error:audio.voice.error?.message||null}}),unlock:()=>audio.unlock(),shuffle:()=>audio.shuffle(),tick:()=>audio.tick(),notify:toast};
  soundState();themeState();renderStaffMode();refresh();
  setInterval(()=>{if(!document.hidden&&!ui.busy&&ui.stage==='home'&&!document.querySelector('dialog[open]')&&!ui.request)refresh();},20000);
 })();

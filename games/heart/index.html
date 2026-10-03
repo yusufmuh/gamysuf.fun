@@ -8,12 +8,12 @@
  <link rel="icon" href="/assets/icons/heart.svg" type="image/svg+xml">
  <link rel="preload" href="/assets/fonts/Poppins-800.woff2" as="font" type="font/woff2" crossorigin>
  <link rel="preload" href="/assets/fonts/Fraunces-Italic-Variable.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="/css/game.css?v=2.6.0">
- <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.6.0">
- <link rel="stylesheet" href="/css/journey.css?v=2.6.0">
- <link rel="stylesheet" href="/css/voyage.css?v=2.6.0">
- <link rel="stylesheet" href="/css/presentation.css?v=2.6.0">
- <script defer src="/js/audio.js?v=2.6.0"></script><script defer src="/js/cards.js?v=2.6.0"></script><script defer src="/js/fx.js?v=2.6.0"></script><script defer src="/js/export.js?v=2.6.0"></script><script defer src="/js/game.js?v=2.6.0"></script><script defer src="/js/journey.js?v=2.6.0"></script>
+ <link rel="stylesheet" href="/css/game.css?v=2.7.0">
+ <link rel="stylesheet" href="/assets/brand/bpedia-tokens.css?v=2.7.0">
+ <link rel="stylesheet" href="/css/journey.css?v=2.7.0">
+ <link rel="stylesheet" href="/css/voyage.css?v=2.7.0">
+ <link rel="stylesheet" href="/css/presentation.css?v=2.7.0">
+ <script defer src="/js/audio.js?v=2.7.0"></script><script defer src="/js/cards.js?v=2.7.0"></script><script defer src="/js/fx.js?v=2.7.0"></script><script defer src="/js/export.js?v=2.7.0"></script><script defer src="/js/game.js?v=2.7.0"></script><script defer src="/js/journey.js?v=2.7.0"></script>
 </head>
 <body data-ready="0" data-host="zoro" data-mode="gacha" data-journey="home">
  <a class="skip" href="#leaders">Langsung pilih cosplayer</a>
@@ -32,14 +32,16 @@
  </header>
  <main id="homeView">
   <section class="hero" aria-labelledby="title">
+   <div class="home-battle-background" id="homeBattleBackground" aria-hidden="true"></div>
    <div class="hero-mascots" aria-hidden="true"><img class="hero-zoro" src="/assets/dealers/zoro-ready.webp" alt="" width="800" height="1000"><img class="hero-sanji" src="/assets/dealers/sanji-flower.webp" alt="" width="800" height="1000"><span class="petal petal-a"></span><span class="petal petal-b"></span><span class="petal petal-c"></span></div>
    <div class="hero-copy">
     <p class="event-chip"><span class="dot" aria-hidden="true"></span>MARKETING 6.0 · URBAN FOREST CIPETE · 3–4 OKT</p>
+    <div class="home-battle-controls"><a href="https://www.youtube.com/watch?v=Llefi8QFN0c" target="_blank" rel="noopener">One Piece · Zoro &amp; Sanji · Crunchyroll</a><button id="homeBattleToggle" type="button" aria-pressed="true">Jeda latar</button></div>
     <h1 id="title"><span class="t-kicker">Bipy</span> <span class="t-main">Grand Line Desire</span></h1>
     <p class="t-sub">Zoro &amp; Sanji Fanservice Card Game</p>
     <section class="trailer hero-trailer" aria-labelledby="trailerTitle">
      <div class="trailer-screen"><video id="paradeTrailer" muted loop playsinline preload="metadata" poster="/assets/video/bipy-promo-poster.webp" aria-label="Cuplikan animasi Bipy Grand Line Desire tanpa suara"><source src="/assets/video/heart-parade-bipy-promo.mp4" type="video/mp4"></video></div>
-     <div class="trailer-copy"><p class="eyebrow">TRAILER</p><h2 id="trailerTitle">Satu tebasan giok, <em>satu mawar emas.</em></h2></div>
+     <div class="trailer-copy trailer-duet"><span class="trailer-emblem" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M9 30 28 11m-3 1 5-5-1 5m-16 11 4 4M20 32V19m0 7c-6-6-9-1-9-1 2 5 9 5 9 5m0-9c7-7 7-12 3-12-3-2-7 3-3 12Z"/></svg></span><div><p class="eyebrow">GIOK × EMAS · GRAND LINE</p><h2 id="trailerTitle"><span>Satu tebasan giok,</span><em>satu mawar emas.</em></h2></div><span class="trailer-duet-heart" aria-hidden="true">♡</span></div>
     </section>
     <p class="hero-lead">Babes, momen favoritmu dimulai di sini. Kenali tujuh fanservice, pilih Zoro atau Sanji, lalu buka kartu momenmu.</p>
     <div class="purchase-guide" aria-label="Cara mendapatkan fanservice di booth">
@@ -51,13 +53,15 @@
     <p class="session-note" id="sessionNote" role="status">Menyiapkan meja kartu…</p>
    </div>
    <div class="table" aria-label="Pilih leader">
+    <div class="leader-duel-title"><p class="eyebrow">ZORO × SANJI</p><h2>Dua rival. <em>Pilihanmu.</em></h2></div>
+    <div class="leader-duel-arena"><span class="leader-energy leader-energy-jade" aria-hidden="true"></span><span class="leader-energy leader-energy-gold" aria-hidden="true"></span><span class="leader-versus" aria-hidden="true">VS</span>
     <div class="leaders" id="leaders" role="group" aria-label="Kartu leader"></div>
+    </div>
     <div class="table-bipys" aria-label="Bipy menemani pilihan leader">
      <img class="sticker s-jade" src="/assets/brand/bipy-jade.webp" alt="Bipy Jade, kostum pendekar hijau" width="929" height="1693" decoding="async">
      <img class="sticker s-pink" src="/assets/brand/bipy-pink.webp" alt="Bipy pink, maskot Bpedia" width="1098" height="2000" decoding="async">
      <img class="sticker s-gold" src="/assets/brand/bipy-gold.webp" alt="Bipy Golden Chef dengan wajan" width="929" height="1693" decoding="async">
     </div>
-    <figure class="quote" aria-live="polite"><span class="quote-mark" aria-hidden="true">“</span><div><small>SATU PESAN UNTUK BABES</small><blockquote id="hostQuote">Hari ini, aku tidak akan salah arah. Tujuanku kamu.</blockquote><figcaption id="quoteName">— Zoro, The Jade Swordsman</figcaption></div><span class="quote-heart" aria-hidden="true">♡</span></figure>
    </div>
   </section>
 
@@ -96,7 +100,7 @@
   </section>
 
   <section class="binder" aria-labelledby="binderTitle">
-   <header class="section-head binder-head"><div><p class="eyebrow">BINDER KOLEKSI</p><h2 id="binderTitle">Kartu di perangkat ini</h2></div><div class="binder-progress"><b id="binderCount">0/14</b><span class="bar"><i id="binderBar"></i></span><small id="collectionCount">Kumpulkan 14 kartu Zoro &amp; Sanji.</small></div></header>
+   <header class="section-head binder-head"><div><p class="eyebrow">BINDER KOLEKSI</p><h2 id="binderTitle">Momen koleksimu</h2></div><div class="binder-progress"><b id="binderCount">0/14</b><span class="bar"><i id="binderBar"></i></span><small id="collectionCount" class="visually-hidden" role="status">Kumpulkan 14 kartu Zoro &amp; Sanji.</small></div></header>
    <div class="binder-grid" id="binder" aria-label="Koleksi kartu"></div>
   </section>
 
@@ -175,6 +179,7 @@
      <p class="result-kicker"><span class="rarity-chip" id="resultRarity">R</span><span id="resultCardNo">BP06-001</span><span id="resultMethod">Gacha Booster</span></p>
      <h2 id="resultTitle" tabindex="-1">Kartu fanservice</h2>
      <p class="result-host">bersama <b id="resultHostName">Zoro</b> · <span id="resultRole">The Jade Swordsman</span></p>
+     <div class="result-audio-controls"><button type="button" class="secondary result-voice" id="replayResultVoice"><span data-icon="sound"></span>Dengarkan kartu</button><button type="button" class="icon-button result-mute" id="resultSoundButton" aria-label="Matikan suara" title="Suara (M)"></button></div>
      <blockquote id="resultRomanticLine"></blockquote>
      <div class="result-bipy"><img id="resultBipy" src="/assets/brand/bipy-pink.webp" alt="" width="640" height="800"><p><b id="resultBipyName">Bipy</b><small>Momen pilihan Babes</small></p></div>
      <div class="comfort-pill" id="resultComfort"></div>

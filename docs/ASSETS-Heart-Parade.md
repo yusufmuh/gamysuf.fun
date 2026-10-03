@@ -100,3 +100,9 @@ Latar dek menampilkan embed resmi Crunchyroll: https://www.youtube.com/watch?v=L
 ## Hero HD dan pratinjau 2.5.0
 
 Dua figur dewasa baru /assets/characters/zoro-hero-hd.webp dan sanji-hero-hd.webp, 1024×1536 RGBA, dibuat dengan OpenAI built-in image_gen. Original PNG di docs/artwork dan Downloads, tanpa crop atau perubahan kreatif setelah generasi; WebP quality 95 menjaga alpha. Manifest hero-hd-manifest.json menyimpan prompt, referensi dan hash. Kartu leader serta panel Cosplayer pilihanmu memakai kedua file ini. Bipy ready/jump/cheer menggunakan WebP dari PNG pemilik yang sudah tercatat dalam manifest stiker, tanpa mengubah artwork. Present diganti animasi CSS duo karakter, bukan video resmi baru.
+
+## Narasi hasil dan latar Home · 2.7.0
+
+Empat belas narasi bahasa Indonesia dibuat memakai edge-tts/id-ID-GadisNeural untuk menyebut nama momen dan partner. Semua teks asli, tanpa tiruan suara karakter. Aset `/assets/audio/results/<host>-<service>.mp3` dan `manifest.json` menyimpan durasi serta SHA-256; skrip `make-result-voices.py` ada di docs sumber. Pemutaran menghormati bisu, gestur, visibilitas dan penutupan hasil.
+
+Home memakai embed resmi Crunchyroll https://www.youtube.com/watch?v=Llefi8QFN0c, sama dengan sumber aksi yang sudah diverifikasi pada dek. Adegan kedua karakter beraksi menyelamatkan Nami dan Usopp; bukan duel Zoro melawan Sanji. Pemutar bisu/berulang tidak disalin ke paket. Binder menggunakan 14 duo stiker asli dan video yang sudah ada, dengan efek CSS tanpa statistik kartu.

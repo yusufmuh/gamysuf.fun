@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "source": "Original Indonesian narration synthesized with edge-tts; not a character voice clone",
+  "items": [
+    {
+      "hostId": "zoro",
+      "serviceId": "cinderella",
+      "text": "Babes, kamu mendapatkan kartu Cinderella's Fit, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-cinderella.mp3",
+      "duration": 5.736,
+      "bytes": 34416,
+      "sha256": "ce10bc7bcec17be897fa29a2a80c9a945cd1695d9fe38ab54fa221342f080279"
+    },
+    {
+      "hostId": "zoro",
+      "serviceId": "twirl",
+      "text": "Babes, kamu mendapatkan kartu Princess Twirl, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-twirl.mp3",
+      "duration": 5.64,
+      "bytes": 33840,
+      "sha256": "4a89fcd938c44d9f6fa90d4a69c660c68084a64efe52c5301db8b20036cb63d7"
+    },
+    {
+      "hostId": "zoro",
+      "serviceId": "whisper",
+      "text": "Babes, kamu mendapatkan kartu Blossom Whisper, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-whisper.mp3",
+      "duration": 5.712,
+      "bytes": 34272,
+      "sha256": "5b3445ae456e2c8aa455cc2404e904f131a9c1fd2b25c625003900bb43f85959"
+    },
+    {
+      "hostId": "zoro",
+      "serviceId": "offering",
+      "text": "Babes, kamu mendapatkan kartu Sweet Offering, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-offering.mp3",
+      "duration": 5.688,
+      "bytes": 34128,
+      "sha256": "08ac22e0d96c81a18a8e8610292775b13984eaf73227d2e2da2d49cfb380dbc8"
+    },
+    {
+      "hostId": "zoro",
+      "serviceId": "vow",
+      "text": "Babes, kamu mendapatkan kartu Knight's Vow, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-vow.mp3",
+      "duration": 5.736,
+      "bytes": 34416,
+      "sha256": "be94a261517d6e0bbbd96fd076989f47b6526ba97fd03b71cf67b4447f63bf59"
+    },
+    {
+      "hostId": "zoro",
+      "serviceId": "hug",
+      "text": "Babes, kamu mendapatkan kartu Warm Hug, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-hug.mp3",
+      "duration": 5.256,
+      "bytes": 31536,
+      "sha256": "3eb9ec1b8146217cb6b7c0b520d035094bc456bcb5018ab44b5f19d54f71dbcd"
+    },
+    {
+      "hostId": "zoro",
+      "serviceId": "pat",
+      "text": "Babes, kamu mendapatkan kartu Pat on Head, bersama Zoro!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/zoro-pat.mp3",
+      "duration": 5.4,
+      "bytes": 32400,
+      "sha256": "79a737a4906825ab0c0e917eab65a656dbc10fa1d8b9178bc990a7a92f9cf823"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "cinderella",
+      "text": "Babes, kamu mendapatkan kartu Cinderella's Fit, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-cinderella.mp3",
+      "duration": 5.808,
+      "bytes": 34848,
+      "sha256": "771742281ae87196617dda6cd2fcce148d619b83482e8c01867c3dc3026177e7"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "twirl",
+      "text": "Babes, kamu mendapatkan kartu Princess Twirl, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-twirl.mp3",
+      "duration": 5.736,
+      "bytes": 34416,
+      "sha256": "c0cbe031d5ac4ecec3ffd30e0f73e4f1828ae3322e55f176da506d94c9f26e26"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "whisper",
+      "text": "Babes, kamu mendapatkan kartu Blossom Whisper, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-whisper.mp3",
+      "duration": 5.784,
+      "bytes": 34704,
+      "sha256": "b932ed73a2f895c8e25e74f6314debd78406986303a64e572cb1206dc1ee849f"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "offering",
+      "text": "Babes, kamu mendapatkan kartu Sweet Offering, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-offering.mp3",
+      "duration": 5.736,
+      "bytes": 34416,
+      "sha256": "289c3bfd1b79e17a3afe3df6185aa5b36805849e31d291b7c8231f8ba78f7b64"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "vow",
+      "text": "Babes, kamu mendapatkan kartu Knight's Vow, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-vow.mp3",
+      "duration": 5.784,
+      "bytes": 34704,
+      "sha256": "6c601b93e56d55b88c0fea43cd8c27c118710f5d0008577557ad9a70da678a53"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "hug",
+      "text": "Babes, kamu mendapatkan kartu Warm Hug, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-hug.mp3",
+      "duration": 5.352,
+      "bytes": 32112,
+      "sha256": "b251e6c40a9cc9ba328a2cf4a36a72ab652eac851d5d1389d1dcc528d57bbe16"
+    },
+    {
+      "hostId": "sanji",
+      "serviceId": "pat",
+      "text": "Babes, kamu mendapatkan kartu Pat on Head, bersama Sanji!",
+      "voice": "id-ID-GadisNeural",
+      "path": "/assets/audio/results/sanji-pat.mp3",
+      "duration": 5.496,
+      "bytes": 32976,
+      "sha256": "6974cc37299cf843527c584fd3a7a3ce8d35f41dc37b3a86e15014e34cbb00a7"
+    }
+  ]
+}

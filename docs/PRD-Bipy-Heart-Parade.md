@@ -119,3 +119,20 @@ Artwork dibuat dengan **OpenAI built-in image_gen**, menggunakan figur lama seba
 Harga belanja Rp100.000/Rp150.000, tujuh kartu per karakter, ID BP06, koleksi, peluang gacha, antrean dan data petugas tetap mengikuti kontrak sebelumnya. Lima video fanservice Gemini dan sembilan loop ilustrasi tidak berubah pada revisi ini; sembilan video generatif masih menunggu kuota sebagaimana dicatat dalam `VIDEO-GENERATION-STATUS.md`.
 
 Validasi lokal saat penulisan: 47 tes sumber dan pemeriksaan sintaks, 75 tes hub, serta 1265 pemeriksaan tampilan di Chromium, Firefox dan WebKit, pada 390×844, 768×1024, 844×390 dan 1440×900 dalam kedua tema. Uji tampilan memeriksa seluruh 14 kombinasi pratinjau, gambar terdekode, ikon, fokus keyboard, ruang aksi Bipy, animasi dan mode kurangi animasi, serta nol permintaan draw ketika hanya membuka pratinjau. Bukti lokal: `artifacts/heart-presentation/report.json`. Verifikasi produksi dan paket dilengkapi setelah penerapan selesai.
+
+
+## Revisi Home, binder dan suara hasil · 2.7.0
+
+# Gamysuf Arcade 1.12.0 · Grand Line Desire 2.7.0
+
+3 Oktober 2026. Home memakai latar video resmi One Piece dari Crunchyroll dengan adegan Zoro dan Sanji beraksi menyelamatkan Nami/Usopp: https://www.youtube.com/watch?v=Llefi8QFN0c. Pemutar YouTube tanpa cookie berjalan bisu dan berulang, dengan lapisan warna Bpedia dalam dua tema. Jeda latar, dialog, tab tersembunyi, perpindahan ke dek dan pilihan kurangi animasi menghentikannya. Kandidat video King/Queen dibatalkan karena dibatasi wilayah; berkas anime tidak diunduh atau dikemas.
+
+Caption trailer kini memiliki emblem pedang/mawar dan panel yang mengikuti warna tema. Kutipan di bawah leader dihapus. Dua kartu leader full body tampil berhadapan dengan VS, perspektif, gerakan menantang serta sapuan giok/emas. Kontrol pemilihan kartu tetap bisa digunakan lewat sentuh dan keyboard.
+
+Binder menampilkan 14 visual momen tanpa statistik POWER/COUNTER atau pelat teks kartu. Kepemilikan dan hitungan 14 kartu dipertahankan. Momen yang dimiliki memakai ilustrasi asli, video sesuai kartu, kilau foil dan spark; kartu terkunci memakai visual redup. Label aksesibel tetap menyebut momen, karakter dan kepemilikan. Gerak/video berhenti di luar layar, saat dialog terbuka dan pada mode kurangi animasi.
+
+Setiap hasil baru menyuarakan nama kartu dan Zoro/Sanji dalam bahasa Indonesia. Empat belas MP3 memakai narasi asli sintetis id-ID-GadisNeural, bukan tiruan aktor karakter. Manifest menyimpan teks, durasi, byte dan SHA-256; docs/make-result-voices.py mereproduksi aset. BGM turun selama narasi. Dialog hasil menyediakan Dengarkan kartu dan tombol bisu, tanpa melakukan draw tambahan. Menutup hasil, menyembunyikan tab atau membisukan menghentikan narasi. Pemulihan hasil lama tidak mengumumkan ulang otomatis.
+
+Atraksi footer, trailer tanpa overlay dan subtitle besar dari revisi 1.11 tetap disertakan. Harga belanja, peluang, ID kartu, stok, antrean dan autentikasi petugas mengikuti kontrak sebelumnya. Lima video kartu Gemini dan sembilan loop ilustrasi tetap tersedia; sembilan video generatif masih menunggu kuota. Detail ada di VIDEO-GENERATION-STATUS.md.
+
+Validasi dan bukti produksi dilengkapi setelah pengujian serta penerapan selesai. Bukti rilis disimpan pada artifacts/heart-collection-voice, artifacts/heart-browser-revision, artifacts/package dan artifacts/deployment-1.12.0.json di repo hub.
