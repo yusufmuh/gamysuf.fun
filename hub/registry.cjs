@@ -33,7 +33,7 @@ const EVENTS={
   summary:'Gacha Pop untuk hadiah beauty dan voucher belanja, Grand Line Desire untuk kartu fanservice bersama Zoro & Sanji. Dua game berbeda, satu profil dan satu album koleksi.',
   cosplay:'Zoro & Sanji hadir 3–4 Okt — dua hari di booth Bpedia',
   teaser:'Gacha Pop & Grand Line Desire di satu booth. Zoro & Sanji hadir dua hari.',
-  logo:'/hub/assets/market-in/market-in-6.webp?v=1.12.0',
+  logo:'/hub/assets/market-in/market-in-6.webp?v=1.12.1',
   schedule:[
    {date:'2026-10-03',day:'Sabtu',label:'Sabtu, 3 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari pertama di booth Bpedia. Jam sesi foto dan fanservice diumumkan petugas.'},
    {date:'2026-10-04',day:'Minggu',label:'Minggu, 4 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari kedua di booth Bpedia. Datang lagi untuk melengkapi kartumu.'}
@@ -142,7 +142,7 @@ const GAMES=[
   eventGroup:'market-in-6',
   mechanic:'Mesin gacha satu tap · kapsul pop · kartu stiker',
   accent:'#39A7E5',
-  cover:'/hub/assets/covers/gacha.jpg?v=1.12.0',
+  cover:'/hub/assets/covers/gacha.jpg?v=1.12.1',
   tagline:'Sekali tap: tuas berputar, kapsul keluar, lalu pop jadi kartu stiker hadiah.',
   description:'Mesin kapsul gashapon bergaya Y2K Marketing 6.0. Cukup satu tap, tanpa isian apa pun: kapsul menggelinding dari corong lalu pop menjadi kartu stiker. Isinya Bundling Paket 1–3, kuas set kolab karakter, Saput Mickey, voucher belanja Bpedia, serta produk PINKFLASH & FOCALLURE.',
   howTo:[
@@ -166,7 +166,7 @@ const GAMES=[
  },
  {
   slug:'heart',title:'Bipy Grand Line Desire',brandTitle:'BIPY GRAND LINE DESIRE',event:'Marketing 6.0',eventGroup:'market-in-6',
-  mechanic:'Zoro & Sanji fanservice · atraksi gacha atau pilih momen · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.12.0',
+  mechanic:'Zoro & Sanji fanservice · atraksi gacha atau pilih momen · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.12.1',
   tagline:'Kartu fanservice Zoro & Sanji bergaya poster bounty. Harga normal dicoret, gratis untuk pelanggan Bpedia.',
   description:'Belanja Rp100.000 di booth untuk Gacha Fanservice, atau Rp150.000 untuk memilih fanservice favoritmu. Pilih Zoro dengan dek hijau atau Sanji dengan dek kuning. Kenali tujuh cuplikannya, lihat atraksi Bipy, lalu ketuk kartu untuk membuka momen dan membaliknya menjadi poster bounty GRATIS.',
   howTo:['Pilih Zoro atau Sanji terlebih dahulu.','Belanja Rp100.000: kenali kartu, lihat Bipy mengocok, lalu pilih satu kartu tertutup.','Belanja Rp150.000: ketuk bagian mana pun pada kartu favoritmu untuk langsung membukanya.','Ketuk hasil kartu untuk membalik ke poster bounty. Demo online gratis untuk mencoba.'],

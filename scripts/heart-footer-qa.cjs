@@ -22,7 +22,7 @@ async function layout(browser,name,w,h,origin){
  const label=`${name}-${w}x${h}`,context=await browser.newContext({viewport:{width:w,height:h},hasTouch:true,reducedMotion:'reduce'}),page=await context.newPage();let posts=0;
  page.on('pageerror',e=>report.errors.push({label,error:e.message}));page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/g/heart/api/play'))posts++;});
  try{
-  await page.goto(origin+'/g/heart/',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="presentation.css?v=2.7.0"]').waitFor({state:'attached'});
+  await page.goto(origin+'/g/heart/',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="presentation.css?v=2.7.1"]').waitFor({state:'attached'});
   check(await page.locator('#videoPlayButton,#videoPlayLabel,.trailer-toggle').count()===0,label+' trailer overlay removed');check(await page.locator('#paradeTrailer').count()===1,label+' trailer retained');
   const font=await page.locator('.t-sub').evaluate(e=>({size:parseFloat(getComputedStyle(e).fontSize),line:parseFloat(getComputedStyle(e).lineHeight),width:e.getBoundingClientRect().width}));
   check(font.size>=(w>600&&w<=1000?20:15),label+' readable subtitle size '+font.size);check(font.line>=font.size*1.5,label+' subtitle line spacing');

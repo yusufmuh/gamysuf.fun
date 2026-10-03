@@ -32,7 +32,7 @@ async function main(){
   const voices=await (await get('/g/heart/assets/audio/results/manifest.json')).json();assert.equal(voices.items.length,14);
   for(const voice of voices.items){const response=await get(voice.path);assert.match(response.headers.get('content-type'),/audio\/mpeg/);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(bytes.length,voice.bytes);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),voice.sha256);}
   checks.push('all fourteen result announcements preserve exact manifest hashes and playable MP3 MIME');
-  assert.ok(html.includes('stickerGalleryDialog')&&html.includes('bpedia-tokens.css?v=2.7.0')&&!html.includes('id="ticketBox"')&&!html.includes('home-music'));
+  assert.ok(html.includes('stickerGalleryDialog')&&html.includes('bpedia-tokens.css?v=2.7.1')&&!html.includes('id="ticketBox"')&&!html.includes('home-music'));
   const stickers=await (await get('/g/heart/assets/stickers/manifest.json')).json();assert.equal(stickers.items.length,50);
   for(const item of stickers.items){const response=await get(item.image);assert.match(response.headers.get('content-type'),/image\/webp/);assert.equal(crypto.createHash('sha256').update(Buffer.from(await response.arrayBuffer())).digest('hex'),item.sha256);}
   for(const card of state.cards)assert.ok(stickers.items.some(item=>item.image===card.stickerImage&&item.hostId===card.hostId));

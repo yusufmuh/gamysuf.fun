@@ -7,7 +7,7 @@ const services=['cinderella','twirl','whisper','offering','vow','hug','pat'];
 const owned=services.map((service,index)=>`${index%2?'sanji':'zoro'}:${service}`);
 const report={origin:'',checks:[],errors:[],cases:[]};
 function check(value,label){assert.ok(value,label);report.checks.push(label);}
-async function ready(page,origin){await page.goto(origin+'/g/heart/',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="presentation.css?v=2.7.0"]').waitFor({state:'attached'});}
+async function ready(page,origin){await page.goto(origin+'/g/heart/',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="presentation.css?v=2.7.1"]').waitFor({state:'attached'});}
 async function fit(page,label){check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+' no horizontal overflow');}
 async function decode(locator){await locator.evaluateAll(images=>Promise.all(images.map(async i=>{i.loading='eager';if(!i.complete)await new Promise((resolve,reject)=>{i.addEventListener('load',resolve,{once:true});i.addEventListener('error',reject,{once:true});});await i.decode();})));}
 async function layout(browser,name,w,h,origin){

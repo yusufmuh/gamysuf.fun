@@ -104,6 +104,20 @@
   $('boosterButton').disabled=!canPlay||!idle||ui.mode!=='gacha';$('boosterButton').setAttribute('aria-label',`Buka Gacha Booster ${h?.name||''}`.trim());
   $('boosterButton').tabIndex=ui.mode==='gacha'?0:-1;
  }
+ function deckActionMarkup(hostId){
+  const sanji=hostId==='sanji';
+  const poses=sanji?[
+   ['kick','Bipy Sanji mengangkat kaki untuk tendangan ceria','Tendangan emas'],
+   ['flower','Bipy Sanji menawarkan mawar','Mawar untukmu'],
+   ['serve','Bipy Sanji menyajikan kejutan','Sajian istimewa']
+  ]:[
+   ['ready','Bipy Zoro bersiap dengan pedang','Siap beraksi'],
+   ['jump','Bipy Zoro melompat sambil mengangkat pedang','Lompatan giok'],
+   ['cheer','Bipy Zoro tersenyum dan mengacungkan jempol','Satu kemenangan!']
+  ];
+  const eyebrow=sanji?'BIPY · GOLDEN GENTLEMAN':'BIPY · JADE SWORDSMAN',title=sanji?'Langkah kecil,<br><em>pesona besar.</em>':'Pendekar kecil,<br><em>aksi besar.</em>',signoff=sanji?'Tendangan, mawar, dan kejutan untukmu.':'Tiga pedang. Satu semangat Bipy.';
+  return `<aside class="deck-actions" id="deckActions" data-host="${esc(hostId)}" aria-labelledby="deckActionsTitle"><p class="eyebrow">${eyebrow}</p><h3 id="deckActionsTitle">${title}</h3><div class="bipy-action-stage">${poses.map(([pose,alt,caption],index)=>`<figure class="action-${['ready','jump','cheer'][index]}" data-pose="${esc(pose)}"><img src="/assets/dealers/${esc(hostId)}-${esc(pose)}.webp" alt="${esc(alt)}" width="800" height="1000" loading="lazy" decoding="async"><figcaption>${esc(caption)}</figcaption></figure>`).join('')}</div><p class="action-signoff">${signoff}</p></aside>`;
+ }
  function renderDeck(){
   const s=ui.state,h=host();if(!h)return;
   const key=`${h.id}|${s.settings.allowPick}|${s.services.map(v=>v.id+':'+v.enabled).join(',')}|${s.cards.map(c=>c.id+c.image).join(',')}`;
@@ -112,7 +126,7 @@
    $('deckHostName').textContent=h.name;
    const ordered=[...s.services].sort((a,b)=>SERVICE_ORDER.indexOf(a.id)-SERVICE_ORDER.indexOf(b.id)),mid=(ordered.length-1)/2;
    $('momentGrid').innerHTML=ordered.map((v,i)=>{const c=cardOf(h.id,v.id);if(!c)return '';const o=i-mid;return `<article class="deck-card${v.enabled?'':' unavailable'}" data-service="${esc(v.id)}" style="--i:${i};--o:${o};--o2:${o*o}">${cardFace(c,{size:'mini',hostName:h.name,video:true})}${v.enabled?'':'<span class="deck-off">Sedang tidak tersedia</span>'}<div class="moment-caption"><h3>${esc(v.name)}</h3><p>${esc(v.detail)}</p><button type="button" class="peek-video secondary" data-service="${esc(v.id)}">${icon('play')} Lihat momen</button><button type="button" class="card-choice" data-service="${esc(v.id)}" aria-pressed="false" aria-label="${esc(v.name)} bersama ${esc(h.name)}, ${esc(RARITY[c.rarity]||c.rarity)}${v.enabled?'':', sedang tidak tersedia'}"${v.enabled?'':' disabled'}>Pilih kartu ini</button></div></article>`;}).join('');
-   $('momentGrid').insertAdjacentHTML('beforeend',`<aside class="deck-actions" id="deckActions" aria-labelledby="deckActionsTitle"><p class="eyebrow">BIPY · JADE SWORDSMAN</p><h3 id="deckActionsTitle">Pendekar kecil,<br><em>aksi besar.</em></h3><div class="bipy-action-stage"><figure class="action-ready"><img src="/assets/dealers/zoro-ready.webp" alt="Bipy Zoro bersiap dengan pedang" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Siap beraksi</figcaption></figure><figure class="action-jump"><img src="/assets/dealers/zoro-jump.webp" alt="Bipy Zoro melompat sambil mengangkat pedang" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Lompatan giok</figcaption></figure><figure class="action-cheer"><img src="/assets/dealers/zoro-cheer.webp" alt="Bipy Zoro tersenyum dan mengacungkan jempol" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Satu kemenangan!</figcaption></figure></div><p class="action-signoff">Tiga pedang. Satu semangat Bipy.</p></aside>`);
+   $('momentGrid').insertAdjacentHTML('beforeend',deckActionMarkup(h.id));
    if(hostChanged&&!motion()){const fan=$('momentGrid');fan.classList.remove('deal');void fan.offsetWidth;fan.classList.add('deal');}
   }
   updateDeck();

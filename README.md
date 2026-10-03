@@ -1,4 +1,4 @@
-# Gamysuf Arcade 1.12.0
+# Gamysuf Arcade 1.12.1
 
 Satu dashboard interaktif untuk lima game booth Bpedia, berjalan di cloud (Hostinger Node.js):
 
@@ -40,4 +40,4 @@ Produksi: `npm start` (entry `hub/server.cjs`), env `ADMIN_PIN` (6–12 digit, w
 
 Dokumen lengkap & status serah-terima: [docs/PRD-Gamysuf-Arcade.md](docs/PRD-Gamysuf-Arcade.md).
 
-Status 3 Oktober 2026: rilis **1.12.0**, Game 5 **2.7.0**. Home memakai video aksi resmi One Piece Zoro–Sanji dengan jeda dan lapisan warna Bpedia. Kartu leader berhadapan dengan VS; kutipan dihapus, caption trailer diperbaiki. Binder memakai visual momen dan efek grafis tanpa statistik rumit. Semua 14 hasil menyebut nama kartu dan partner lewat suara Indonesia, dengan replay/bisu dalam dialog. Atraksi footer Bipy dan subtitle tablet disertakan. Bukti pengujian dan penerapan: [docs/RELEASE-1.12.0.md](docs/RELEASE-1.12.0.md). Lima video kartu Gemini aktif; sembilan video generatif masih menunggu kuota. PRD: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md).
+Status 3 Oktober 2026: rilis **1.12.1**, Game 5 **2.7.1**. Panel aksi mengikuti leader yang dipilih: tiga pose Bipy Zoro atau tiga pose Bipy Sanji dari folder asli pemilik, dengan gerakan berbeda dan label yang sesuai. Gerak berhenti di luar layar, saat dialog terbuka dan pada mode kurangi animasi. Validasi revisi: [docs/RELEASE-1.12.1.md](docs/RELEASE-1.12.1.md). Home, binder visual, 14 narasi hasil, leader VS dan atraksi footer dari [rilis 1.12.0](docs/RELEASE-1.12.0.md) tetap disertakan. Lima video kartu Gemini aktif; sembilan video generatif masih menunggu kuota. PRD: [docs/PRD-Bipy-Heart-Parade.md](docs/PRD-Bipy-Heart-Parade.md).

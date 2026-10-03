@@ -10,7 +10,7 @@ async function run(browser,name,w,h,origin){
  const label=`${name}-${w}x${h}`,context=await browser.newContext({viewport:{width:w,height:h},hasTouch:true,reducedMotion:'reduce'}),page=await context.newPage();let draws=0;
  page.on('pageerror',e=>report.errors.push({label,error:e.message}));page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/g/heart/api/play'))draws++;});
  try{
-  await page.goto(origin+'/g/heart/',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="presentation.css?v=2.7.0"]').waitFor({state:'attached'});
+  await page.goto(origin+'/g/heart/',{waitUntil:'networkidle'});await page.waitForFunction(()=>window.HeartGame?.context().state);await page.locator('link[href*="presentation.css?v=2.7.1"]').waitFor({state:'attached'});
   check((await page.locator('.brand').textContent()).trim()==='×',label+' presents removed');check(await page.locator('.brand-crew img').count()===2,label+' two One Piece characters in brand accent');
   for(const host of ['zoro','sanji']){const image=page.locator(`.tcg-leader.host-${host} .host-art`);check((await image.getAttribute('src')).endsWith(`${host}-hero-hd.webp`),label+' '+host+' new hero');await page.waitForFunction(h=>{const i=document.querySelector(`.tcg-leader.host-${h} .host-art`);return i.complete&&i.naturalWidth===1024&&i.naturalHeight===1536;},host);}
   for(const theme of ['light','dark']){

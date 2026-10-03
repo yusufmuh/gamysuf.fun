@@ -14,7 +14,7 @@
  new IntersectionObserver(entries=>{homeBattleInView=entries[0].isIntersecting;syncHomeBattle();},{threshold:0}).observe($('homeBattleBackground'));
  $('homeBattleToggle').addEventListener('click',()=>{homeBattlePaused=!homeBattlePaused;syncHomeBattle();});
  let observedActions=null;
- const actionObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);},{threshold:.15});
+ const actionObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);syncDeckVideos();},{threshold:.15});
  const footerRivalry=$('footerRivalry');let footerInView=false,footerPaused=false;
  const leaderArena=document.querySelector('.leader-duel-arena'),binder=$('binder');
  const visualObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting&&!document.hidden);},{threshold:.1});
@@ -34,7 +34,7 @@
   $('battleToggle').textContent=battlePaused?'Putar latar aksi':'Jeda latar aksi';$('battleToggle').setAttribute('aria-pressed',String(!battlePaused));
  }
  const videoObserver=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting)visibleVideos.add(entry.target);else visibleVideos.delete(entry.target);}syncDeckVideos();},{threshold:.15});
- function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const inJourney=video.id==='rivalryVideo'||video.classList.contains('binder-video')?document.body.dataset.journey==='home':document.body.dataset.journey==='table';const playing=visibleVideos.has(video)&&inJourney&&!document.hidden&&!reduced&&!blocked&&video.dataset.userPaused!=='true';if(playing)video.play().catch(()=>{});else video.pause();}syncBattle();syncFooterRivalry();syncHomeBattle();for(const el of [leaderArena,binder])el.dataset.active=String(el.dataset.inView==='true'&&!document.hidden&&!reduced&&!blocked&&document.body.dataset.journey==='home');}
+ function syncDeckVideos(){const blocked=Boolean(document.querySelector('dialog[open]')),reduced=game.context().reduced;for(const video of videos){const inJourney=video.id==='rivalryVideo'||video.classList.contains('binder-video')?document.body.dataset.journey==='home':document.body.dataset.journey==='table';const playing=visibleVideos.has(video)&&inJourney&&!document.hidden&&!reduced&&!blocked&&video.dataset.userPaused!=='true';if(playing)video.play().catch(()=>{});else video.pause();}syncBattle();syncFooterRivalry();syncHomeBattle();for(const el of [leaderArena,binder])el.dataset.active=String(el.dataset.inView==='true'&&!document.hidden&&!reduced&&!blocked&&document.body.dataset.journey==='home');const actions=$('deckActions');if(actions)actions.dataset.active=String(actions.dataset.inView==='true'&&!document.hidden&&!reduced&&!blocked&&document.body.dataset.journey==='table');}
  const dialogObserver=new MutationObserver(syncDeckVideos);for(const modal of document.querySelectorAll('dialog'))dialogObserver.observe(modal,{attributes:true,attributeFilter:['open']});
  dialogObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});dialogObserver.observe(document.body,{attributes:true,attributeFilter:['data-journey']});
  const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
