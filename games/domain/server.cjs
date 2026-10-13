@@ -86,7 +86,7 @@ async function createApp({dataDir=path.join(__dirname,'.local-data'),port=0,host
    if(raw.includes('..')||raw.includes('\\')||raw.includes('\0'))throw fail('Path tidak valid.',403);
    const rel=raw==='/'?'index.html':raw.slice(1);
    if(!['index.html','admin.html'].includes(rel)&&!/^(assets|css|js)\/[a-zA-Z0-9_./-]+$/.test(rel))throw fail('Berkas tidak ditemukan.',404);
-   const file=path.join(__dirname,rel),type=TYPES[path.extname(file)];
+   const file=path.join(__dirname,rel),type=rel==='js/vendor/THREE-LICENSE.txt'?'text/plain; charset=utf-8':TYPES[path.extname(file)];
    if(!type||!fs.existsSync(file)||!fs.statSync(file).isFile())throw fail('Berkas tidak ditemukan.',404);
    const stat=fs.statSync(file),media=/^(?:audio|video)\//.test(type),cache=/\.(html|css|js)$/.test(file)?'no-cache':'public, max-age=3600';
    if(media&&req.headers.range){
