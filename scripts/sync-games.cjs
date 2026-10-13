@@ -14,7 +14,8 @@ const SOURCES={
  nyapit:'02 nyapit',
  drop:'03 bipy-beauty-drop',
  gacha:'04 bipy-gacha-pop',
- heart:'05 bipy-heart-parade'
+ heart:'05 bipy-heart-parade',
+ domain:'07 bipy-domain-festival'
 };
 const ENTRIES=['server.cjs','index.html','admin.html','core','js','css','assets','maskot.png','logo.png','rancangan maskot.png'];
 const SKIP=[
@@ -57,5 +58,5 @@ for(const [slug,folder] of Object.entries(SOURCES)){
 }
 }
 
-module.exports={copy,syncGames};
+module.exports={copy,syncGames,SOURCES};
 if(require.main===module)syncGames();

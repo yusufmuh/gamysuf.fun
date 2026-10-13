@@ -21,11 +21,24 @@ function heartMomentCard(host,service,name){
  const image=heartMomentImage(host?.id,service?.id);
  return image?{cardId:`${host.id}-${service.id}`,name:name||`${service.name} · ${host.name}`,image,rarity:'epic'}:null;
 }
+function domainRewardCard(reward,host){
+ if(!reward?.id)return null;
+ if(reward.track==='fanservice')return host?.id?{cardId:`${host.id}-${reward.id}`,name:`${reward.name} · ${host.name}`,image:host.image,rarity:'epic'}:null;
+ return {cardId:reward.id,name:reward.name,image:reward.image,rarity:reward.id.startsWith('voucher-')?'rare':'common'};
+}
 
 /* Event booth yang menyatukan beberapa game di beranda. Game tetap berdiri
    sendiri; eventGroup hanya mengelompokkan tampilan. Jadwal cosplayer tanpa
    jam karena jam sesi diumumkan langsung oleh petugas booth. */
 const EVENTS={
+ 'trademark-2026':{
+  id:'trademark-2026',title:'Trademark Market × JKTGO',place:'Trans Convention Centre',dates:'5–8 Nov 2026',
+  startDate:'2026-11-05',endDate:'2026-11-08',page:'/g/domain/',
+  headline:'Gojo vs Geto: Bipy Domain Clash.',
+  summary:'Infinity Convergence dan Spirit Absorption: otomatis satu ketukan atau kontrol layar sentuh, lalu buka portal hadiah dan tiket hasil.',
+  teaser:'13 Bipy · dua domain · sekali klik atau sentuh',
+  logo:'/g/domain/assets/scene/domain-city.png',schedule:[]
+ },
  'market-in-6':{
   id:'market-in-6',title:'Marketing 6.0',place:'Urban Forest Cipete',city:'Jakarta',dates:'3–4 Okt 2026',
   startDate:'2026-10-03',endDate:'2026-10-04',page:'/market-in',
@@ -33,7 +46,7 @@ const EVENTS={
   summary:'Gacha Pop untuk hadiah beauty dan voucher belanja, Grand Line Desire untuk kartu fanservice bersama Zoro & Sanji. Dua game berbeda, satu profil dan satu album koleksi.',
   cosplay:'Zoro & Sanji hadir 3–4 Okt — dua hari di booth Bpedia',
   teaser:'Gacha Pop & Grand Line Desire di satu booth. Zoro & Sanji hadir dua hari.',
-  logo:'/hub/assets/market-in/market-in-6.webp?v=1.12.1',
+  logo:'/hub/assets/market-in/market-in-6.webp?v=1.13.0',
   schedule:[
    {date:'2026-10-03',day:'Sabtu',label:'Sabtu, 3 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari pertama di booth Bpedia. Jam sesi foto dan fanservice diumumkan petugas.'},
    {date:'2026-10-04',day:'Minggu',label:'Minggu, 4 Okt 2026',hosts:['Zoro','Sanji'],note:'Hari kedua di booth Bpedia. Datang lagi untuk melengkapi kartumu.'}
@@ -142,7 +155,7 @@ const GAMES=[
   eventGroup:'market-in-6',
   mechanic:'Mesin gacha satu tap · kapsul pop · kartu stiker',
   accent:'#39A7E5',
-  cover:'/hub/assets/covers/gacha.jpg?v=1.12.1',
+  cover:'/hub/assets/covers/gacha.jpg?v=1.13.0',
   tagline:'Sekali tap: tuas berputar, kapsul keluar, lalu pop jadi kartu stiker hadiah.',
   description:'Mesin kapsul gashapon bergaya Y2K Marketing 6.0. Cukup satu tap, tanpa isian apa pun: kapsul menggelinding dari corong lalu pop menjadi kartu stiker. Isinya Bundling Paket 1–3, kuas set kolab karakter, Saput Mickey, voucher belanja Bpedia, serta produk PINKFLASH & FOCALLURE.',
   howTo:[
@@ -166,7 +179,7 @@ const GAMES=[
  },
  {
   slug:'heart',title:'Bipy Grand Line Desire',brandTitle:'BIPY GRAND LINE DESIRE',event:'Marketing 6.0',eventGroup:'market-in-6',
-  mechanic:'Zoro & Sanji fanservice · atraksi gacha atau pilih momen · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.12.1',
+  mechanic:'Zoro & Sanji fanservice · atraksi gacha atau pilih momen · poster bounty',accent:'#D45778',cover:'/hub/assets/covers/heart.jpg?v=1.13.0',
   tagline:'Kartu fanservice Zoro & Sanji bergaya poster bounty. Harga normal dicoret, gratis untuk pelanggan Bpedia.',
   description:'Belanja Rp100.000 di booth untuk Gacha Fanservice, atau Rp150.000 untuk memilih fanservice favoritmu. Pilih Zoro dengan dek hijau atau Sanji dengan dek kuning. Kenali tujuh cuplikannya, lihat atraksi Bipy, lalu ketuk kartu untuk membuka momen dan membaliknya menjadi poster bounty GRATIS.',
   howTo:['Pilih Zoro atau Sanji terlebih dahulu.','Belanja Rp100.000: kenali kartu, lihat Bipy mengocok, lalu pilih satu kartu tertutup.','Belanja Rp150.000: ketuk bagian mana pun pada kartu favoritmu untuk langsung membukanya.','Ketuk hasil kartu untuk membalik ke poster bounty. Demo online gratis untuk mencoba.'],
@@ -180,7 +193,20 @@ const GAMES=[
    if(Array.isArray(state.cards)&&state.cards.length)return state.cards.map(card=>heartMomentCard(named(state.hosts,card.hostId),named(state.services,card.serviceId),card.name)).filter(Boolean);
    return state.hosts.flatMap(host=>state.services.map(service=>heartMomentCard(host,service))).filter(Boolean);
   }
+ },
+ {
+  slug:'domain',title:'Bipy Domain Clash',brandTitle:'BIPY DOMAIN CLASH',event:'Trademark Market × JKTGO',eventGroup:'trademark-2026',
+  mechanic:'Infinity Convergence · Spirit Absorption · sekali klik atau layar sentuh',accent:'#168AFF',cover:'/g/domain/assets/characters/bipy-cast-atlas.png',
+  tagline:'Gojo, Geto dan Bipy membuka dua aktivitas dalam satu festival.',
+  description:'Bidik dan satukan energi di Infinity Convergence, atau rangkai delapan spirit di Spirit Absorption. Pilih Gojo biru-putih atau Suguru Geto ungu gelap; kenali 13 varian Bipy bergerak, tampilan ilustrasi dan model 3D. Kedua arena dapat selesai otomatis dari satu ketukan atau dimainkan dengan layar sentuh. Menu fanservice dan beauty terlihat sebelum mulai; demo bukan tiket booth.',
+  howTo:['Langsung tekan Main sekali klik, atau pilih karakter/arena lebih dulu.','Otomatis berjalan segera; kontrol sentuh dapat dipilih.','Bidik energi atau sambungkan delapan spirit, lalu buka portal hadiah.','Tiket hasil demo masuk album; klaim booth mengikuti stok, verifikasi dan ketersediaan petugas.'],
+  quickStart:['Tekan Main sekali klik untuk langsung bermain otomatis.','Satukan energi atau serap delapan spirit bersama Bipy.','Buka portal hadiah dan tiket hasil.'],
+  tips:['Skor visual tidak mengubah undian hadiah server.','Peran cosplayer dan jadwal sesi dikonfirmasi petugas.'],
+  controls:[['Sentuh / klik','Mulai, bidik energi atau rangkai spirit'],['Panah','Gerakkan bidikan'],['Tab / Enter','Pilih dan mulai']],
+  admin:{path:'admin.html',login:'PIN = ADMIN_PIN'},loginRoutes:['/api/login'],resultRoutes:['/api/play'],
+  extract(_route,json){return domainRewardCard(json?.reward,json?.host);},
+  cards(state){return (state.rewards||[]).flatMap(reward=>reward.track==='fanservice'?(state.hosts||[]).map(host=>domainRewardCard(reward,host)):[domainRewardCard(reward)]).filter(Boolean);}
  }
 ];
 
-module.exports={GAMES,EVENTS,rarityOf,heartMomentImage,HEART_HOST_IDS,HEART_SERVICE_IDS};
+module.exports={GAMES,EVENTS,rarityOf,heartMomentImage,HEART_HOST_IDS,HEART_SERVICE_IDS,domainRewardCard};

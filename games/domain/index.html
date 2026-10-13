@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#e8f7ff" />
+    <title>Bipy Domain Clash • Bpedia</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="theme-gojo">
+    <canvas id="ambience" aria-hidden="true"></canvas>
+    <header class="main-header">
+      <a class="brand" href="../" aria-label="Kembali ke arcade"
+        ><img src="assets/brand/bpedia-pink.webp" alt="Bpedia" /><span
+          >DOMAIN CLASH</span
+        ></a
+      >
+      <nav>
+        <a href="#castSection">Bipy cast</a
+        ><a href="#rewardSection">Menu hadiah</a>
+      </nav>
+      <button id="mute" class="icon" aria-label="Matikan suara">♪</button>
+    </header>
+    <main id="home">
+      <section class="domain-lobby" aria-label="Panggung Bipy Domain Clash">
+        <div class="stage-backdrop">
+          <span class="world-kanji" aria-hidden="true" id="worldKanji"
+            >無限</span
+          >
+          <div class="scene-caption">
+            <span id="domainIndex">DOMAIN / 01</span
+            ><strong id="domainEnvironment">THE INFINITE SKY</strong>
+          </div>
+        </div>
+        <div id="heroPV" class="pv-backdrop" aria-hidden="true"></div>
+        <div
+          id="bipyStage"
+          class="bipy-stage"
+          aria-label="Panggung karakter Bipy 3D"
+        >
+          <p class="stage-loading">Menyiapkan Bipy 3D…</p>
+        </div>
+        <div class="lobby-copy">
+          <p class="eyebrow">TRADEMARK MARKET × JKTGO</p>
+          <p class="event-date">5–8 NOV 2026 · TRANS CONVENTION CENTRE</p>
+          <h1 id="domainTitle">ENTER THE<br /><span>INFINITY.</span></h1>
+          <p id="domainCopy" class="lead">
+            Langit terbuka. Energi menyatu. Bersama Bipy, lepaskan kekuatan
+            domainmu.
+          </p>
+          <p class="guest-line">limcosfit × geraldino</p>
+          <div class="mode-note">
+            <span class="live-dot"></span
+            ><span id="modeLabel">Memeriksa mode festival…</span>
+          </div>
+          <div class="actions">
+            <button id="auto" class="primary">
+              Main sekali klik <span>↗</span></button
+            ><button id="touch" class="secondary">
+              Main dengan sentuh <span>→</span>
+            </button>
+          </div>
+          <p class="micro">
+            Hadiah diacak sebelum permainan. Mode otomatis dan sentuh memakai
+            aturan hadiah yang sama.
+          </p>
+        </div>
+        <div class="stage-info">
+          <p class="eyebrow">BIPY COSPLAY UNIVERSE</p>
+          <strong id="characterName">Bipy Gojo</strong
+          ><span id="characterTag">INFINITY / 3D CAST</span>
+          <div class="pose-controls" aria-label="Pratinjau animasi">
+            <button data-pose="cast">Lepaskan energi ↗</button
+            ><button data-pose="dance">Bipy dance ♪</button>
+          </div>
+        </div>
+        <div
+          class="domain-switch"
+          id="characters"
+          aria-label="Pilih host domain"
+        >
+          <button data-value="gojo" class="selected">
+            <span>01</span><strong>GOJO</strong
+            ><small>Infinity · langit biru</small></button
+          ><button data-value="geto">
+            <span>02</span><strong>SUGURU GETO</strong
+            ><small>Spirit · kuil bayangan</small>
+          </button>
+        </div>
+      </section>
+      <section
+        class="play-options"
+        aria-label="Pilihan aktivitas dan jalur hadiah"
+      >
+        <div>
+          <p class="eyebrow">PILIH AKTIVITAS</p>
+          <div class="segments" id="activities">
+            <button data-value="infinity" class="selected">
+              <span>∞</span>
+              <div>
+                Infinity Convergence<small
+                  >Bidik · satukan · lepaskan energi</small
+                >
+              </div></button
+            ><button data-value="seal">
+              <span>✦</span>
+              <div>
+                Spirit Absorption<small>Panggil · rangkai · serap spirit</small>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div>
+          <p class="eyebrow">JALUR HADIAHMU</p>
+          <div class="segments" id="tracks">
+            <button data-value="fanservice" class="selected">
+              <span>♡</span>
+              <div>
+                Fanservice<small>Momen bersama cosplayer</small>
+              </div></button
+            ><button data-value="beauty">
+              <span>✧</span>
+              <div>Beauty<small>Kejutan produk Bpedia</small></div>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section id="castSection" class="cast-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">13 BIPY · ONE UNIVERSE</p>
+            <h2>Temukan Bipy favoritmu.</h2>
+          </div>
+          <p>
+            Kostum mengubah penampilan Bipy.<br />Host dan jalur hadiah tetap
+            pilihanmu.
+          </p>
+        </div>
+        <div class="cast-toolbar">
+          <div class="visual-switch" aria-label="Tampilan karakter">
+            <button data-view="illustration">Ilustrasi hidup</button>
+            <button data-view="model">Model 3D</button>
+          </div>
+          <label class="search-field"
+            ><span>⌕</span
+            ><input
+              id="castSearch"
+              type="search"
+              placeholder="Cari karakter…"
+              aria-label="Cari karakter Bipy" /></label
+          ><span id="castCount">Menyiapkan cast…</span>
+        </div>
+        <div class="cast-showcase">
+          <div class="cast-preview">
+            <div id="castPreview"></div>
+            <strong id="castPreviewName">Bipy Gojo</strong>
+            <div class="pose-controls">
+              <button data-pose="cast">Aksi domain ↗</button
+              ><button data-pose="dance">Dance ♪</button>
+            </div>
+          </div>
+          <div
+            id="castGallery"
+            class="cast-gallery"
+            aria-label="Koleksi karakter Bipy"
+          ></div>
+        </div>
+      </section>
+      <section id="cinematicSection" hidden class="cinematic-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE DOMAIN IN MOTION</p>
+            <h2>Masuk ke dunianya.</h2>
+          </div>
+        </div>
+        <div id="cinematicPlayer" hidden></div>
+        <div class="video-caption">
+          <p>
+            PV resmi Jujutsu Kaisen · latar bergerak, cuplikan Gojo dan Geto
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=aybr_9MzKXI"
+            target="_blank"
+            rel="noopener"
+            >Lihat sumber resmi ↗</a
+          ><button id="pvToggle" class="secondary">Jeda latar PV Ⅱ</button
+          ><button id="pvViewer" class="secondary">
+            Lihat PV dengan kontrol ↗</button
+          ><button id="ownerIntro" class="secondary">
+            Dengarkan intro Bpedia ♪
+          </button>
+        </div>
+      </section>
+      <section id="rewardSection" class="reward-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FESTIVAL REWARD MENU</p>
+            <h2>Lihat kejutan yang menantimu.</h2>
+          </div>
+          <p>
+            Pilih jalur, lalu biarkan domain menentukan hadiah.<br />Interaksi
+            tanpa sentuhan menjadi standar.
+          </p>
+        </div>
+        <div class="reward-toolbar">
+          <div class="reward-tabs" id="rewardTabs">
+            <button data-track="fanservice" class="selected">
+              Fanservice <span id="fanserviceCount">—</span></button
+            ><button data-track="beauty">
+              Beauty <span id="beautyCount">—</span>
+            </button>
+          </div>
+          <span id="rewardAvailability">Memuat menu festival…</span>
+        </div>
+        <div id="rewardList" class="reward-list"></div>
+      </section>
+      <footer>
+        <a class="footer-brand" href="https://bpedia.id"
+          ><strong>bpedia.id</strong><span>Belanja Bikin Bahagia</span></a
+        >
+        <p>5–8 November 2026<br />Trademark Market × JKTGO</p>
+        <a href="admin.html">Panel petugas ↗</a>
+      </footer>
+    </main>
+    <section id="playScreen" hidden>
+      <div class="game-hud">
+        <div>
+          <p class="eyebrow" id="playActivity">INFINITY CONVERGENCE</p>
+          <h2 id="playHost">Bipy Gojo</h2>
+        </div>
+        <div class="game-phase">
+          <span id="phaseLabel">MEMASUKI DOMAIN</span
+          ><strong id="score">0 resonansi</strong>
+        </div>
+        <div class="timer"><strong id="time">14</strong><span>DETIK</span></div>
+      </div>
+      <div id="arena">
+        <div id="arenaPV" class="pv-backdrop" aria-hidden="true"></div>
+        <div id="arena3d" class="arena-3d"></div>
+        <canvas
+          id="game"
+          tabindex="0"
+          aria-label="Arena interaksi Bipy"
+        ></canvas>
+        <div id="countdown" aria-live="polite"></div>
+        <div class="arena-vignette"></div>
+        <div id="arenaWord" class="arena-word" aria-hidden="true">INFINITY</div>
+        <div class="charge-meter">
+          <span id="chargeLabel">DOMAIN ENERGY</span>
+          <div><i id="chargeBar"></i></div>
+        </div>
+      </div>
+      <div class="play-bottom">
+        <p id="instruction"></p>
+        <span>Hadiahmu telah diacak sebelum domain dibuka.</span>
+      </div>
+    </section>
+    <section id="resultScreen" hidden aria-live="polite">
+      <div class="result-stage">
+        <div id="result3d"></div>
+        <div class="result-rays"></div>
+        <p class="eyebrow">BIPY DOMAIN COMPLETE</p>
+      </div>
+      <div class="result-copy">
+        <p class="eyebrow" id="resultMode">DOMAIN UNLOCKED</p>
+        <h1 id="rewardName"></h1>
+        <p id="rewardDescription"></p>
+        <img id="rewardArt" class="reward-art" alt="Hadiah festival" hidden />
+        <p id="ticketCode" class="result-code"></p>
+        <div class="ticket">
+          <div>
+            <span>NOMOR ANTREAN</span><strong id="queueNumber">—</strong>
+          </div>
+          <div>
+            <span>PANDUAN KLAIM</span>
+            <p id="claimInfo"></p>
+          </div>
+        </div>
+        <p id="rewardTerms" class="micro"></p>
+        <p id="resultExtra" class="micro"></p>
+        <button id="ack" class="primary">
+          Selesai · kembali ke domain <span>↗</span>
+        </button>
+      </div>
+    </section>
+    <div id="notice" role="status" hidden></div>
+    <script type="module" src="js/bipy3d.js"></script>
+    <script src="js/audio.js" defer></script>
+    <script src="js/arena.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </body>
+</html>

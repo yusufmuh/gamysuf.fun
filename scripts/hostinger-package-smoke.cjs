@@ -17,9 +17,13 @@ async function main(){
   process.env.GAMYSUF_AUTOSTART='0';const {createHub}=require(path.join(appDir,'hub','server.cjs'));
   hub=await createHub({dataDir:path.join(temp,'data'),adminPin:'246810',heartPin:'1234',local:true});
   async function get(route,headers={}){const response=await fetch(hub.origin+route,{headers});assert.ok(response.ok,`${route}: HTTP ${response.status}`);return response;}
-  const catalog=await (await get('/hub-api/catalog')).json();assert.equal(catalog.version,version);assert.equal(catalog.games.length,5);
-  for(const route of ['/','/market-in','/g/spin/','/g/nyapit/','/g/drop/','/g/gacha/','/g/heart/'])assert.match(await (await get(route)).text(),/<html/i);
-  checks.push('hub, event page and all five games boot from the packaged application');
+  const catalog=await (await get('/hub-api/catalog')).json();assert.equal(catalog.version,version);assert.equal(catalog.games.length,6);
+  for(const route of ['/','/market-in','/g/spin/','/g/nyapit/','/g/drop/','/g/gacha/','/g/heart/','/g/domain/'])assert.match(await (await get(route)).text(),/<html/i);
+  checks.push('hub, event page and all six mounted games including Game 7 boot from the packaged application');
+  const domain=await (await get('/g/domain/api/state')).json();assert.equal(domain.hosts.length,2);assert.equal(domain.rewards.length,27);assert.equal(domain.settings.mode,'demo');
+  for(const id of ['gojo','geto','yuji','megumi','nobara','sukuna','yuta','maki','toge','panda','nanami','toji','kenjaku']){const response=await get('/g/domain/assets/models/'+id+'.glb');assert.match(response.headers.get('content-type'),/model\/gltf-binary/);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(bytes.readUInt32LE(0),0x46546c67);}
+  for(const file of ['bpedia-owner-bgm.mp3','bpedia-owner-jingle.mp3','bpedia-owner-intro.mp3']){const response=await get('/g/domain/assets/audio/'+file,{Range:'bytes=0-255'});assert.equal(response.status,206);assert.equal((await response.arrayBuffer()).byteLength,256);}
+  checks.push('Domain demo catalog, 13 embedded GLB actors and owner audio ranges survive packaging');
   const html=await (await get('/g/heart/')).text();assert.ok(html.includes('Grand Line'));assert.ok(!html.includes('id="prepDialog"'));
   assert.ok((await (await get('/g/heart/css/game.css')).text()).includes('/g/heart/assets/fonts/'));
   const poster=await get('/g/heart/assets/video/grand-line-promo-poster.webp');assert.match(poster.headers.get('content-type'),/image\/webp/);assert.equal((await poster.arrayBuffer()).byteLength,32102);

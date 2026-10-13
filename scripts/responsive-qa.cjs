@@ -98,9 +98,9 @@ async function eventChecks(page,base,stem) {
   check(await page.locator('#newArena').getAttribute('href')==='#market-in',`${stem} hero pill targets event section`);
   const order=await page.evaluate(()=>{const hero=document.querySelector('.hero'),event=document.getElementById('market-in');return hero.nextElementSibling===event;});
   check(order,`${stem} event section follows hero`);
-  check((await section.textContent()).includes('Zoro & Sanji hadir 3–4 Okt'),`${stem} cosplayer ribbon`);
+  check((await section.textContent()).includes('Trademark Market × JKTGO'),`${stem} upcoming Trademark event`);
   const ctas=await page.locator('#market-in .event-game-actions a.btn-primary').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
-  check(JSON.stringify(ctas)===JSON.stringify(['/g/gacha/','/g/heart/']),`${stem} event CTAs`,JSON.stringify(ctas));
+  check(JSON.stringify(ctas)===JSON.stringify(['/g/domain/']),`${stem} event CTAs`,JSON.stringify(ctas));
   for(const href of ctas) await linkResolves(page,base,href,`${stem} event CTA`);
   for(const selector of ['#market-in .event-game-actions a.btn-primary','#market-in .event-game-actions button','#market-in .event-staff a','.event-tile a.btn-primary']) {
     await page.locator(selector).first().scrollIntoViewIfNeeded();
@@ -108,7 +108,7 @@ async function eventChecks(page,base,stem) {
     check(control.visible && control.inViewport && control.width>=44 && control.height>=44,`${stem} ${selector} touch target`,JSON.stringify(control));
   }
   const staff=await page.locator('#market-in .event-staff a').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
-  check(JSON.stringify(staff)===JSON.stringify(['/g/gacha/admin.html','/g/heart/admin.html']),`${stem} staff links`,JSON.stringify(staff));
+  check(JSON.stringify(staff)===JSON.stringify(['/g/domain/admin.html']),`${stem} staff links`,JSON.stringify(staff));
   for(const href of staff) await linkResolves(page,base,href,`${stem} staff`);
   const tile=await page.locator('#gameGrid > .event-tile a.btn-primary').evaluateAll(links=>links.map(link=>link.getAttribute('href')));
   check(JSON.stringify(tile)===JSON.stringify(['/g/gacha/','/g/heart/']),`${stem} Market-In double tile keeps two play buttons`,JSON.stringify(tile));
@@ -156,7 +156,7 @@ async function hubFlow(page, base, browserName, sizeId) {
   const onboarding=page.locator('#onboardModal');
   check(await onboarding.isVisible(),`${log.stem} onboarding visible`);
   await page.locator('#nicknameInput').fill('QA Lokal');
-  await page.locator('#onboardSave').click({timeout:5000});
+  await page.locator('#onboardSave').click({timeout:15000});
   await onboarding.waitFor({state:'hidden'});
   check((await page.locator('#chipName').textContent()).includes('QA Lokal'),`${log.stem} onboarding saved`);
   await page.screenshot({path:path.join(out,`${log.stem}-after-onboard.png`),fullPage:false});

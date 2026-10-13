@@ -1,6 +1,6 @@
-# Gamysuf Arcade 1.12.1
+# Gamysuf Arcade 1.13.0
 
-Satu dashboard interaktif untuk lima game booth Bpedia, berjalan di cloud (Hostinger Node.js):
+Satu dashboard interaktif untuk enam entri game booth Bpedia, termasuk Game 7 dengan dua arena, berjalan di cloud (Hostinger Node.js):
 
 | Game | Alamat | Event |
 |---|---|---|
@@ -9,6 +9,9 @@ Satu dashboard interaktif untuk lima game booth Bpedia, berjalan di cloud (Hosti
 | Bipy Beauty Drop (papan pin + kapsul mekar) | `/g/drop/` | TAKEOVER X 2026 |
 | Game 4 · Bipy Gacha Pop (gacha satu tap, 20 hadiah / 497 kapsul awal) | `/g/gacha/` | Marketing 6.0 · 3–4 Okt 2026 |
 | Game 5 · Bipy Grand Line Desire (14 kartu BP06, 7 menu × Zoro/Sanji) | `/g/heart/` | Marketing 6.0 · 3–4 Okt 2026 |
+| Game 7 · Bipy Domain Clash (13 Bipy; sekali klik atau sentuh; dua arena tanpa kartu) | `/g/domain/` | Trademark Market × JKTGO · 5–8 Nov 2026 |
+
+Game 7 memiliki Infinity Convergence dan Spirit Absorption, Gojo biru-putih versus Suguru Geto ungu gelap, enam pose gerak, pilihan ilustrasi hidup/model GLB 3D, serta menu tujuh fanservice dan dua puluh beauty. Master Gojo/Geto baru dibuat di ChatGPT; Suguru Geto dan Kenjaku adalah varian berbeda. Musik memakai file lengkap milik pemilik. Narasi Jepang sintetis dan PV resmi ditandai sesuai asalnya. Stok dan kuota event baru mulai dari nol; penugasan awal limcosfit sebagai Geto dan geraldino sebagai Gojo dapat diubah petugas.
 
 Halaman acara `/market-in` mengelompokkan Game 4 dan Game 5 di satu booth Bpedia di Urban Forest Cipete pada 3–4 Oktober 2026. Zoro dan Sanji dijadwalkan hadir kedua hari; jam sesi diumumkan petugas. Masing-masing game tetap memiliki rute, mekanik, stok atau antrean, serta dashboard petugas sendiri.
 
@@ -16,8 +19,8 @@ Gacha Pop memigrasikan katalog lama ke 20 hadiah/497 kapsul awal dengan memperhi
 
 Musik Bpedia dari berkas pemilik disusun menjadi suite berulang hampir enam menit dengan dua dialog pengenalan Jepang sintetis. Trailer Gemini menggunakan referensi Bipy resmi. Lima cuplikan kartu memakai animasi karakter Gemini: Zoro Twirl/Hug dan Sanji Cinderella/Twirl/Vow; sembilan lainnya tetap motion graphics ilustrasi duo pemilik karena kuota generator habis. Video baru Zoro–Sanji bersaing secara lucu untuk Princess Bipy menggantikan parade. Dek memiliki latar cuplikan resmi Crunchyroll yang bisu, tombol jeda, belakang kartu kompas pelaut, toolbar Bipy bergerak, CTA 3D, dan gaya mode gacha/pilih yang berbeda. Tema terang pink/gelap, bisu, animasi, layar penuh dan Demo/Main Tercatat tersedia di header. Pemutaran suara menunggu interaksi pertama sesuai browser. Petugas mengonfirmasi interaksi nyata dan dokumentasi di booth.
 
-Fitur pemain: profil & avatar Bipy, XP & level, streak harian, 3 misi harian, 11 lencana, album 91 kartu, papan peringkat mingguan/sepanjang masa, kode pemulihan profil, panduan & FAQ. Online memakai demo pribadi; klaim hadiah atau fanservice dilakukan pada sesi booth resmi.
-Portal petugas (`/studio`): tautan mode admin/petugas pada lima game, tanpa login pemilik terpusat. Admin setiap game mempertahankan autentikasinya.
+Fitur pemain: profil & avatar Bipy, XP & level, streak harian, 3 misi harian, 11 lencana, album 125 koleksi, papan peringkat mingguan/sepanjang masa, kode pemulihan profil, panduan & FAQ. Online memakai demo pribadi; klaim hadiah atau fanservice dilakukan pada sesi booth resmi.
+Portal petugas (`/studio`): tautan admin/petugas pada enam game, tanpa login pemilik terpusat. Admin setiap game mempertahankan autentikasinya.
 
 ## Menjalankan
 
@@ -25,7 +28,7 @@ Portal petugas (`/studio`): tautan mode admin/petugas pada lima game, tanpa logi
 npm install
 npm run dev                 # http://127.0.0.1:4400 · PIN lokal 123456
 npm test                    # tes gateway, pemain, Studio, keamanan ZIP
-npm run sync                # salin ulang game dari folder 01/02/03/04/05
+npm run sync                # salin ulang game dari folder 01/02/03/04/05/07
 npm run qa                  # tur visual Electron → artifacts/qa
 npm run qa:responsive       # Chromium, Firefox, WebKit; viewport 320–1920 px dan gameplay
 node scripts/capture-gameplay-covers.cjs # sampul gameplay → artifacts/cover-candidates

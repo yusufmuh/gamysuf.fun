@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Petugas • Domain Clash</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      main {
+        max-width: 1100px;
+        padding: 0 5vw;
+      }
+      h1 {
+        font-size: 36px;
+        letter-spacing: -1px;
+      }
+      form,
+      .admin-section {
+        margin: 25px 0;
+        padding: 20px;
+        border: 1px solid #ffffff20;
+        border-radius: 12px;
+        background: #101925;
+      }
+      label {
+        display: block;
+        min-height: 48px;
+        font-size: 12px;
+        color: #a3b8cb;
+        margin: 12px 0;
+      }
+      input,
+      select,
+      textarea {
+        display: block;
+        max-width: 100%;
+        width: 100%;
+        min-height: 48px;
+        padding: 12px;
+        background: #07111c;
+        border: 1px solid #324456;
+        border-radius: 6px;
+        color: white;
+        font: inherit;
+        margin-top: 6px;
+      }
+      input[type="checkbox"] {
+        display: inline;
+        width: 20px;
+        min-height: 20px;
+        vertical-align: middle;
+        margin-right: 10px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+      }
+      .admin-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 15px;
+      }
+      .admin-list form {
+        margin: 0;
+      }
+      h3 {
+        margin: 0 0 14px;
+      }
+      a {
+        color: #80dfff;
+      }
+      .ticket-row {
+        padding: 15px 0;
+        border-bottom: 1px solid #ffffff22;
+      }
+      .ticket-row button {
+        margin: 5px;
+        padding: 10px;
+        background: #243b51;
+        border-radius: 5px;
+      }
+      .status {
+        font-size: 12px;
+        color: #a9bacb;
+      }
+    </style>
+  </head>
+  <body class="theme-geto">
+    <header>
+      <a class="brand" href="index.html">bpedia<span>PANEL PETUGAS</span></a>
+    </header>
+    <main>
+      <h1>Kontrol festival</h1>
+      <p class="status" id="status">
+        Masuk menggunakan PIN yang dikonfigurasi operator.
+      </p>
+      <form id="login">
+        <label
+          >PIN petugas<input
+            id="pin"
+            type="password"
+            autocomplete="current-password"
+            required /></label
+        ><button class="primary">Masuk</button>
+      </form>
+      <div id="panel" hidden>
+        <div class="actions">
+          <button id="refresh" class="secondary">Muat ulang</button
+          ><a href="/api/admin/export" class="secondary">Ekspor tiket CSV</a
+          ><button id="logout" class="secondary">Keluar</button>
+        </div>
+        <form id="settings">
+          <h3>Pengaturan operasional</h3>
+          <div class="row">
+            <label
+              >Mode<select name="mode">
+                <option value="demo">Demo</option>
+                <option value="live">Resmi</option>
+              </select></label
+            ><label
+              >Batas antrean<input
+                name="queueLimit"
+                type="number"
+                min="1" /></label
+            ><label
+              >Minimum belanja (Rp)<input
+                name="purchaseThreshold"
+                type="number"
+                min="0" /></label
+            ><label><input type="checkbox" name="paused" />Jeda permainan</label
+            ><label
+              ><input type="checkbox" name="sessionOpen" />Sesi cosplayer
+              dibuka</label
+            >
+          </div>
+          <button class="primary">Simpan pengaturan</button>
+        </form>
+        <section class="admin-section">
+          <h3>Host · kuota dan penugasan</h3>
+          <p class="status">
+            Isi nama cosplayer setelah penugasan dikonfirmasi. Kuota berlaku
+            untuk sesi ini.
+          </p>
+          <div id="hosts" class="admin-list"></div>
+        </section>
+        <section class="admin-section">
+          <h3>Hadiah · stok dan syarat</h3>
+          <div id="rewards" class="admin-list"></div>
+        </section>
+        <form id="official">
+          <h3>Mulai permainan resmi</h3>
+          <p class="status">
+            Verifikasi bukti belanja sebelum mencatat tiket. Setelah berhasil,
+            buka halaman permainan pada perangkat ini untuk menampilkan hasil
+            tersimpan.
+          </p>
+          <div class="row">
+            <label
+              >Host<select name="character">
+                <option value="gojo">Bipy Gojo</option>
+                <option value="geto">Bipy Geto (Kenjaku)</option>
+              </select></label
+            ><label
+              >Aktivitas<select name="activity">
+                <option value="infinity">Infinity Rush</option>
+                <option value="seal">Spirit Seal</option>
+              </select></label
+            ><label
+              >Jalur hadiah<select name="rewardTrack">
+                <option value="fanservice">Fanservice</option>
+                <option value="beauty">Beauty</option>
+              </select></label
+            ><label
+              >Mode kontrol<select name="controlMode">
+                <option value="auto">Otomatis</option>
+                <option value="touch">Sentuh</option>
+              </select></label
+            ><label
+              >Nilai belanja<input
+                name="purchaseAmount"
+                type="number"
+                min="0"
+                required /></label
+            ><label
+              >Nama peserta (opsional)<input
+                name="username"
+                maxlength="40" /></label
+            ><label
+              >Preferensi interaksi<select name="comfort">
+                <option value="no-touch">Tanpa sentuhan</option>
+                <option value="touch">Sentuhan dengan persetujuan</option>
+              </select></label
+            ><label
+              ><input name="consent" type="checkbox" />Persetujuan interaksi
+              dikonfirmasi</label
+            ><label
+              ><input name="recording" type="checkbox" />Peserta setuju
+              direkam</label
+            ><label
+              ><input name="verified" type="checkbox" required />Bukti belanja
+              telah diverifikasi</label
+            >
+          </div>
+          <button class="primary">Verifikasi & mulai tiket</button>
+        </form>
+        <section class="admin-section">
+          <h3>Antrean</h3>
+          <div id="tickets"></div>
+        </section>
+      </div>
+    </main>
+    <script src="js/admin.js" defer></script>
+  </body>
+</html>

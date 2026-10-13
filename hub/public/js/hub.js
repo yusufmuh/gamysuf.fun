@@ -156,7 +156,7 @@
    ${event.cosplay?`<p class="event-ribbon">${svg(SPARKLE)}<span>${esc(event.cosplay)}</span>${svg(SPARKLE)}</p>`:''}
    <div class="event-games">${panels}</div>
    <footer class="event-foot">
-    ${event.page?`<a class="event-page-link" href="${esc(event.page)}">Jadwal cosplayer &amp; cara dapat tiket booth<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>`:''}
+    ${event.page?`<a class="event-page-link" href="${esc(event.page)}">${event.id==='trademark-2026'?'Jelajahi dua aktivitas Bipy':'Jadwal cosplayer &amp; cara dapat tiket booth'}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>`:''}
     ${staff.length?`<p class="event-staff"><span>Untuk petugas booth</span>${staff.map(game=>`<a href="${esc(game.staffUrl)}">Dashboard ${esc(EV.shortTitle(game.title))}</a>`).join('')}</p>`:''}
    </footer>
   </div>`;

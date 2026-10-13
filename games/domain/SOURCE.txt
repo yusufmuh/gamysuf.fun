@@ -1,0 +1,1 @@
+Disalin dari "07 bipy-domain-festival" oleh scripts/sync-games.cjs. Ubah game di folder aslinya, lalu jalankan npm run sync.

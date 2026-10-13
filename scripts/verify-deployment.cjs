@@ -6,7 +6,8 @@ const path=require('node:path');
 const crypto=require('node:crypto');
 const {execFileSync}=require('node:child_process');
 const {rewriteOutgoing}=require('../hub/rewrite.cjs');
-const {HEART_HOST_IDS,HEART_SERVICE_IDS}=require('../hub/registry.cjs');
+const {GAMES,HEART_HOST_IDS,HEART_SERVICE_IDS}=require('../hub/registry.cjs');
+const {verifyDomainRelease}=require('./domain-release.cjs');
 const root=path.join(__dirname,'..');
 const pkg=require('../package.json');
 const base=process.argv[2]||'https://gamysuf.fun';
@@ -89,10 +90,10 @@ async function main(){
  if(catalog.version!==pkg.version)throw new Error(`Expected ${pkg.version}, received ${catalog.version}`);
  const page=(await read('/')).toString();
  if(!page.includes('Navigasi cepat')||!page.includes(`/hub/css/responsive.css?v=${pkg.version}`)||!page.includes('Pilih Bipy versimu.'))throw new Error('Dashboard release markup not present.');
- for(const route of ['/studio','/g/spin/','/g/nyapit/','/g/drop/','/g/gacha/','/g/gacha/admin.html','/g/heart/','/g/heart/admin.html']){
+ for(const route of ['/studio',...GAMES.flatMap(game=>[`/g/${game.slug}/`,`/g/${game.slug}/${game.admin.path}`])]){
   const html=(await read(route)).toString();
   if(!html.includes('Content-Security-Policy'))throw new Error(`${route}: CSP meta not present.`);
-  if(route==='/studio'&&(html.includes('id="loginPanel"')||(html.match(/class="panel staff-game"/g)||[]).length!==5))throw new Error('Staff portal release markup not present.');
+  if(route==='/studio'&&(html.includes('id="loginPanel"')||(html.match(/class="panel staff-game"/g)||[]).length!==GAMES.length))throw new Error('Staff portal release markup not present.');
  }
  const hubFiles=execFileSync('git',['ls-tree','-r','--name-only','HEAD','hub/public'],{cwd:root,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
  const committedServer=execFileSync('git',['show','HEAD:hub/server.cjs'],{cwd:root,encoding:'utf8',maxBuffer:10*1024*1024});
@@ -145,6 +146,10 @@ async function main(){
   }
   if(!check.ok&&/\.(?:png|jpe?g|webp)$/i.test(file))verifyDecodedImage(check,route,check.localSha256,check.liveSha256);
   if(!check.ok)throw new Error(`${file}: live Heart Parade asset mismatch.`);
+ }
+ if(GAMES.some(game=>game.slug==='domain')){
+  const files=execFileSync('git',['ls-tree','-r','--name-only','HEAD','games/domain'],{cwd:root,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+  await verifyDomainRelease({base,files,checks,version:pkg.version,readCommitted:file=>execFileSync('git',['show',`HEAD:games/domain/${file}`],{cwd:root,maxBuffer:128*1024*1024})});
  }
  const report={verifiedAt:new Date().toISOString(),base,version:catalog.version,checks};
  const out=path.join(root,'artifacts',`deployment-${pkg.version}.json`);

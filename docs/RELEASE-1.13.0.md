@@ -1,0 +1,9 @@
+# Gamysuf Arcade 1.13.0 · Bipy Domain Clash
+
+Game 7 adds two 14-second arenas for Trademark Market × JKTGO: aim and converge energy, or trace and absorb eight spirits. Both finish from one automatic launch or respond to touch, mouse and arrows. Gojo and original Suguru Geto have clearly distinct blue/white and dark violet themes, newly generated transparent Bipy masters, a 12-character illustration atlas and 13 articulated GLB models including separate Kenjaku. Six motion states and two rendering views are available. Prize choices are visible before play: seven fanservice menus and twenty beauty items.
+
+Owner-supplied complete music, intro and jingle replace the previous festival synthesis. Japanese narration remains synthetic. Official PV scenes are embedded and labeled; no direct Gojo/Geto fight or Grok clip is falsely claimed. Public demo and real stock remain isolated. New official quotas and stock start at zero.
+
+Validation: source 12/12; hub 82/82; mounted Domain UI 196/196 across Chromium, Firefox and WebKit, 280–1920px; hub/event responsive matrix 530/530. Actual touch input reaches eight spirits, keyboard works, all thirteen actors load, music advances and mute stops it, pending results survive reload. Firefox focus no longer scrolls the arena. Hidden GLB rendering stops in illustration mode and discarded contexts are released.
+
+Package smoke verification boots the exact extracted ZIP, checks all six game routes, all thirteen GLBs and owner audio ranges, and retains old Heart media and authentication. Production publication and public hash verification are pending at this release-candidate stage; final evidence is stored in artifacts/deployment-1.13.0.json after completion.

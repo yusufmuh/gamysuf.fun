@@ -9,6 +9,7 @@ const os=require('node:os');
 const path=require('node:path');
 process.env.GAMYSUF_AUTOSTART='0';
 const {createHub}=require('../hub/server.cjs');
+const {GAMES}=require('../hub/registry.cjs');
 
 const mode=process.env.CAPTURE_MODE||'covers';
 const width=Number(process.env.CAPTURE_WIDTH)||1600;
@@ -39,7 +40,7 @@ app.whenReady().then(async()=>{
   if(mode==='covers'){
    const out=path.join(root,'hub','public','assets','covers');
    fs.mkdirSync(out,{recursive:true});
-   for(const slug of ['spin','nyapit','drop','gacha','heart']){
+   for(const {slug} of GAMES){
     await win.loadURL(`${base}/g/${slug}/`);
     await wait(9000);
     const image=(await shot()).resize({width:1200,quality:'best'});
@@ -68,7 +69,7 @@ app.whenReady().then(async()=>{
    await save('04-howto-drop.png');
    await js(`document.querySelector('.modal.open [data-close]')?.click()`);
    await wait(400);
-   for(const slug of ['spin','nyapit','drop','gacha','heart']){
+   for(const {slug} of GAMES){
     await win.loadURL(`${base}/g/${slug}/`);
     await wait(6000);
     await save(`05-game-${slug}.png`);
@@ -90,7 +91,7 @@ app.whenReady().then(async()=>{
    await save('08-album.png');
    await win.loadURL(`${base}/studio`);
    await wait(800);
-   await until(`document.querySelectorAll('.staff-game a[href$="/admin.html"]').length===5`);
+   if(!await until(`document.querySelectorAll('.staff-game a[href$="/admin.html"]').length===${GAMES.length}`))throw new Error('Portal petugas tidak memuat semua game.');
    await save('09-staff-portal.png');
    await wait(1000);
    await save('10-studio.png');

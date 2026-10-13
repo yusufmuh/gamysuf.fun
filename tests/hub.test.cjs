@@ -13,7 +13,7 @@ const {Players,validNickname,levelFor}=require('../hub/players.cjs');
 
 const HOST='gamysuf.fun';
 const ORIGIN=`https://${HOST}`;
-const CLIENT={spin:'spin-studio',nyapit:'nyapit',drop:'beautydrop',gacha:'gachapop',heart:'heartparade'};
+const CLIENT={spin:'spin-studio',nyapit:'nyapit',drop:'beautydrop',gacha:'gachapop',heart:'heartparade',domain:'domainfestival'};
 const vid=char=>char.repeat(32);
 
 async function hubFor(t,options={}){
@@ -57,9 +57,9 @@ test('rewrite memberi awalan pada URL absolut dan melepasnya lagi dari body',()=
  assert.equal(rewriteCookie('s=1; HttpOnly; SameSite=Strict; Path=/api/','/g/drop',true),'s=1; HttpOnly; SameSite=Strict; Path=/g/drop/api/; Secure');
 });
 
-test('lima game tampil lewat gateway dengan URL berawalan dan tombol Gamysuf',async t=>{
+test('enam game tampil lewat gateway dengan URL berawalan dan tombol Gamysuf',async t=>{
  const hub=await hubFor(t);
- for(const slug of ['spin','nyapit','drop','gacha','heart']){
+ for(const slug of ['spin','nyapit','drop','gacha','heart','domain']){
   const page=await call(hub,`/g/${slug}/`);
   assert.equal(page.status,200,slug);
   assert.ok(page.text.includes('/hub/js/inject.js'),`${slug}: inject`);
@@ -181,7 +181,7 @@ test('Studio: login PIN, CSRF, dan slot game tambahan (tautan & ZIP aman)',async
  assert.equal(login.status,200);
  const cookie=login.headers['set-cookie'].find(item=>item.startsWith('gamysuf_admin=')).split(';')[0];
  const admin=(route,body)=>call(hub,route,{method:body?'POST':'GET',body,cookie});
- assert.equal((await admin('/hub-api/admin/state')).json.games.length,5);
+ assert.equal((await admin('/hub-api/admin/state')).json.games.length,6);
 
  assert.equal((await admin('/hub-api/admin/game',{slug:'drop',title:'Bentrok',type:'link',url:'https://x.test'})).status,400,'slug bawaan tidak boleh dipakai');
  const link=await admin('/hub-api/admin/game',{slug:'kuis-bpedia',title:'Kuis Bpedia',type:'link',url:'https://example.com/kuis',published:true,howTo:['Jawab pertanyaan'],tags:['kuis']});
@@ -253,7 +253,7 @@ test('Gacha Pop lewat gateway: satu tap jadi kartu album & XP, stok booth tidak 
  assert.equal(gacha.cards.length,20,'17 hadiah + 3 voucher belanja');
  assert.deepEqual([...new Set(gacha.cards.map(card=>card.rarity))].sort(),['common','epic','legendary','rare']);
  assert.ok(gacha.cards.filter(card=>card.rarity==='rare').length>=3,'voucher = kartu langka');
- assert.equal(album.total,91);
+ assert.equal(album.total,91+album.games.find(game=>game.slug==='domain').cards.length);
  assert.equal(hub.mounts.get('gacha').app.engine.state.history.length,0);
  assert.equal((await call(hub,'/g/gacha/api/result',{method:'POST',body:{id:played.json.id}})).status,200);
  assert.equal((await call(hub,'/g/gacha/api/mode',{method:'POST',body:{mode:'live'}})).status,403);
@@ -274,7 +274,7 @@ test('Grand Line Desire: isolated demo, idempotent XP and fourteen collectible m
  assert.equal((await call(hub,'/hub-api/me')).json.xp,me.xp);
  const album=(await call(hub,'/hub-api/album')).json;
  const heartCards=album.games.find(game=>game.slug==='heart').cards;
- assert.equal(heartCards.length,14);assert.equal(album.total,91);
+ assert.equal(heartCards.length,14);assert.equal(album.total,91+album.games.find(game=>game.slug==='domain').cards.length);
  assert.equal(new Set(heartCards.map(card=>card.image)).size,14);
  for(const card of heartCards)assert.equal(card.image,`/g/heart/assets/stickers/${card.key.slice('heart:'.length)}.webp`);
  assert.equal((await call(hub,'/g/heart/api/result',{method:'POST',body:{id:first.json.id}})).status,200);
